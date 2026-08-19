@@ -1,0 +1,155 @@
+{
+    "nationalPhoneNumber": "01931-410070",
+    "formattedAddress": "Ichapura, Ichamoti road, 1542, Bangladesh",
+    "location": {
+        "latitude": 23.5537901,
+        "longitude": 90.3823962
+    },
+    "rating": 3.8,
+    "displayName": {
+        "text": "MJ Holiday Resort",
+        "languageCode": "en"
+    },
+    "photos": [
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3lA1XNWLRX15DI-TcKf0y_x496J61LM3deU1vAATul_tKYM5Ux9g2bUs3s-S4y9lXS6f2vY4fUy3mpl6Hs08Hd-cb99QgeoQSF4-zPGtgizMY8ZQdOVjhT-drPl4kbV7AY2FLv59K4RD7LHRSIEom00y3ohYACLxjKd_yCLNsA5195YSjMyPZSJhvm9HPvRbZzY3MgnnkNutiFtxvfMq902Z8vdQCBJDAAfCG5PwHi3rUW9gCuvnXrr2311i8KVQsKJH3__tyloa8KjWNLNOJon1Nk4YLkGflRFfK1NaKv9xeh0VKZ5i55-bvqDTsaSrKd6HEMUsAcLRcoVSecpRUPiK3mpuPlNoZvYLsUaE82MgVei_QNzl7pnzTMt4vJGk9OtThADOVZhLlE0uAUUOROLMH7nzEqVipRZ7LG-YWCKFQ",
+            "widthPx": 960,
+            "heightPx": 522,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID80NnUFg&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID80NnUFg!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3lKcMdA4dLsNqKCWSqEJY-ODSICeMIf3Y5qimc0UaE-J6T3EmnfkpDEryrPg-LROI5S9_b4I_T1H-WUj388i_-ziLcJ_V_WWCs43q4lP4a4h53Q-Y1TJolJiZ30x3n1eeDCloiHbgY9NQVOfEq0hIEV90O5VMPmcdbGs83LBF8-98cYX0pOAu5uhSlGiqP8qVFBV3j6jXElT7jDzCpWqjF8Gqy37Sscl6-awWrQdiZ-AH4FIJ0xHFef75qvU7-uZeaAN8nrYlIXPWkWj_ZmjDJ0GBm6oWsjVdfWEOzI2_vd5WGIZ8Y0kfbOxMVNP1Xk_iQ3pqLOUjqm2zhEcVu2GUzAaJ1Ljk79vph7WbYOMUiKu6MiWI6n1sPlSsSjlkWrC8N920CqsIn2-u68o948-CbyqFilGwukF6vYlWwfz8n-RQ",
+            "widthPx": 961,
+            "heightPx": 782,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgIDWi5iKXg&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgIDWi5iKXg!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3nzXNBGUdCaiKnUnaScCKEjsyAk9Zu9iPBtdkdPud1Rc3HKIZdLsWWVyLFVUiSIGcmWwWJwTiN_oB3MJduoE4VMUAMQO39jvH6certvb_mPnci3ZZmLT3S6ZrZvtvYGsG-Jj1jzhxKyhnGcz5TJZtv8lt8JKuLr8qsNb1tJJHFgbshw90U1vvq9itOvVDs7ZOufTdD_6qisVE2hQmboRXAvic8bSvc7OyHsW0-yJhomCM_TgTvvMrZVqCwKGmqPxxxrTpfSDDIBgjbsX3IqS2-1wTD71VR1qNyZ9uwb0Q-d-6QD9EyWyicLiWJftzrgJSBoHCRtgfNpH31D-niWotK3HYENHl-RaYgHV1isGPPet8Uv2xKXYzBATpRIKoPwPqXelevnFOmd9cc7buoOy5Hzr00b7uBey3X73ujpj1c",
+            "widthPx": 4096,
+            "heightPx": 3072,
+            "authorAttributions": [
+                {
+                    "displayName": "Md. Jalal uddin",
+                    "uri": "https://maps.google.com/maps/contrib/109286388393737240438",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjX5_uDRpmhs4Jxz4hsHNaxW-JModIEhqt09inrQhkFjB0snxjpJKg=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgICu3ZKdMg&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgICu3ZKdMg!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3mAB7rhG56mjjrqb_tJjw2grd0evLXgoev1kLvBrChph6z_0jTrd8Xi2284ptwJ_oMpKzVD6Mtb-BfX3mx85DCZkQhMpvjkdgVJCnXsMSoOv_8W9HwPSjB0xR1U85UMT106agfmrV9YOpwmHwtf5ADtV5Rh6zs3DYZXBT0u6F34_DRbqslbpjRjD4zgDe1XTbI0Ed-IjhZSWHjDRIi-dcAtphNVL6T5z0xXlxx2IyOOwXknvRCTh5lOhoaHG-NBrV-WD3dlomI8VNNTcUw3_fHzHKXyzINs0NVKKHA3Els9ktwaO3j3XyhBIqy7B4nRMJM3P6gUd0FuVlwD_b6wri_Zp36SX9enZ9MBaFQdxeEyoc25fyzyGf5FCsDRENI42aaoSH2qojQghnz7JgVm_KoyhFIF4lpQcZS-BSFLkpQ",
+            "widthPx": 960,
+            "heightPx": 720,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgIC61uTKCA&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgIC61uTKCA!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3kUx5Yb6Rz_LUcNGkXIXJ_867U1nhnKFVR0CBQz6RT3i1VqfjTQ_Pf-_w3SN4mDZkMY2Au5lWGW1KFArmU-L99G2IomJwb6n-05WBi8DJaOOnmn4XlfU1HvEBs45ddayObxFO6bYPbialdYgGZv9fFjHEypzi6IGZ2N1MBY49C57SoJn__dSNitU_W1Fwp8IJFPM_bIKgVr3uaZ1Omhe5GWvfPYq3ynHFSGyu28aGShDhIeYMgpPG7dT1smTWkzwpi0B3wJskac50e5RRD0RoTBvrlLuMZmogNEfsdudh0Vq2pJORjzjONqC-R0mr0f9khYdA0Jw5kWUXlE4j61v-p5w9sOPnvaYiZB9uwwrFHAvMc4JCt6uDKhAODG-CC_grkAxpFwDPEgorESvDiUVADaY5CRo0GUJvMZCkdsxcDjMGM",
+            "widthPx": 960,
+            "heightPx": 720,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID80MX84gE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID80MX84gE!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3lMMkmO5G4_mU1NIXM2izwxl7lLdvvS5fRyWnDHzADj5XnW_JfZEkV0m9JRt1fN9-bUbRihjbgqDrIDr6RY88YMbdMvJZeNWg9L1VRAm2FrUNFC3AGs6DAcz9h2DgW6EmLoc8clglEFYM6a679_lIWgT66ShXux7HRoygzXIf6P8aJ7_dTGZPieh3I4EmuP-JnufVFkV45af4bTSAPg0qOS3e4wQWVVARQylk7gT-BQsIOj5CUBEinsaLH1n-U0a6LfOOtkVGouskwS8VZ1UWkHhk_WvjfJAD1SCDqwR1o3xf1pUx9mUymoTVsgRqA3Wl3kgPIQjzWjKMiY4nPuagIJ64Yy1jHlwl1XZnsu91sGqzf2UvpCNJ9qBiH9Tay_erOePqSPuiAtNw8Vu0ujUsP7tdIrIp8Sbsk8AAKtmbAO-0cu",
+            "widthPx": 830,
+            "heightPx": 467,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID6sqKJsQE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID6sqKJsQE!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3l45HTn7NmLufYQNynIKh2cQRMfsYtqxyXkYLYzimyUBzzKs57rOxc_1zGAyqWT8cmtflovGf8ngLZcqgbsbJPS_tlKJlX9pY3ggsUB_qnF0SPOMffrLgd-pIwsGSklLGatcPT0blcyOLpHENWHKp9p-EEwayQ_h1VJRKeiyUvrqt4MwqHDGrONBCnlWS2GhNMRdjbUhFT_K7tjdF5Zl6zzBai9GaApPuhy7TWwisrGXMhmWuOOTPhrIUL4BaCypXMHdhGszvzDYYdVqYf8-aEll9nI2K8TrpqbCw-Lq971IZSwYu_YZRX0zZnYFlMzWfEhOIk0dpGD9k_mmoLOEQKiPX1uUCsPUPcniAUUx4mMCwzP5TqsQl8mvIeEs6XUBiirD_iaCrvV_c08NaaeftpTT6VVi7gC6qd47X3touvYNg",
+            "widthPx": 960,
+            "heightPx": 720,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID80MX8Yg&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID80MX8Yg!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3lOyZNxF1ZQWhaMVjG-vsSVdClHLwY76NCtRPyhQQ850JSTxQjBD6cACUmH3rUr1WvtPxI7LhK2xmRLeOQlSFtS8MBD8vrdgJnyoolO6-VfrS6bdjkHqqQH4I1V25NGL05aaVvFOmlJglFiNoar4y9d-9UGCv-aiaLZllPmonknKpHKxfkk6BwqOr1oAW-3LsyysEV-SXnTdYLRQbvI0o28MMGTIyxBDSnIx6Kv2zpvvE5UbL1eurqeyigSzxx78rtv2tue_2i76lA9pXIOAVSfk1w0EmJrI5sEh2oxDyNpujsY-A3e8bKu_kUWOAMmld_BBbbldibjrU69tOg8uJyvNeZCZZBlU3-VNRVS38aKSD4ffQmrfxkPUO8tHAH7Fdzh1MyPrAvuBiXLj2ul8zYWpHgODCvvxcaxeh8i14UTgA",
+            "widthPx": 2880,
+            "heightPx": 1800,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID80OmaNQ&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID80OmaNQ!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3kjb7qHCMtpH8ghN9LeqZ0ccsfuKyUS25BRI54vmujcsFIMFuhoOfenznaNZ0hXvOrz55Q2N9JD6x3DVtq82KMSKjOipS_yzscz0dnOAScoIyfNQEDpup6JTVP3UwxGKMPD4_xH38_nxU_WicbW4FFQ_RmWKkduQGnN2xRiQ_ysc2KfiWZslQZkvJuLsaqhSR7V4ZHnkIukYeY5w7O0oBujFhccc2FmGNMMgoO312-Qny2nZ9OlqT4Ng0e_o-br_hgtRcZfW91qU0pLdeJoE-iW9cse8LZ3zkxiup4hl_ISiDcmgVKK3fpf9a5Urxlzo4Czs7jiKzv_6MPCPmxA533mPdaVCWRsXIY-9r1NtnvRMBE1rVkNu5xUWx2s-AmhiWrExd50u-lfXZt_6hTiWWbgAGxcWJZfeSYtpxGc3-wT7KoE",
+            "widthPx": 4160,
+            "heightPx": 2340,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID80NnUlgE&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID80NnUlgE!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        },
+        {
+            "name": "places/ChIJudECbKOkVTcRJws_VKoYu7g/photos/AaVGc3lrZzSjvEFDGN3llJaPzBSAH3ZlRw6E2zVxZBK0DQA8oFKDUnlii2M_2n4HstTiSWilaeHUuHp5gCiLgQbYXQewQteDvdO1UwIkMyVoE9HcM2AiZbxG5BrWHqwl1PVJyvgq39S5AOe9FUPIAbdcgkOeqxxzuORzRLttDw1Ywr_jg_cN1TIZoIhg7DNeKmWjZY3DhBb2HxdV5v08-QBulIoF8B909i1h1ALhCdzhiC8DGmOsWLQTjdc8I2sk0uvW2TkIev9wf1fl2hml7yDGcpNHYAZcPNZSvvpj55F-IBgYYjGBkeDmWRnBzX6_MdcNTTPX_u3AxVNro-NZvTBrdTwGZD-QeOKnhW7eos-FQT8zQ9QMObpLM8z062-YEMreIr3F2QICN766Weu19fXQpEPSzgzCLR2g0-eWA11vtWWrGw",
+            "widthPx": 935,
+            "heightPx": 701,
+            "authorAttributions": [
+                {
+                    "displayName": "MJ Holiday Resort",
+                    "uri": "https://maps.google.com/maps/contrib/106880895653380700821",
+                    "photoUri": "https://lh3.googleusercontent.com/a-/ALV-UjVoRKsvf42xOGGf9EPneYVU84zeL5K7Cx_fUlNSvUlP8sIik4TZ=s100-p-k-no-mo"
+                }
+            ],
+            "flagContentUri": "https://www.google.com/local/content/rap/report?postId=!1e10!2sCIHM0ogKEICAgID80NnUZg&t=27&cb_client=maps_api_places.places_api&hl=en-US",
+            "googleMapsUri": "https://www.google.com/maps/place//data=!3m4!1e2!3m2!1sCIHM0ogKEICAgID80NnUZg!2e10!4m2!3m1!1s0x3755a4a36c02d1b9:0xb8bb18aa543f0b27"
+        }
+    ]
+}

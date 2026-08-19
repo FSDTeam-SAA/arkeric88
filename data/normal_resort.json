@@ -1,0 +1,172 @@
+[
+    {
+        "name": "Your Agro Farm & Eco Resort",
+        "rating": 5,
+        "phone": "01817-620000",
+        "price_level": "NOT_AVAILABLE",
+        "address": "7th floor,House, South Breeze center, 5 Road No. 11, Dhaka 1213, Bangladesh",
+        "photos": [
+            "img_37",
+            "img_38",
+            "img_39",
+            "img_40"
+        ],
+        "coords": {
+            "lat": 23.7906241,
+            "lng": 90.40463009999999
+        }
+    },
+    {
+        "name": "Dream Square Resort",
+        "rating": 4.3,
+        "phone": "01401-020202",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Chalkpara, Medical Mor, মাওনা ইউনিয়ন 1740, Bangladesh",
+        "photos": [
+            "img_21",
+            "img_22",
+            "img_23",
+            "img_24"
+        ],
+        "coords": {
+            "lat": 24.2544677,
+            "lng": 90.36670590000001
+        }
+    },
+    {
+        "name": "Bhawal Resort & Spa",
+        "rating": 4.3,
+        "phone": "01871-004015",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Noljahni, Baroipara, 1700, Bangladesh",
+        "photos": [
+            "img_25",
+            "img_26",
+            "img_27",
+            "img_28"
+        ],
+        "coords": {
+            "lat": 24.1550625,
+            "lng": 90.4500625
+        }
+    },
+    {
+        "name": "GRAND BHAWAL Resort",
+        "rating": 4.1,
+        "phone": "01825-355554",
+        "price_level": "NOT_AVAILABLE",
+        "address": "P8H8+2H9 Bhawal Monoharia, Ati Bazar-Kalatiya Rd, 1312, Bangladesh",
+        "photos": [
+            "img_29",
+            "img_30",
+            "img_31",
+            "img_32"
+        ],
+        "coords": {
+            "lat": 23.727562499999998,
+            "lng": 90.31643749999999
+        }
+    },
+    {
+        "name": "Mawa Resort",
+        "rating": 3.9,
+        "phone": "01755-592585",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Kandipara Road, Puraton Feri Ghat, Mawa Louhajong, Munshigonj, Bangladesh",
+        "photos": [
+            "img_1",
+            "img_2",
+            "img_3",
+            "img_4"
+        ],
+        "coords": {
+            "lat": 23.47905,
+            "lng": 90.253908
+        }
+    },
+    {
+        "name": "Dhali's Amber Nivaas Resort",
+        "rating": 3.9,
+        "phone": "No phone number listed",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Ichapura - Sirajdikhan Rd, Baherkuchi 1540, Bangladesh",
+        "photos": [
+            "img_5",
+            "img_6",
+            "img_7",
+            "img_8"
+        ],
+        "coords": {
+            "lat": 23.549837099999998,
+            "lng": 90.4054883
+        }
+    },
+    {
+        "name": "Heritage Resort",
+        "rating": 3.9,
+        "phone": "01755-677149",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Mahid Expo Int, মনির কমান্ডার রোড রাইনাদী দিঘীরপাড়, Madhabdi 1604, Bangladesh",
+        "photos": [
+            "img_13",
+            "img_14",
+            "img_15",
+            "img_16"
+        ],
+        "coords": {
+            "lat": 23.8609157,
+            "lng": 90.6609318
+        }
+    },
+    {
+        "name": "Shamol Bangla Resort",
+        "rating": 3.8,
+        "phone": "01776-508612",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Village: Guita Krishna Nagar, Union:, P.O: Kalatia, ঢাকা 1313, Bangladesh",
+        "photos": [
+            "img_9",
+            "img_10",
+            "img_11",
+            "img_12"
+        ],
+        "coords": {
+            "lat": 23.729521,
+            "lng": 90.29813399999999
+        }
+    },
+    {
+        "name": "Greentech Resort & Convention Center",
+        "rating": 3.8,
+        "phone": "01777-737363",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Dhaka - Mymensingh Rd, গাজীপুর 1740, Bangladesh",
+        "photos": [
+            "img_17",
+            "img_18",
+            "img_19",
+            "img_20"
+        ],
+        "coords": {
+            "lat": 24.130882399999997,
+            "lng": 90.43091609999999
+        }
+    },
+    {
+        "name": "La Riveria Resort & Park",
+        "rating": 3.5,
+        "phone": "01344-853524",
+        "price_level": "NOT_AVAILABLE",
+        "address": "Dhaka, Bangladesh",
+        "photos": [
+            "img_33",
+            "img_34",
+            "img_35",
+            "img_36"
+        ],
+        "coords": {
+            "lat": 23.8415625,
+            "lng": 90.5434375
+        }
+    }
+]
