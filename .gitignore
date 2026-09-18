@@ -9,10 +9,11 @@ wheels/
 # Virtual environments
 .venv
 
-.env
 
 code.py
 personal/
 src/personal
 # data/
 # *.md
+node_modules
+.env
