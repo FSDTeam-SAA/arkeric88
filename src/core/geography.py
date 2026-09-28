@@ -83,3 +83,59 @@ def country_matches_region(country: str, preferred_region: str) -> bool | None:
     if country_key == region_key:
         return True
     return None
+
+
+# Countries lying mostly south of the equator. Used only to flip seasons for
+# destinations whose catalog row has no latitude.
+SOUTHERN_HEMISPHERE_COUNTRIES = {
+    "argentina", "australia", "bolivia", "botswana", "brazil", "chile", "eswatini",
+    "fiji", "lesotho", "madagascar", "malawi", "mauritius", "mozambique", "namibia",
+    "new zealand", "paraguay", "peru", "samoa", "seychelles", "south africa",
+    "tanzania", "tonga", "uruguay", "vanuatu", "zambia", "zimbabwe",
+}
+
+EARTH_RADIUS_KM = 6371.0
+
+
+def region_for_country(country: str) -> str | None:
+    """Return the world region key (e.g. "europe") for a known country."""
+    country_key = _normalize(country)
+    for region, countries in REGION_COUNTRIES.items():
+        if country_key in countries:
+            return region
+    return None
+
+
+def great_circle_km(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """Straight-line (haversine) distance. A lower bound on any real route."""
+    from math import asin, cos, radians, sin, sqrt
+
+    phi1, phi2 = radians(lat1), radians(lat2)
+    delta_phi = radians(lat2 - lat1)
+    delta_lambda = radians(lng2 - lng1)
+    a = sin(delta_phi / 2) ** 2 + cos(phi1) * cos(phi2) * sin(delta_lambda / 2) ** 2
+    return 2 * EARTH_RADIUS_KM * asin(sqrt(a))
+
+
+def is_southern_hemisphere(country: str, latitude: float | None = None) -> bool:
+    if latitude is not None:
+        return latitude < 0
+    return _normalize(country) in SOUTHERN_HEMISPHERE_COUNTRIES
+
+
+_COUNTRY_ALIASES = {
+    "usa": "united states",
+    "us": "united states",
+    "united states of america": "united states",
+    "uk": "united kingdom",
+    "czech republic": "czechia",
+}
+
+
+def same_country(first: str | None, second: str | None) -> bool:
+    """Compare country names from different sources (catalog vs. map lookup)."""
+    first_key = _normalize(first or "")
+    second_key = _normalize(second or "")
+    if not first_key or not second_key:
+        return False
+    return _COUNTRY_ALIASES.get(first_key, first_key) == _COUNTRY_ALIASES.get(second_key, second_key)

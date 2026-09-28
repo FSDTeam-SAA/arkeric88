@@ -3,9 +3,9 @@ from unittest.mock import Mock, patch
 from fastapi.testclient import TestClient
 from langchain_core.messages import AIMessage
 import main
-from app.schemas.city_body import QuestionAnswers
 from src.service.chat_services import get_ai_response
 from src.tools.tools import get_detailed_tourist_places
+from intake_fixtures import build_intake
 
 
 class FakeLLM:
@@ -36,25 +36,6 @@ class TravelPlannerFlowTests(unittest.TestCase):
             '{"tour_plan":[{"day":1,"activities":[{"activity_name":"Cafe","activity_description":"Coffee","activity_location":"Center","activity_time":"11:00","activity_cost":10}]}],"reasoning":"updated"}',
         ])
 
-    def _v2_payload(self) -> dict:
-        return {
-            "archetype": "burned_out_achiever",
-            "escape_from": "noise_stimulation",
-            "arrival_priority": "silence_privacy",
-            "structure_preference": "optional_rituals",
-            "reset_style": "digital_disconnection",
-            "physical_intensity": "gentle",
-            "party": {"type": "solo", "adults": 1, "children": 0},
-            "spirituality": "none",
-            "travel_window": {"mode": "flexible"},
-            "planning_service_level": "well_planned",
-            "restrictions": {"text": "", "codes": []},
-            "settings": [],
-            "budget": {"currency": "USD", "per_person_per_night_max": 500, "open_ended": False},
-            "duration": {"bucket": "4_7_nights"},
-            "transform_focus": ["Burnout Recovery", "Sleep"],
-        }
-
     def test_get_ai_response_executes_tool_calls(self) -> None:
         fake_llm = FakeLLM()
         tool_mock = Mock()
@@ -69,41 +50,43 @@ class TravelPlannerFlowTests(unittest.TestCase):
 
     def test_city_and_tour_session_flow(self) -> None:
         """
-        Step 1 (POST /get_suggested_city) now ranks real properties and groups
-        them into cities deterministically -- no LLM city-invention call is
-        involved, so only the get_cityinfo enrichment tool and the tour-plan
-        LLM step (Step 2) need mocking.
+        Step 1 (POST /get_suggested_city) ranks the destination catalog
+        deterministically -- no LLM is involved -- so only the map lookup and
+        the tour-plan LLM step (Step 2) need mocking.
         """
         def fake_tour_plan_ai(prompt: str) -> str:
             return next(self.tour_plan_responses)
 
-        with patch("src.service.chat_services.get_ai_response", side_effect=RuntimeError("LLM disabled in tests")), \
-             patch("app.router.city_content_route.get_ai_response", side_effect=fake_tour_plan_ai), \
-             patch("app.router.city_content_route.get_cityinfo") as mock_tool, \
-             patch("app.router.city_content_route.get_detailed_tourist_places") as mock_places, \
-             patch("app.router.city_content_route.get_nearby_restaurants") as mock_restaurants, \
-             patch("app.router.city_content_route.get_google_hotels_by_facilities") as mock_hotel_facilities, \
-             patch("app.router.city_content_route.calculate_distance_routes_api") as mock_distance:
-            mock_tool.invoke.return_value = {
-                "city_name": "MockCity",
-                "country": "Mockland",
-                "lat": 46.0,
-                "lng": 2.0,
+        def fake_city_lookup(args: dict) -> dict:
+            # A real lookup echoes the requested place in its own country.
+            return {
+                "city_name": args["city_name"],
+                "country": args["region_hint"],
+                "lat": 10.0,
+                "lng": 20.0,
                 "photos": ["https://example.com/photo.jpg"],
             }
+
+        with patch("app.router.city_content_route.get_ai_response", side_effect=fake_tour_plan_ai), \
+             patch("src.core.destination_places.get_cityinfo") as mock_lookup, \
+             patch("app.router.city_content_route.get_detailed_tourist_places") as mock_places, \
+             patch("app.router.city_content_route.get_nearby_restaurants") as mock_restaurants, \
+             patch("app.router.city_content_route.get_google_hotels_sorted_by_rating") as mock_hotels, \
+             patch("app.router.city_content_route.calculate_distance_routes_api") as mock_distance:
+            mock_lookup.invoke.side_effect = fake_city_lookup
             mock_places.invoke.side_effect = [
-                [{"name": "Museum", "address": "1 Museum St, Paris", "photos": ["https://example.com/museum.jpg"]}],
-                [{"name": "Cafe Central", "address": "2 Cafe St, Paris", "photos": ["https://example.com/cafe.jpg"]}],
+                [{"name": "Museum", "address": "1 Museum St", "photos": ["https://example.com/museum.jpg"]}],
+                [{"name": "Cafe Central", "address": "2 Cafe St", "photos": ["https://example.com/cafe.jpg"]}],
             ]
             mock_restaurants.invoke.return_value = [{
                 "name": "Cafe Meal",
-                "address": "3 Meal St, Paris",
+                "address": "3 Meal St",
                 "photos": ["https://example.com/meal.jpg"],
                 "rating": 4.2,
             }]
-            mock_hotel_facilities.invoke.return_value = [{
-                "name": "Hotel Paris",
-                "address": "1 Hotel St, Paris",
+            mock_hotels.invoke.return_value = [{
+                "name": "Hotel Calm",
+                "address": "1 Hotel St",
                 "rating": 4.5,
                 "price_level": "PRICE_LEVEL_MODERATE",
                 "photos": ["https://example.com/hotel.jpg"],
@@ -114,33 +97,31 @@ class TravelPlannerFlowTests(unittest.TestCase):
                 "duration_minutes": 10,
             }
 
-            # Step 1: rank properties, get real cities back with property_id + match_score.
-            initial = self.client.post("/get_suggested_city", json=self._v2_payload())
+            # Step 1: rank the catalog, get real destinations with destination_id + match_score.
+            initial = self.client.post("/get_suggested_city", json=build_intake())
             self.assertEqual(initial.status_code, 200)
             suggested_cities = initial.json()["suggested_cities"]
             self.assertTrue(suggested_cities)
             first_city = suggested_cities[0]
-            self.assertTrue(first_city["property_id"].startswith("retreat_"))
+            self.assertTrue(first_city["destination_id"])
             self.assertIsInstance(first_city["match_score"], int)
+            self.assertEqual(first_city["city_image"], ["https://example.com/photo.jpg"])
+            self.assertEqual(first_city["evidence"]["place_lookup"]["outcome"], "MATCHED")
             session_id = initial.json()["session_id"]
 
-            # Regenerate: deterministic, excludes cities already shown.
+            # Regenerate: deterministic, excludes destinations already shown.
             regenerated = self.client.post(
                 "/regenerate_suggested_city",
-                json={"session_id": session_id, "user_instruction": "more energetic"},
+                json={"session_id": session_id, "user_instruction": "something different"},
             )
             self.assertEqual(regenerated.status_code, 200)
-            regenerated_ids = {city["property_id"] for city in regenerated.json()["suggested_cities"]}
-            self.assertFalse(regenerated_ids & {first_city["property_id"]})
+            regenerated_ids = {city["destination_id"] for city in regenerated.json()["suggested_cities"]}
+            self.assertFalse(regenerated_ids & {first_city["destination_id"]})
 
-            # Step 2: select a city by property_id, get activities (unchanged flow).
+            # Step 2: select a destination by destination_id, get activities.
             plan = self.client.post(
                 "/get_tour_plan",
-                json={
-                    "session_id": session_id,
-                    "selected_city": first_city["city_name"],
-                    "property_id": first_city["property_id"],
-                },
+                json={"session_id": session_id, "destination_id": first_city["destination_id"]},
             )
             self.assertEqual(plan.status_code, 200)
             self.assertEqual(plan.json()["source"], "generated")
@@ -153,6 +134,7 @@ class TravelPlannerFlowTests(unittest.TestCase):
                 },
             )
             self.assertEqual(plan_regenerated.status_code, 200)
+            self.assertEqual(plan_regenerated.json()["destination_id"], first_city["destination_id"])
             regenerated_activities = plan_regenerated.json()["tour_plan"][0]["activities"]
             first_non_meal = next(
                 activity for activity in regenerated_activities
@@ -161,49 +143,10 @@ class TravelPlannerFlowTests(unittest.TestCase):
             self.assertEqual(first_non_meal["activity_name"], "Cafe Central")
             details = self.client.get(f"/session/{session_id}")
             self.assertEqual(details.status_code, 200)
-            self.assertEqual(len(details.json()["suggested_cities"]), len(suggested_cities))
+            self.assertEqual(details.json()["intake"]["trip_goals"], ["restoration", "reflection"])
+            self.assertEqual(len(details.json()["suggested_cities"]), len(regenerated_ids))
 
-    def test_regenerate_suggested_city_rejects_legacy_sessions(self) -> None:
-        """A session with no stored v2 profile (pre-dating this flow) cannot be regenerated."""
-        from src.session.city_session_store import CitySessionStore
-        legacy_session = CitySessionStore.create(
-            questions_answers=QuestionAnswers(
-                todays_feeling="curious",
-                experience_kind="culture",
-                energy_level="medium",
-                travel_style="slow",
-                trip_organization="loose",
-                activity_restrictions=[],
-                life_season="exploration",
-                preferred_environments=["cities"],
-                total_trip_budget=1200.0,
-                trip_length_days=3,
-            ),
-            suggested_cities=[],
-            response={"suggested_cities": []},
-        )
-        response = self.client.post(
-            "/regenerate_suggested_city",
-            json={"session_id": legacy_session.session_id, "user_instruction": "anything"},
-        )
-        self.assertEqual(response.status_code, 409)
-
-    def test_profile_budget_region_and_dynamic_place_query(self) -> None:
-        profile = QuestionAnswers(
-            todays_feeling="overwhelmed",
-            experience_kind="nervous system reset",
-            energy_level="low",
-            travel_style="solo and slow",
-            trip_organization="semi-guided",
-            activity_restrictions=["steep hikes"],
-            life_season="recovery",
-            preferred_environments=["forest", "water"],
-            budget_per_person_per_night=250,
-            trip_length_days=4,
-            preferred_region="Asia",
-        )
-        self.assertEqual(profile.effective_total_budget, 1000)
-
+    def test_dynamic_place_query(self) -> None:
         mock_response = Mock(status_code=200)
         mock_response.json.return_value = {"places": []}
         with patch("src.tools.tools.requests.post", return_value=mock_response) as post:
@@ -218,6 +161,9 @@ class TravelPlannerFlowTests(unittest.TestCase):
             "quiet forest mindfulness restorative experiences in Kyoto",
         )
         self.assertNotIn("includedType", payload)
+        field_mask = post.call_args.kwargs["headers"]["X-Goog-FieldMask"]
+        self.assertIn("places.id", field_mask)
+        self.assertIn("places.businessStatus", field_mask)
 
 if __name__ == "__main__":
     unittest.main()

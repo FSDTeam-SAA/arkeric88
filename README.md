@@ -1,5 +1,7 @@
 # AI Tour Guide Platform - API Documentation & Flow Guide
 
+> **Current contract:** Step 1 takes the 11-step Velari intake and suggests destinations from `data/1. AI_IMPORT_DESTINATIONS.csv` under the rules in `data/3. IMPORT_RULES.csv`. The request examples below predate that change; use `API_CITY_FLOW_DOCS.md` and `BACKEND_INTEGRATION_GUIDE.md` for the current request and response shapes.
+
 ## System Overview
 
 This is a two-phase conversational tour guide system with session-based caching:

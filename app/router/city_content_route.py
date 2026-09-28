@@ -1,4 +1,9 @@
+from datetime import datetime, timezone
+from typing import Optional
+
 from fastapi import APIRouter, HTTPException
+from pydantic import ValidationError
+
 from src.core.prompt_templete import PromptGenerator
 from src.service.chat_services import get_ai_response
 from app.schemas.city_body import (
@@ -7,16 +12,32 @@ from app.schemas.city_body import (
     TourPlanRequestData,
     StayInfo,
 )
-from app.schemas.retreat_v2_schema import RetreatRecommendationRequest
+from app.schemas.intake_schema import (
+    INTAKE_FORM_ID,
+    INTAKE_FORM_VERSION,
+    STORED_INTAKE_CONTEXT,
+    TravelIntakeRequest,
+)
 from src.core.data_processor import ProcessData
 from src.session.city_session_store import CitySessionStore, ActivitySessionStore
-from src.tools.tools import get_cityinfo, get_detailed_tourist_places, get_google_hotels_sorted_by_rating, get_google_hotels_by_facilities, calculate_distance_routes_api, get_nearby_restaurants
+from src.tools.tools import get_detailed_tourist_places, get_google_hotels_sorted_by_rating, calculate_distance_routes_api, get_nearby_restaurants
 from src.core.image_registry import image_registry
-from src.core.geography import country_matches_region
-from src.core.retreat_catalog import find_retreat_candidates, retreat_facilities, get_retreat_by_property_id
-from src.core.legacy_profile_adapter import build_legacy_answers
-from src.core.retreat_explanation import generate_match_explanations
-from src.core.retreat_matching_orchestrator import build_ranked_pool, select_city_representatives
+from src.core.destination_catalog import (
+    Destination,
+    get_catalog_version,
+    get_destination,
+    load_destination_candidates,
+)
+from src.core.destination_places import lookup_destination_place, lookup_missing_coordinates
+from src.core.destination_matching import (
+    build_no_valid_result,
+    build_suggestion,
+    rank_destinations,
+    select_diverse,
+)
+from src.core.intake_mappings import INTAKE_MAPPING_VERSION, SCORING_VERSION
+from src.core.origin import resolve_origin
+from src.core.trip_profile import TripProfile, build_trip_profile
 import re
 router = APIRouter()
 
@@ -45,172 +66,70 @@ def _merge_regenerated_field(
     return updated_response
 
 
-def _enrich_city_suggestions(suggested_cities: list, preferred_region: str = "") -> list:
-    """
-    Enrich LLM-proposed city suggestions with real data from get_cityinfo tool.
-    For each city in the list:
-    1. Call get_cityinfo with the city name
-    2. Merge the tool's verified country, lat, lng, and photos list into the city dict
-    3. If the tool errors, fall back to empty image list and null coordinates
-    The LLM output should never contain city_image, latitude, or longitude -
-    those are supplied entirely by this enrichment step.
-    """
-    enriched = []
-    for city in suggested_cities:
-        city_name = city.get("city_name", "")
-        if not city_name:
-            continue
-        raw_country = city.get("country_name")
-        raw_region_match = country_matches_region(raw_country or "", preferred_region)
-        lookup_hint = raw_country if raw_region_match is True else preferred_region
-        # Default values in case tool fails
-        tool_country = None
-        tool_photos = []
-        tool_lat = None
-        tool_lng = None
-        try:
-            result = get_cityinfo.invoke({
-                "city_name": city_name,
-                "region_hint": lookup_hint or None,
-            })
-            if result and "error" not in result:
-                tool_country = result.get("country")
-                tool_photos = result.get("photos", [])
-                # Ensure photos is always a clean list[str]
-                if not isinstance(tool_photos, list):
-                    tool_photos = []
-                else:
-                    tool_photos = _clean_photos(tool_photos)
-                location = result.get("lat")
-                if location is not None:
-                    tool_lat = float(location)
-                location = result.get("lng")
-                if location is not None:
-                    tool_lng = float(location)
-        except Exception:
-            # Tool failure - keep defaults (empty photos, null coords)
-            pass
-        tool_region_match = country_matches_region(tool_country or "", preferred_region)
-        if tool_region_match is False:
-            # Never attach coordinates/photos from a same-named city in the wrong region.
-            tool_country = None
-            tool_photos = []
-            tool_lat = None
-            tool_lng = None
-            if raw_region_match is not True:
-                continue
-        elif tool_region_match is None and raw_region_match is True:
-            # An unknown lookup country must not override a region-valid model country.
-            tool_country = None
-            tool_photos = []
-            tool_lat = None
-            tool_lng = None
-        elif tool_country is None and raw_region_match is False:
-            continue
+def _utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
 
-        # country_name priority: region-valid tool value > region-valid model value
-        merged_country = tool_country if tool_country else city.get("country_name")
-        passthrough = {
-            key: value
-            for key, value in city.items()
-            if key not in {
-                "city_name", "country_name", "city_image", "latitude",
-                "longitude", "number_of_days", "description",
-            }
-        }
-        enriched.append({
-            "city_name": city_name,
-            "country_name": merged_country,
-            "city_image": tool_photos,
-            "latitude": tool_lat,
-            "longitude": tool_lng,
-            "number_of_days": city.get("number_of_days"),
-            "description": city.get("description", ""),
-            **passthrough,
-        })
+
+def _enrich_destination_media(suggestion: dict) -> dict:
+    """
+    Attach photos (and coordinates only when the catalog has none) from the
+    shared, country-checked map lookup, and record its outcome and timestamp
+    as evidence (IMPORT_RULES.csv "Freshness and privacy").
+    """
+    destination = get_destination(suggestion["destination_id"])
+    place = lookup_destination_place(destination)
+    enriched = dict(suggestion)
+    enriched["city_image"] = _clean_photos(place["photos"])
+    if suggestion.get("latitude") is not None and suggestion.get("longitude") is not None:
+        coordinates_source = "catalog"
+    elif place["latitude"] is not None and place["longitude"] is not None:
+        enriched["latitude"] = place["latitude"]
+        enriched["longitude"] = place["longitude"]
+        coordinates_source = "place_lookup"
+    else:
+        coordinates_source = None
+    enriched["evidence"] = {
+        **suggestion.get("evidence", {}),
+        "coordinates_source": coordinates_source,
+        "place_lookup": {
+            "query": place["query"],
+            "outcome": place["outcome"],
+            "checked_at_utc": place["checked_at_utc"],
+        },
+    }
     return enriched
 
 # ==================== TOUR PLAN ENRICHMENT HELPERS ====================
 
 
 def _find_hotel(
-    city_name: str,
-    total_budget: float,
-    num_nights: int,
+    location: str,
+    nightly_budget: float,
+    budget_open_ended: bool,
     profile_search_query: str = "",
-    preferred_region: str = "",
-    forced_retreat: dict | None = None,
 ) -> dict:
     """
-    Find the best-rated hotel in the city that fits within the user's total budget.
-    1. Call get_google_hotels_sorted_by_rating for the city
-    2. Try best-rated first, then fall back to cheaper options if budget allows
-    3. Returns hotel dict with name, address, rating, price_level, photos, coords
-
-    `forced_retreat`: when a caller already selected an exact catalog record via
-    a stable property_id (see BACKEND_DEVELOPER_CHANGES.md "Itinerary generation
-    must accept property_id"), pass it here to skip the fuzzy city/facility
-    search and enrich that single record with live Google Maps data instead.
+    Pick a stay from a live Google Places search: the best-rated result whose
+    estimated nightly cost fits the per-room budget, else the cheapest result.
+    Places has no bookable rates, so every price here is an estimate and
+    availability is never claimed (IMPORT_RULES.csv "Booking search and
+    availability"). No historical property sheet is used.
     """
-    nightly_budget = total_budget / max(num_nights, 1)
-    catalog_candidates = (
-        [forced_retreat]
-        if forced_retreat is not None
-        else find_retreat_candidates(
-            city_name=city_name,
-            preferred_region=preferred_region,
-            facility_terms=profile_search_query,
-            nightly_budget=nightly_budget,
-        )
-    )
-    for retreat in catalog_candidates:
-        property_name = retreat.get("Property Name", "")
-        location = ", ".join(
-            part for part in [retreat.get("Region", ""), retreat.get("Country", "")] if part
-        )
-        try:
-            map_results = get_google_hotels_by_facilities.invoke({
-                "location_name": location or city_name,
-                "facilities": [],
-                "search_query": property_name,
-            })
-            if map_results and not _is_tool_error_list(map_results):
-                map_hotel = _best_hotel_name_match(map_results, property_name)
-                if map_hotel:
-                    return _merge_catalog_and_map_hotel(retreat, map_hotel)
-        except Exception:
-            continue
-
-    if catalog_candidates:
-        return _merge_catalog_and_map_hotel(catalog_candidates[0], {})
-
     try:
         hotels = get_google_hotels_sorted_by_rating.invoke({
-            "location_name": city_name,
+            "location_name": location,
             "search_query": profile_search_query or None,
         })
         if not hotels or "error" in hotels[0]:
-            # Fallback: return a placeholder
-            return _fallback_hotel(city_name)
-        # Estimate hotel cost: if price_level indicates a numeric range, use mid-point
-        # Otherwise assume ~$150/night as a reasonable estimate
-        best_hotel = hotels[0]
-        hotel_cost_per_night = _estimate_hotel_cost(best_hotel)
-        total_hotel_cost = hotel_cost_per_night * num_nights
-        # If the best hotel fits within budget (leaving at least some for activities),
-        # return it. Otherwise try cheaper options.
-        if total_hotel_cost < total_budget * 0.7:  # Leaves 30%+ for activities
-            return best_hotel
-        # Try cheaper hotels
-        for hotel in hotels[1:]:
-            hotel_cost_per_night = _estimate_hotel_cost(hotel)
-            total_hotel_cost = hotel_cost_per_night * num_nights
-            if total_hotel_cost < total_budget * 0.5:
+            return _fallback_hotel(location)
+        if budget_open_ended:
+            return hotels[0]
+        for hotel in hotels:
+            if _estimate_hotel_cost(hotel) <= nightly_budget:
                 return hotel
-        # If nothing fits well, return the cheapest available
-        return hotels[-1] if len(hotels) > 1 else best_hotel
+        return min(hotels, key=_estimate_hotel_cost)
     except Exception:
-        return _fallback_hotel(city_name)
+        return _fallback_hotel(location)
 
 
 def _estimate_hotel_cost(hotel: dict) -> float:
@@ -333,64 +252,6 @@ def _complete_hotel_values(
     )
     return completed
 
-def _best_hotel_name_match(hotels: list[dict], property_name: str) -> dict | None:
-    """Return a Google Maps result only when its name matches the workbook property."""
-    generic_tokens = {"hotel", "resort", "retreat", "spa", "estate", "the"}
-    target_tokens = set(_normalize_place_text(property_name).split()) - generic_tokens
-    scored = [
-        (
-            len(target_tokens & set(_normalize_place_text(hotel.get("name", "")).split())),
-            hotel,
-        )
-        for hotel in hotels
-    ]
-    score, hotel = max(scored, key=lambda item: item[0])
-    return hotel if score > 0 else None
-
-
-def _merge_catalog_and_map_hotel(retreat: dict, map_hotel: dict) -> dict:
-    """Use the workbook for selection and Google Maps for current details/images."""
-    approximate_fields = []
-    region_country = ", ".join(
-        part for part in [retreat.get("Region", ""), retreat.get("Country", "")] if part
-    )
-    address = map_hotel.get("address")
-    if not address or address == "No address listed":
-        address = f"{region_country or 'Location unavailable'} (approximately)"
-        approximate_fields.append("address")
-    rating = map_hotel.get("rating")
-    if rating in (None, 0, 0.0):
-        experience_score = retreat.get("⌀ Score", "")
-        try:
-            rating = round(min(5.0, float(experience_score) / 2), 1)
-        except (TypeError, ValueError):
-            rating = 4.0
-        approximate_fields.append("rating")
-    price_level = map_hotel.get("price_level")
-    if not price_level or price_level == "NOT_AVAILABLE":
-        price_level = f"{retreat.get('Budget Tier') or 'Premium'} (approximately)"
-        approximate_fields.append("price level")
-    average_nightly_price = retreat.get("Avg Night", "")
-    if not average_nightly_price:
-        average_nightly_price = "$150 per night (approximately)"
-        approximate_fields.append("nightly price")
-    return {
-        "name": map_hotel.get("name") or retreat.get("Property Name") or "Retreat",
-        "address": address,
-        "rating": rating,
-        "price_level": price_level,
-        "photos": map_hotel.get("photos", []),
-        "coords": map_hotel.get("coords"),
-        "average_nightly_price": average_nightly_price,
-        "budget_tier": retreat.get("Budget Tier", ""),
-        "facilities": retreat_facilities(retreat),
-        "website": retreat.get("Website", ""),
-        "estimate_note": (
-            f"Unavailable {', '.join(approximate_fields)} values are (approximately)."
-            if approximate_fields else ""
-        ),
-    }
-
 _PHOTO_SENTINELS = {"No photos available", "No photo available"}
 _MEAL_SCHEDULE = {
     "Breakfast": ("08:00 AM - 09:00 AM", 18),
@@ -432,11 +293,13 @@ def _is_tool_error_list(results: list) -> bool:
     return bool(results and isinstance(results[0], dict) and "error" in results[0])
 
 
-def _build_profile_search_context(questions_answers) -> str:
-    """Create positive Google Places terms from all experience-shaping answers."""
-    nightly_budget = questions_answers.budget_per_person_per_night
-    if nightly_budget is None:
-        nightly_budget = questions_answers.effective_total_budget / questions_answers.trip_length_days
+def _build_profile_search_context(profile: TripProfile) -> str:
+    """
+    Positive Google Places terms from the guest's chosen moments, desired
+    feelings and settings. Only option labels are used -- never free text --
+    and avoided activities are left out (they are filtered after retrieval).
+    """
+    nightly_budget = profile.budget_per_night
     if nightly_budget <= 150:
         budget_tier = "entry budget"
     elif nightly_budget <= 400:
@@ -446,16 +309,22 @@ def _build_profile_search_context(questions_answers) -> str:
     else:
         budget_tier = "ultra luxury"
     terms = [
-        questions_answers.experience_kind,
-        questions_answers.travel_style,
-        questions_answers.trip_organization,
-        questions_answers.life_season,
-        " ".join(questions_answers.preferred_environments),
-        f"{questions_answers.energy_level} energy",
+        *profile.moment_labels,
+        *profile.goal_labels,
+        *([] if profile.surprise_me else profile.environment_labels),
         budget_tier,
-        "wellness restorative experiences",
     ]
-    return " ".join(str(term).strip() for term in terms if str(term).strip())
+    return " ".join(str(term).strip().lower() for term in terms if str(term).strip())
+
+
+_CLOSED_BUSINESS_STATUSES = {"CLOSED_PERMANENTLY", "CLOSED_TEMPORARILY"}
+_PLACE_AVAILABILITY_NOTE = (
+    "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+)
+
+
+def _is_open_business(place: dict) -> bool:
+    return place.get("business_status") not in _CLOSED_BUSINESS_STATUSES
 
 
 def _fetch_attraction_dataset(city_name: str, profile_search_query: str = "") -> list[dict]:
@@ -467,7 +336,7 @@ def _fetch_attraction_dataset(city_name: str, profile_search_query: str = "") ->
         })
         if not results or _is_tool_error_list(results):
             return []
-        return results
+        return [place for place in results if _is_open_business(place)]
     except Exception:
         return []
 
@@ -518,6 +387,9 @@ def _enrich_activities(
             verified_name = activity_name
             verified_address = "N/A"
             verified_photos = []
+            place_id = None
+            business_status = None
+            availability_note = "Place not verified on the map; confirm details before visiting."
             best_match = _find_best_match(
                 attraction_dataset,
                 activity_name,
@@ -528,6 +400,9 @@ def _enrich_activities(
                 verified_name = best_match.get("name", activity_name)
                 verified_address = best_match.get("address", "N/A")
                 verified_photos = _clean_photos(best_match.get("photos", []))
+                place_id = best_match.get("place_id")
+                business_status = best_match.get("business_status")
+                availability_note = _PLACE_AVAILABILITY_NOTE
                 match_key = _place_key(best_match)
                 if match_key:
                     used_place_keys.add(match_key)
@@ -540,6 +415,9 @@ def _enrich_activities(
                 "activity_time": activity.get("activity_time", ""),
                 "activity_cost": activity.get("activity_cost", 0),
                 "distance_from_previous_km": None,
+                "place_id": place_id,
+                "business_status": business_status,
+                "availability_note": availability_note,
             }
             enriched_day["activities"].append(enriched_activity)
         enriched_plan.append(enriched_day)
@@ -632,6 +510,8 @@ def _find_restaurant_for_meal(
             "meal_type": meal_name.lower(),
         })
         if restaurants and not _is_tool_error_list(restaurants):
+            restaurants = [restaurant for restaurant in restaurants if _is_open_business(restaurant)]
+        if restaurants and not _is_tool_error_list(restaurants):
             for restaurant in restaurants:
                 key = _place_key(restaurant)
                 if key and key not in used_restaurant_keys:
@@ -666,6 +546,12 @@ def _meal_activity(meal_name: str, restaurant: dict, anchor_location: str) -> di
         "activity_time": time_window,
         "activity_cost": cost,
         "distance_from_previous_km": None,
+        "place_id": restaurant.get("place_id"),
+        "business_status": restaurant.get("business_status"),
+        "availability_note": (
+            "Opening hours and seating are not confirmed; check with the restaurant, "
+            "including any dietary needs."
+        ),
     }
 
 
@@ -735,28 +621,24 @@ def _calculate_distances(tour_plan: list, hotel_address: str) -> list:
     return tour_plan
 
 
-def _check_budget(
-    tour_plan: list,
-    hotel: dict,
-    num_nights: int,
-    total_budget: float,
-) -> tuple:
+def _check_budget(tour_plan: list, hotel: dict, profile: TripProfile) -> tuple:
     """
-    Calculate total cost and verify it's within budget.
-    Total cost = (hotel price_per_night -- num_nights) + sum of all activity costs.
-    Returns (total_cost, is_within_budget).
+    Estimated trip cost, and whether the stay fits the budget.
+
+    The budget is USD per room, per night (IMPORT_RULES.csv "Budget"), so the
+    stay is compared per room-night; activities are costed per person across
+    the party and reported in the total but never counted against the
+    lodging budget. Returns (total_cost_estimate, stay_within_budget).
     """
-    # Calculate hotel total
-    hotel_cost_per_night = _estimate_hotel_cost(hotel)
-    hotel_total = hotel_cost_per_night * num_nights
-    # Sum all activity costs
-    activities_total = 0.0
-    for day in tour_plan:
-        for activity in day.get("activities", []):
-            activities_total += activity.get("activity_cost", 0)
-    total_cost = hotel_total + activities_total
-    is_within_budget = total_cost <= total_budget
-    return total_cost, is_within_budget
+    nightly = _estimate_hotel_cost(hotel)
+    lodging_total = nightly * profile.nights * profile.rooms
+    activities_total = sum(
+        activity.get("activity_cost", 0) or 0
+        for day in tour_plan
+        for activity in day.get("activities", [])
+    ) * profile.party_size
+    within_budget = profile.budget_open_ended or nightly <= profile.budget_per_night
+    return lodging_total + activities_total, within_budget
 
 
 def _build_final_response(
@@ -785,6 +667,8 @@ def _build_final_response(
             facilities=hotel.get("facilities", []),
             website=hotel.get("website", ""),
             estimate_note=hotel.get("estimate_note", ""),
+            price_status="ESTIMATED",
+            availability_status="NOT_CHECKED",
         ),
         "tour_plan": tour_plan,
         "total_cost_estimate": round(total_cost, 2),
@@ -793,158 +677,178 @@ def _build_final_response(
         "source": source,
     }
 
-# ==================== CITY SUGGESTION FLOW ====================
+# ==================== DESTINATION SUGGESTION FLOW ====================
 
 
-def _build_raw_city_suggestions(candidates, explanations, number_of_days: int) -> list[dict]:
-    """Turn ranked property candidates into the city-suggestion dict shape."""
-    raw_cities = []
-    for candidate in candidates:
-        explanation = explanations.get(candidate.property_id, {"match_reasons": [], "warnings": []})
-        raw_cities.append({
-            "city_name": candidate.record.get("Region", ""),
-            "country_name": candidate.record.get("Country", ""),
-            "number_of_days": number_of_days,
-            "description": " ".join(explanation["match_reasons"][:2]),
-            "property_id": candidate.property_id,
-            "match_score": round(candidate.total_score),
-            "warnings": [*candidate.warnings, *explanation["warnings"]],
-        })
-    return raw_cities
+def _load_session_intake(intake: dict) -> TravelIntakeRequest:
+    """Re-read an intake stored in a session (see STORED_INTAKE_CONTEXT)."""
+    return TravelIntakeRequest.model_validate(intake, context=STORED_INTAKE_CONTEXT)
 
 
-def _enrich_city_suggestions_per_country(raw_cities: list[dict]) -> list[dict]:
+def _validation_error(error: ValidationError) -> HTTPException:
+    import json
+    return HTTPException(status_code=422, detail=json.loads(error.json(include_url=False)))
+
+
+def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozenset()) -> tuple:
     """
-    Enrich one city at a time, using that city's own (ground-truth) country as
-    the region hint/hard-constraint for _enrich_city_suggestions, since a
-    single v2 session can suggest cities across several different countries
-    (unlike the old flow, which had one preferred_region for the whole batch).
+    Run the deterministic destination matcher and build the response body.
+    Returns (response, destination_ids_shown). No LLM call happens here; the
+    only network calls are the departure geocode and coordinate lookups for
+    catalog rows without coordinates (both skipped when the guest is open to
+    anywhere) and the per-suggestion photo lookup. None of them receives any
+    intake field besides the departure place name.
     """
-    enriched = []
-    for city in raw_cities:
-        enriched.extend(_enrich_city_suggestions([city], preferred_region=city["country_name"]))
-    return enriched
+    profile = build_trip_profile(request)
+    origin = None
+    if profile.travel_distance != "anywhere":
+        origin = resolve_origin(
+            request.departure_location,
+            request.departure_latitude,
+            request.departure_longitude,
+            request.departure_country,
+        )
+    looked_up = (
+        lookup_missing_coordinates(load_destination_candidates())
+        if origin is not None and origin.has_coordinates
+        else {}
+    )
+    result = rank_destinations(profile, origin, looked_up)
+    selected = select_diverse(result.ranked, exclude_ids=set(exclude_ids))
+    suggestions = [
+        _enrich_destination_media(build_suggestion(item, profile, origin))
+        for item in selected
+    ]
+
+    if not result.ranked:
+        match_status = "no_valid_result"
+    elif not suggestions:
+        match_status = "exhausted"
+    else:
+        match_status = "matched"
+
+    response = {
+        "match_status": match_status,
+        "suggested_cities": suggestions,
+        "no_valid_result": build_no_valid_result(result, profile) if match_status == "no_valid_result" else None,
+        "clarifications": profile.clarifications,
+        "guest_context": profile.guest_context(),
+        "eligible_count": len(result.ranked),
+        "excluded_count": len(result.exclusions),
+        "excluded_by_reason": result.excluded_by_reason(),
+        "total_candidate_count": result.total_candidate_count,
+        "data_gaps": result.data_gaps,
+        "origin": origin.to_dict() if origin is not None else {"status": "NOT_NEEDED"},
+        "estimate_status": (
+            "Suggestions are editorial candidates. No live price, availability or route has been checked."
+        ),
+        "generated_at_utc": _utc_now(),
+        "intake_form": {"form_id": INTAKE_FORM_ID, "form_version": INTAKE_FORM_VERSION},
+        "catalog_version": get_catalog_version(),
+        "intake_mapping_version": INTAKE_MAPPING_VERSION,
+        "scoring_version": SCORING_VERSION,
+    }
+    return response, [suggestion["destination_id"] for suggestion in suggestions]
 
 
-def _build_city_suggestion_response(
-    enriched_cities: list[dict],
-    ranking,
-    profile,
-) -> dict:
+def _suggestion_payload(session) -> dict:
     return {
-        "suggested_cities": enriched_cities,
-        "excluded_count": ranking.excluded_count,
-        "total_candidate_count": ranking.total_candidate_count,
-        "data_gaps": ranking.data_gaps,
-        "extracted_restrictions": {
-            "codes": profile.restrictions.codes,
-            "accessibility_needs": profile.restrictions.accessibility_needs,
-            "unresolved_text": profile.restrictions.unresolved_text,
-        },
+        "session_id": session.session_id,
+        "match_status": session.response.get("match_status"),
+        "suggested_cities": session.suggested_cities,
+        "response": session.response,
     }
 
 
 @router.post("/get_suggested_city")
 
 
-async def get_suggested_city(request: RetreatRecommendationRequest):
+async def get_suggested_city(request: TravelIntakeRequest):
     """
-    GENERATE: run the deterministic property-matching engine (identical
-    pipeline to POST /v2/retreat-recommendations) against the 15-question
-    profile, then group the ranked properties into city-level suggestions --
-    the single best-scoring, real, bookable property per distinct city.
-    Stores the profile and shown property_ids in session for regenerate and
-    for Step 2 (POST /get_tour_plan, unchanged). See API_CITY_FLOW_DOCS.md.
+    GENERATE: rank the destination catalog against the 11-step Velari intake
+    and return 2-3 diverse candidate destinations, each with match reasons
+    tied to the guest's answers, tradeoffs, unresolved facts and verification
+    status. When no destination survives the hard constraints, returns
+    match_status "no_valid_result" naming the blocking constraints instead of
+    relaxing them. See API_CITY_FLOW_DOCS.md.
     """
     try:
-        profile, ranking = build_ranked_pool(request)
-        representatives = select_city_representatives(ranking.ranked, limit=5)
-        explanations = generate_match_explanations(representatives)
-
-        raw_cities = _build_raw_city_suggestions(
-            representatives, explanations, profile.duration_nights_estimate
-        )
-        enriched_cities = _enrich_city_suggestions_per_country(raw_cities)
-        response = _build_city_suggestion_response(enriched_cities, ranking, profile)
-
-        # The itinerary/activity pipeline (Step 2) still runs on the legacy
-        # QuestionAnswers shape -- see src/core/legacy_profile_adapter.py.
-        legacy_answers = build_legacy_answers(request, profile)
-
+        response, shown_ids = _match_intake(request)
         session = CitySessionStore.create(
-            questions_answers=legacy_answers,
-            suggested_cities=enriched_cities,
+            intake=request.model_dump(mode="json"),
+            suggested_cities=response["suggested_cities"],
             response=response,
-            v2_request=request.model_dump(mode="json"),
-            shown_property_ids=[city["property_id"] for city in raw_cities],
+            shown_destination_ids=shown_ids,
         )
-        return {
-            "session_id": session.session_id,
-            "suggested_cities": session.suggested_cities,
-            "response": session.response,
-        }
+        return _suggestion_payload(session)
+    except HTTPException:
+        raise
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+# Party fields depend on travel_party; when a refinement changes the party
+# type without resending them, the stored counts must not carry over.
+_PARTY_DEPENDENT_FIELDS = ("party_adults", "party_children", "party_rooms", "party_child_ages")
+
+
+def _apply_intake_updates(stored: dict, updates: dict) -> TravelIntakeRequest:
+    merged = {**stored, **updates}
+    if "travel_party" in updates and updates["travel_party"] != stored.get("travel_party"):
+        for field_name in _PARTY_DEPENDENT_FIELDS:
+            if field_name not in updates:
+                merged.pop(field_name, None)
+    # Refined answers are a new submission, so the normal date rules apply.
+    return TravelIntakeRequest.model_validate(merged)
+
 
 @router.post("/regenerate_suggested_city")
 
 
 async def regenerate_suggested_city(regenerate_data: RegenerateInputData):
     """
-    REGENERATE: re-run the same deterministic matching pipeline for the same
-    profile, excluding every property already shown in this session, and
-    surface the next best distinct cities. Ranking is deterministic, so this
-    never needs another model call to pick different cities.
+    REGENERATE: without intake_updates, re-rank the same answers and show the
+    next best destinations not yet shown in this session. With intake_updates
+    (e.g. a constraint the guest agreed to flex), re-validate the refined
+    answers and rank from scratch.
     """
     session = CitySessionStore.get(regenerate_data.session_id)
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
-    if not session.v2_request:
-        raise HTTPException(
-            status_code=409,
-            detail=(
-                "This session predates the property-matching questionnaire and has no "
-                "stored v2 profile, so it cannot be regenerated. Start a new session "
-                "with POST /get_suggested_city."
-            ),
-        )
     try:
-        request = RetreatRecommendationRequest(**session.v2_request)
-        profile, ranking = build_ranked_pool(request)
-        already_shown = set(session.shown_property_ids)
-        representatives = select_city_representatives(
-            ranking.ranked, exclude_property_ids=already_shown, limit=5
-        )
-        if not representatives:
+        if regenerate_data.intake_updates:
+            request = _apply_intake_updates(session.intake, regenerate_data.intake_updates)
+            exclude_ids = frozenset()
+            updated_intake = request.model_dump(mode="json")
+        else:
+            request = _load_session_intake(session.intake)
+            exclude_ids = frozenset(session.shown_destination_ids)
+            updated_intake = None
+    except ValidationError as error:
+        raise _validation_error(error) from error
+
+    try:
+        response, new_ids = _match_intake(request, exclude_ids)
+        if response["match_status"] == "exhausted":
             raise HTTPException(
                 status_code=404,
-                detail="No further distinct cities are available for this profile.",
+                detail=(
+                    "No further destinations are available for these answers. "
+                    "Send intake_updates to refine the answers and see different options."
+                ),
             )
-        explanations = generate_match_explanations(representatives)
-
-        raw_cities = _build_raw_city_suggestions(
-            representatives, explanations, profile.duration_nights_estimate
-        )
-        enriched_cities = _enrich_city_suggestions_per_country(raw_cities)
-        response = _build_city_suggestion_response(enriched_cities, ranking, profile)
-
+        shown_ids = new_ids if updated_intake is not None else [*session.shown_destination_ids, *new_ids]
         updated_session = CitySessionStore.update_response(
             session_id=regenerate_data.session_id,
             response=response,
             update_field_name="suggested_cities",
             user_instruction=regenerate_data.user_instruction or "",
-            shown_property_ids=[
-                *session.shown_property_ids,
-                *(city["property_id"] for city in raw_cities),
-            ],
+            shown_destination_ids=shown_ids,
+            intake=updated_intake,
         )
         if updated_session is None:
             raise HTTPException(status_code=404, detail="Session not found.")
-        return {
-            "session_id": updated_session.session_id,
-            "suggested_cities": updated_session.suggested_cities,
-            "response": updated_session.response,
-        }
+        return _suggestion_payload(updated_session)
     except HTTPException:
         raise
     except Exception as error:
@@ -952,137 +856,171 @@ async def regenerate_suggested_city(regenerate_data: RegenerateInputData):
 
 # ==================== ACTIVITY/TOUR PLAN FLOW ====================
 
+
+def _resolve_selected_destination(city_session, request_data: TourPlanRequestData) -> Destination:
+    """
+    Only a destination suggested in this session can be planned: anything else
+    was never matched against the guest's answers, or was excluded by them
+    (IMPORT_RULES.csv "Candidate versus recommendation").
+    """
+    shown_ids = city_session.shown_destination_ids
+    if request_data.destination_id:
+        destination = get_destination(request_data.destination_id)
+        if destination is None:
+            raise HTTPException(
+                status_code=404,
+                detail=f"No catalog destination found for destination_id '{request_data.destination_id}'.",
+            )
+        if destination.destination_id not in shown_ids:
+            raise HTTPException(
+                status_code=400,
+                detail=f"destination_id '{request_data.destination_id}' was not suggested in this session.",
+            )
+        return destination
+
+    wanted = request_data.selected_city.strip().lower()
+    if not wanted:
+        raise HTTPException(status_code=400, detail="Provide destination_id (preferred) or selected_city.")
+    shown = [get_destination(destination_id) for destination_id in shown_ids]
+    for destination in shown:
+        if destination is not None and destination.destination.lower() == wanted:
+            return destination
+    options = ", ".join(destination.destination for destination in shown if destination is not None)
+    raise HTTPException(
+        status_code=400,
+        detail=f"'{request_data.selected_city}' was not suggested in this session. Choose one of: {options or 'none'}.",
+    )
+
+
+def _location_for(destination: Optional[Destination], fallback: str) -> str:
+    """Destination plus its catalog country, so map searches stay in the right country."""
+    if destination is None:
+        return fallback
+    return f"{destination.destination}, {destination.country}"
+
+
+def _cheaper_stay_within_budget(
+    location: str, profile: TripProfile, profile_search_query: str, tour_plan: list
+) -> Optional[tuple]:
+    """Cheapest-first search for a stay whose estimated nightly cost fits the budget."""
+    try:
+        hotels = get_google_hotels_sorted_by_rating.invoke({
+            "location_name": location,
+            "search_query": profile_search_query,
+        })
+    except Exception:
+        return None
+    if not hotels or "error" in hotels[0]:
+        return None
+    candidates = sorted(
+        (
+            _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
+            for hotel in hotels
+        ),
+        key=_estimate_hotel_cost,
+    )
+    for candidate in candidates:
+        total_cost, within_budget = _check_budget(tour_plan, candidate, profile)
+        if within_budget:
+            return candidate, total_cost
+    return None
+
+
+def _budget_check(hotel: dict, profile: TripProfile, within_budget: bool) -> dict:
+    """Surface the stay/budget comparison instead of relaxing the budget silently."""
+    return {
+        "budget_per_night_usd": profile.budget_per_night,
+        "budget_open_ended": profile.budget_open_ended,
+        "rooms": profile.rooms,
+        "estimated_stay_nightly_usd": _estimate_hotel_cost(hotel),
+        "stay_within_budget": within_budget,
+        "status": "ESTIMATED",
+        "note": (
+            "Estimated from map data, not a live rate. Confirm the final payable amount for your "
+            "dates, party and rooms with the booking provider before booking."
+            if within_budget
+            else "No stay found at or below your nightly budget in the map search; the stay shown is "
+            "above it (estimated). Your budget was not changed."
+        ),
+    }
+
+
+def _hotel_from_stay(stay) -> dict:
+    return stay.model_dump() if hasattr(stay, "model_dump") else dict(stay)
+
+
 @router.post("/get_tour_plan")
 
 
 async def get_tour_plan(request_data: TourPlanRequestData):
     """
-    GENERATE: First time -> create day-wise activity plan for selected city.
-    Two-step pattern:
+    GENERATE: First time -> create a day-wise plan for a destination suggested
+    in this session. Two-step pattern:
     1. LLM proposes activity names, descriptions, areas, times, costs
-    2. Tool enrichment: hotel lookup, address/photos enrichment, distance calculation, budget check
-    Returns: stay, tour_plan (with enriched addresses/images/distances), total_cost_estimate.
+    2. Tool enrichment: stay search, place/address/photos enrichment,
+       distance calculation, budget check (all prices estimated)
     """
-    # Fetch parent city session
     city_session = CitySessionStore.get(request_data.session_id)
     if city_session is None:
         raise HTTPException(status_code=404, detail="City session not found.")
-    # Resolve the destination. property_id (from POST /v2/retreat-recommendations)
-    # takes precedence over selected_city per BACKEND_DEVELOPER_CHANGES.md
-    # ("Itinerary generation must accept property_id, not only a city name.").
-    forced_retreat = None
-    city_name = request_data.selected_city
-    if request_data.property_id:
-        forced_retreat = get_retreat_by_property_id(request_data.property_id)
-        if forced_retreat is None:
-            raise HTTPException(
-                status_code=404,
-                detail=f"No property found for property_id '{request_data.property_id}'.",
-            )
-        city_name = forced_retreat.get("Region") or forced_retreat.get("Property Name") or city_name
+    destination = _resolve_selected_destination(city_session, request_data)
+    city_name = destination.destination
     try:
-        # Check if activity session already exists for this destination (to avoid re-generation)
         activity_session = ActivitySessionStore.get_by_city(
             session_id=request_data.session_id,
             city_name=city_name,
         )
         if activity_session is not None:
-            # Activities already generated -> return cached version
             return {
                 "activity_session_id": activity_session.activity_session_id,
+                "destination_id": activity_session.destination_id,
                 "city": activity_session.city,
                 "stay": activity_session.stay,
                 "tour_plan": activity_session.tour_plan,
                 "total_cost_estimate": activity_session.total_cost_estimate,
+                "budget_check": activity_session.response.get("budget_check"),
                 "packing_tips": activity_session.packing_tips,
                 "travel_tips": activity_session.travel_tips,
                 "source": "cached",
             }
+        profile = build_trip_profile(_load_session_intake(city_session.intake))
+        location = _location_for(destination, city_name)
+
         # === STEP 1: LLM proposes activities (names, descriptions, areas, times, costs only) ===
-        prompt = PromptGenerator.gen_tour_plan_prompt(
-            questions_answers=city_session.questions_answers,
-            selected_city=city_name,
-            trip_length_days=city_session.questions_answers.trip_length_days,
-        )
-        response_text = get_ai_response(prompt)
-        response = _parse_ai_response(response_text)
+        prompt = PromptGenerator.gen_tour_plan_prompt(profile, city_name, destination)
+        response = _parse_ai_response(get_ai_response(prompt))
         llm_tour_plan = response.get("tour_plan", [])
         packing_tips = response.get("packing_tips", "")
         travel_tips = response.get("travel_tips", "")
-        # === STEP 2a: Tool - Find hotel ===
-        budget = city_session.questions_answers.effective_total_budget
-        num_nights = city_session.questions_answers.trip_length_days
-        profile_search_query = _build_profile_search_context(city_session.questions_answers)
-        hotel = _find_hotel(
-            city_name,
-            budget,
-            num_nights,
-            profile_search_query,
-            city_session.questions_answers.preferred_region or "",
-            forced_retreat=forced_retreat,
-        )
-        hotel = _complete_hotel_values(
-            hotel,
-            city_name,
-            budget / max(num_nights, 1),
-            profile_search_query,
-        )
+
+        # === STEP 2a: Tool - Find stay ===
+        profile_search_query = _build_profile_search_context(profile)
+        hotel = _find_hotel(location, profile.budget_per_night, profile.budget_open_ended, profile_search_query)
+        hotel = _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
         hotel["photos"] = _clean_photos(hotel.get("photos", []))
-        hotel_address = hotel.get("address", f"City Center, {city_name}")
-        # === STEP 2b: Tool - Enrich activities with real addresses & photos ===
-        enriched_plan = _enrich_activities(
-            llm_tour_plan, city_name, profile_search_query=profile_search_query
-        )
-        enriched_plan = _add_daily_meals(enriched_plan, hotel_address, city_name)
+        hotel_address = hotel.get("address", f"City Center, {location}")
+
+        # === STEP 2b: Tool - Enrich activities with real places, addresses & photos ===
+        enriched_plan = _enrich_activities(llm_tour_plan, location, profile_search_query=profile_search_query)
+        enriched_plan = _add_daily_meals(enriched_plan, hotel_address, location)
         # === STEP 2c: Tool - Calculate real distances ===
         enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-        # === STEP 5: Budget check ===
-        total_cost, is_within_budget = _check_budget(
-            enriched_plan, hotel, num_nights, budget
-        )
-        # If over budget, try to find a cheaper hotel
-        if not is_within_budget:
-            # Try cheaper hotels
-            try:
-                all_hotels = get_google_hotels_sorted_by_rating.invoke({
-                    "location_name": city_name,
-                    "search_query": profile_search_query,
-                })
-                if all_hotels and "error" not in all_hotels[0]:
-                    all_hotels = [
-                        _complete_hotel_values(
-                            candidate,
-                            city_name,
-                            budget / max(num_nights, 1),
-                            profile_search_query,
-                        )
-                        for candidate in all_hotels
-                    ]
-                    # Sort by estimated price ascending
-                    all_hotels_with_price = [
-                        (h, _estimate_hotel_cost(h) * num_nights)
-                        for h in all_hotels
-                    ]
-                    all_hotels_with_price.sort(key=lambda x: x[1])
-                    for cheaper_hotel, _ in all_hotels_with_price:
-                        test_cost, test_budget = _check_budget(
-                            enriched_plan, cheaper_hotel, num_nights, budget
-                        )
-                        if test_budget:
-                            hotel = cheaper_hotel
-                            hotel["photos"] = _clean_photos(hotel.get("photos", []))
-                            hotel_address = hotel.get("address", f"City Center, {city_name}")
-                            # Recalculate distances since hotel changed
-                            enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-                            total_cost = test_cost
-                            is_within_budget = True
-                            break
-            except Exception:
-                pass
-        # Replace total_cost_estimate in response with actual hotel+activities total
+
+        # === STEP 3: Budget check (stay per room-night vs. the guest's budget) ===
+        total_cost, within_budget = _check_budget(enriched_plan, hotel, profile)
+        if not within_budget:
+            cheaper = _cheaper_stay_within_budget(location, profile, profile_search_query, enriched_plan)
+            if cheaper is not None:
+                hotel, total_cost = cheaper
+                within_budget = True
+                hotel["photos"] = _clean_photos(hotel.get("photos", []))
+                hotel_address = hotel.get("address", f"City Center, {location}")
+                enriched_plan = _calculate_distances(enriched_plan, hotel_address)
+
         response["total_cost_estimate"] = round(total_cost, 2)
-        # === STEP 6: Store in session ===
-        # Create new activity session with enriched data
+        response["budget_check"] = _budget_check(hotel, profile, within_budget)
+
+        # === STEP 4: Store in session ===
         activity_session = ActivitySessionStore.create(
             parent_session_id=request_data.session_id,
             city_name=city_name,
@@ -1092,17 +1030,24 @@ async def get_tour_plan(request_data: TourPlanRequestData):
             total_cost_estimate=round(total_cost, 2),
             packing_tips=packing_tips,
             travel_tips=travel_tips,
+            destination_id=destination.destination_id,
         )
-        return _build_final_response(
-            hotel=hotel,
-            tour_plan=enriched_plan,
-            total_cost=total_cost,
-            packing_tips=packing_tips,
-            travel_tips=travel_tips,
-            activity_session_id=activity_session.activity_session_id,
-            city_name=city_name,
-            source="generated",
-        )
+        return {
+            **_build_final_response(
+                hotel=hotel,
+                tour_plan=enriched_plan,
+                total_cost=total_cost,
+                packing_tips=packing_tips,
+                travel_tips=travel_tips,
+                activity_session_id=activity_session.activity_session_id,
+                city_name=city_name,
+                source="generated",
+            ),
+            "destination_id": destination.destination_id,
+            "budget_check": response["budget_check"],
+        }
+    except HTTPException:
+        raise
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
@@ -1111,142 +1056,80 @@ async def get_tour_plan(request_data: TourPlanRequestData):
 
 async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
     """
-    REGENERATE: User wants different day-wise activities (same city, new plan).
+    REGENERATE: different day-wise activities (same destination, new plan).
     Same two-step pattern as generate:
     1. LLM proposes new activity names/descriptions/areas/times/costs
-    2. Tool enrichment: address/photos lookup, distance recalculation, budget re-check
+    2. Tool enrichment: place/address/photos lookup, distance recalculation, budget re-check
     """
-    # Fetch activity session
     activity_session = ActivitySessionStore.get(regenerate_data.activity_session_id)
     if activity_session is None:
         raise HTTPException(status_code=404, detail="Activity session not found.")
-    # Fetch parent city session for Q&A
     city_session = CitySessionStore.get(activity_session.parent_session_id)
     if city_session is None:
         raise HTTPException(status_code=404, detail="Parent city session not found.")
     try:
+        profile = build_trip_profile(_load_session_intake(city_session.intake))
+        destination = get_destination(activity_session.destination_id) if activity_session.destination_id else None
+        city_name = activity_session.city
+        location = _location_for(destination, city_name)
+
         # === STEP 1: LLM proposes new activities ===
         prompt = PromptGenerator.regenerate_tour_plan_prompt(
-            questions_answers=city_session.questions_answers,
-            city_name=activity_session.city,
+            profile=profile,
+            city_name=city_name,
             current_tour_plan=activity_session.tour_plan,
             day_to_regenerate=regenerate_data.day_to_regenerate,
             user_instruction=regenerate_data.user_instruction,
+            destination=destination,
         )
-        response_text = get_ai_response(prompt)
-        generated_response = _parse_ai_response(response_text)
+        generated_response = _parse_ai_response(get_ai_response(prompt))
         llm_tour_plan = generated_response.get("tour_plan", [])
+
         # === STEP 2: Tool enrichment ===
-        city_name = activity_session.city
-        budget = city_session.questions_answers.effective_total_budget
-        num_nights = city_session.questions_answers.trip_length_days
-        profile_search_query = _build_profile_search_context(city_session.questions_answers)
-        # Reuse the existing hotel from the stored response if available
-        hotel_data = activity_session.stay
-        if hotel_data:
-            hotel = {
-                "name": hotel_data.name,
-                "address": hotel_data.address,
-                "rating": hotel_data.rating,
-                "price_level": hotel_data.price_level,
-                "photos": hotel_data.photos,
-                "coords": hotel_data.coords,
-                "average_nightly_price": hotel_data.average_nightly_price,
-                "budget_tier": hotel_data.budget_tier,
-                "facilities": hotel_data.facilities,
-                "website": hotel_data.website,
-                "estimate_note": hotel_data.estimate_note,
-            }
+        profile_search_query = _build_profile_search_context(profile)
+        if activity_session.stay:
+            hotel = _hotel_from_stay(activity_session.stay)
         else:
-            hotel = _find_hotel(
-                city_name,
-                budget,
-                num_nights,
-                profile_search_query,
-                city_session.questions_answers.preferred_region or "",
-            )
-        hotel = _complete_hotel_values(
-            hotel,
-            city_name,
-            budget / max(num_nights, 1),
-            profile_search_query,
-        )
+            hotel = _find_hotel(location, profile.budget_per_night, profile.budget_open_ended, profile_search_query)
+        hotel = _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
         hotel["photos"] = _clean_photos(hotel.get("photos", []))
-        hotel_address = hotel.get("address", f"City Center, {city_name}")
-        # Enrich activities with real data
+        hotel_address = hotel.get("address", f"City Center, {location}")
         enriched_plan = _enrich_activities(
             llm_tour_plan,
-            city_name,
+            location,
             existing_plan=activity_session.tour_plan,
             day_to_regenerate=regenerate_data.day_to_regenerate,
             profile_search_query=profile_search_query,
         )
-        enriched_plan = _add_daily_meals(enriched_plan, hotel_address, city_name)
-        # Calculate distances for the regenerated days, then merge if needed.
+        enriched_plan = _add_daily_meals(enriched_plan, hotel_address, location)
         enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-        full_tour_plan = (
-            _merge_tour_plan_days(activity_session.tour_plan, enriched_plan)
-            if regenerate_data.day_to_regenerate is not None
-            else enriched_plan
-        )
-        # Budget check
-        total_cost, is_within_budget = _check_budget(
-            full_tour_plan, hotel, num_nights, budget
-        )
-        if not is_within_budget:
-            try:
-                all_hotels = get_google_hotels_sorted_by_rating.invoke({
-                    "location_name": city_name,
-                    "search_query": profile_search_query,
-                })
-                if all_hotels and "error" not in all_hotels[0]:
-                    all_hotels = [
-                        _complete_hotel_values(
-                            candidate,
-                            city_name,
-                            budget / max(num_nights, 1),
-                            profile_search_query,
-                        )
-                        for candidate in all_hotels
-                    ]
-                    all_hotels_with_price = [
-                        (h, _estimate_hotel_cost(h) * num_nights)
-                        for h in all_hotels
-                    ]
-                    all_hotels_with_price.sort(key=lambda x: x[1])
-                    for cheaper_hotel, _ in all_hotels_with_price:
-                        candidate_full_plan = (
-                            _merge_tour_plan_days(activity_session.tour_plan, enriched_plan)
-                            if regenerate_data.day_to_regenerate is not None
-                            else enriched_plan
-                        )
-                        test_cost, test_budget = _check_budget(
-                            candidate_full_plan, cheaper_hotel, num_nights, budget
-                        )
-                        if test_budget:
-                            hotel = cheaper_hotel
-                            hotel["photos"] = _clean_photos(hotel.get("photos", []))
-                            hotel_address = hotel.get("address", f"City Center, {city_name}")
-                            enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-                            full_tour_plan = (
-                                _merge_tour_plan_days(activity_session.tour_plan, enriched_plan)
-                                if regenerate_data.day_to_regenerate is not None
-                                else enriched_plan
-                            )
-                            total_cost = test_cost
-                            is_within_budget = True
-                            break
-            except Exception:
-                pass
+
+        def full_plan(plan: list) -> list:
+            if regenerate_data.day_to_regenerate is None:
+                return plan
+            return _merge_tour_plan_days(activity_session.tour_plan, plan)
+
+        full_tour_plan = full_plan(enriched_plan)
+        total_cost, within_budget = _check_budget(full_tour_plan, hotel, profile)
+        if not within_budget:
+            cheaper = _cheaper_stay_within_budget(location, profile, profile_search_query, full_tour_plan)
+            if cheaper is not None:
+                hotel, total_cost = cheaper
+                within_budget = True
+                hotel["photos"] = _clean_photos(hotel.get("photos", []))
+                hotel_address = hotel.get("address", f"City Center, {location}")
+                enriched_plan = _calculate_distances(enriched_plan, hotel_address)
+                full_tour_plan = full_plan(enriched_plan)
+
         generated_response["total_cost_estimate"] = round(total_cost, 2)
         generated_response["tour_plan"] = full_tour_plan
-        # Merge enriched tour plan into response
         response = _merge_regenerated_field(
             previous_response=activity_session.response,
             generated_response=generated_response,
             update_field_name="tour_plan",
         )
-        # Update activity session with enriched data
+        response["total_cost_estimate"] = round(total_cost, 2)
+        response["budget_check"] = _budget_check(hotel, profile, within_budget)
         updated_session = ActivitySessionStore.update_response(
             activity_session_id=regenerate_data.activity_session_id,
             response=response,
@@ -1257,16 +1140,22 @@ async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
         )
         if updated_session is None:
             raise HTTPException(status_code=404, detail="Activity session not found.")
-        return _build_final_response(
-            hotel=hotel,
-            tour_plan=full_tour_plan,
-            total_cost=total_cost,
-            packing_tips=activity_session.packing_tips if hasattr(activity_session, 'packing_tips') else "",
-            travel_tips=activity_session.travel_tips if hasattr(activity_session, 'travel_tips') else "",
-            activity_session_id=updated_session.activity_session_id,
-            city_name=city_name,
-            source="regenerated",
-        )
+        return {
+            **_build_final_response(
+                hotel=hotel,
+                tour_plan=full_tour_plan,
+                total_cost=total_cost,
+                packing_tips=activity_session.packing_tips,
+                travel_tips=activity_session.travel_tips,
+                activity_session_id=updated_session.activity_session_id,
+                city_name=city_name,
+                source="regenerated",
+            ),
+            "destination_id": activity_session.destination_id,
+            "budget_check": response["budget_check"],
+        }
+    except HTTPException:
+        raise
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
 
@@ -1276,14 +1165,16 @@ async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
 
 
 async def get_session_details(session_id: str):
-    """Get full session details: Q&A, suggestions, and regeneration history."""
+    """Get full session details: intake answers, suggestions, and regeneration history."""
     session = CitySessionStore.get(session_id)
     if session is None:
         raise HTTPException(status_code=404, detail="Session not found.")
     return {
         "session_id": session.session_id,
-        "questions_answers": session.questions_answers.model_dump(),
+        "intake": session.intake,
+        "match_status": session.response.get("match_status"),
         "suggested_cities": [city.model_dump() for city in session.suggested_cities],
+        "shown_destination_ids": session.shown_destination_ids,
         "regeneration_history": session.history,
     }
 
@@ -1298,6 +1189,7 @@ async def get_activity_session_details(activity_session_id: str):
     return {
         "activity_session_id": session.activity_session_id,
         "parent_session_id": session.parent_session_id,
+        "destination_id": session.destination_id,
         "city": session.city,
         "stay": session.stay,
         "tour_plan": [day.model_dump() for day in session.tour_plan],

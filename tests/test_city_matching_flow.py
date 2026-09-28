@@ -1,207 +1,291 @@
 """
-Tests for the merged city-suggestion flow: POST /get_suggested_city now runs
-the deterministic property-matching engine and groups ranked properties into
-cities, instead of asking a model to invent destinations. See
-API_CITY_FLOW_DOCS.md for the full contract this covers.
+API tests for the Velari intake flow: POST /get_suggested_city ranks the
+destination catalog, /regenerate_suggested_city shows new options or applies
+refined answers, and POST /get_tour_plan only plans a destination that was
+suggested in the session. See API_CITY_FLOW_DOCS.md.
 """
 
-from unittest.mock import patch
+import json
+from unittest.mock import MagicMock, patch
 
-import pytest
 from fastapi.testclient import TestClient
 
 import main
-from app.schemas.retreat_v2_schema import RetreatRecommendationRequest
-from src.core.legacy_profile_adapter import build_legacy_answers
-from src.core.matching_profile import build_matching_profile
-from src.core.retreat_matching_orchestrator import (
-    build_ranked_pool,
-    select_city_representatives,
-)
+from src.core.destination_catalog import load_discovery_backlog
+from intake_fixtures import build_intake, exact_dates, with_restriction
 
 client = TestClient(main.app)
 
-
-@pytest.fixture(autouse=True)
-def _stub_llm_explanations(monkeypatch):
-    def _disabled(*_args, **_kwargs):
-        raise RuntimeError("LLM disabled in tests")
-
-    monkeypatch.setattr("src.service.chat_services.get_ai_response", _disabled)
-    yield
-
-
-def _v2_payload(**overrides) -> dict:
-    payload = {
-        "archetype": "burned_out_achiever",
-        "escape_from": "noise_stimulation",
-        "arrival_priority": "silence_privacy",
-        "structure_preference": "optional_rituals",
-        "reset_style": "digital_disconnection",
-        "physical_intensity": "gentle",
-        "party": {"type": "solo", "adults": 1, "children": 0},
-        "spirituality": "none",
-        "travel_window": {"mode": "flexible"},
-        "planning_service_level": "well_planned",
-        "restrictions": {"text": "", "codes": []},
-        "settings": [],
-        "budget": {"currency": "USD", "per_person_per_night_max": 500, "open_ended": False},
-        "duration": {"bucket": "4_7_nights"},
-        "transform_focus": ["Burnout Recovery", "Sleep"],
-    }
-    payload.update(overrides)
-    return payload
+TOUR_PLAN_JSON = json.dumps({
+    "tour_plan": [{"day": 1, "activities": [{
+        "activity_name": "Hot spring soak",
+        "activity_description": "Unhurried soak; confirm with the operator",
+        "activity_location": "Old town",
+        "activity_time": "10:00 AM - 11:30 AM",
+        "activity_cost": 20,
+    }]}],
+    "total_cost_estimate": 20,
+    "packing_tips": "Layers",
+    "travel_tips": "Check official entry guidance",
+})
 
 
-# ==================== select_city_representatives ====================
-
-def test_select_city_representatives_returns_distinct_locations_only():
-    request = RetreatRecommendationRequest(**_v2_payload())
-    _, ranking = build_ranked_pool(request)
-    representatives = select_city_representatives(ranking.ranked, limit=5)
-    locations = [
-        (c.record.get("Region", "").lower(), c.record.get("Country", "").lower())
-        for c in representatives
-    ]
-    assert len(locations) == len(set(locations))
+def _suggest(payload: dict):
+    return client.post("/get_suggested_city", json=payload)
 
 
-def test_select_city_representatives_excludes_given_property_ids():
-    request = RetreatRecommendationRequest(**_v2_payload())
-    _, ranking = build_ranked_pool(request)
-    first_batch = select_city_representatives(ranking.ranked, limit=5)
-    exclude = {c.property_id for c in first_batch}
-    second_batch = select_city_representatives(ranking.ranked, exclude_property_ids=exclude, limit=5)
-    assert not exclude & {c.property_id for c in second_batch}
+def _tool(return_value) -> MagicMock:
+    tool = MagicMock()
+    tool.invoke.return_value = return_value
+    return tool
 
 
-def test_select_city_representatives_picks_best_score_per_location():
-    """Within one location, the representative must be the highest-scoring property there."""
-    request = RetreatRecommendationRequest(**_v2_payload())
-    _, ranking = build_ranked_pool(request, pool_size=150)
-    representatives = select_city_representatives(ranking.ranked, limit=150)
-    best_by_location = {}
-    for candidate in ranking.ranked:
-        key = (candidate.record.get("Region", "").lower(), candidate.record.get("Country", "").lower())
-        best_by_location.setdefault(key, candidate)
-    for representative in representatives:
-        key = (representative.record.get("Region", "").lower(), representative.record.get("Country", "").lower())
-        assert representative.property_id == best_by_location[key].property_id
+# ==================== /get_suggested_city ====================
 
-
-# ==================== legacy_profile_adapter ====================
-
-def test_legacy_adapter_maps_planning_service_and_settings_directly():
-    request = RetreatRecommendationRequest(**_v2_payload(
-        planning_service_level="hour_by_hour",
-        settings=["ocean_beach", "mountains"],
-    ))
-    profile = build_matching_profile(request)
-    legacy = build_legacy_answers(request, profile)
-    assert "hour-by-hour" in legacy.trip_organization
-    assert "ocean/beach" in legacy.preferred_environments
-    assert "mountains" in legacy.preferred_environments
-
-
-def test_legacy_adapter_has_no_birthdate_and_carries_budget_and_duration():
-    request = RetreatRecommendationRequest(**_v2_payload())
-    profile = build_matching_profile(request)
-    legacy = build_legacy_answers(request, profile)
-    assert legacy.birthdate is None
-    assert legacy.budget_per_person_per_night == 500
-    assert legacy.trip_length_days == profile.duration_nights_estimate
-    assert legacy.effective_total_budget == 500 * profile.duration_nights_estimate
-
-
-def test_legacy_adapter_surfaces_restrictions_as_activity_restrictions():
-    request = RetreatRecommendationRequest(**_v2_payload(
-        restrictions={"text": "No hiking or long drives", "codes": []}
-    ))
-    profile = build_matching_profile(request)
-    legacy = build_legacy_answers(request, profile)
-    assert "no_hiking" in legacy.activity_restrictions
-    assert "no_long_drives" in legacy.activity_restrictions
-
-
-# ==================== API-level: /get_suggested_city ====================
-
-def test_get_suggested_city_returns_real_properties_grouped_by_city():
-    response = client.post("/get_suggested_city", json=_v2_payload())
+def test_get_suggested_city_returns_two_to_three_catalog_destinations():
+    response = _suggest(build_intake())
     assert response.status_code == 200
     data = response.json()
+    assert data["match_status"] == "matched"
     cities = data["suggested_cities"]
-    assert cities
+    assert 2 <= len(cities) <= 3
+    assert len({city["country_name"] for city in cities}) == len(cities)
     for city in cities:
-        assert city["property_id"].startswith("retreat_")
+        assert city["destination_id"]
         assert isinstance(city["match_score"], int)
-    city_names = [c["city_name"] for c in cities]
-    assert len(city_names) == len(set(city_names))
-    assert "response" in data
-    assert "data_gaps" in data["response"]
-    assert "extracted_restrictions" in data["response"]
+        assert city["match_reasons"] and city["tradeoffs"] and city["unresolved_facts"]
+        assert city["verification"]["candidate_status"] == "CANDIDATE_ONLY"
+        assert city["evidence"]["place_lookup"]["outcome"] == "UNVERIFIED"  # offline in tests
+    body = data["response"]
+    assert body["total_candidate_count"] == 72
+    assert body["catalog_version"]["backlog_count"] == 928
+    assert body["origin"] == {"status": "NOT_NEEDED"}
+    assert body["guest_context"]["trip_goals"][0]["label"] == "Restoration"
 
 
-def test_get_suggested_city_rejects_legacy_payload_shape():
-    """The old 12-question InputData shape is no longer a valid request body."""
-    response = client.post(
-        "/get_suggested_city",
-        json={
-            "questions_answers": {"todays_feeling": "curious"},
-            "hope_of_this_trip": "relax",
-        },
-    )
+def test_old_questionnaire_payload_is_rejected():
+    response = _suggest({
+        "archetype": "burned_out_achiever",
+        "escape_from": "noise_stimulation",
+        "budget": {"currency": "USD", "per_person_per_night_max": 500},
+    })
     assert response.status_code == 422
 
 
-def test_regenerate_suggested_city_never_repeats_a_property_across_calls():
-    initial = client.post("/get_suggested_city", json=_v2_payload())
-    session_id = initial.json()["session_id"]
-    first_ids = {c["property_id"] for c in initial.json()["suggested_cities"]}
+def test_no_valid_result_names_the_constraint_instead_of_relaxing_it():
+    payload = with_restriction(build_intake(), "mobility_accessibility", "must_avoid")
+    response = _suggest(payload)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["match_status"] == "no_valid_result"
+    assert data["suggested_cities"] == []
+    no_result = data["response"]["no_valid_result"]
+    assert no_result["relaxed_automatically"] is False
+    assert no_result["blocking_constraints"][0]["field"] == "restriction_severity_mobility_accessibility"
 
-    regenerated = client.post(
-        "/regenerate_suggested_city",
-        json={"session_id": session_id, "user_instruction": "more variety"},
+
+def test_departure_geocode_receives_only_the_departure_place():
+    geocode = _tool({"city_name": "Lisbon", "country": "Portugal", "lat": 38.72, "lng": -9.14, "photos": []})
+    payload = build_intake(
+        travel_distance="nearby",
+        recent_feelings=["something_else"],
+        recent_feelings_other="PRIVATE-FEELING",
     )
-    assert regenerated.status_code == 200
-    second_ids = {c["property_id"] for c in regenerated.json()["suggested_cities"]}
-    assert not first_ids & second_ids
+    with patch("src.core.origin.get_cityinfo", geocode):
+        response = _suggest(payload)
+    assert response.status_code == 200
+    geocode.invoke.assert_called_once_with({"city_name": "Lisbon"})
+    body = response.json()["response"]
+    assert body["origin"]["status"] == "GEOCODED"
+    for city in response.json()["suggested_cities"]:
+        km = city["distance_check"]["straight_line_km"]
+        assert km is None or km <= 1500
+    assert "PRIVATE-FEELING" not in response.text
 
 
-def test_regenerate_suggested_city_unknown_session_is_404():
-    response = client.post(
-        "/regenerate_suggested_city",
-        json={"session_id": "does-not-exist", "user_instruction": "x"},
+def test_guest_supplied_coordinates_skip_the_geocode():
+    geocode = _tool({"error": "should not be called"})
+    payload = build_intake(
+        travel_distance="nearby",
+        departure_latitude=38.72,
+        departure_longitude=-9.14,
+        departure_country="Portugal",
     )
+    with patch("src.core.origin.get_cityinfo", geocode):
+        response = _suggest(payload)
+    assert response.json()["response"]["origin"]["status"] == "GUEST_SUPPLIED"
+    geocode.invoke.assert_not_called()
+
+
+# ==================== /regenerate_suggested_city ====================
+
+def test_regenerate_never_repeats_until_exhausted_then_404():
+    initial = _suggest(build_intake()).json()
+    session_id = initial["session_id"]
+    seen = {city["destination_id"] for city in initial["suggested_cities"]}
+    for _ in range(40):
+        response = client.post("/regenerate_suggested_city", json={"session_id": session_id})
+        if response.status_code == 404:
+            break
+        assert response.status_code == 200
+        batch = {city["destination_id"] for city in response.json()["suggested_cities"]}
+        assert batch and not batch & seen
+        seen |= batch
+    else:
+        raise AssertionError("regeneration never ran out of destinations")
+    assert "intake_updates" in response.json()["detail"]
+
+
+def test_regenerate_with_intake_updates_lets_the_guest_flex_a_constraint():
+    blocked = _suggest(with_restriction(build_intake(), "mobility_accessibility", "must_avoid")).json()
+    assert blocked["match_status"] == "no_valid_result"
+    response = client.post("/regenerate_suggested_city", json={
+        "session_id": blocked["session_id"],
+        "user_instruction": "It's workable with planning",
+        "intake_updates": {"restriction_severity_mobility_accessibility": "prefer_avoid"},
+    })
+    assert response.status_code == 200
+    data = response.json()
+    assert data["match_status"] == "matched"
+    details = client.get(f"/session/{blocked['session_id']}").json()
+    assert details["intake"]["restriction_severity"] == {"mobility_accessibility": "prefer_avoid"}
+    assert details["shown_destination_ids"] == [c["destination_id"] for c in data["suggested_cities"]]
+    assert details["regeneration_history"][-1]["intake_updated"] is True
+
+
+def test_regenerate_party_change_does_not_carry_stale_counts():
+    initial = _suggest(build_intake(travel_party="family", party_adults=2, party_children=2)).json()
+    response = client.post("/regenerate_suggested_city", json={
+        "session_id": initial["session_id"],
+        "intake_updates": {"travel_party": "solo"},
+    })
+    assert response.status_code == 200
+
+
+def test_regenerate_with_invalid_update_is_422_and_keeps_the_session():
+    initial = _suggest(build_intake()).json()
+    response = client.post("/regenerate_suggested_city", json={
+        "session_id": initial["session_id"],
+        "intake_updates": {"trip_goals": ["restoration", "growth", "adventure"]},
+    })
+    assert response.status_code == 422
+    details = client.get(f"/session/{initial['session_id']}").json()
+    assert details["intake"]["trip_goals"] == ["restoration", "reflection"]
+
+
+def test_regenerate_unknown_session_is_404():
+    response = client.post("/regenerate_suggested_city", json={"session_id": "missing"})
     assert response.status_code == 404
 
 
-def test_get_tour_plan_resolves_the_exact_selected_property():
-    initial = client.post("/get_suggested_city", json=_v2_payload())
-    session_id = initial.json()["session_id"]
-    chosen = initial.json()["suggested_cities"][0]
+# ==================== /get_tour_plan ====================
 
-    with patch("app.router.city_content_route.get_ai_response") as mock_ai, \
-         patch("app.router.city_content_route.get_google_hotels_by_facilities") as mock_hotel_fac, \
-         patch("app.router.city_content_route.get_detailed_tourist_places") as mock_places, \
-         patch("app.router.city_content_route.get_nearby_restaurants") as mock_restaurants, \
-         patch("app.router.city_content_route.calculate_distance_routes_api") as mock_distance:
-        mock_ai.return_value = (
-            '{"tour_plan":[{"day":1,"activities":['
-            '{"activity_name":"Spa","activity_description":"relax","activity_location":"onsite",'
-            '"activity_time":"10:00 AM - 11:00 AM","activity_cost":0}]}],'
-            '"total_cost_estimate":0,"packing_tips":"t","travel_tips":"t"}'
-        )
-        mock_hotel_fac.invoke.return_value = [{
-            "name": "Test Hotel", "address": "1 Rd", "rating": 4.5,
-            "price_level": "PRICE_LEVEL_LUXURY", "photos": [], "coords": None,
-        }]
-        mock_places.invoke.return_value = []
-        mock_restaurants.invoke.return_value = []
-        mock_distance.invoke.return_value = {"error": "skip"}
+def _plan(session_id: str, **body):
+    places = _tool([
+        {"name": "Hot spring soak", "place_id": "place-open", "business_status": "OPERATIONAL",
+         "address": "1 Spring Rd", "photos": []},
+        {"name": "Hot spring soak annex", "place_id": "place-closed", "business_status": "CLOSED_PERMANENTLY",
+         "address": "2 Spring Rd", "photos": []},
+    ])
+    hotels = _tool([{
+        "name": "Quiet Stay", "address": "3 Stay Rd", "rating": 4.6,
+        "price_level": "PRICE_LEVEL_MODERATE", "photos": [], "coords": None,
+    }])
+    restaurants = _tool([{"name": "Cafe", "place_id": "r1", "business_status": "OPERATIONAL",
+                          "address": "4 Food Rd", "photos": []}])
+    ai = MagicMock(return_value=TOUR_PLAN_JSON)
+    with patch("app.router.city_content_route.get_ai_response", ai), \
+         patch("app.router.city_content_route.get_detailed_tourist_places", places), \
+         patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", hotels), \
+         patch("app.router.city_content_route.get_nearby_restaurants", restaurants), \
+         patch("app.router.city_content_route.calculate_distance_routes_api", _tool({"error": "skip"})):
+        response = client.post("/get_tour_plan", json={"session_id": session_id, **body})
+    return response, ai, places, hotels, restaurants
 
-        plan = client.post(
-            "/get_tour_plan",
-            json={"session_id": session_id, "selected_city": "irrelevant", "property_id": chosen["property_id"]},
-        )
-    assert plan.status_code == 200
-    assert plan.json()["city"] == chosen["city_name"]
+
+def test_get_tour_plan_builds_on_the_selected_destination_with_estimates_only():
+    initial = _suggest(build_intake(**exact_dates(nights=3))).json()
+    chosen = initial["suggested_cities"][0]
+    response, ai, places, hotels, _ = _plan(initial["session_id"], destination_id=chosen["destination_id"])
+    assert response.status_code == 200
+    data = response.json()
+    assert data["city"] == chosen["city_name"]
+    assert data["destination_id"] == chosen["destination_id"]
+    assert data["stay"]["price_status"] == "ESTIMATED"
+    assert data["stay"]["availability_status"] == "NOT_CHECKED"
+    assert data["budget_check"]["status"] == "ESTIMATED"
+    assert data["budget_check"]["stay_within_budget"] is True
+    activity = next(a for a in data["tour_plan"][0]["activities"] if a["activity_name"] == "Hot spring soak")
+    assert activity["place_id"] == "place-open"
+    assert "confirm" in activity["availability_note"]
+    assert all(a.get("place_id") != "place-closed" for a in data["tour_plan"][0]["activities"])
+    location = f"{chosen['city_name']}, {chosen['country_name']}"
+    assert places.invoke.call_args.args[0]["location_name"] == location
+    assert hotels.invoke.call_args.args[0]["location_name"] == location
+
+
+def test_private_free_text_never_reaches_the_llm_or_travel_tools():
+    payload = build_intake(
+        recent_feelings=["something_else"],
+        recent_feelings_other="PRIVATE-FEELING",
+        trip_prompt="something_else",
+        trip_prompt_other="PRIVATE-REASON",
+    )
+    initial = _suggest(payload).json()
+    chosen = initial["suggested_cities"][0]
+    response, ai, places, hotels, restaurants = _plan(initial["session_id"], destination_id=chosen["destination_id"])
+    assert response.status_code == 200
+    sent = repr(ai.call_args_list) + repr(places.invoke.call_args_list) + repr(hotels.invoke.call_args_list) \
+        + repr(restaurants.invoke.call_args_list)
+    assert "PRIVATE" not in sent
+    assert "PRIVATE" not in repr(client.get(f"/session/{initial['session_id']}").json()["regeneration_history"])
+
+
+def test_get_tour_plan_accepts_a_suggested_city_by_name():
+    initial = _suggest(build_intake()).json()
+    chosen = initial["suggested_cities"][0]
+    response, *_ = _plan(initial["session_id"], selected_city=chosen["city_name"].upper())
+    assert response.status_code == 200
+    assert response.json()["destination_id"] == chosen["destination_id"]
+
+
+def test_get_tour_plan_rejects_destinations_not_suggested_in_the_session():
+    initial = _suggest(build_intake()).json()
+    shown = {city["destination_id"] for city in initial["suggested_cities"]}
+    other = next(d for d in ("NE-1159151609", "NE-1159151503", "US-TUC") if d not in shown)
+    response, *_ = _plan(initial["session_id"], destination_id=other)
+    assert response.status_code == 400
+    response, *_ = _plan(initial["session_id"], selected_city="Atlantis")
+    assert response.status_code == 400
+    backlog_id = load_discovery_backlog()[0]["destination_id"]
+    response, *_ = _plan(initial["session_id"], destination_id=backlog_id)
+    assert response.status_code == 404
+
+
+def test_get_tour_plan_is_cached_per_destination():
+    initial = _suggest(build_intake()).json()
+    chosen = initial["suggested_cities"][0]["destination_id"]
+    first, *_ = _plan(initial["session_id"], destination_id=chosen)
+    second, ai, *_ = _plan(initial["session_id"], destination_id=chosen)
+    assert second.json()["source"] == "cached"
+    assert second.json()["activity_session_id"] == first.json()["activity_session_id"]
+    ai.assert_not_called()
+
+
+def test_stay_over_budget_is_reported_not_hidden():
+    initial = _suggest(build_intake(budget_per_night=100)).json()
+    chosen = initial["suggested_cities"][0]["destination_id"]
+    luxury = _tool([{
+        "name": "Grand Palace", "address": "5 Palace Rd", "rating": 4.9,
+        "price_level": "PRICE_LEVEL_LUXURY", "photos": [], "coords": None,
+    }])
+    with patch("app.router.city_content_route.get_ai_response", MagicMock(return_value=TOUR_PLAN_JSON)), \
+         patch("app.router.city_content_route.get_detailed_tourist_places", _tool([])), \
+         patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", luxury), \
+         patch("app.router.city_content_route.get_nearby_restaurants", _tool([])), \
+         patch("app.router.city_content_route.calculate_distance_routes_api", _tool({"error": "skip"})):
+        response = client.post("/get_tour_plan", json={"session_id": initial["session_id"], "destination_id": chosen})
+    budget = response.json()["budget_check"]
+    assert budget["stay_within_budget"] is False
+    assert "not changed" in budget["note"]
+    assert budget["budget_per_night_usd"] == 100

@@ -1,0 +1,636 @@
+{
+  "formId": "velari_emotional_travel_intake",
+  "version": 1,
+  "totalSteps": 11,
+  "steps": [
+    {
+      "step": 1,
+      "key": "recent_feelings",
+      "type": "multiple_choice",
+      "question": "How have you been feeling lately?",
+      "prompt": "Select up to two.",
+      "whyWeAsk": "Your starting point helps us understand what you want travel to change or add.",
+      "required": true,
+      "multiple": true,
+      "maxSelections": 2,
+      "options": [
+        {
+          "value": "stretched_thin",
+          "label": "Stretched thin"
+        },
+        {
+          "value": "stuck_in_routine",
+          "label": "Stuck in a routine"
+        },
+        {
+          "value": "disconnected",
+          "label": "Disconnected"
+        },
+        {
+          "value": "curious",
+          "label": "Curious"
+        },
+        {
+          "value": "energized",
+          "label": "Energized"
+        },
+        {
+          "value": "turning_point",
+          "label": "At a turning point"
+        },
+        {
+          "value": "content_ready",
+          "label": "Content and ready to enjoy life"
+        },
+        {
+          "value": "something_else",
+          "label": "Something else"
+        }
+      ],
+      "conditionalFields": [
+        {
+          "key": "recent_feelings_other",
+          "type": "text",
+          "label": "Tell us in your own words",
+          "placeholder": "Tell us in your own words",
+          "showWhen": {
+            "field": "recent_feelings",
+            "contains": "something_else"
+          },
+          "requiredWhenVisible": true
+        }
+      ]
+    },
+    {
+      "step": 2,
+      "key": "trip_goals",
+      "type": "card_multiple_choice",
+      "question": "What are you hoping this trip gives you?",
+      "prompt": "Select up to two. You can change your mind later.",
+      "whyWeAsk": "The feeling you want guides our recommendations. There is more than one way to get there.",
+      "required": true,
+      "multiple": true,
+      "maxSelections": 2,
+      "options": [
+        {
+          "value": "restoration",
+          "label": "Restoration",
+          "description": "Space to slow down and feel less pulled in every direction"
+        },
+        {
+          "value": "connection",
+          "label": "Connection",
+          "description": "Meaningful time with people who matter to you"
+        },
+        {
+          "value": "discovery",
+          "label": "Discovery",
+          "description": "New places, flavors, stories and perspectives"
+        },
+        {
+          "value": "adventure",
+          "label": "Adventure",
+          "description": "Movement, challenge and doing something new"
+        },
+        {
+          "value": "inspiration",
+          "label": "Inspiration",
+          "description": "Fresh ideas through art, learning or creativity"
+        },
+        {
+          "value": "celebration",
+          "label": "Celebration",
+          "description": "Joy, pleasure and a moment worth remembering"
+        },
+        {
+          "value": "reflection",
+          "label": "Reflection",
+          "description": "Quiet and perspective to think about what matters"
+        },
+        {
+          "value": "growth",
+          "label": "Growth",
+          "description": "An experience that helps you stretch or make a change"
+        }
+      ]
+    },
+    {
+      "step": 3,
+      "key": "trip_prompt",
+      "type": "single_choice",
+      "question": "What prompted this trip?",
+      "prompt": "Choose one.",
+      "whyWeAsk": "The reason for going helps us shape the trip around the moment you’re in.",
+      "required": true,
+      "multiple": false,
+      "options": [
+        {
+          "value": "need_a_break",
+          "label": "I need a break"
+        },
+        {
+          "value": "time_with_someone",
+          "label": "Time with someone"
+        },
+        {
+          "value": "celebrating",
+          "label": "I’m celebrating"
+        },
+        {
+          "value": "curious_to_explore",
+          "label": "I’m curious to explore"
+        },
+        {
+          "value": "ready_for_change",
+          "label": "I’m ready for change"
+        },
+        {
+          "value": "change_of_scenery",
+          "label": "A change of scenery"
+        },
+        {
+          "value": "no_particular_reason",
+          "label": "No particular reason"
+        },
+        {
+          "value": "something_else",
+          "label": "Something else"
+        }
+      ],
+      "conditionalFields": [
+        {
+          "key": "trip_prompt_other",
+          "type": "text",
+          "label": "Tell us in your own words",
+          "placeholder": "Tell us in your own words",
+          "showWhen": {
+            "field": "trip_prompt",
+            "equals": "something_else"
+          },
+          "requiredWhenVisible": true
+        }
+      ]
+    },
+    {
+      "step": 4,
+      "key": "preferred_moments",
+      "type": "multiple_choice",
+      "question": "Which moments sound most like your kind of trip?",
+      "prompt": "Select up to three.",
+      "whyWeAsk": "People can want the same feeling from very different experiences.",
+      "required": true,
+      "multiple": true,
+      "maxSelections": 3,
+      "options": [
+        {
+          "value": "food_drinks",
+          "label": "Memorable food and drinks"
+        },
+        {
+          "value": "art_history_culture",
+          "label": "Art, history and culture"
+        },
+        {
+          "value": "nature_wildlife",
+          "label": "Nature and wildlife"
+        },
+        {
+          "value": "beaches_water",
+          "label": "Beaches and water"
+        },
+        {
+          "value": "movement_adventure",
+          "label": "Movement and adventure"
+        },
+        {
+          "value": "quiet_privacy",
+          "label": "Quiet and privacy"
+        },
+        {
+          "value": "meeting_people",
+          "label": "Meeting people"
+        },
+        {
+          "value": "spa_wellness",
+          "label": "Spa and wellness"
+        },
+        {
+          "value": "music_nightlife",
+          "label": "Music and nightlife"
+        },
+        {
+          "value": "learning_making",
+          "label": "Learning or making something"
+        }
+      ]
+    },
+    {
+      "step": 5,
+      "key": "preferred_environments",
+      "type": "multiple_choice",
+      "question": "What setting draws you in?",
+      "prompt": "Select up to two.",
+      "whyWeAsk": "This helps us find places you’ll enjoy spending time in.",
+      "required": true,
+      "multiple": true,
+      "maxSelections": 2,
+      "options": [
+        {
+          "value": "coast",
+          "label": "Coast"
+        },
+        {
+          "value": "mountains",
+          "label": "Mountains"
+        },
+        {
+          "value": "forest_jungle",
+          "label": "Forest or jungle"
+        },
+        {
+          "value": "desert",
+          "label": "Desert"
+        },
+        {
+          "value": "countryside",
+          "label": "Countryside"
+        },
+        {
+          "value": "small_town",
+          "label": "Small town"
+        },
+        {
+          "value": "vibrant_city",
+          "label": "Vibrant city"
+        },
+        {
+          "value": "surprise_me",
+          "label": "Surprise me",
+          "exclusive": true
+        }
+      ]
+    },
+    {
+      "step": 6,
+      "key": "trip_pace",
+      "type": "single_choice",
+      "question": "What pace would feel good?",
+      "prompt": "Choose one.",
+      "whyWeAsk": "We use this to leave the right amount of space in your itinerary.",
+      "required": true,
+      "multiple": false,
+      "options": [
+        {
+          "value": "mostly_open",
+          "label": "Mostly open time"
+        },
+        {
+          "value": "one_highlight",
+          "label": "One highlight each day, with plenty of free time"
+        },
+        {
+          "value": "balanced",
+          "label": "A balance of activities and downtime"
+        },
+        {
+          "value": "full_days",
+          "label": "Full days with plenty to do"
+        }
+      ]
+    },
+    {
+      "step": 7,
+      "key": "travel_party",
+      "type": "party",
+      "question": "Who is traveling?",
+      "prompt": "Choose one.",
+      "whyWeAsk": "Your travel party affects rooms, activities and the pace of the trip.",
+      "required": true,
+      "multiple": false,
+      "options": [
+        {
+          "value": "solo",
+          "label": "Just me",
+          "defaults": {
+            "party_adults": 1,
+            "party_children": 0,
+            "party_rooms": 1
+          }
+        },
+        {
+          "value": "couple",
+          "label": "My partner and me",
+          "defaults": {
+            "party_adults": 2,
+            "party_children": 0,
+            "party_rooms": 1
+          }
+        },
+        {
+          "value": "group",
+          "label": "Friends or a group"
+        },
+        {
+          "value": "family",
+          "label": "Family"
+        }
+      ],
+      "conditionalFields": [
+        {
+          "key": "party_details",
+          "type": "field_group",
+          "label": "How many people and rooms?",
+          "showWhen": {
+            "field": "travel_party",
+            "notEquals": "solo"
+          },
+          "fields": [
+            {
+              "key": "party_adults",
+              "type": "number",
+              "label": "Adults",
+              "minimum": 1,
+              "default": 1,
+              "required": true
+            },
+            {
+              "key": "party_children",
+              "type": "number",
+              "label": "Children",
+              "minimum": 0,
+              "default": 0,
+              "required": true
+            },
+            {
+              "key": "party_rooms",
+              "type": "number",
+              "label": "Rooms",
+              "minimum": 1,
+              "default": 1,
+              "required": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": 8,
+      "key": "activity_restrictions",
+      "type": "restrictions",
+      "question": "Is there anything we should plan around or avoid?",
+      "prompt": "Optional. Select a tag or tell us in your own words.",
+      "whyWeAsk": "We’ll rule out options that conflict with your firm needs before matching.",
+      "required": false,
+      "multiple": true,
+      "options": [
+        {
+          "value": "mobility_accessibility",
+          "label": "Mobility or accessibility"
+        },
+        {
+          "value": "food_dietary",
+          "label": "Food allergy or dietary need"
+        },
+        {
+          "value": "no_long_drives",
+          "label": "No long drives"
+        },
+        {
+          "value": "no_intense_activity",
+          "label": "No intense activity"
+        },
+        {
+          "value": "no_water_activities",
+          "label": "No water activities"
+        },
+        {
+          "value": "avoid_extreme_heat",
+          "label": "Avoid extreme heat"
+        },
+        {
+          "value": "avoid_cold_weather",
+          "label": "Avoid cold weather"
+        },
+        {
+          "value": "other",
+          "label": "Other"
+        }
+      ],
+      "conditionalFields": [
+        {
+          "keyPattern": "restriction_severity_{selected_option}",
+          "type": "single_choice",
+          "label": "How important is this restriction?",
+          "showForEachSelectedOption": true,
+          "requiredWhenVisible": true,
+          "options": [
+            {
+              "value": "must_avoid",
+              "label": "I must avoid this"
+            },
+            {
+              "value": "prefer_avoid",
+              "label": "I’d prefer to avoid this"
+            }
+          ]
+        },
+        {
+          "key": "restriction_notes",
+          "type": "textarea",
+          "label": "Other planning needs",
+          "placeholder": "Anything else we should know? (optional)",
+          "required": false
+        }
+      ]
+    },
+    {
+      "step": 9,
+      "key": "departure",
+      "type": "departure",
+      "question": "Where would you leave from?",
+      "prompt": "And how far are you open to traveling?",
+      "whyWeAsk": "Travel time can make or break a trip, especially a short one.",
+      "required": true,
+      "fields": [
+        {
+          "key": "departure_location",
+          "type": "text",
+          "label": "Departure city or airport",
+          "placeholder": "Search your city or departure airport",
+          "required": true
+        },
+        {
+          "key": "travel_distance",
+          "type": "single_choice",
+          "label": "Travel distance",
+          "required": true,
+          "options": [
+            {
+              "value": "nearby",
+              "label": "Nearby"
+            },
+            {
+              "value": "manageable_flight",
+              "label": "A manageable flight"
+            },
+            {
+              "value": "anywhere",
+              "label": "Open to anywhere"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "step": 10,
+      "key": "travel_timing",
+      "type": "timing",
+      "question": "When can you go, and for how long?",
+      "prompt": "Choose the timing you know today.",
+      "whyWeAsk": "Timing helps us check routes, available stays and experiences.",
+      "required": true,
+      "multiple": false,
+      "options": [
+        {
+          "value": "exact_dates",
+          "label": "I have exact dates"
+        },
+        {
+          "value": "flexible",
+          "label": "My dates are flexible"
+        },
+        {
+          "value": "month_season",
+          "label": "I know the month or season"
+        }
+      ],
+      "conditionalFields": [
+        {
+          "key": "exact_date_range",
+          "type": "field_group",
+          "showWhen": {
+            "field": "travel_timing",
+            "equals": "exact_dates"
+          },
+          "fields": [
+            {
+              "key": "check_in_date",
+              "type": "date",
+              "label": "Check-in",
+              "required": true
+            },
+            {
+              "key": "check_out_date",
+              "type": "date",
+              "label": "Check-out",
+              "required": true,
+              "minimumField": "check_in_date"
+            }
+          ]
+        },
+        {
+          "key": "travel_period",
+          "type": "select",
+          "label": "Month or season",
+          "showWhen": {
+            "field": "travel_timing",
+            "equals": "month_season"
+          },
+          "requiredWhenVisible": true,
+          "options": [
+            {
+              "value": "spring",
+              "label": "Spring"
+            },
+            {
+              "value": "summer",
+              "label": "Summer"
+            },
+            {
+              "value": "autumn",
+              "label": "Autumn"
+            },
+            {
+              "value": "winter",
+              "label": "Winter"
+            },
+            {
+              "value": "january",
+              "label": "January"
+            },
+            {
+              "value": "february",
+              "label": "February"
+            },
+            {
+              "value": "march",
+              "label": "March"
+            },
+            {
+              "value": "april",
+              "label": "April"
+            },
+            {
+              "value": "may",
+              "label": "May"
+            },
+            {
+              "value": "june",
+              "label": "June"
+            },
+            {
+              "value": "july",
+              "label": "July"
+            },
+            {
+              "value": "august",
+              "label": "August"
+            },
+            {
+              "value": "september",
+              "label": "September"
+            },
+            {
+              "value": "october",
+              "label": "October"
+            },
+            {
+              "value": "november",
+              "label": "November"
+            },
+            {
+              "value": "december",
+              "label": "December"
+            }
+          ]
+        },
+        {
+          "key": "trip_nights",
+          "type": "number",
+          "label": "Number of nights",
+          "placeholder": "5",
+          "minimum": 1,
+          "required": true,
+          "showWhen": {
+            "field": "travel_timing",
+            "isNotEmpty": true
+          }
+        }
+      ]
+    },
+    {
+      "step": 11,
+      "key": "budget_per_night",
+      "type": "range",
+      "question": "What is your maximum lodging budget per night?",
+      "prompt": "USD per room, per night, for the guests you listed.",
+      "whyWeAsk": "We check live lodging options for your dates before treating a destination as affordable.",
+      "required": true,
+      "currency": "USD",
+      "minimum": 100,
+      "maximum": 7000,
+      "stepAmount": 100,
+      "maximumLabel": "$7,000+"
+    }
+  ]
+}

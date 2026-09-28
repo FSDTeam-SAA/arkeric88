@@ -1,6 +1,6 @@
 from typing import List, Optional, Literal, Dict
 from pydantic import BaseModel
-from app.schemas.city_body import QuestionAnswers
+from app.schemas.intake_schema import TravelIntakeRequest
 
 
 class CitySuggestion(BaseModel):
@@ -22,11 +22,11 @@ class TourPlanDay(BaseModel):
 
 
 class CitySuggestionResponse(BaseModel):
-    questions_answers: QuestionAnswers
+    intake: TravelIntakeRequest
     suggested_cities: List[CitySuggestion]
 
 
 class TourPlanResponse(BaseModel):
-    questions_answers: QuestionAnswers
+    intake: TravelIntakeRequest
     suggested_citie: CitySuggestion
     suggested_tour_plan: List[TourPlanDay]

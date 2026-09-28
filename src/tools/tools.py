@@ -100,8 +100,9 @@ def get_detailed_tourist_places(
 
     `search_query` should describe positive desired qualities derived from the full
     traveler profile. Do not include avoided activities; filter those after retrieval.
-    Returns a list of dicts, each with: name, address, phone, coords, photos
-    (up to 4 compact image IDs), and available_time (weekday opening hours).
+    Returns a list of dicts, each with: name, place_id, business_status, address,
+    phone, coords, photos (up to 4 compact image IDs), and available_time
+    (weekday opening hours -- not proof of ticket or activity availability).
     Resolve image IDs to URLs before returning the final API response.
     """
     api_key = settings.google_api_key
@@ -115,7 +116,9 @@ def get_detailed_tourist_places(
             "places.nationalPhoneNumber,"
             "places.location,"
             "places.regularOpeningHours,"
-            "places.photos"
+            "places.photos,"
+            "places.id,"
+            "places.businessStatus"
         ),
     }
     payload = {
@@ -141,6 +144,8 @@ def get_detailed_tourist_places(
             results.append(
                 {
                     "name": place.get("displayName", {}).get("text", "N/A"),
+                    "place_id": place.get("id"),
+                    "business_status": place.get("businessStatus"),
                     "address": place.get("formattedAddress", "No address available"),
                     "phone": place.get("nationalPhoneNumber", "No phone number listed"),
                     "photos": _extract_photo_ids(place, api_key) or ["No photos available"],
@@ -327,8 +332,8 @@ def get_nearby_restaurants(
 
     `search_query` can describe positive dining needs such as calm, healthy,
     vegetarian, or accessible; it is combined with meal type and location.
-    Returns restaurant dicts with: name, address, rating, price_level, phone,
-    coords, photos (compact image IDs), and meal_type. Resolve image IDs to
+    Returns restaurant dicts with: name, place_id, business_status, address,
+    rating, price_level, phone, coords, photos (compact image IDs), and meal_type. Resolve image IDs to
     URLs before returning the final API response.
     """
     api_key = settings.google_api_key
@@ -344,7 +349,9 @@ def get_nearby_restaurants(
             "places.location,"
             "places.rating,"
             "places.nationalPhoneNumber,"
-            "places.photos"
+            "places.photos,"
+            "places.id,"
+            "places.businessStatus"
         ),
     }
     dining_intent = " ".join(
@@ -366,6 +373,8 @@ def get_nearby_restaurants(
             restaurants.append(
                 {
                     "name": place.get("displayName", {}).get("text", "N/A"),
+                    "place_id": place.get("id"),
+                    "business_status": place.get("businessStatus"),
                     "address": place.get("formattedAddress", "No address listed"),
                     "rating": place.get("rating", 0.0),
                     "phone": place.get("nationalPhoneNumber", "No phone number listed"),

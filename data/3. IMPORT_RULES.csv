@@ -1,0 +1,17 @@
+﻿Rule,Required behavior
+Primary import,Read AI_IMPORT_DESTINATIONS as candidate seed data. DISCOVERY_BACKLOG is excluded from guest recommendations. No historical property or archetype sheet is included.
+Candidate versus recommendation,"A candidate_status of CANDIDATE_ONLY is not approval for guest display. Verify the destination claim against its source, then match the actual guest intake and live inventory."
+Source review,"Every source claim is pending explicit review. Destination_source_url may be a broad tourism page or property context. If it does not support the exact claim and place, fetch a destination-specific source or withhold that claim. Never turn source_scope into a fact."
+Emotion interpretation,"Use up to two guest-selected desired feelings as primary signals; match concrete interests, setting, pace and travel party. Themes are editorial hypotheses and can blend. No promise of an emotional result, diagnosis, or required spa/spiritual program."
+Hard exclusions,Filter must-avoid and accessibility requirements before ranking. Unknown high-impact suitability is not a pass. Use prefer-avoid as a penalty or explain the tradeoff.
+Exact dates,"Only claim live hotel availability and price with exact check-in/out, party ages, rooms, currency and booker eligibility. Flexible month is inspiration only."
+Budget,"USD per room per night slider. For the full required room configuration compare mandatory payable amount divided by nights to slider maximum; preserve original currency and conversion provenance. Blank verified_nightly_usd means UNKNOWN, never zero."
+Booking search and availability,Fetch current products and extra_charges. Label search/availability prices estimated. Confirm final amount using orders/preview before booking; rerun on handoff. API results can change.
+Places,Google place ID and status establish an identifiable business; opening hours may cover only a short future window and do not prove ticket or activity availability. Confirm time-sensitive activities with the operator.
+Route,"Use actual travel origin, mode, dates and transfer legs; a gateway hint or straight-line distance is insufficient."
+Guest explanation,"Return 2–3 diverse options when available. Tie each reason to guest words and a specific checked feature. Show a material tradeoff, unresolved facts and quote timestamp/estimated status. Let guest refine the fit."
+No valid result,Say which constraint prevents a grounded match and ask which one may flex. Do not relax budget or must-avoid silently.
+Safety and entry,"Use current official destination/entry guidance and individual travel details. Neither Maps nor a tourism listing verifies entry, accessibility, or safety."
+Freshness and privacy,"Record evidence URL or API ID, timestamp, dates and outcome. On API failure mark UNVERIFIED. Do not send private emotional free text to travel APIs or logs."
+Version and scope,"Catalog data snapshot: 2026-09-24. 72 editorial candidate records; 928 geographic backlog records. No hotel IDs, prices, rates, availability, tickets or final itineraries have been verified in this file."
+References,Booking pricing: https://developers.booking.com/demand/docs/accommodations/pricing-faqs ; Google Places fields: https://developers.google.com/maps/documentation/places/web-service/reference/rest/v1/places

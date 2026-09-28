@@ -1,0 +1,12 @@
+﻿intake_key,definition,match_role,guest-facing handling
+current_feeling,Optional current state; no diagnosis,Context only,"Reflect guest wording, no psychological conclusion"
+desired_outcomes,"Up to two: Restoration, Connection, Discovery, Adventure, Inspiration, Celebration, Reflection, Growth",Primary emotional themes,Show concise theme definitions
+trip_trigger,Reason or occasion,Occasion and itinerary context,Optional clarification if ambiguous
+experience_interests,Up to three interests,Experience selection,Match actual validated places
+settings,Up to two settings or surprise me,Preference unless explicitly mandatory,Balance alternatives
+pace,"Open time, one highlight, balanced, full days",Itinerary density,Separate from fitness/accessibility
+party,"Adults, child ages, room count",Occupancy and suitability,Required for live rates
+constraints,Must-avoid and prefer-avoid separately,Hard filter versus soft penalty,Ask if a critical need is unclear
+origin_radius,Origin and travel tolerance,Feasibility,Route and transport checks
+dates_duration,Exact dates or flexible period; nights,"Seasonality, inventory, itinerary",Exact dates for price/availability
+nightly_budget,Numeric USD per room-night for full party,Live payable cost filter,Confirm rooms if party needs more than one

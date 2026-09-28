@@ -4,69 +4,80 @@ from datetime import datetime, timezone
 from typing import Any, List, Optional
 from uuid import uuid4
 
-from app.schemas.city_body import QuestionAnswers, CitySuggestionInput, TourPlanDayInput, StayInfo
+from app.schemas.city_body import CitySuggestionInput, StayInfo, TourPlanActivityInput, TourPlanDayInput
 
 
 # ==================== CITY SESSION ====================
 
 @dataclass
 class CitySession:
-    """Session for city suggestions (parent session)."""
+    """Session for destination suggestions (parent session)."""
     session_id: str
-    questions_answers: QuestionAnswers
+    # The validated Velari intake (TravelIntakeRequest.model_dump(mode="json")),
+    # kept so regenerate and the itinerary step re-read the same answers.
+    intake: dict
     suggested_cities: List[CitySuggestionInput]
-    response: dict  # Full AI response
+    response: dict
     created_at: str
     updated_at: str
     history: List[dict] = field(default_factory=list)  # Track regenerations
-    # The original v2 15-question request (see RetreatRecommendationRequest),
-    # kept so /regenerate_suggested_city can re-run the identical deterministic
-    # matching pipeline. None for any session created before this field
-    # existed -- regenerate is not available for those (see city_content_route.py).
-    v2_request: Optional[dict] = None
-    # property_ids already surfaced to the user across generate + regenerate
-    # calls, so regeneration can exclude them and always show distinct cities.
-    shown_property_ids: List[str] = field(default_factory=list)
+    # destination_ids already surfaced across generate + regenerate calls, so
+    # regeneration shows new options and the itinerary step only accepts a
+    # destination the guest was actually offered.
+    shown_destination_ids: List[str] = field(default_factory=list)
+
+
+def _to_suggestions(cities: List[Any]) -> List[CitySuggestionInput]:
+    return [CitySuggestionInput.model_validate(city) for city in cities]
+
+
+def _to_stay(stay_data: dict) -> StayInfo:
+    return StayInfo(
+        **{
+            "name": "N/A",
+            "address": "N/A",
+            "rating": 0.0,
+            "price_level": "NOT_AVAILABLE",
+            **{key: value for key, value in stay_data.items() if key in StayInfo.model_fields},
+        }
+    )
+
+
+def _to_day(day: dict) -> TourPlanDayInput:
+    return TourPlanDayInput(
+        day=day.get("day"),
+        activities=[
+            {
+                **{key: value for key, value in act.items() if key in TourPlanActivityInput.model_fields},
+                "activity_address": act.get("activity_address", "N/A"),
+                "activity_image": act.get("activity_image", []),
+                "activity_cost": act.get("activity_cost", 0),
+            }
+            for act in day.get("activities", [])
+        ],
+    )
 
 
 class CitySessionStore:
-    """In-memory store for city suggestion sessions."""
+    """In-memory store for destination suggestion sessions."""
     _sessions: dict[str, CitySession] = {}
 
     @classmethod
     def create(
         cls,
-        questions_answers: QuestionAnswers,
+        intake: dict,
         suggested_cities: List[Any],
         response: dict,
-        v2_request: Optional[dict] = None,
-        shown_property_ids: Optional[List[str]] = None,
+        shown_destination_ids: Optional[List[str]] = None,
     ) -> CitySession:
-        """
-        Create a new city session.
-        Called when user generates city suggestions for first time.
-        """
+        """Create a new session when the guest first submits the intake."""
         session_id = str(uuid4())
         now = datetime.now(timezone.utc).isoformat()
 
         session = CitySession(
             session_id=session_id,
-            questions_answers=questions_answers,
-            suggested_cities=[
-                CitySuggestionInput(
-                    city_name=city.get("city_name"),
-                    country_name=city.get("country_name"),
-                    number_of_days=city.get("number_of_days"),
-                    description=city.get("description"),
-                    city_image=city.get("city_image", []),
-                    latitude=city.get("latitude"),
-                    longitude=city.get("longitude"),
-                    property_id=city.get("property_id"),
-                    match_score=city.get("match_score"),
-                    warnings=city.get("warnings", []),
-                )
-                for city in suggested_cities
-            ],
+            intake=deepcopy(intake),
+            suggested_cities=_to_suggestions(suggested_cities),
             response=deepcopy(response),
             created_at=now,
             updated_at=now,
@@ -75,10 +86,10 @@ class CitySessionStore:
                     "action": "generated",
                     "timestamp": now,
                     "suggested_cities_count": len(suggested_cities),
+                    "match_status": response.get("match_status"),
                 }
             ],
-            v2_request=deepcopy(v2_request) if v2_request is not None else None,
-            shown_property_ids=list(shown_property_ids or []),
+            shown_destination_ids=list(shown_destination_ids or []),
         )
 
         cls._sessions[session_id] = session
@@ -99,49 +110,33 @@ class CitySessionStore:
         response: dict,
         update_field_name: str,
         user_instruction: str,
-        shown_property_ids: Optional[List[str]] = None,
+        shown_destination_ids: Optional[List[str]] = None,
+        intake: Optional[dict] = None,
     ) -> Optional[CitySession]:
-        """
-        Update session with new AI response (on regenerate).
-        Called when user regenerates city suggestions.
-        """
+        """Replace the suggestions on regenerate (optionally with refined answers)."""
         session = cls._sessions.get(session_id)
         if session is None:
             return None
 
-        # Extract new suggested cities from response
         new_cities = response.get("suggested_cities", [])
-        session.suggested_cities = [
-            CitySuggestionInput(
-                city_name=city.get("city_name"),
-                country_name=city.get("country_name"),
-                number_of_days=city.get("number_of_days"),
-                description=city.get("description"),
-                city_image=city.get("city_image", []),
-                latitude=city.get("latitude"),
-                longitude=city.get("longitude"),
-                property_id=city.get("property_id"),
-                match_score=city.get("match_score"),
-                warnings=city.get("warnings", []),
-            )
-            for city in new_cities
-        ]
-
-        # Update response and timestamp
+        session.suggested_cities = _to_suggestions(new_cities)
         session.response = deepcopy(response)
         now = datetime.now(timezone.utc).isoformat()
         session.updated_at = now
-        if shown_property_ids is not None:
-            session.shown_property_ids = list(shown_property_ids)
+        if shown_destination_ids is not None:
+            session.shown_destination_ids = list(shown_destination_ids)
+        if intake is not None:
+            session.intake = deepcopy(intake)
 
-        # Track regeneration in history
         session.history.append(
             {
                 "action": "regenerated",
                 "timestamp": now,
                 "update_field_name": update_field_name,
                 "user_instruction": user_instruction,
+                "intake_updated": intake is not None,
                 "suggested_cities_count": len(new_cities),
+                "match_status": response.get("match_status"),
             }
         )
 
@@ -175,6 +170,7 @@ class ActivitySession:
     total_cost_estimate: float = 0.0  # Combined hotel + activities total
     packing_tips: str = ""
     travel_tips: str = ""
+    destination_id: Optional[str] = None  # Catalog entry the plan was built for
 
 
 class ActivitySessionStore:
@@ -192,6 +188,7 @@ class ActivitySessionStore:
         total_cost_estimate: float = 0.0,
         packing_tips: str = "",
         travel_tips: str = "",
+        destination_id: Optional[str] = None,
     ) -> ActivitySession:
         """
         Create a new activity session.
@@ -203,41 +200,14 @@ class ActivitySessionStore:
         # Build stay object from raw data if provided
         stay_obj = None
         if stay_data:
-            stay_obj = StayInfo(
-                name=stay_data.get("name", "N/A"),
-                address=stay_data.get("address", "N/A"),
-                rating=stay_data.get("rating", 0.0),
-                price_level=stay_data.get("price_level", "NOT_AVAILABLE"),
-                photos=stay_data.get("photos", []),
-                coords=stay_data.get("coords"),
-                average_nightly_price=stay_data.get("average_nightly_price", ""),
-                budget_tier=stay_data.get("budget_tier", ""),
-                facilities=stay_data.get("facilities", []),
-                website=stay_data.get("website", ""),
-                estimate_note=stay_data.get("estimate_note", ""),
-            )
+            stay_obj = _to_stay(stay_data)
         
         session = ActivitySession(
             activity_session_id=activity_session_id,
             parent_session_id=parent_session_id,
             city=city_name,
             tour_plan=[
-                TourPlanDayInput(
-                    day=day.get("day"),
-                    activities=[
-                        {
-                            "activity_name": act.get("activity_name"),
-                            "activity_description": act.get("activity_description"),
-                            "activity_location": act.get("activity_location"),
-                            "activity_address": act.get("activity_address", "N/A"),
-                            "activity_image": act.get("activity_image", []),
-                            "activity_time": act.get("activity_time"),
-                            "activity_cost": act.get("activity_cost", 0),
-                            "distance_from_previous_km": act.get("distance_from_previous_km"),
-                        }
-                        for act in day.get("activities", [])
-                    ],
-                )
+                _to_day(day)
                 for day in tour_plan
             ],
             response=deepcopy(response),
@@ -247,6 +217,7 @@ class ActivitySessionStore:
             total_cost_estimate=total_cost_estimate,
             packing_tips=packing_tips,
             travel_tips=travel_tips,
+            destination_id=destination_id,
             history=[
                 {
                     "action": "generated",
@@ -309,22 +280,7 @@ class ActivitySessionStore:
         if day_to_regenerate is None:
             # Regenerate entire plan
             session.tour_plan = [
-                TourPlanDayInput(
-                    day=day.get("day"),
-                    activities=[
-                        {
-                            "activity_name": act.get("activity_name"),
-                            "activity_description": act.get("activity_description"),
-                            "activity_location": act.get("activity_location"),
-                            "activity_address": act.get("activity_address", "N/A"),
-                            "activity_image": act.get("activity_image", []),
-                            "activity_time": act.get("activity_time"),
-                            "activity_cost": act.get("activity_cost", 0),
-                            "distance_from_previous_km": act.get("distance_from_previous_km"),
-                        }
-                        for act in day.get("activities", [])
-                    ],
-                )
+                _to_day(day)
                 for day in new_tour_plan
             ]
         else:
@@ -334,39 +290,12 @@ class ActivitySessionStore:
                     # Find and replace the day in existing plan
                     for i, existing_day in enumerate(session.tour_plan):
                         if existing_day.day == day_to_regenerate:
-                            session.tour_plan[i] = TourPlanDayInput(
-                                day=new_day.get("day"),
-                                activities=[
-                                    {
-                                        "activity_name": act.get("activity_name"),
-                                        "activity_description": act.get("activity_description"),
-                                        "activity_location": act.get("activity_location"),
-                                        "activity_address": act.get("activity_address", "N/A"),
-                                        "activity_image": act.get("activity_image", []),
-                                        "activity_time": act.get("activity_time"),
-                                        "activity_cost": act.get("activity_cost", 0),
-                                        "distance_from_previous_km": act.get("distance_from_previous_km"),
-                                    }
-                                    for act in new_day.get("activities", [])
-                                ],
-                            )
+                            session.tour_plan[i] = _to_day(new_day)
                             break
 
         # Update stay if new data provided
         if stay_data:
-            session.stay = StayInfo(
-                name=stay_data.get("name", "N/A"),
-                address=stay_data.get("address", "N/A"),
-                rating=stay_data.get("rating", 0.0),
-                price_level=stay_data.get("price_level", "NOT_AVAILABLE"),
-                photos=stay_data.get("photos", []),
-                coords=stay_data.get("coords"),
-                average_nightly_price=stay_data.get("average_nightly_price", ""),
-                budget_tier=stay_data.get("budget_tier", ""),
-                facilities=stay_data.get("facilities", []),
-                website=stay_data.get("website", ""),
-                estimate_note=stay_data.get("estimate_note", ""),
-            )
+            session.stay = _to_stay(stay_data)
 
         # Update total cost estimate if provided
         if total_cost_estimate is not None:

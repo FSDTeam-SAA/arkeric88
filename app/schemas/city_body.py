@@ -1,88 +1,27 @@
-from datetime import date
-from pydantic import BaseModel, model_validator
-from typing import List, Optional
-
-
-# ==================== QUESTION & ANSWER SCHEMA ====================
-
-class QuestionAnswers(BaseModel):
-    """User's answers to tour preference questions."""
-    # How are you feeling today?
-    todays_feeling: str
-
-    # What kind of experience is calling to you?
-    experience_kind: str
-
-    # What's your energy like for this trip?
-    energy_level: str
-
-    # How do you want to experience this journey?
-    travel_style: str
-
-    # How would you like your trip to be organized?
-    trip_organization: str
-
-    # Are there any activities you'd like to avoid or can't do?
-    activity_restrictions: list[str]
-
-    # Which word best describes the season you're in right now?
-    life_season: str
-
-    # What environment speaks to your soul?
-    preferred_environments: list[str]
-
-    # Your birthdate. Optional because the v2 15-question flow (see
-    # src/core/legacy_profile_adapter.py) never collects age; it is still
-    # accepted for any client still sending the original 12-question payload.
-    birthdate: Optional[date] = None
-
-    # Preferred geography from question 12 (for example: Europe or Asia).
-    preferred_region: Optional[str] = None
-
-    # Question 10 is a per-person, per-night budget. `total_trip_budget` is
-    # retained as a backwards-compatible alternative for existing clients.
-    budget_per_person_per_night: Optional[float] = None
-    total_trip_budget: Optional[float] = None
-
-    # How many days are you planning to travel?
-    trip_length_days: int
-
-    @model_validator(mode="after")
-    def validate_budget(self):
-        if self.budget_per_person_per_night is None and self.total_trip_budget is None:
-            raise ValueError(
-                "Provide budget_per_person_per_night or the legacy total_trip_budget."
-            )
-        if self.budget_per_person_per_night is not None and self.budget_per_person_per_night <= 0:
-            raise ValueError("budget_per_person_per_night must be greater than zero.")
-        if self.total_trip_budget is not None and self.total_trip_budget <= 0:
-            raise ValueError("total_trip_budget must be greater than zero.")
-        if self.trip_length_days <= 0:
-            raise ValueError("trip_length_days must be greater than zero.")
-        return self
-
-    @property
-    def effective_total_budget(self) -> float:
-        """Budget for one traveler across the stay, including legacy inputs."""
-        if self.budget_per_person_per_night is not None:
-            return self.budget_per_person_per_night * self.trip_length_days
-        return float(self.total_trip_budget or 0)
+from pydantic import BaseModel, ConfigDict
+from typing import Any, Dict, List, Optional
 
 
 # ==================== CITY SUGGESTION REQUEST/RESPONSE ====================
 #
-# POST /get_suggested_city now takes the same 15-question payload as
-# POST /v2/retreat-recommendations (see app/schemas/retreat_v2_schema.py,
-# RetreatRecommendationRequest) instead of the old QuestionAnswers-based
-# InputData wrapper. The old wrapper has been removed since the endpoint no
-# longer asks a model to invent cities from a free-form profile -- see
-# API_CITY_FLOW_DOCS.md for the full contract.
+# POST /get_suggested_city takes the 11-step Velari intake
+# (app/schemas/intake_schema.TravelIntakeRequest) and ranks the destination
+# catalog in data/1. AI_IMPORT_DESTINATIONS.csv. See API_CITY_FLOW_DOCS.md.
 
 
 class RegenerateInputData(BaseModel):
-    """Input for regenerating city suggestions."""
+    """
+    Input for regenerating destination suggestions.
+
+    Without `intake_updates`, the same answers are re-ranked and destinations
+    already shown in this session are excluded. With `intake_updates` (any
+    intake fields, e.g. a flexed restriction or travel distance after a
+    "no valid result" response), the stored answers are updated, re-validated
+    and re-ranked from scratch -- IMPORT_RULES.csv "Let guest refine the fit".
+    """
     session_id: str
-    user_instruction: str  # User's preference for regeneration (e.g., "more adventure", "budget options")
+    user_instruction: str = ""
+    intake_updates: Optional[Dict[str, Any]] = None
 
 
 # ==================== STAY / HOTEL SCHEMA ====================
@@ -100,6 +39,10 @@ class StayInfo(BaseModel):
     facilities: List[str] = []
     website: str = ""
     estimate_note: str = ""
+    # IMPORT_RULES.csv "Booking search and availability": search prices are
+    # estimates; availability is never claimed without a live check.
+    price_status: str = "ESTIMATED"
+    availability_status: str = "NOT_CHECKED"
 
 
 # ==================== ACTIVITY/TOUR PLAN REQUEST/RESPONSE ====================
@@ -114,6 +57,11 @@ class TourPlanActivityInput(BaseModel):
     activity_time: str  # e.g., "9:00 AM - 12:00 PM"
     activity_cost: float = 0.0
     distance_from_previous_km: Optional[float] = None
+    # IMPORT_RULES.csv "Places": a place ID + business status identify a real
+    # business; they do not prove ticket or activity availability.
+    place_id: Optional[str] = None
+    business_status: Optional[str] = None
+    availability_note: str = ""
 
 
 class TourPlanDayInput(BaseModel):
@@ -124,35 +72,26 @@ class TourPlanDayInput(BaseModel):
 
 class TourPlanRequestData(BaseModel):
     """
-    Request payload for generating a day-wise tour plan for a chosen city.
+    Request payload for generating a day-wise tour plan.
 
-    `property_id` (from POST /v2/retreat-recommendations) is now preferred over
-    `selected_city` per BACKEND_DEVELOPER_CHANGES.md ("Itinerary generation must
-    accept property_id, not only a city name."). `selected_city` is kept
-    required for backward compatibility with the legacy /get_suggested_city
-    flow; when `property_id` is supplied it takes precedence and the resolved
-    retreat's location is used instead of `selected_city`.
+    `destination_id` (from POST /get_suggested_city) is preferred. Without it,
+    `selected_city` must name one of the destinations suggested in this
+    session -- a place that was never matched (or that a must-avoid
+    restriction excluded) cannot be planned.
     """
     session_id: str
-    selected_city: str
-    property_id: Optional[str] = None
-
-
-class TourPlanInput(BaseModel):
-    """Complete tour plan (all days)."""
-    suggested_city: "CitySuggestionInput"
-    tour_plan: List[TourPlanDayInput]
+    selected_city: str = ""
+    destination_id: Optional[str] = None
 
 
 class CitySuggestionInput(BaseModel):
     """
-    Suggested city details. `property_id` and `match_score` are populated by
-    the deterministic property-matching engine (see
-    src/core/retreat_matching_orchestrator.py): each suggested city is the
-    real, bookable property that ranked highest in that city/region, not a
-    model-invented place. Select a city by `property_id` when calling
-    POST /get_tour_plan -- see API_CITY_FLOW_DOCS.md.
+    One destination suggestion. Every suggestion is a CANDIDATE_ONLY catalog
+    entry: `verification` and `unresolved_facts` say what has and has not
+    been checked. Select it by `destination_id` when calling POST /get_tour_plan.
     """
+    model_config = ConfigDict(extra="ignore")
+
     city_name: str
     country_name: str
     number_of_days: int
@@ -160,9 +99,18 @@ class CitySuggestionInput(BaseModel):
     city_image: List[str] = []
     latitude: Optional[float] = None
     longitude: Optional[float] = None
-    property_id: Optional[str] = None
+    destination_id: Optional[str] = None
+    world_region: Optional[str] = None
     match_score: Optional[int] = None
+    score_breakdown: Dict[str, float] = {}
+    match_reasons: List[str] = []
+    tradeoffs: List[str] = []
+    unresolved_facts: List[str] = []
     warnings: List[str] = []
+    restriction_checks: List[dict] = []
+    distance_check: Dict[str, Any] = {}
+    verification: Dict[str, Any] = {}
+    evidence: Dict[str, Any] = {}
 
 
 class RegenerateActivityInputData(BaseModel):
@@ -178,7 +126,7 @@ class CitySuggestionResponse(BaseModel):
     """Response after generating city suggestions."""
     session_id: str
     suggested_cities: List[CitySuggestionInput]
-    response: dict  # Full AI response (for reference)
+    response: dict
 
 
 class TourPlanResponse(BaseModel):
@@ -197,7 +145,7 @@ class TourPlanResponse(BaseModel):
 class SessionDetailsResponse(BaseModel):
     """Response when fetching full session details."""
     session_id: str
-    questions_answers: dict
+    intake: dict
     suggested_cities: List[CitySuggestionInput]
     regeneration_history: List[dict]
 
