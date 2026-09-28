@@ -133,6 +133,8 @@ class TourPlanResponse(BaseModel):
     """Response after generating tour plan."""
     activity_session_id: str
     city: str
+    # "The feeling behind your journey" -- see src/core/feeling_block.py.
+    feeling_block: Optional[dict] = None
     stay: StayInfo
     tour_plan: List[TourPlanDayInput]
     total_cost_estimate: float = 0.0

@@ -4,6 +4,7 @@ from app.schemas.city_body import TourPlanDayInput
 from src.core.destination_catalog import Destination
 from src.core.intake_mappings import (
     TRIP_GOAL_DEFINITIONS,
+    TRIP_GOAL_FEELING_WORDS,
     TRIP_PACE_ITINERARY_GUIDANCE,
     TRIP_PACE_LABELS,
     TRIP_PROMPT_LABELS,
@@ -37,21 +38,25 @@ class PromptGenerator:
         profile: TripProfile,
         selected_city: str,
         destination: Optional[Destination] = None,
+        revision_note: str = "",
     ) -> str:
         """
         Prompt for a day-wise itinerary. The LLM only proposes activity names,
         descriptions, areas, times and costs; addresses, images, distances and
-        the stay are filled in by a separate tool step.
+        the stay are filled in by a separate tool step. `revision_note` is set
+        when a previous draft did not support the traveler's chosen feeling
+        (see src/core/feeling_block.py).
         """
+        revision = f"\nREVISION REQUIRED: {revision_note}\n" if revision_note else ""
         prompt = f"""
 Design a {profile.nights}-day trip in {selected_city} shaped around how this traveler wants to feel, not a checklist of tourist sights.
 TRAVELER PROFILE:
 {PromptGenerator._build_profile_summary(profile)}
-{PromptGenerator._build_destination_summary(destination)}
+{PromptGenerator._build_destination_summary(destination)}{revision}
 REQUIREMENTS:
 1. Create {profile.nights} days of activities.
 2. Pace: {TRIP_PACE_ITINERARY_GUIDANCE[profile.pace]}
-3. Choose activities that express the desired feelings through the traveler's chosen moments. Do not promise an emotional result, diagnose the traveler, or add spa or spiritual programs they did not ask for.
+3. {PromptGenerator._feeling_requirement(profile)}
 4. {PromptGenerator._restriction_requirement(profile)}
 5. Prefer these settings: {', '.join(profile.environment_labels)}.
 6. Suit the whole travel party ({profile.party_phrase()}).
@@ -108,7 +113,7 @@ TRAVELER PROFILE:
 {PromptGenerator._build_destination_summary(destination)}{instruction_context}
 REQUIREMENTS:
 1. Pace: {TRIP_PACE_ITINERARY_GUIDANCE[profile.pace]}
-2. {PromptGenerator._restriction_requirement(profile)}
+2. {PromptGenerator._restriction_requirement(profile)} {PromptGenerator._feeling_requirement(profile)}
 3. Suit the whole travel party ({profile.party_phrase()}).
 4. For each activity provide ONLY the activity name, a short description, the rough area/neighborhood,
    a suggested time window, and an estimated cost per person in USD (an estimate, not a quote).
@@ -174,6 +179,15 @@ Respond ONLY with valid JSON, no preamble.
 - Setting: {destination.setting_context}
 - Tradeoffs to plan around: {destination.tradeoffs_to_check}
 """
+
+    @staticmethod
+    def _feeling_requirement(profile: TripProfile) -> str:
+        feelings = " and ".join(TRIP_GOAL_FEELING_WORDS[goal] for goal in profile.goals)
+        return (
+            f"The traveler chose to feel {feelings}. Across the trip, include at least two experiences that "
+            "clearly give room for that feeling through the moments they enjoy. Do not promise an emotional "
+            "result, diagnose the traveler, or add spa or spiritual programs they did not ask for."
+        )
 
     @staticmethod
     def _restriction_requirement(profile: TripProfile) -> str:

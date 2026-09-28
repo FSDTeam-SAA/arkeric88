@@ -54,6 +54,21 @@ TRIP_GOAL_DEFINITIONS = {
     "growth": "An experience that helps you stretch or make a change",
 }
 
+# Headline word for the itinerary's "The feeling behind your journey" block
+# ("THE FEELING: REFLECTIVE"). Reflective, Connected, Inspired and Curious
+# come from the client's sample descriptors; the other four are editorial
+# choices and can be changed here without touching code.
+TRIP_GOAL_FEELING_WORDS = {
+    "restoration": "Restored",
+    "connection": "Connected",
+    "discovery": "Curious",
+    "adventure": "Adventurous",
+    "inspiration": "Inspired",
+    "celebration": "Joyful",
+    "reflection": "Reflective",
+    "growth": "Growing",
+}
+
 TRIP_PROMPT_LABELS = {
     "need_a_break": "I need a break",
     "time_with_someone": "Time with someone",

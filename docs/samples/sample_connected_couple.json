@@ -1,0 +1,948 @@
+{
+  "intake": {
+    "recent_feelings": [
+      "disconnected"
+    ],
+    "trip_goals": [
+      "connection"
+    ],
+    "trip_prompt": "time_with_someone",
+    "preferred_moments": [
+      "food_drinks",
+      "beaches_water",
+      "art_history_culture"
+    ],
+    "preferred_environments": [
+      "coast"
+    ],
+    "trip_pace": "balanced",
+    "travel_party": "couple",
+    "departure_location": "London",
+    "travel_distance": "manageable_flight",
+    "travel_timing": "exact_dates",
+    "check_in_date": "2027-05-20",
+    "check_out_date": "2027-05-24",
+    "trip_nights": 4,
+    "budget_per_night": 500
+  },
+  "suggestions": {
+    "session_id": "f15551a1-8f61-4dd6-86b2-db7a2b9261a9",
+    "match_status": "matched",
+    "suggested_cities": [
+      {
+        "city_name": "Cartagena",
+        "country_name": "Colombia",
+        "number_of_days": 4,
+        "description": "You chose Connection; our editors tag Cartagena for Connection. This is an editorial hypothesis, not a promised outcome. You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: History|Food|Art|Coast.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMYCw-ZYcpIZTvyuNE9K59aQwxUPauPwyofElpd4bmEIipdESB-jNIkNrHo3om9zdfRricoIijzVCu4whc09YaGyXk0Xv6OrLJBDisfOOiFjrBEqFrepR8y669x75ZsnqX6-OlwWe-16iCDQeGl1vU-DUuzMZuFXQ8oGiimCEyJXDyj1CkRfT5zaW_FEOmMoWMfunC30shuAupKYnjDpmWMaJV_yxRbOa9DuTBUCfk1Vsnyu92SaWs1yz9H2TmYfo7ltP9PSt2XIBCWrosyG_9xfsbBwOLiYdVyQHmug5OsyeLgep5WYrlwWqJQpeXV2KJaIFdTLxiRwy-CC-e_wQ4seX57wGy5sFiAERskTOrLn-fIayrwoDsCQh5pDu7PFmtF4qHjYa7_uIHai6HAk5oIwBCQKUY8/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMZLi2nt9rIQA0gG3-Z0M1Sr1_tFWAUlixx7fEcnGssQ0UpuOY12uNdJDhIomlh7Hf4um98jcVOmL580faDsd_7xtaM9njibfM_jzP0vkS-UpkzKheGQ5jwoZvV50mqREnfotcKQ7QjR-aOezOkFd-Q8zR_VE232xgTpVkOqQbBM5pcM96IMoXx9ckvYqoh-uR71sLMm-qKr2AGI7oBQigloy04KH4e8RoLoY1kGoLNrnxfmUu9-UhhNd-qYBRz8zQXO4Iw2XRNEI_cwLYPjd1cF_kMKoVXsQ06dPNQ6i-XjA4inXrx2LX_59LEii9Higwrdj75jUAaeimfN1_M0d7Cxj1Zi3cEvVFvW4FygGHrnZfwgnGR9lxEGpPTDGnt_9BQPpVKJ6TWCd-WQSnv5Dfh_Ug/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMbBOl4wsJec7OebMbXLPjBMblFY1KJedx2CNCUmcBeEOVEmc4WP7O2I31NAwUjEANlgdf1ZvMaLFxpsYwK0oHPlNOF3VI_2mpg1ZmVFiDp6XpVF3U9Ke66_DKsCzwSvAKaD9tadgsp0eJP6kLuTrn5pvdcYlbuPqCuZjNBwyC-NrqS7khVd9KJj9pkRVYJH93fRd12imi2rFgBVfDymC0WyNxmO0CF45zNw8cU4lKw0ZpxBQ9WLWq-sssuTiZ0GHGTn52F2HswW6380yU3_YOl0cIcnrvgKTaWHPfAkG5RlXPemA09GH6MGD7wIabhXOsMpPgps2dJCoASFRV1KTIGgzPzjEC2Aco780pF9UxpUfvW92wXXmt_y130s4nyMoObT2FcrAtZ6KxwhF1HGv4PlfFk/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMbtZXAELMa09CBxFxn9E2H7pjGr3L9GMhQiRnHKMml3SkBr7f_6ursyjCU_Bq2AHEj5NVYv0k-OoDdyTCr_G9KXOr2mU4rukTVmYTryV_DL0Db1pg27E4li8XGjQzGmUJ0nYsn9C0FDXKagGuXU0xLApa5AsorZyfFjr3-k1LBXRZX4CtEPY4C8tA0cRGahrWC0HYzxwp5mxcWOiFweOcrd4hyMK4_VE3GHSMuq2MfsiUnmBU62zuufXZExisDsx7sQTDzJjBhvXMKpQnZm4f3gaCAx8Q2y3T9GABrJFb9iRdRMr9ccr9iAN1JACy6Bkg3HU62EDM3nIcplaDaRbsWYwdPONRuvMkob0wqnlUkVXot5URVVvTetPRlNDfJNSAZjyhS72izyoc5KWtjzMelDMg/media?key=REDACTED&maxHeightPx=400"
+        ],
+        "latitude": 10.393227699999999,
+        "longitude": -75.4832311,
+        "destination_id": "CO-CAR",
+        "world_region": "South America",
+        "match_score": 100,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 10.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "You chose Connection; our editors tag Cartagena for Connection. This is an editorial hypothesis, not a promised outcome.",
+          "You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: History|Food|Art|Coast.",
+          "You're drawn to Coast; catalog setting: Historic city|Coast."
+        ],
+        "tradeoffs": [
+          "Check before booking: Heat and noise in central streets."
+        ],
+        "unresolved_facts": [
+          "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+          "Live stay availability and price have not been checked for your dates yet.",
+          "Nightly lodging cost is unknown, not yet compared with your $500 per room, per night budget (1 room).",
+          "Route from London (mode, transfers and travel time) has not been checked.",
+          "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+        ],
+        "warnings": [
+          "Check before booking: Heat and noise in central streets."
+        ],
+        "restriction_checks": [],
+        "distance_check": {
+          "status": "within_straight_line_limit",
+          "straight_line_km": 8093,
+          "detail": "About 8,093 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+        },
+        "evidence": {
+          "destination_source_url": "https://colombia.travel/en/cartagena/tour-historic-center",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Cartagena",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-09-28T08:33:15.106881+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Peloponnese",
+        "country_name": "Greece",
+        "number_of_days": 4,
+        "description": "You chose Connection; our editors tag Peloponnese for Connection. This is an editorial hypothesis, not a promised outcome. You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|History|Food.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMbkoGPV7aOUE17S-z1fxisWeGWCz9KYswIoA7lp2vWDzJEKBmYM1ftarapU7Nd4HCAqLPD5ryu3Wtg-erOOq-qNJroHBXbz_chYB5-vNdPQU0txYwQsADZ0cO3n__YNWgqVZZkM7urb-E1d9mpiCDGXqc6542YarUO2-Z23rlMilAg24ZvmL_I5N_GdeXrVNcm-Qr6XESIdtf-beA_ZO7snKPsSitU6-4K36VBT9L4QXZecJxLCAwjkE6MH7ZVJALS2hyBjMdaHbiptYfnODbLClfZB7g9vfUTR-FjRRncl7YHlq1uULoznv4Q4owKswwcd1dfN-qlZbIhAZQfKedOWPwyTWLSqtKlDfnPMOnBL76AP188odnSO8JoB0Jei_0zIu8jbkxqPk6vriZPxC0lnpTPvJjw/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMbx1xmAzVsZn7-1HmwJTtiC1Bo-BkiKxniTLUhO-OL0nSL_0MzHM_qgCQ8netlghshBZleBXsd5RLoa0QBQHJMAvgL9uvypB0TWvvq2dDGhNJS6LkOz53493yPrucn123LjL2-Il1LJVV4IzNrFKhhByyLkGol6tkxW_uRqCxVLTkNydFUXLa87UNqwx2cuFQXgEggoGjwqd_UtKIdgfgIOjc8jk4OdtDjfNtLSwca1uCZwS9YpnoJTr89kmx6Aut3g5Viv8CeR3N32XplYCwVbPNVSwgMJ7aCnpABBfDu9_xnYURxZAQ5dCC2Bxz5Wysh1Hh0DLh8if0z7cFPz8-V14ddI3yCo049krdTHzaz8d9eimF9FLjSPh8Ws_YouzaNy3yARDxgOtRdNWUMeScc9uw/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMZabBIUmbl8ULlju7AVtsnuT5YPFeIUHoXaPL9MdnerOmC1SJY8q6FvHSpQLn61_C8LvuYQjSconMNsCW7gknwdFzLS2cktxum-LlGp1-89WmtlwV-7lo9XiRM2NkhWteMl9aFds52efbAOhX6O-gy5yUNC1Aj9EtEn293t_rtw4_WDLbiH18EP0tv03XaDWz5z3_mUi3ZsG35Ob02yK4RSaU7AImqR8BhSoXsOD7Sr1Or0FQaBx7x5FSzvVVCC3jMYDcYEmOgFrpwxMZIQ1Q2Sbrr6jpS0kuThOub3ruAkb7YmPRMBmlytLVkcdqoQju9eRsZNtig4gPxqAyoLD_FFiEmAe5mORE__9-ISGpqopp8H9Z5BPbAll9xqiBi0hRtROevYal3bZZdp5L2tsfy4ls0/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMZKcDvdgz7V3ItlZax2KOEaVnck-c-Sdgk8mBDzbt2DGRG5VHUnT24QW0ooS0DJQSRBgPKUf4O_YvmIcb9Hmcfeb2WZ2A1CQR0Q_ZL_cVZuzCbi3uTwZev9P3iN_6wRGPYn46tyPU4ZOOWZii1eRlvLvRnlJWTUnD9O3ubWutPtn2r6TP0BLbeZAWRIhW4P-s2dMN9gttbUFOjj5D9GzF3nj9IWytwsdYepCt3x3qG3gXb_e1A0sP8us4Tv_9GmFXt2cbOkdNrL8qWX_HjZpUp8Mf22RB6ktY64w_UlzcjgfR-XUYVQLBu0SCNYHo_7tTO1XsIM2T6MPIzLJnl_ToNBoTauyieF0fsQVFboF6Yu3fHyTt3O4SVeuUH-9GEpybvujl25gxkAro66UL2VhM3U35o/media?key=REDACTED&maxHeightPx=400"
+        ],
+        "latitude": 37.349722,
+        "longitude": 22.352221999999998,
+        "destination_id": "GR-PEL",
+        "world_region": "Europe",
+        "match_score": 95,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 5.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "You chose Connection; our editors tag Peloponnese for Connection. This is an editorial hypothesis, not a promised outcome.",
+          "You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|History|Food.",
+          "You're drawn to Coast; catalog setting: Coast|Mountain."
+        ],
+        "tradeoffs": [
+          "Check before booking: Seasonality varies across region."
+        ],
+        "unresolved_facts": [
+          "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+          "Live stay availability and price have not been checked for your dates yet.",
+          "Nightly lodging cost is unknown, not yet compared with your $500 per room, per night budget (1 room).",
+          "Route from London (mode, transfers and travel time) has not been checked.",
+          "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+        ],
+        "warnings": [
+          "Check before booking: Seasonality varies across region."
+        ],
+        "restriction_checks": [],
+        "distance_check": {
+          "status": "within_straight_line_limit",
+          "straight_line_km": 2362,
+          "detail": "About 2,362 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+        },
+        "evidence": {
+          "destination_source_url": "https://www.visitgreece.gr/",
+          "source_scope": "Official tourism source; verify subregion activities",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Peloponnese",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-09-28T08:33:15.732824+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Essaouira",
+        "country_name": "Morocco",
+        "number_of_days": 4,
+        "description": "You chose Connection; our editors tag Essaouira for Connection. This is an editorial hypothesis, not a promised outcome. You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|Art|Food.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMZ46408-qycYuBeMCgpm2-9YEFdKqKY2OkHk89xQwEK-KKW4JQWjpjyuMYquLFcIQpMW4PyKL75LYwXGL4_c5emp03eEjM1McekMK-UF1p5Nemo5rMMKyCax_zZfFKTX04e8Kx7y9euClBlaVNZ-XXUui98I6yzZiSOqJaeSnIkp0-BZubZitMzZ7sjLimIsbxHnlzr0zs3gNFyxOmXTbZHHvg-NsuTLMeCxnFXIIk2JpVm7bC_Sr1d1KYWKn8pQbWu_wOifkhGhsE7tAosVGz-etWvjIq9xNbsXpKckSQ83tnM9DzH8e1EPHiTcPObbpgD9VV8PMp_DB3eeVhSaT8WDbo823KRV9ShgKP2D_nEoT70fg30m58cTmzuXUjDDQIZ2J8T0VKzs59mAD3aznAAQDJJDt2i6MJQI1czbiPuuCcp/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMa4hgMhDoAZ0oJeb4fQgrpToBZx_7FoZtVIUQWpI6LSDKAa6_qG371XjSd1Xpae2d8QOjCQrQrNLH0etvi_BAtEt-MvS2W4vL2ZZ_jKpPlmR_aLD1ycQLMExSTEZg-OPiwHy4mVmW047wnhIbNmi__ZQivMbS1mSaj1Sm3KA1_3IN_M-lb-l_zAl33o6hJKneM3dSvksslPE7M7y31qtSS-6m_uDgmUFLMGQShDPMY3Gn9wu-dF05j94Xr1OS4ejBlMyXyT7Djcx8XoyoNcRJpZlsgUQFIrSc-eM1GHhFN-U0IBDR08QG9BdTcStLw25Wb0WavljCBPLWKz_KGAljuobBlBxtknu8a0sXRpMKxVVVrG_I9DB8LsAxuA-e80A-cSb5pKssGXrXcs_sIS27mF1w7lJJdB83JMfRtvtQgyeg/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMaRbKcgSUUzlGguV3X2F6xtluc76Omn5CjuDkfZBobubwR_lxT6fRX3TiLr3AvhHvOQJBVxp9Gq3gs2qlUYSwwaMZzwDr_1ncNXFvhdnLjiPOMJD7P_WSJQ0b_ijHwpkkSm2qW3KdOdVCvLS8uOCdD0AoG3Yan4X8jXaEbnd0PGW_DVmviVpRoAlJj21fRDD7TsGwOjQyPLEbenaZfYGoXOZA0x6rTuZqR4Ierzb1Rmp1ogEpShES3kMT7W_2ZO0FneMvsrLj2aBkfYewqn6B_Ibzf9epQ1j5lCzwgmRf9vnH7_9JYe-k4j_RMMoczvkC0MGBPTQuZxS39WhzUHxrFZJIrbK9Ppoz2HxfpG3YSAWor1yPZoT-2edJJOY0Cj8l6w_Y9XdbjnOqT2yeFSiHev6IxorQRYN6837nHUWKbSFPul/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMZRdsWSe1p6eJtoiJX92B_RaCBqxpeoR1BN_N9W9pXrg_0yi1yx5tE1hFdW8QVcOIaWQk9VQiH35q8RszIFYmPi_4BkJikidhQhMu1tkOHw68KtJCNseFz07sFKqtGeSXTYML6LdxM0BA3AaBRH3t-FJJzALfAi2tyn1owbEQKRTLI9T0OSgZ4kiu90qqc03qWaVLj0P0V9buApQV6IOYEY9v82eI9Vs07jNdCPmVexPSiJJp9wDF7r7aTgDcvHj_kCEsgrxyNaArW-PlEHCi55GMi9Kl7lmkPDQTd7qSwrEJDZGtA0PMIc8IXCJYjCJEW-ZC5rqJP4r7YsGY28mjaewmw1tpcb62XSIqi1kKskrx9FS6HJ3ljxGxSc0osdCVpaQ7b84PFsLVHcV0WSm_vGhgUSJuZkBjIH3BilIaQ1_A/media?key=REDACTED&maxHeightPx=400"
+        ],
+        "latitude": 31.508492600000004,
+        "longitude": -9.7595041,
+        "destination_id": "MA-ESS",
+        "world_region": "Africa",
+        "match_score": 95,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 5.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "You chose Connection; our editors tag Essaouira for Connection. This is an editorial hypothesis, not a promised outcome.",
+          "You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|Art|Food.",
+          "You're drawn to Coast; catalog setting: Coastal town."
+        ],
+        "tradeoffs": [
+          "Check before booking: Wind and temperature vary by season."
+        ],
+        "unresolved_facts": [
+          "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+          "Live stay availability and price have not been checked for your dates yet.",
+          "Nightly lodging cost is unknown, not yet compared with your $500 per room, per night budget (1 room).",
+          "Route from London (mode, transfers and travel time) has not been checked.",
+          "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+        ],
+        "warnings": [
+          "Check before booking: Wind and temperature vary by season."
+        ],
+        "restriction_checks": [],
+        "distance_check": {
+          "status": "within_straight_line_limit",
+          "straight_line_km": 2359,
+          "detail": "About 2,359 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+        },
+        "evidence": {
+          "destination_source_url": "https://www.visitmorocco.com/en/travel/essaouira-mogador",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Essaouira",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-09-28T08:33:15.943894+00:00"
+          }
+        }
+      }
+    ],
+    "response": {
+      "match_status": "matched",
+      "suggested_cities": [
+        {
+          "destination_id": "CO-CAR",
+          "city_name": "Cartagena",
+          "country_name": "Colombia",
+          "world_region": "South America",
+          "number_of_days": 4,
+          "description": "You chose Connection; our editors tag Cartagena for Connection. This is an editorial hypothesis, not a promised outcome. You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: History|Food|Art|Coast.",
+          "latitude": 10.393227699999999,
+          "longitude": -75.4832311,
+          "match_score": 100,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 10.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "You chose Connection; our editors tag Cartagena for Connection. This is an editorial hypothesis, not a promised outcome.",
+            "You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: History|Food|Art|Coast.",
+            "You're drawn to Coast; catalog setting: Historic city|Coast."
+          ],
+          "tradeoffs": [
+            "Check before booking: Heat and noise in central streets."
+          ],
+          "unresolved_facts": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Live stay availability and price have not been checked for your dates yet.",
+            "Nightly lodging cost is unknown, not yet compared with your $500 per room, per night budget (1 room).",
+            "Route from London (mode, transfers and travel time) has not been checked.",
+            "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+          ],
+          "warnings": [
+            "Check before booking: Heat and noise in central streets."
+          ],
+          "restriction_checks": [],
+          "distance_check": {
+            "status": "within_straight_line_limit",
+            "straight_line_km": 8093,
+            "detail": "About 8,093 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+          },
+          "evidence": {
+            "destination_source_url": "https://colombia.travel/en/cartagena/tour-historic-center",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Cartagena",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-09-28T08:33:15.106881+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMYCw-ZYcpIZTvyuNE9K59aQwxUPauPwyofElpd4bmEIipdESB-jNIkNrHo3om9zdfRricoIijzVCu4whc09YaGyXk0Xv6OrLJBDisfOOiFjrBEqFrepR8y669x75ZsnqX6-OlwWe-16iCDQeGl1vU-DUuzMZuFXQ8oGiimCEyJXDyj1CkRfT5zaW_FEOmMoWMfunC30shuAupKYnjDpmWMaJV_yxRbOa9DuTBUCfk1Vsnyu92SaWs1yz9H2TmYfo7ltP9PSt2XIBCWrosyG_9xfsbBwOLiYdVyQHmug5OsyeLgep5WYrlwWqJQpeXV2KJaIFdTLxiRwy-CC-e_wQ4seX57wGy5sFiAERskTOrLn-fIayrwoDsCQh5pDu7PFmtF4qHjYa7_uIHai6HAk5oIwBCQKUY8/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMZLi2nt9rIQA0gG3-Z0M1Sr1_tFWAUlixx7fEcnGssQ0UpuOY12uNdJDhIomlh7Hf4um98jcVOmL580faDsd_7xtaM9njibfM_jzP0vkS-UpkzKheGQ5jwoZvV50mqREnfotcKQ7QjR-aOezOkFd-Q8zR_VE232xgTpVkOqQbBM5pcM96IMoXx9ckvYqoh-uR71sLMm-qKr2AGI7oBQigloy04KH4e8RoLoY1kGoLNrnxfmUu9-UhhNd-qYBRz8zQXO4Iw2XRNEI_cwLYPjd1cF_kMKoVXsQ06dPNQ6i-XjA4inXrx2LX_59LEii9Higwrdj75jUAaeimfN1_M0d7Cxj1Zi3cEvVFvW4FygGHrnZfwgnGR9lxEGpPTDGnt_9BQPpVKJ6TWCd-WQSnv5Dfh_Ug/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMbBOl4wsJec7OebMbXLPjBMblFY1KJedx2CNCUmcBeEOVEmc4WP7O2I31NAwUjEANlgdf1ZvMaLFxpsYwK0oHPlNOF3VI_2mpg1ZmVFiDp6XpVF3U9Ke66_DKsCzwSvAKaD9tadgsp0eJP6kLuTrn5pvdcYlbuPqCuZjNBwyC-NrqS7khVd9KJj9pkRVYJH93fRd12imi2rFgBVfDymC0WyNxmO0CF45zNw8cU4lKw0ZpxBQ9WLWq-sssuTiZ0GHGTn52F2HswW6380yU3_YOl0cIcnrvgKTaWHPfAkG5RlXPemA09GH6MGD7wIabhXOsMpPgps2dJCoASFRV1KTIGgzPzjEC2Aco780pF9UxpUfvW92wXXmt_y130s4nyMoObT2FcrAtZ6KxwhF1HGv4PlfFk/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJUROdrucl9o4RyiY_Ay45YbE/photos/Aa-ngMbtZXAELMa09CBxFxn9E2H7pjGr3L9GMhQiRnHKMml3SkBr7f_6ursyjCU_Bq2AHEj5NVYv0k-OoDdyTCr_G9KXOr2mU4rukTVmYTryV_DL0Db1pg27E4li8XGjQzGmUJ0nYsn9C0FDXKagGuXU0xLApa5AsorZyfFjr3-k1LBXRZX4CtEPY4C8tA0cRGahrWC0HYzxwp5mxcWOiFweOcrd4hyMK4_VE3GHSMuq2MfsiUnmBU62zuufXZExisDsx7sQTDzJjBhvXMKpQnZm4f3gaCAx8Q2y3T9GABrJFb9iRdRMr9ccr9iAN1JACy6Bkg3HU62EDM3nIcplaDaRbsWYwdPONRuvMkob0wqnlUkVXot5URVVvTetPRlNDfJNSAZjyhS72izyoc5KWtjzMelDMg/media?key=REDACTED&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "GR-PEL",
+          "city_name": "Peloponnese",
+          "country_name": "Greece",
+          "world_region": "Europe",
+          "number_of_days": 4,
+          "description": "You chose Connection; our editors tag Peloponnese for Connection. This is an editorial hypothesis, not a promised outcome. You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|History|Food.",
+          "latitude": 37.349722,
+          "longitude": 22.352221999999998,
+          "match_score": 95,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 5.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "You chose Connection; our editors tag Peloponnese for Connection. This is an editorial hypothesis, not a promised outcome.",
+            "You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|History|Food.",
+            "You're drawn to Coast; catalog setting: Coast|Mountain."
+          ],
+          "tradeoffs": [
+            "Check before booking: Seasonality varies across region."
+          ],
+          "unresolved_facts": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Live stay availability and price have not been checked for your dates yet.",
+            "Nightly lodging cost is unknown, not yet compared with your $500 per room, per night budget (1 room).",
+            "Route from London (mode, transfers and travel time) has not been checked.",
+            "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+          ],
+          "warnings": [
+            "Check before booking: Seasonality varies across region."
+          ],
+          "restriction_checks": [],
+          "distance_check": {
+            "status": "within_straight_line_limit",
+            "straight_line_km": 2362,
+            "detail": "About 2,362 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+          },
+          "evidence": {
+            "destination_source_url": "https://www.visitgreece.gr/",
+            "source_scope": "Official tourism source; verify subregion activities",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Peloponnese",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-09-28T08:33:15.732824+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMbkoGPV7aOUE17S-z1fxisWeGWCz9KYswIoA7lp2vWDzJEKBmYM1ftarapU7Nd4HCAqLPD5ryu3Wtg-erOOq-qNJroHBXbz_chYB5-vNdPQU0txYwQsADZ0cO3n__YNWgqVZZkM7urb-E1d9mpiCDGXqc6542YarUO2-Z23rlMilAg24ZvmL_I5N_GdeXrVNcm-Qr6XESIdtf-beA_ZO7snKPsSitU6-4K36VBT9L4QXZecJxLCAwjkE6MH7ZVJALS2hyBjMdaHbiptYfnODbLClfZB7g9vfUTR-FjRRncl7YHlq1uULoznv4Q4owKswwcd1dfN-qlZbIhAZQfKedOWPwyTWLSqtKlDfnPMOnBL76AP188odnSO8JoB0Jei_0zIu8jbkxqPk6vriZPxC0lnpTPvJjw/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMbx1xmAzVsZn7-1HmwJTtiC1Bo-BkiKxniTLUhO-OL0nSL_0MzHM_qgCQ8netlghshBZleBXsd5RLoa0QBQHJMAvgL9uvypB0TWvvq2dDGhNJS6LkOz53493yPrucn123LjL2-Il1LJVV4IzNrFKhhByyLkGol6tkxW_uRqCxVLTkNydFUXLa87UNqwx2cuFQXgEggoGjwqd_UtKIdgfgIOjc8jk4OdtDjfNtLSwca1uCZwS9YpnoJTr89kmx6Aut3g5Viv8CeR3N32XplYCwVbPNVSwgMJ7aCnpABBfDu9_xnYURxZAQ5dCC2Bxz5Wysh1Hh0DLh8if0z7cFPz8-V14ddI3yCo049krdTHzaz8d9eimF9FLjSPh8Ws_YouzaNy3yARDxgOtRdNWUMeScc9uw/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMZabBIUmbl8ULlju7AVtsnuT5YPFeIUHoXaPL9MdnerOmC1SJY8q6FvHSpQLn61_C8LvuYQjSconMNsCW7gknwdFzLS2cktxum-LlGp1-89WmtlwV-7lo9XiRM2NkhWteMl9aFds52efbAOhX6O-gy5yUNC1Aj9EtEn293t_rtw4_WDLbiH18EP0tv03XaDWz5z3_mUi3ZsG35Ob02yK4RSaU7AImqR8BhSoXsOD7Sr1Or0FQaBx7x5FSzvVVCC3jMYDcYEmOgFrpwxMZIQ1Q2Sbrr6jpS0kuThOub3ruAkb7YmPRMBmlytLVkcdqoQju9eRsZNtig4gPxqAyoLD_FFiEmAe5mORE__9-ISGpqopp8H9Z5BPbAll9xqiBi0hRtROevYal3bZZdp5L2tsfy4ls0/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJ00VfUMs7YBMR702kpqcaRGI/photos/Aa-ngMZKcDvdgz7V3ItlZax2KOEaVnck-c-Sdgk8mBDzbt2DGRG5VHUnT24QW0ooS0DJQSRBgPKUf4O_YvmIcb9Hmcfeb2WZ2A1CQR0Q_ZL_cVZuzCbi3uTwZev9P3iN_6wRGPYn46tyPU4ZOOWZii1eRlvLvRnlJWTUnD9O3ubWutPtn2r6TP0BLbeZAWRIhW4P-s2dMN9gttbUFOjj5D9GzF3nj9IWytwsdYepCt3x3qG3gXb_e1A0sP8us4Tv_9GmFXt2cbOkdNrL8qWX_HjZpUp8Mf22RB6ktY64w_UlzcjgfR-XUYVQLBu0SCNYHo_7tTO1XsIM2T6MPIzLJnl_ToNBoTauyieF0fsQVFboF6Yu3fHyTt3O4SVeuUH-9GEpybvujl25gxkAro66UL2VhM3U35o/media?key=REDACTED&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "MA-ESS",
+          "city_name": "Essaouira",
+          "country_name": "Morocco",
+          "world_region": "Africa",
+          "number_of_days": 4,
+          "description": "You chose Connection; our editors tag Essaouira for Connection. This is an editorial hypothesis, not a promised outcome. You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|Art|Food.",
+          "latitude": 31.508492600000004,
+          "longitude": -9.7595041,
+          "match_score": 95,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 5.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "You chose Connection; our editors tag Essaouira for Connection. This is an editorial hypothesis, not a promised outcome.",
+            "You picked 'Memorable food and drinks', 'Beaches and water' and 'Art, history and culture'; the catalog describes it as: Coast|Art|Food.",
+            "You're drawn to Coast; catalog setting: Coastal town."
+          ],
+          "tradeoffs": [
+            "Check before booking: Wind and temperature vary by season."
+          ],
+          "unresolved_facts": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Live stay availability and price have not been checked for your dates yet.",
+            "Nightly lodging cost is unknown, not yet compared with your $500 per room, per night budget (1 room).",
+            "Route from London (mode, transfers and travel time) has not been checked.",
+            "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+          ],
+          "warnings": [
+            "Check before booking: Wind and temperature vary by season."
+          ],
+          "restriction_checks": [],
+          "distance_check": {
+            "status": "within_straight_line_limit",
+            "straight_line_km": 2359,
+            "detail": "About 2,359 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+          },
+          "evidence": {
+            "destination_source_url": "https://www.visitmorocco.com/en/travel/essaouira-mogador",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Essaouira",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-09-28T08:33:15.943894+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMZ46408-qycYuBeMCgpm2-9YEFdKqKY2OkHk89xQwEK-KKW4JQWjpjyuMYquLFcIQpMW4PyKL75LYwXGL4_c5emp03eEjM1McekMK-UF1p5Nemo5rMMKyCax_zZfFKTX04e8Kx7y9euClBlaVNZ-XXUui98I6yzZiSOqJaeSnIkp0-BZubZitMzZ7sjLimIsbxHnlzr0zs3gNFyxOmXTbZHHvg-NsuTLMeCxnFXIIk2JpVm7bC_Sr1d1KYWKn8pQbWu_wOifkhGhsE7tAosVGz-etWvjIq9xNbsXpKckSQ83tnM9DzH8e1EPHiTcPObbpgD9VV8PMp_DB3eeVhSaT8WDbo823KRV9ShgKP2D_nEoT70fg30m58cTmzuXUjDDQIZ2J8T0VKzs59mAD3aznAAQDJJDt2i6MJQI1czbiPuuCcp/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMa4hgMhDoAZ0oJeb4fQgrpToBZx_7FoZtVIUQWpI6LSDKAa6_qG371XjSd1Xpae2d8QOjCQrQrNLH0etvi_BAtEt-MvS2W4vL2ZZ_jKpPlmR_aLD1ycQLMExSTEZg-OPiwHy4mVmW047wnhIbNmi__ZQivMbS1mSaj1Sm3KA1_3IN_M-lb-l_zAl33o6hJKneM3dSvksslPE7M7y31qtSS-6m_uDgmUFLMGQShDPMY3Gn9wu-dF05j94Xr1OS4ejBlMyXyT7Djcx8XoyoNcRJpZlsgUQFIrSc-eM1GHhFN-U0IBDR08QG9BdTcStLw25Wb0WavljCBPLWKz_KGAljuobBlBxtknu8a0sXRpMKxVVVrG_I9DB8LsAxuA-e80A-cSb5pKssGXrXcs_sIS27mF1w7lJJdB83JMfRtvtQgyeg/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMaRbKcgSUUzlGguV3X2F6xtluc76Omn5CjuDkfZBobubwR_lxT6fRX3TiLr3AvhHvOQJBVxp9Gq3gs2qlUYSwwaMZzwDr_1ncNXFvhdnLjiPOMJD7P_WSJQ0b_ijHwpkkSm2qW3KdOdVCvLS8uOCdD0AoG3Yan4X8jXaEbnd0PGW_DVmviVpRoAlJj21fRDD7TsGwOjQyPLEbenaZfYGoXOZA0x6rTuZqR4Ierzb1Rmp1ogEpShES3kMT7W_2ZO0FneMvsrLj2aBkfYewqn6B_Ibzf9epQ1j5lCzwgmRf9vnH7_9JYe-k4j_RMMoczvkC0MGBPTQuZxS39WhzUHxrFZJIrbK9Ppoz2HxfpG3YSAWor1yPZoT-2edJJOY0Cj8l6w_Y9XdbjnOqT2yeFSiHev6IxorQRYN6837nHUWKbSFPul/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJz4xYn06arQ0RMH1dbRcaQlc/photos/Aa-ngMZRdsWSe1p6eJtoiJX92B_RaCBqxpeoR1BN_N9W9pXrg_0yi1yx5tE1hFdW8QVcOIaWQk9VQiH35q8RszIFYmPi_4BkJikidhQhMu1tkOHw68KtJCNseFz07sFKqtGeSXTYML6LdxM0BA3AaBRH3t-FJJzALfAi2tyn1owbEQKRTLI9T0OSgZ4kiu90qqc03qWaVLj0P0V9buApQV6IOYEY9v82eI9Vs07jNdCPmVexPSiJJp9wDF7r7aTgDcvHj_kCEsgrxyNaArW-PlEHCi55GMi9Kl7lmkPDQTd7qSwrEJDZGtA0PMIc8IXCJYjCJEW-ZC5rqJP4r7YsGY28mjaewmw1tpcb62XSIqi1kKskrx9FS6HJ3ljxGxSc0osdCVpaQ7b84PFsLVHcV0WSm_vGhgUSJuZkBjIH3BilIaQ1_A/media?key=REDACTED&maxHeightPx=400"
+          ]
+        }
+      ],
+      "no_valid_result": null,
+      "clarifications": [],
+      "guest_context": {
+        "recent_feelings": [
+          "Disconnected"
+        ],
+        "trip_goals": [
+          {
+            "code": "connection",
+            "label": "Connection",
+            "definition": "Meaningful time with people who matter to you"
+          }
+        ],
+        "trip_prompt": "Time with someone",
+        "preferred_moments": [
+          "Memorable food and drinks",
+          "Beaches and water",
+          "Art, history and culture"
+        ],
+        "preferred_environments": [
+          "Coast"
+        ],
+        "trip_pace": "A balance of activities and downtime",
+        "party": "My partner and me: 2 adults, 1 room",
+        "restrictions": [],
+        "timing": "2027-05-20 to 2027-05-24 (4 nights)",
+        "budget_per_night_usd": 500.0,
+        "budget_open_ended": false
+      },
+      "eligible_count": 36,
+      "excluded_count": 36,
+      "excluded_by_reason": {
+        "travel_distance": 31,
+        "no_grounded_fit": 5
+      },
+      "total_candidate_count": 72,
+      "data_gaps": [
+        "No candidate has a verified nightly price yet, so budget could not filter destinations. Your budget will be applied when live stays are checked for exact dates.",
+        "1 candidates could not be located on the map, so their distance from you was not checked."
+      ],
+      "origin": {
+        "status": "GEOCODED",
+        "latitude": 51.5072178,
+        "longitude": -0.12758619999999998,
+        "country": "United Kingdom",
+        "region": "europe",
+        "checked_at_utc": "2026-09-28T08:33:15.101368+00:00",
+        "detail": ""
+      },
+      "estimate_status": "Suggestions are editorial candidates. No live price, availability or route has been checked.",
+      "generated_at_utc": "2026-09-28T08:33:16.934896+00:00",
+      "intake_form": {
+        "form_id": "velari_emotional_travel_intake",
+        "form_version": 1
+      },
+      "catalog_version": {
+        "snapshot_date": "2026-09-24",
+        "candidate_count": 72,
+        "backlog_count": 928,
+        "candidates_file": "1. AI_IMPORT_DESTINATIONS.csv"
+      },
+      "intake_mapping_version": "2026-09-28.1",
+      "scoring_version": "velari-destinations-2026-09-28.1"
+    }
+  },
+  "itinerary": {
+    "activity_session_id": "f7b5bd99-5496-4c19-b378-3ce445515fe8",
+    "destination_id": "CO-CAR",
+    "city": "Cartagena",
+    "feeling_block": {
+      "title": "The feeling behind your journey",
+      "feelings": [
+        {
+          "code": "connection",
+          "label": "Connected"
+        }
+      ],
+      "headline": "THE FEELING: CONNECTED",
+      "intention": "You want meaningful time together, built around coast days, memorable food, and shared exploration.",
+      "narrative": "You and your partner get to slow into Cartagena with conversation-friendly walks through the historic center, then keep the connection going on calmer promenade stretches. Later, sea time on the water and an unhurried craft-beer tasting add shared moments to the art, history, and sunset coast views that round out the trip.",
+      "markdown": "**THE FEELING: CONNECTED**\nYou want meaningful time together, built around coast days, memorable food, and shared exploration. You and your partner get to slow into Cartagena with conversation-friendly walks through the historic center, then keep the connection going on calmer promenade stretches. Later, sea time on the water and an unhurried craft-beer tasting add shared moments to the art, history, and sunset coast views that round out the trip.",
+      "supporting_experiences": [
+        {
+          "day": 1,
+          "activity_name": "Free Walking Tour Cartagena | Guru Walk"
+        },
+        {
+          "day": 1,
+          "activity_name": "Camellón de los Mártires"
+        },
+        {
+          "day": 2,
+          "activity_name": "Cerveceria Cartagena"
+        },
+        {
+          "day": 3,
+          "activity_name": "Islas rosario | City sailing Cartagena | Top islas rosario"
+        },
+        {
+          "day": 4,
+          "activity_name": "Cartagena sunset brokers"
+        }
+      ],
+      "note": "Describes an intention for the trip, not a promise of how you will feel.",
+      "alignment": {
+        "status": "aligned",
+        "detail": "The narrative references experiences that are in this itinerary.",
+        "checked_at_utc": "2026-09-28T08:33:54.150005+00:00",
+        "display_guidance": "Show the block at the top of the itinerary."
+      }
+    },
+    "stay": {
+      "name": "Blue Apple Beach",
+      "address": "Blue Apple Beach House, Isla Tierra Bomba, Bocachica, Cartagena de Indias, Bolívar, Colombia",
+      "rating": 4.7,
+      "price_level": "PRICE_LEVEL_EXPENSIVE (approximately)",
+      "photos": [
+        "https://places.googleapis.com/v1/places/ChIJ5UQbTLsp9o4RZ21NmlNxUxY/photos/Aa-ngMZ1Kem1uVoM2ZzIjr94sQPW4bZugGK_B8vQOK-3wS2u5P-ffN9rMtgTPf2PfEgQv7cCAf7QQuRaCQAN5Y5cmfWtQz5ke1D5rp_qkqp6ouPQoAl8eg_JmaEMjG0kjCort5s7RcX5bKNpRLYhNpgJuRvwCrw-pg_3XoVddhP1PFB0KteQIHM-X4w3fwdPrNMB2c_ICCDF5jz5gdgnRDCJPo6Nd7mEvUeBhpoCX6O_zY8OUCkxmvSsF5svlmmIPSyRnZRvVD1ip5dRPwornPLMgeIwzQ75bYz-TKld--avm1do9YG2hEQqD15aImPdRE43ZCWNzAEOicC6LQVGLU29_9x_EGX4hZvDcfbEkmZameS4dikE01OS_AHwP3USGpPhAq5pkPqn0qheL3C8DIheEDq7BEiEEGw/media?key=REDACTED&maxHeightPx=400",
+        "https://places.googleapis.com/v1/places/ChIJ5UQbTLsp9o4RZ21NmlNxUxY/photos/Aa-ngMZfRfT5eXQ7mmU3xH4hBuCF77nRvMwrMXtKU2WSezHxpNjFmp5HseynsLC5NTqkNl0rVaFH4UA8L5IKK67K4MijMTBhJyV96HGdM9bqxFVQGbGSfK8rM9q-joYti622wZ6VOT-GJf3C2wy1wtW-RGFBKsp1AraVstdX1ifxWVuB8qKhowulKZzeWEH1Qpi3Fxw02WSnQPMnmPlSdEk49-h15jGEtyhcjnF8-CR4e4PF6lR9pr7VGOKLGz2rvWbyAAmwKdSOyo5Q7KaJRR9aGSCxK7x4bNQZs91iAUnKfT1MH2tT1EB4x1whQbA-FgnNOKASwQBjFAX3mCr4OCdCkgG8_h42M04yVcbLXr8cVDpXUGPkI36UCoaBwmpaFeCA8iYLn-g_q18tnMV7BK7nNObdLjvfLoI/media?key=REDACTED&maxHeightPx=400",
+        "https://places.googleapis.com/v1/places/ChIJ5UQbTLsp9o4RZ21NmlNxUxY/photos/Aa-ngMbLkb0bosvM9L4QO_7xl2CdcehzAOBjeNncu5PMaAAlItvVYRNsbCdmwLRyjeoRxH10RtZU_aAEwTLm3RAQzXJFIAGiuz5zJYakLN8jjxYl_EypuQGbgyZGKz7RI30I5ptfMG7N3iCz9XMwmMi--ZWPUd2WOby2_opQ8_y-SP8eefH3oQxbeA6FYJV9sAseCQnj02zyWSrFe43c3Au49foN-GzQdDulcXi3KJfz_9RmH88wBneJZK6I4I4MIFjmVt48oEnfi_6MIKpfaUasBjgRBWyQLWcdXmoVCNMH9LlkUw2miNHrhHbREYncEZWekpTHG6diDKCTkPjh8VMA6SOWOgq7XmM8iJa68JrErv8YlXk7JEtN38IQpNIaicNSc-zs7r0skWb9dPwGGJlgXwWaYNVRKIg/media?key=REDACTED&maxHeightPx=400",
+        "https://places.googleapis.com/v1/places/ChIJ5UQbTLsp9o4RZ21NmlNxUxY/photos/Aa-ngMa5TyHQdq21TALkSrj3JPRzo7lqeSbcCw_rVFaQjx3Lh1Cgyg2OKGTzYkAaNpljlagTszccyzi_AMdcmjgAHNttFr4b8njCudSFHB-oPGi_6wmVmFfoeXB8p8Tlyrm2lHb0JFIrMHPzzzsEZTs0uwfs5AQfIkBM6Ca6HOikuW21afR9IR3A2eC0GvzYzADICaXTvi7nur_ZwE3QTZLSLrgWVsY8BrXs2lL30M0wvJBAS_oO5MlOVfoFyzAhimhJmMZJi_xdruCBqj6fBQszcHEBfFKv_QixRVIeN0PKebDcIeRRvz8tiUOX92duDKGSwa2UuPTJPc9sURccRuLsyAMqKxWuauu4V5iILUcEb6NTdfSxartxCrkG0rjJWauxC30T19i8061sPNE9cJ9PPxTo2o9k/media?key=REDACTED&maxHeightPx=400"
+      ],
+      "coords": {
+        "lat": 10.3255653,
+        "lng": -75.5906017
+      },
+      "average_nightly_price": "$350 per night (approximately)",
+      "budget_tier": "Premium (approximately)",
+      "facilities": [
+        "Water or coastal access (approximately)",
+        "Premium guest amenities (approximately)"
+      ],
+      "website": "Not available",
+      "estimate_note": "Unavailable price level, nightly price, budget tier, facilities values are (approximately).",
+      "price_status": "ESTIMATED",
+      "availability_status": "NOT_CHECKED"
+    },
+    "tour_plan": [
+      {
+        "day": 1,
+        "activities": [
+          {
+            "activity_name": "Breakfast at LA BRIOCHE Bocagrande",
+            "activity_description": "A convenient breakfast stop near the day's planned route.",
+            "activity_location": "LA BRIOCHE Bocagrande",
+            "activity_address": "Cra. 2 #9-124 local 4, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJq_7-YBMv9o4RDOxqxaIUNnU/photos/Aa-ngMZ3As_Fvfzm3ogrTtu3_7GIqL7Pa0i8elKkmwWvydcu7E16WgN1Nrsb4QIFu-b0VKEpKzZBzSQI9a48hkLhwDT8K7gxIZEcb6X-1IdXT4AHogn6iNBgKvCZ6e2mcAK3WnlqCK7TFI6JO_0FDtu3H4p40-12Cq0RbrHMfsIw4uieyn0tQqR0C5G2nHyg32O3dBxaG9Zt_jMuEMLtXOkFkHlzK_tvzBQaX2S9O60c9RfgLuNdoq6LG49WSaE5naCCmHy4gk4sG_Aaf0TSdN5YHcwlLJGBlHfUyBH2VGtmTrD3pVe6vcsvRU5vryglFs1P-s-Gyk7kyrj9esOHVRjZuSPXR0Ei6b7uAQSfc491Tmmt_ZyRVpNcbHo2nmoIrsNmK6W6BE4k7nRkSmMgH4uw4Xf2IXAwtHv0nIR_3NZQ8BdzWsNFb-GQSprsSflMEGRc/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJq_7-YBMv9o4RDOxqxaIUNnU/photos/Aa-ngMZWxqUXnVt2iTglEBdOWrG5KvQQadlYJyFSIbHJcm8yIiE-dBOaUexCtHhhqFUe9K3M5jS_H6VwVbWg9TaMqMmj13ROmcSoEC7y1bqKrvRYqkju3B9mysP1GCr0ruYoHHSNcEfga2wgy8ZQ5_TIFtWZ2AS-k3ZZKMoOUaMtMl94vmri_nchW4AYTY0J9t4sZpxaAlOo8K7H6Jel0Nh6d28xbvA4yqSUJJhCQxuOn1BoV77IgQC-kzSXAuSY9zqhux3TfMQeiMIGcQEO4l6It4fOHhXXbR1-olyg_SKLG1oCtJChIB7B8EXW_u3HNA9gyZhJqcbK9ccWy-9nBtWgBDYHX1dvCVqx05ASMMCdS8b7G2T-Fp7U3cIh7hCJKd4esr7JqRGG1hrb6rssChA0ceacwxy34tvpewiLx8IYk-kAyD_2-cWFLu0IKJrUIA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJq_7-YBMv9o4RDOxqxaIUNnU/photos/Aa-ngMaofOCG2ij9y8tO-iWW4sj3FFyTjedK6kvsekAWpC1XyCXokWC4S5LZfNvq6OC8cjrcXQMhmpHK7sCV-e8hPNauGBTitS21_fmJRuTy_h6faX7MQIzop1IVowgHjpvRCpmyEzhKud_Gf2eax6hCgWVwlA9tuuRbrRKPYdF1OfgpmO6le0tZZzOVo6hCu_BEWJx5iE1sAmWocLZYcRALNkIQ4T4zyYrA6zDj1gT07XUdpzljkP0-LV9GW-DzuOkIcfl3S0t2CkYEyi179ntDvYwdAIMocGWWeadab_SrzC1wWX6i85vnF-w4zuhj53aWzz_7Jju_qSiCeMymM5YYikJQFDgG3GYIgJIiJqI1o4QbQUCnqCU0LU8lKjegCY8Q3LgXqbgcq-cXy9cAipUlgX5g0LOg-CSxVNbBqvFuB7SlsTr2UXuWDCriQ8gsaQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJq_7-YBMv9o4RDOxqxaIUNnU/photos/Aa-ngMbnO0bl82_LnXaMf4y4yZbb1jbm_lI09IFcb8LkGs_ImfZ4AQks5MKBcfhNZ6royhBOyYFk9bK4DhJXO1WSjuESYniOiPZH0F_PJ-C8yZxv2lrZViW6cWyK8clHbZWcEfXXEReBLIl0pi1fNp-M3gqoAmcsbamx8GM58dY8j14aE4eKj8fgjo_Mjn9WnU0BXWAtb10ZFY7xzOSyOyl7t66VdCOl6lr-GU7ZKBJ0KGukZvoNxiehfi5DM6JUN6O5m_-KVf83ewc9r7pLooqM7huansAp1yPZ3eOXCUvMwH2p83__ldwMbQZYckgi5g5RsqxG6v1BEjgK27iWmmqK5Qb9kE96-NSQy7BM1nCb-unXqsFJyjkxqCdrJyxqubdG6nhskdvCP7IwSHC4F6hIEXufWJPwgD1JJqfkcIRbzEhR3Ja7R9p2i_U_pR49hEnH/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:00 AM - 09:00 AM",
+            "activity_cost": 18,
+            "distance_from_previous_km": null,
+            "place_id": "ChIJq_7-YBMv9o4RDOxqxaIUNnU",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Free Walking Tour Cartagena | Guru Walk",
+            "activity_description": "Start with a human-scale introduction through the historic center, designed for conversation and shared discovery. Go at a comfortable pace and pause for photos and stories.",
+            "activity_location": "El Centro (historic center)",
+            "activity_address": "Centro Histórico, Calle de la Amargura #32, El Centro, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ29v9XGUv9o4R5vNICz5plRo/photos/Aa-ngMZqJi_-bXFzfgBgt0HfJkciPGrwZzNSt2Xy1gDAGkKLeStuqpk8ZvZZBSYcExShyzfQjkP1z3v92ZIeT0ZqjpG0BWBspVuvcQYwM2pkbvAEIxQS57SvgaNIXomKRr20UAfoWSxhT3QRZ7KlpE1PglZ-uhzs0EgQKr--phlK9GCuyGsdpKUc_7uKkWUAAIF7WkgPqnYGEQv0oX3UExWmiGmK-6wRDp9PZLZky_usTwfUSj5om9uqSLEHdvm8zA_e49J1o0w6OJ0t43lchbRUef5W6BqNtENCC81wGqUZGn2D_gcIw4F-47o98ffMveWDnDOPpJJhaDDzuvUwVqa1zdainOBq9-NT5SGJZFyrRX-8FuXTLBD-L8mLPOKFQFrTt4ZYspAD5qofsti89GA-UKBcAoigL_7puBbge0FY3sCtrw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ29v9XGUv9o4R5vNICz5plRo/photos/Aa-ngMbdVqMD5Xc5PtVlyGEu9fBXEpGXjm90X4xwb4wX9GF4aHaRa5I_mmjr3gcYcfaXZh8RvKjjh94A6w0MYMqxuwKs6Ne8vVxXt-19ufRrOYc4K_6g29FUgwXfaEDDxiKETWUxXOusIQHiC_0K_g5uYFggnLYa4GKTr-5QexzT9nxPJfLBmR9-HP21faMm5MTIAaK0xqhCHIVgdaMr8XzmerImkmhyoYCKeFEzkaHCl0pCeTKooc5mbgL_NunF1PSDZB69CTEn1u31k5q3wCkrq59v8TXmCURbtGofxRWvITHtW_-qMdNuIPTmyEJMkSJQ71zB3WF1Bxh-maondkNoBuinnReyG4FGYbC2r8yBsBKXhVhfZ0cHrv9FkALCjL38ZbbvYwyBo6W9eN51e-A6feMsBcxpUqEnpr-m_TKDvpJa4Q/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ29v9XGUv9o4R5vNICz5plRo/photos/Aa-ngMaOyJdlAqhk32KfQjqbbyKlXpetjH4ZUSqWLK1O4KR4dIeiaqj0VlP8_k_1XUTU4edGWeCce8tr0M-7r--FCXfU_Azm4cHxpAx44tYHuJS5Mp0r3Q3bJ-fdFxTeoEmsNmLG1XfADHD0YEgCXaoVkKf4VwSd1tubdbAg6XSuWjy8cDEllrdpTkfQc7KOm-FMcx0Gl3JpSycXh7-XnCt_7KFEuyq9caPYGX0Uqi_WBXR8WMRzGfcOT0ZAryFVp1xEzg9q3BF-OsVbb-h4HVVXpgkiMm3B3wFXJSEYLc9iF05aZNaeyY1rofWpVQccY1Y71ItjLOBfkHm1fZ2rgqohKu3nGago9CcUCDyWV-N3UNVublhGdrQ3P3Hqmh9YOVpv3PVBRiT9l8p4jWsa22ciRUHkAEFrevT6nxnV-VQwsu3Qog/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ29v9XGUv9o4R5vNICz5plRo/photos/Aa-ngMbEd-6_lqrT8V2az4siU5Ng1vhimqtODvhyF2iIexWJMPzDRl6ttDDriEeVNplMA8HAoRwlno_OZ7Iv59SV8q1qsBwQ2KsbnmkiFE9s6iAXnrSkfsnvWIKt3inceC8gwi7tpSUejv4t_Wt7hydX6757VDovhsy2U50c9lpR44MMLjiS9ufA8VpzwwglH5BqiY9nOoT--n650h9o0hcg88gwDgAlTlYZK47QaOg8CF9zGjirEhCKIJPNZt2BCjv3RhFpWqFEKD6c-1xtMFGfHSUHYy_VlM5J0mlRJnjowZhNVGhrVNWKmNYUStqhkWefC2PiNwnJvH_S1dd_Wxp0eH-Ove1kwCg_I5-5cdPkfCePXN5CHued-oRmiqbJ8c2VWK5EHH7lGR_xOQ9BNkDP6VU92SCYxDBp5-xACg6XNg8oBw/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "09:30 AM - 11:30 AM",
+            "activity_cost": 0,
+            "distance_from_previous_km": 3.24,
+            "place_id": "ChIJ29v9XGUv9o4R5vNICz5plRo",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at RESTAURANTE EL BURLADOR Mediterráneo - Caribe (Cartagena)",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "RESTAURANTE EL BURLADOR Mediterráneo - Caribe (Cartagena)",
+            "activity_address": "Calle Santo Domingo, Cra. 3 #33-88, El Centro, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ9axfPqAv9o4R1J3X94WI5lI/photos/Aa-ngMaJ5iJLLrf5a1Ls3ZMRfbL7mBjpZqFTKPvsNICLpK4b6wQu49yTDDEkT5nNHAncB_Seg7TZGZdfd5mUH8Fi9JhgPItkoHmp7UjnLQWrxqTyiBMo4NJ37uz9DxJdqWqGFRiAKXhQGAaEEBY3pmAB_7nlIQVA2d0pjgQZiVnEdPSAaVWbbs1QFzz6EzxxF5c9RttDCLA-KZ_jf6fb8qXCljI0ejfKgd8BTqzEDjFYbNFAVr7m7tqxLL7BlCiUc9R8lkqZLlWFN2CdJbULN43syowarvVAfgSznqox6wrI0oJNwpwq6KDQrZX7kuEG2aunEt_oO5lSPZE1ihFb8UVeC9VRnWvtL4eG8CWwKsNAtp3H476f7bsHHY3tWCamlNCGmKTD9DsOjsAsbpvIoRxSBCH-DlZNEqXQXOjpW--Os5h7/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ9axfPqAv9o4R1J3X94WI5lI/photos/Aa-ngMYArR5NFke-2Xkj3N01qVG494c7OcHX4V43NPN6J59Fj0ptHq97zBcyWK-MfGH8Tkf2z_A7Ko8OpHtPwZbGxHdh0s4HtBWkyE2-BazlQTTuiE0B1jc0vY1iwUd03d5_MZnIng9M2OCIK2Bk7q2m6ZJG5_6zlvP-NcKcs0VqVR2p1YsQsp9lCIjihAE3Q-mFlTCrIfr7DlAI37eeGyFh0l0vvbz6Glems2LyQIWx7STjygZJfGug4KEHXgREoHEKcspPWpQB0nU_46d469gA4AZrCZy4439kzz5auLLsXue6W4Z9P1EFEVLlJw5b9A0eK0sM5ykSNGQ0MUvmqhmAEvvdOLoOZ7kiVFZPMtQFKHMVWrxytXTPfHQeCP-p36EZKgp-avXJsaPLCDeL73rQtXkuKRT4tPUZYiMnD_s4hYrV8g/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ9axfPqAv9o4R1J3X94WI5lI/photos/Aa-ngMZAs85YFlayl3dWE8TsUmsNGg8LXj7kTD6PF9bSoulyZkyJr_jxMoWQzsvVauJZfEqtQrSionquHeYaNIZwLtf51YmLEhmZd9bhMSMImGDhmt3zs28_o7PCLcbEHXF0FzuAmzcvAhy5rNf3hBm9heQt-tJYVq_wynJe4hpV4cCjCcstP2abUQRgixyDtfNvCL53cQFAB3Akv--qAW0s_EUC2RwcuBA8AaKLHFXNsXFm4NGgFFIuIjYUVkMow2eo4Qn6ReiRfrWfHcz5-X2UXhznSc50WrEnGCT56sJaLAJQ6ub3WtVGF9MNZpZWrV2g4uCwj4YnTxsaoMgxBh2SXZ0RRgRwZy-IIkXuGKtEZcv-CjY0q_BctSoErisrpHGeveqx2nGDDRiQ83oBkYhxieEu_BwewxDDU4fDNm0Z0jrh/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ9axfPqAv9o4R1J3X94WI5lI/photos/Aa-ngMYL8yfUSUwua7mUsFUDbdxMbDMBEfIEKTxgbmSMnqsBarYiiXDfPriFiUrzH1LHbVE6QqshMltAZCY7AjANsijSm5j9tSwoT2VJ0xJcZixyZ9SI3BXShfHxfR3B0yThKeJDmVQTKG3UHsVmZedwUk9rhxfPens-erD65fKBbsn2cqaZWo59EsjXx5CMxbJCI3tJVqmKmv3BE655kF5ATNhO7W60Zt3O2gt8WqnSlSn_Tg4E1vr74UQd-oAXwEAkCOKYZ7zvBvtj3_tf7C6eo-nn3abaXg1Id2JC0CZOSOXB-XrMCsZ7y0xmVzxfCQbv317FMSC2VHLHk41u2YW5_PE9gsibfw_hIqGwJiVdupWSx_CoYJGQ7CpsjSXHmf4ofX114aFOqHSUHT13pD2E_XXjuWn2T9B51T9pI7WVnJyg/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 0.68,
+            "place_id": "ChIJ9axfPqAv9o4R1J3X94WI5lI",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Camellón de los Mártires",
+            "activity_description": "Slow stroll along the promenade for calmer views and a break from busier central streets; use the time to reset and connect over what you’re noticing together.",
+            "activity_location": "El Centro (promenade area)",
+            "activity_address": "Cl. 31 #71-48, El Centro, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJR9-reHUv9o4Roxkn_QrkGow/photos/Aa-ngMYJ2D2x5lugfvNBkfx-N3ufYAJm7EaKy8Focl3uZpjT4KppbJEMZzNb-8IoG5-6YW-GyNQyijoD0B6zCNF-37vSCzI-vCnnrD5I18CZ8J60Fn-dNiFD0BKiRwjQcp5tNOlU47aAcFFH-CcLUm8C1kvcHOnsQ2BhvF1UEiBLqiCMp3GWZOEVXVPn5SL-DMDKSAlKsfvjXDl3XIBdttz7E9sqGXyM-bTkzAHG37BFCelWt8mh-Tl-5JJmvvWOsTLE9hlR2SN_0n7DPaT_H7ud7-hhkTGHFKiGt9N_jSMQVWTzEW4drwXN8mpdAj_0Oj_2aZA7dl3Adag_fPbN9PYgOYS76Dkwvy_zdkYArho_igrThfk1hba4eHWVxujkWRM8BWqNstFyh92L9v0Wj2GGLuby736IHPR0mPn27E4dIqAzWMc/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJR9-reHUv9o4Roxkn_QrkGow/photos/Aa-ngMb-gnpXSdFI-VH66Pf-lXn9r6xoWwl5lsrseHZqKTfQNt9mXntFzSi4WnoltI2fDGQLYHuc2v4aL7Boj19Sv62mz8DE1_dqPhYbPn-ePwuB-tW5Fm20v8jxep_nGs4us6gGKdQNQdGkaY_-TQ_-2EFJU3fXc0ufafkRAJfmRHujiBdGGY3WuzEMSgLx_S-0iWqRffHcn5ZWAT5d2AbkjSdmpERpZsDpvcVzPReKihD8hF6sSWY-bwQ_v76Dl4xQ1Pb2VIPYsdDdgcqn9fCraqnKBDMe0joIqI8ShrZ31vfIgzlV7dfgzSzbxRelR1KkDjq2QkT-wXS67iKcJet5BuP0YXRH8QKma7T4DMh8Xu4AOyGgTJgRhAzfMzsznyvlPewDb0WVPEkDy8drbXR783fXlKIHzoXcQ-xHMni9GiHxYt3u/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJR9-reHUv9o4Roxkn_QrkGow/photos/Aa-ngMbWP2FWMfFiWfFgIdKaReYYJ9mv-m6K0y-hLwcXqD4q2XbsE2Bto855iGZ6Hbi_ReXH0e7FfOOFRP1cUmAt_K28i4y6thnk77xVuZOc55S9vbhzstF9_Yv9WhXvWLRTbIxPFrvWkJ63MfvPFGq61o-2sjiIO4V-ZprXkLoY7UklXKVF_QDRlRfhHZ5Juu7z9QwqYmW2Quypiv27xOD9lnBrfNc7vMlQhg7L3QW1aVElwwqsHdtLmJDHvJTgEQDh6_HMAere1YBt_ks0ZPkaTr0_t7nlmx-BGynD8W-8FLMQQFmJxDXV8zfGep45o4rnQRxokB9vKNDXmKJXBUt76WjHphKnF9k5Dp47ckQ_vPPt_7txkjdnLm9Jo9VqIv6-hrHz2jZ4LI0cLrP_bDcZssBOHtZljcb7Sj-Qz0OnyVfBDw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJR9-reHUv9o4Roxkn_QrkGow/photos/Aa-ngMaOqejS_uGGw53_NjO4Oxfu6adft2Go4-pq8QBVYk105CYYsQLZRmh4wlXYxoRNFz795UfbO9w8b8FUX4uYsdMFR_AdxfpIZNBG8nePtt6tltVMcPXznxPYsPG1TtGom7n9wWRQx3AL-bEvK3Er53ES0ntggxPj272iY-4v3QW93gcyayYBa_Eqa4zWCR-0SC88Ffd5dafuW7A56R2yJlnV1HTlW65YcjN7S1BkgMAB6SnsEJCM_qU5LE-4za0yDFPIF7F4kAqTejhhRDURiPT-OekQT6nUVrBN3BMHcKnJCOthYcH0TVJcrBhLFZw_l3qxSt5dplPwUY8GQTbtnNv5yEQuyCaa81tps6eJGfjpLFGegJNrggcZ0eYf9KcEBTrHcDjODn4U7BBkh5d6k6-odN3B9NwAYBulUg/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "05:00 PM - 06:30 PM",
+            "activity_cost": 5,
+            "distance_from_previous_km": 1.75,
+            "place_id": "ChIJR9-reHUv9o4Roxkn_QrkGow",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Dinner at Restaurante Sambal, bistro caribeño",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Restaurante Sambal, bistro caribeño",
+            "activity_address": "Calle Media Luna, Cl. 30 #9 - 47, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJEQsCQmEv9o4Rts5NnqKt-mU/photos/Aa-ngMZpyNnmV4apIr0g5X7Dsn_QkGWbsKHb8parOszCdynXBzCbx9WXeQOQ0Kb8eo6PTRY_MDoYUenpEn2N8PZhD1TM51218f74EQzfzajJCnl3cNzxgmlsFiI-hVpuBHdQSJgUqjGbhDLt2xphqY5kvqktQeL4UJJGTi92rIi2T0nGPT2xLkbxK9oHAzOq_40F3LSc8fA6ZsJWVuE1N2ccAOVtGC9tMxGJmux-oCYcLsAfwwkvjhihYKqpp3icSMNjU881llp6w3UZ7n1rjmky3KmfJgOMtKDvNiaFVcfiShTRpCsjgmuCZAUvTTz3Q1bYjHhzNMdfDUzCs49toonjDyAvPC95wFFvMGhlecXe3J-wALlc5VKdOuxKGXMxoQRkKtcD18zrB3AmQ51bVWbpOYg-uuLWw8LrPi4PSdyGvTzkHN4G/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJEQsCQmEv9o4Rts5NnqKt-mU/photos/Aa-ngMbn0MnTVglcDynPDlpi2Blnp4niguhwDDZgosTYiGmMUtgROgZMoxt5mSfaGeUqBhCafGgsNIuGHkgt5a3xzSFQxM6OQzGBqm-gfcouLszWFA_X10ItLInUdZ0KbPfxD-VhvK0GIe80hTAIB5Nfdf4eVdRSTSjLHxgZDlY-n69PcaStB1v9tgiriSM1MomWYZM70DqImguB0LFugq5ymBPwUlrSRKQDqRuo4QsFppxGZUQPNKzm5I8gOXdVthDaZ70jbf8Uo4FstkuQDYpA9FE1iU9V2ndFaT-JvLXnbRWLEGqZr9wX9t6UM9BggRlEE_RuGjf5uqHbQeATVMxF3ZAg3CW5ptPozoRcJUoXbhYgsZtLjKuitn4O9uuCiZBx-E1-O4rkUr6FEaH--BsysBVtP7KXYV_RYTXVm-CBuseMJm80uc42hoox_ioSPA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJEQsCQmEv9o4Rts5NnqKt-mU/photos/Aa-ngMYb5v7TfmlJx9nJFv9DYZ3QZLghceBok9Q1DmRbaettaKBKnbIF8EdO2OJ-1hBUKPXn26DwVjLG9Y-uP8zbOC3wC7RZRncg3RmZBTml0aV0JlpV8Jhf5BhB_9MOZcjzq2InJiyjMp0nJZtoeNjfKl9dao8hMso5kyG3HoVk5V_4jhHD-RuZe_kiG6ZqcVgU0A7qgdva5YfTyADNXLJoqxFuVDkQAb_3Iz0rkVRGbkpt5v5oR_6Mp5I0twBPnnpT4ErqzL_Hdq3ehsVS2j2f_wVS14r6mgM4tv89zeuln8SsBBiJ6S99NXvCWFYMT5XjV78PwXBI0w9zQB8lduat_FbeYZo-6kRU-ZYsPr4aYiOBymm1vQ0g0l6kYHMD3UCqETameALHLpUK_iT0ZJ59Y8dgbHJ8jrUBn82ugqIGuyZ0n5nKwLOGtysboWNAeR0A/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJEQsCQmEv9o4Rts5NnqKt-mU/photos/Aa-ngMZqx-KAr-U43hOSFy2P0cLbBKqMJsOaVTOwAiYMV35TB0ib9pkcJ_Y0yKkWhrIMqPzxbsxRkNxnJVcA7T4znXCRR8GlCI4j232ENqVObvP91aE7xGBy54LmyhYiF79W2IAVbHNr_t85r2sIpLh7KSnVcJ5Jf2RrdDJZmjmbtz01mjocstbCSySsPfLUDiDnywdX1QotraGQ6o9QmuAU0EQ7T4L7hU5kj_ZwQpDTuKQ36RRz32snHm_uTL0C3OFOtHM8u12Sg3e1T60eejC1_yUCdINmhIjBuC6ODd3q3bb60LN2GdwYF9LY9dMg66UHsCyNvGGd7cGrCnadVLTZnt31UTLv0TDLQHNC1jFYKjp9HTzU-ZLgBq2lsRZgcdEyiyhDNQoVicdDvSUAIhne2zqBqprerbip0-YlzoyB-U8qTMqHHq3l59W2QNRD93Ag/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 4.02,
+            "place_id": "ChIJEQsCQmEv9o4Rts5NnqKt-mU",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "activities": [
+          {
+            "activity_name": "Breakfast at Manna Breakfast & Lunch",
+            "activity_description": "A convenient breakfast stop near the day's planned route.",
+            "activity_location": "Manna Breakfast & Lunch",
+            "activity_address": "Cl. de San Juan #25-118, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJp8F_nDIv9o4RZSKyICeuzs4/photos/Aa-ngMaVAEZPOW3aQbJ5NPBaekgQ1c4HSVFlYRxj0bNp9hg2cCq1-ZG2ELqkc80_xxa5oK38SmrLcQnwA-iTmrgl49wdsnJt8FXhHvjFHCEUHKbyjkLzHoSg65Y_CzIcii_O59n6BaDkEbM6OYwIzaqkHM5OfFxo2VxKPu0Yu9vs64oDKWkkzU7oIs1Od0KbYnzo1oCEr_u5KDufxgBRoY6uBYIuOSdhKVcNB9ni-7r4qlV6mzifk2cKat0EsNTGWabEkZpKmoUAR4xxW0kpYm3IcH0I4u0k7xRAjILMvmBSRFu6wNLr9YGA_r-waB0m86gox7tSnGP0E7eYSV_k0odR7kA6DNRAV7jdjtoNC-r3DcF8sLqHL-MJLXdizIuklOtxI49IINUIG09rJ1om75v9I9UU8eGiBT_9E6y0cp8PcSkKgQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJp8F_nDIv9o4RZSKyICeuzs4/photos/Aa-ngMbzkPGY2ef1o9rwdjoi5-zMZLPh8Ixjb1DjouIMEPlwJ_uPDC7FoIegKwzUQ-XFupxqPJXWkfYzRXJ8KnU4BwHM30r1hz6uzn0sxXyxAPn6OZJEpT1gj_Q3xEag7-P_O_Rd5Z8WSPvgqN2EBzGlfEw-aD-IQXom55kjzQY2y_jm132TmdQ3j4nTRnMcDlTAuXCAzCtg_MdWaR5q93PeX5Zm5E03CjalTGI1qSZeSJVM5X2IEZwybI6qbA7e7SXAxe_Ra1v4kcq0OsgUQGw5eEaufUtml72WoS9MA3ojIrA69e-YRU5pFiaqfTrP6TGs_SwIKJCYBO4aKHdzfIFleZ4QA1DuExnvI_OaVUYjmFiEBCLtT8TEHksJhPX5mY5Shz16nzHZR1wa6NMdbBmRqOVNpDMM0KI/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJp8F_nDIv9o4RZSKyICeuzs4/photos/Aa-ngMauEDdEfgidvCLqnC5k5OyrIm-xAfXIeD8UQ3W1dtGXYXjVULKIVRGEWBHApLbxoS2frsjDIYFW1YXB5ovMSQVVlo68Pysf4WK9-phAYeE-DwRcdz3Pqa8L535xWIceFztcL6ZMzKTM4q0dHEHeCs39XPDLBjD_t-Xc3ydW4d-ZzCtlLOKLsI3picju6Z2__jS2tJu0InnsPvEd8S646CCIrxmwwvP5KFoFUNsaygiK4HOamrbJKf85GD0ixovQWNouQ5WbZTpohgcoXfesH0u3KYAobjVIgXIywRimuKKSP6ewJM1nAgjhzf84P4_PBEOlb7Zp8RCDCA4jDLRs_wHIMyFhw1nSj3l7SL1ibwOVBiHN85tcSL85oGfOr9Fh8NPzoC_fK2XAzRBah5W50OlA95-mVS6yf7T4CEol_V7W/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJp8F_nDIv9o4RZSKyICeuzs4/photos/Aa-ngMZ0dXzC15s8FGeOm0WdctNDCtG7yNAAljpTQiMR2gBWoWHhy_ZspQ4nc_vlegrGhE93B66tJHWicmtVpypsPTvMFD8L4y8rp7gNyPJkIJDUQAnHzGKc_Lu426Xk3fmlF4JplosI6X4Gduj0KhmDlkkrthVB_OnlG8XVPV_cMIGUq83czojB1VbS4-YEJtfLtAx0WGhfIVYOp3XzUhCsq25Ymv0l4kMOduAUXiO39zwnZUl3l-PKMMnpsi6lszA5Ql1ZL-jg94I_t0YPac4j-DLnS4m3aHHipjk1U4Wj0JNVJ1sa9x1HVOamEXWh-seKHroa0LDnESh_rkYI__RKauyK8GOLpPwDP9FglJcMvRVvsNHkwSbiFtutWjxF6G8G7lUxysyRmFRZyCAsZOiEP-o40l0qPWjW7TrmpypznGrclw/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:00 AM - 09:00 AM",
+            "activity_cost": 18,
+            "distance_from_previous_km": null,
+            "place_id": "ChIJp8F_nDIv9o4RZSKyICeuzs4",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Mural del Tigre",
+            "activity_description": "Explore street-art textures and color up close, then keep wandering the nearby side streets at your own pace (choose a few murals and take your time).",
+            "activity_location": "Getsemaní",
+            "activity_address": "Cra. 10b #26-22, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJFUtAegAv9o4RTN9Tfy_kz9c/photos/Aa-ngMaF45Hm2Q9F_HIhek8RexkCjJTHUA0hLsHeL5C9oeOxzV-ryud-xM7bwnsbMpfOOK22igVzMdQrFcQyCcebN28P578ETjB6kJYQyxuNFwgoGWXfy4MJsc3-y9D1RhsDeJA5bnNaPfTN7UjEm45WPp5B02mqqixzhYf-IlPA4xnDtoo6sv-sTSexMqvVL8LdhVnt3hAi0-KiWCWx5PP6yzl2yd3j95wj9mYSyuXrVWCk4k-9n_SlcAl4mLOaKyQQW9i3JzFmOe0nyLOKO_fNTDJGafNrzsh_URlhfkLIFPAyIIQiu2ShtCQ6uPVemd7ppTeUnHdsZf25DRd8n56b-IxDVrn3Qkdejmm3JokRUe1kCL5g_AAJOkJnVvjWhYE9crrkhJPiyTlFrjarNOa8joWKENRXLdQ_ltyoMKq4pKBgXGc71eCf31qdpaDiRQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJFUtAegAv9o4RTN9Tfy_kz9c/photos/Aa-ngMYeCNWD3zoEOePKkCvuFTLZkg0PcBjYZphqV2fFzUYOX8SClPFki3WhItURVlMXJNjETz0--N1blD6dY6U7k1GAGZBslLADOGqhdUL_DimCUjTREy3LnF7__IpnhY5NoyulGfwcu1uqPiU43EerpXKZeNeMk2yS30SmNoxv5rj-cjkpLGD5FN2IU66sLUgnZ9cv22VkmE-IHPJtVouoTIKnWUdRiMd3rozlYRtvpAhcehp3p7N1_IBl3aQPOilvVxTLh8ZhDnkP98Y_bJzBiBuvHSE97hURZW7q0mvmNzkI7kJa0Oa-qhph6RBI9Rf9LakANByQjEZh2qHXW24zdfwbEE9gFfjw1tPnBkVNbizSEJFeFSCRb21z3cYngzA_kd114W6RYaCNLOEkhYwNW9o9_c2XdHahUUC--fzZ0JM5KqRUJBX2EDq8-U_M9MZz/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJFUtAegAv9o4RTN9Tfy_kz9c/photos/Aa-ngMY_c35wrxriIxl1BVtpVJIKlrimKv_Hkg0uyjWIkDkdwy6mzEzaADUW7UAXk3jucP0OesoVGpIVS6tsg6cfv0y65OMJFvWWw1xnuwiWeLurG6aTXq_ZAeMHO9pn_57_PTS59Ju3tXp9GXs27owFs5Bbn--Z9fSGF7c1VcghGC7tj4EnImBIETbNyfLqOSDBNPYTTgsM4BwIydrZz9TZo-aW0mDBjUC55RWIAynTwOSwDuS1ofl_BHl_IjSFHhGuEt75_yfJyYBxbroFKJ-_MXsBQb9Nv-eppgOEC89b3-zZ0gbXm5deSbb12HtvnzmcRfz_Hmw2sP5z-bmM9bbMlehHaMLchYZqBR1hIVJr1IBZ9BAqvzQMApJAOJsjsSF1mPGwLgGPPN-cha11PvLwCeAOZEXNtN8WW_CXhsa8x-k1Xts/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJFUtAegAv9o4RTN9Tfy_kz9c/photos/Aa-ngMbXSjGv-z5aRt_dyCn8hYwHZ4V0Bk1pNh990vCgplfdwATKqXaRNL1pOIyLXwJhPl_EUJNUwSSJ6UPZpPBSWLs0Gik9JrpZm2SnlHNvLNbJjCNDb2nGBl6VTCEFD9qnVhoVq55i5Qq0DXx98vOrHRS-CzoRmf99BFBL4qkb68q-00-PhP7wK8HQfDFvO8m0vY6KQQXtiSQLTWZqUgqHZY-7lL51GBUIRwDepKgrdL3flvcHHFMYaQhqSnJtAuHbPfnScbcS8aLnOFfAJUqD8hqdvY45cQ3IiEgVC56dWz-mw1Yadx3s9t6Y0Ccc_RlUfc9ngwyiuB4__oakA3Tc42Bo-OqghU6jQA32HZJkLfO93qRrSkp-GcDegTFNbo8fu5VpYVX2eY1cIxTz3SSSTLi1RfUR2qipzz4F4SGFhs5DJ7s6eUdPY6J7--oSYQ/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "10:00 AM - 12:00 PM",
+            "activity_cost": 0,
+            "distance_from_previous_km": 2.07,
+            "place_id": "ChIJFUtAegAv9o4RTN9Tfy_kz9c",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at El beso Bar-Restaurant",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "El beso Bar-Restaurant",
+            "activity_address": "25 - 37, Calle san antonio #25-37, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJA5OAAkYv9o4Rw6Cjw-dzSS4/photos/Aa-ngMb7f637bT7vDJjEW-YTVGI2P1U8ZjUIl3lG7vN-z5yXgQz7bDA0TgzP9GHuXPHXBL9xklvBXL9MxgINEvtGfJkpV0Wa1SohFitnEWmEsSU8J-g6J1bn7S1WOcnmZj4RwQupQFtL1UvxRYXkNKHvSUEzxHkmxizNAGJ8oFLSdJmSP9XNQldfsX4L8b7qPtjQqOLBgLINGBodE11fjFKSvYGbyoCJu2QoQIxIZsAOn1WhrHmIVKa-4t1jOuVDN_b6lyAljIHVdJl79ou5uvmEegrSKM9fHBjZV0Iz8SHh_1Iz87Aie6kzNcAeHev0D5pYxFPmaykthq5NjNgNOtOF1o02hyYoNseuhKDyYTwEOWMBRx64f7go0QI7gOHWYgNwrwtfk3YLEue0s7f5JfAeWrA0--yBMM8eVFFcScQe1BRnK-z_sSgktywccgU_LNxH/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJA5OAAkYv9o4Rw6Cjw-dzSS4/photos/Aa-ngMbsWf-pP9W1Xbh13BCX3p1CWb2-N-328vqxoIWknGluz4WJJBb4mKcORIeY1vKdKKgku_hn4g0x13jAssmkSyNJtZBN5hzBzVtwCZqf1dX_5xvnmHfkMVg1eedcxI6b42PEnSnTsXQWrUFh19edE3bQsDDmvCXg1NLr3V-OQtXeGPQohxZpfzL9vmm4dlGJgqmRr8nHsW5pthB4LscA2E7YTeyZas-Jcp29ELm-ngIHS37_9EoOfL--iGS5jVEAnHY6VqKmECyBf4Ayl6AKeEqjwz38iPOFIICPTZ8nukJERBUKpZ31WF0U3dfqAR6nRTEELC8hPb2xJVvl3RByZve_0dFeLWKXtF5X6J7wLu0q3JwZmbj9ZWQeI93JgGyqMPdj2Pw0WGPe1E2mBMJdxLzbijLNM5U2y6x86Q0D132keivxQaDfhjZsAsfNRg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJA5OAAkYv9o4Rw6Cjw-dzSS4/photos/Aa-ngMYUdsh209K2quLQsuGSwrbaZ5wNdCuvSFE7q_fBRauzwkTdJ-NBUfzzXIp3Jgj-fdCasKNqDKsdG4NYiVZhHNhVi1Czg9U6WLc2o_7G6BjRSuaC5lAtE-yeczhM5zMHzTTPgevKoFSXElQD3_z2QRPnAq2YZmSoS0S2eTYMVjpF3SoxhAaF0npZ5OPOJozCEmDVyLtTYtAVIBa678qsF6Yrlw8l_7Mg_dwtLqrnrNuWx7agTNkqE0DNYaxqyrznotn55PRR37_zTFI75_ZxeKQav5bEC7PjDAYrhTlWU2eDVGSxw27uOT7RyLpi5ZlF0G62gyTUYF2Er-3n2OiiKuWJoGgpKeJSYbVMxo9nupxSwLxk8dva2w7iAUVX6JOg9uV7TXB86HF8qZlkXkKZu7gDpKtwLooS15scxJy92Dc1ub_qDoNe5Kjri4uMyw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJA5OAAkYv9o4Rw6Cjw-dzSS4/photos/Aa-ngMYopSinT6KTbU6u6fc118tonzCCf6TMU-Kx9M5luI4B2Ixeu8gMUeFvUsHyZmtNC5KGvCqk0GZJrs1KugU0NOPkBSXD1Wl1WxKg0Nj3gsuzqpG9j_1eC_cu_hWMvOlUnjsyeAHMppcWIoLdL36O3u_fK3jSogKHNpfks3WJyfBzw7dmrfDOhXNjVQMktW58BfiPuF4E8CGOH3ToVyjUsaf1D86ucnVSo4hzxBNwjSNv6RcOFhKL2dX1XAhUIY7Oaw6LDuiMIvmMu2_7x9SNfTKVGEXoShCgXTEM2bghy20TzbHoKir3r21qOzUynJDaJF8J6j2Iep3LoUBFjOaEhkW4x5cQ_woqB0OG5js8-K-d2Zy5NnmfM9ftBOHfhI4MCHUOIyee0nBYbgMBmBdOUMc4AkqIA1P1jk1Kg2DZVsDD_82PSLbTh6hgd0BP7I8V/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 2.34,
+            "place_id": "ChIJA5OAAkYv9o4Rw6Cjw-dzSS4",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Cerveceria Cartagena",
+            "activity_description": "Settle into a craft-beer tasting-style visit and slow down with drinks; focus on trying a few different flavors rather than rushing through.",
+            "activity_location": "Getsemaní",
+            "activity_address": "Cl. 25 #10-42, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJEzCx2lAl9o4RkLVKy-RsJms/photos/Aa-ngMa4fwBgPADS1XYfT5uWebXpKEFKWCV8umZH-yIkp7YYfZU5O0UhRFKJ_oglqagAHgu3EGkysyvVes1z8jRUrqys3TjLUOWa5FdNtR8QSFAU8f31L4tDuG4fsalUwBWfgPPuKUmUH8G_bh2YPsQRUCe95xinjcBsVBL52vhlh_U2nOq7Y_KRc06-_mjkQV6snUBxMa8rIrgz4ltI7QXjmgjmg_R7KgcdRZXX7ilnpnITngcLt7IjHdERoxmBxPZEmDm-iXu8gNtstrGjajt8ky4FZp0B26LHnYlQx3c0CddCbBeJcWSQw3B9cdfhevLxohNjfP-0RkgiNaAWW3qicFMUwNqafKMuJspo-1E_6ZFgTOS1TXc-lMh09kEdE9735qTgIoiP5Oirfl1egTtMZPfirz_k/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJEzCx2lAl9o4RkLVKy-RsJms/photos/Aa-ngMZ37SnNBEbdU57zHYC8K15owhv62iVXnTxGJuHwJOKWxXIMLFH637xLjnxIDDZg5MdEC1f1H5_-LYOjLW0k7PUJPjaK_RWXNi4Jp3U9hmlPNKHCTgukusy8RXUFquIB6jh3jtnEzP9XnQWZbcsmq1ODE6vjaksR59qvEgZWUc1WeQae_j3djZMIWgh0-o0R1gI63U-6Zx9ENSSUsgwaTmlvqCpTMLY2KCaEMcoTsx64AIRPdzK3WpkVYFnM8fG0S3lpwvo_eNgZk3DUl8bYnVpWG1j6zkm0DZp8vpkbr7IC1M3n_ORmLdv0HrXJunxVZBHoTzQIqFFYTDgi6PkIJK0XZNYFamfMu4YF4ibox5smlYEDzjIs79a35C54bugqVCH1mDGIFnrpbDQM1v-TZSDZMA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJEzCx2lAl9o4RkLVKy-RsJms/photos/Aa-ngMZ1anJljWys5c2cizNe00n74YfaCnI6Sp_jFO1tbr_ORtG6HYWdFEn0OO4GLOdNVAe3NIFu-TLUzd7KFSiTwAJ8yPnVwYQtlSq0POZXr6L959XNO3XE_hI1eXQhA6lMbiY-SBr3Mllqw_swUSyZBGATSCBFCmAi9u0mX-6aTeIyO6C7UPn92-fl9Ve3_4d6hM9aHFqm5RV3NMPZX_jBnpqTWLgFqELV81PRPcRsarUrB9lCtElDDp5q--vd6a9eSt2ClPN0li3UAZEWdVYKlXdsz-fBVNu2zJuNWcBrwijSsjeOLadmO6iyUVFOCJYVandQOlFEFs46NcmDUDZ2GhI9Bsj6syv2Bsr6DTblKmF28_JtaJIiWVuXhzGuKknCrkmi3N4qHVnTUDB9wJDSeE46FhTXBpE3UqjUpY-Txqeo_w/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJEzCx2lAl9o4RkLVKy-RsJms/photos/Aa-ngMYogoZ6Iy1MyYGW_wXABqBWwpTal0arsDXWeJD5BtshIkWm5xBtdSqTguiSkikKAJGVPZG9UXF3Av7FcONeAn_Wjfeugu5WO21-p0dlbWhcHxNOHMtaus_X9EUPJADJG9-qvIw8nu1LBGYivz0nUfiu_6oBpW4cq7pqsCr0Hu_63II8zFloQx4LRndPr9xgnekznUhX53yaakSRyOZl-gr67b9hoSupxo03CllPEirPblM-Bt0in2XmqTvgC9Zv7kpqOzZEvJ4HV1_VGGgCVr850_9FUMgi8-oMxtdjZUA_8593wTv94Rz_Ba1bgwlDSJZrNaqKs4aIxNgW03XsvclG5uYQh5uT10B16Q8u0zupvqQyDQ_tMNy7yy_XhqA8q0EM6m4F8pk90FA_2pIRoyV1tsY/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "04:30 PM - 06:00 PM",
+            "activity_cost": 18,
+            "distance_from_previous_km": 2.0,
+            "place_id": "ChIJEzCx2lAl9o4RkLVKy-RsJms",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Dinner at Casual Bistró Local",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Casual Bistró Local",
+            "activity_address": "Calle de La Media Luna, cl. 10 #104, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJs0z9cnYv9o4Rlr4fWItgffY/photos/Aa-ngMZF8p4RxLGoReavlwGYVGa6bMbGq9Rqw_E7oSjPaYc2AcFsVZifxOAFeoPRJERbarQHOrEegESIOU9KCKW_62l8tpBJ6mi5yp3_gJgdxujLNTVBbBoF2QN8GPveW_D6XOodHc6xADzL9Ia6tRXI9jx8y1_cNH6FTFB9EaLFL_y70Ka5Lv7hLrAd_N-aJznZUDrsgzUupEMckeGKDi-mE0KIQZFWRhqTIHf2CCnS1v3mt0lAqvIbXoIe83GS0s3FzDGXqEhB-npy2CEmozYyza25KGj2HijObHgYpnFUcBQBgEF2KMZgyQyF7UrcAGPwQfepRq-KZi75uEzdVJ50E4SdI1K3FRlVaeHyDw-6XJnWDno-sHuiJm-F6V3Wjc2fXepYvTrT1HZ21PIDMhIL6YotMJ4wv-Ror4zOiQqT86-hjdEokeAPDb8Son5MUQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJs0z9cnYv9o4Rlr4fWItgffY/photos/Aa-ngMahLGYUWwcoQnMuOMDl47pFAtkY6T1dDvyioNOTGpTNZCkeeZU-0gAd29bHS0n8t9jISsrOVi6sbFcgLFJ1BBQSjeUsqnV9GVEF03BHnZQ-Iw4TPWkB1_OSPyjRBR8nMw5xYac8Pio7afPvzB6BUMPXk8aYwgNaUOoQldGpVCDF5dMMEnvyLEfP0UNK8rKgC24twC9LCfB3yI7-o6OKIiIGCXU_2gY7fhGfB5cACryPcjeGCYY5RiU4TmZJ49Axx5sjMCxZjNMksZrKSo0wuNTQ5LXv-f0fiz3NnFxS0_aONeui0tQaX_o_hfnlYs4oUKb0PfhbeXtVB3bCwla6wZvFTJPRw-fhXe-LaV4aMiTtjCKfeEocyMFC9q63O-sqOJkfDBr4jNPUr2PJwonFT9CrIZy7TYTSc-V-PiyiCtZoL1K4b3TxUDx44tvA6ykE/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJs0z9cnYv9o4Rlr4fWItgffY/photos/Aa-ngMZ6_UsNUjYeWOec67ibvR6---4ls-9ISehb0V-XJFRyUfcTxT6BxOJ75Sjw_W60FxG7uOsk3gcs4sK84Q-B5AwTilH77IG6hrzdVK6gUcu75OkdqXlU5Diw_oNYgsx8rdR2FFtsU2Xk3elGvf9kWBmZ3JGgdDpa4sh8lWRVbAGKSHq6AkHNrQRfsbAT66Usrnswl5qOng6_3mPx9wTCDsT-TWklxDBEVtmuEjeBxr_qYJ10RU8FrMdsCr-NNxn-R9jXwuHzsmTl-atdtPnb8QID2gLlbu1s2cZRWX83fVP0v0rSTfGy2Y66tyQHdrXDlRmUaLMYWcpPr6kPE-8kj4gMhjslQ07muDk0IWE4NkOzci1payoO-FBombZcTMJUhKsiWg6q5qS9-8FEp2Nuq5qaWalOI6u5w5_1UkYG6WurhHQBdNzOUGldLhSOAN0i/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJs0z9cnYv9o4Rlr4fWItgffY/photos/Aa-ngMbtdWQRTh_YdyMIJvhfqkzHsnlnHbF17O3G8HBpP9xiCMWVgVTKUReIpwerMBy7ISlsNrKUm0Gb6QPZXVTlXqIsvTgFd9KUhnFnZXHGvc5tvRqm2Aa1eTpM86_taiIJsSBsy2oqFFy3k2gblz6RKaAeu0Kel8madGZUfboMjwUNlJ-PdRhCzsf7sbCuQrbZH-0R7KbWb4z2EryVDnpn1KKIzAKeppvF0zrdHEEltnhlA0HYvsHXd57M5m4352Jot-JTFV3dai04l10udEI0Hv95V8XeaIKetAG4x3uf_xYpvkuxnZz9nn6xISej4IDONOPnz2VaHh-o8D_-IHEovYipT_W4kLroWRTcQEDBUE-Od_7eNN5hZ6mUuXA5wqRohxEhuAxqbXst3OSQseKzKLFVeyFqvSyBUEldaPx2dv04ctN704QgBWAb68xuaWZF/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 1.7,
+            "place_id": "ChIJs0z9cnYv9o4Rlr4fWItgffY",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "activities": [
+          {
+            "activity_name": "Islas rosario | City sailing Cartagena | Top islas rosario",
+            "activity_description": "Private-feeling day on the water with time to float and take in sea views together. confirm with the operator for the exact itinerary and inclusions.",
+            "activity_location": "Rosario Islands (departing from Cartagena)",
+            "activity_address": "Cra. 2 #41-328, Barrio El Cabrero, Cartagena de Indias, Cabrero, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ0fmSkG4v9o4RfzqoIvynLF8/photos/Aa-ngMaQts5Pz6_chBil5CY3qEkcaNojO1aQoO-woGKp6dpEl8hdGVrL_0W5xXbNxSkr77Ya4J-3dkl5KzYN866jBGdodwSZ_2T9jPJbLr2jsPN-nQ5aGcR9Qhid5VE0Kwc7VYAiTQc4FMlKwGtsBIo6xyhPahlyvFm7o3UtL29quvoY0jyybd8DfuNX5kZXX2AGg9Uw_n9755aNXCczF_A8xyho0ZEQTSZef96-P8ZUdPSZYbLPUciYm5gQYl8aXZ0gfFOgE2LfTAHXkaWH2Y0jN97BQveHXa0upooiS5k5vM9iQ-LxIXFkZKh2jM7dY89CkHo0lYPLN4MiPeRGNvVKxvODLoggkFEI6Oa5TQCaA84F3zdomIoOl2Nys8VoWkhAJ3Z3O8i5hBu5QJbOR8TL1LhXxaVdtA_UjsVQRS1_AJ6_NA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ0fmSkG4v9o4RfzqoIvynLF8/photos/Aa-ngMaj_w6AaPaG5pwO3Qb2uk2fpdoEWt0KjJpLl45_RhJeWORQw4_AwMrEkeHZu-fIIiDa2jagh--OaxPW6PHPITorJcSGjBpQ3OJ-ilu1MlfUHEsKp7Bunb9Ln8kztq3wD0CXJMAJL3CwTnwqLOdljfmLpQcuHNN2iTym2vbS4hpjFKCNSuPNekCNv8DiSsoPjvJ9apXET5lXN9OfSsH5Txlr02oaEgjGiwQu7X1-LGbkVTneWDSWGzM1WRFD_5M57kxOYnfL5h8wa1QyKXJyUkai_eitZWFWoFEaZa36pzAelovOsaBiOyP5gt5kOP8QEmBkoZNKG1N0ZT1Qnn-rSE-Mzdi23-Ip22mR4U3SIOH44QQ823YsTXFv9EZmv9cCWajcI7dU9jHzfUNdd76iCCeVHiFY0sEq2zsnM6FqaVfD-g/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ0fmSkG4v9o4RfzqoIvynLF8/photos/Aa-ngMarH6VdQLS7kUEMnTHbr4JtVWO9ftKev7iXLUEzJXqzSenrMgBhtGNycweldcONK-1hhFu_jHH8Tq3OfjSlpTgPG9ZJZdJRlQFz0Sj_dEeJVDlk2OyDqorIKBHV5zQ3n3mAKQaDQ3gfj9adatgsGUqfux59sWV9MaX5inWPwI_hNz1rBwWiU5e3sJsWP3-Da414jNNarlU0n53y64MGj-H_fGy9CDdk6ZUBTiqW0fZaRK8o_gCyfZeAmoZx6S3MnPdVOLMgk8vWnWsI6ZnZGGADm68iiunVUQtWDE-GhF-4JxAVwPUo4ZHZKYutNE_oDwt-7IVK0FRSs_DdRISQAZU1MDwzzR3JOJ3asIkR-OQwmpTzhD03RWeYJG1Ae5ajKTEaKOCOpsfI14VFO-s4DwIeBuXQVg7jkCuqoaF9vtuCdgSV/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ0fmSkG4v9o4RfzqoIvynLF8/photos/Aa-ngMbS5ZuA9xPxCn1INKM3P5QWDFP2DHP_bi6gfrBiRhVBDLHuwrcPAI0r0YzIigCJmhABYpj6eraqtYuROLLa443XMY6rvO1J_yn15j1PkNXGO61vN0Dq1IhuaMr9SlHNAT-46RrTUUnlkWxWfS2W2Fb1cxwH7qCs8uu66-f8iUzEy_z_wjSZNEep2zzNqBeEqUr_yXKiS_9OthMjqQP0T3w-XFey6QkcReXQXSZN4sonfVZzlqnuRPCIpzWKgWiCkoAnn2x-UCRZAou9Tn-Rv7pqsVsSROh1gmhjvU81UclVGWr8qz3xfoicy2MtD72tkhX1QwKydyI0JqLLNG9MWo3V2YpTNcz9HZCAQPXZAkztSoItDnR88jS_kqrbB-Do-pGaqkFrzugv88poN-4_MuIuYZYtFDdf2rHm5ugIOOw/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:30 AM - 02:30 PM",
+            "activity_cost": 95,
+            "distance_from_previous_km": null,
+            "place_id": "ChIJ0fmSkG4v9o4RfzqoIvynLF8",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Bendita Beach",
+            "activity_description": "Wind down at the water’s edge with a lighter, coastal reset after the sea day—bring water shoes if you prefer.",
+            "activity_location": "Manga",
+            "activity_address": "Cl. 24 #23-89, Manga, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ0x8vkEJ9WI4RED4sf_eeafQ/photos/Aa-ngMb-9b8QRtvzeqbEe2MrjaI_u7Ouf2AeIDHeitvEaJSr68okRHgWjC6Jst3PNVMLRT5kU6ebzyhXMHOWTIOLMmHPRR4Gv0MrDyF2-gfk3bqjCyggYok1RlUfCL7-d78IDul6P58B5uq-Oeqz2mttJXXIKv4ZViqoSdQm9PYbgfjZOqykGkLkbiHFBBAyuxH_SvRSqyuNR0p9yuDyH5fpVU0RliRAPjuWbig76DidHliI1GbfWWi5vATga4hjnoY1KktI6pBuyhl-F9wcQUk4yrhOcyOiDu5BJMQqH_B13mWMzN7tfA9RYTLZApPr3sdKW3aqQiK-Cxf2Vw2HQRR0wBTQYDulpTTIpG8FRYhW0BJIFkVoYB0jJRZ8QWbgiaUxfyurQdr9DoNlNajX29zHfXSW3URFcNXlvD7LkcgbLcA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ0x8vkEJ9WI4RED4sf_eeafQ/photos/Aa-ngMab3hKHUKc8ZEghiqmTc8lW5gK1IqV4qlEX1vyPi5_F-3Zo-z2RotiVDeMx-q6dKaoBj-BHIK5Yp_PD6_u81PJFujCuqF8GSD09-cLIDd4vWvAwlDNUipJpGjlm6e0I5hyxjafLu6H6UzwpNushXE0YKcx7zNF1LbSa1g1micWTP1XsZAedM6pgrVmUNuhcdJ2WhQkC28SMzxRNXKPz3tVJ8LS--3kJ2wCbB163TFw63wUaZ7nwnlCMEnAtdbXHf8kWifQA_2wG_OIB3z__-WrfYBz05jYLg6ks6MWVPXWVj2hQJKEtyj8wUU3K5tuVbJd_Zkwxuohxpo4IgbCsufT2ugoSclw7njTuSQgTGV0TDQ9RSPZ1LPMNtn5UX2HD5meiU66q5ArPjATOmx6FbxVol9a8eLzKHB5GBZnkmqc7kw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ0x8vkEJ9WI4RED4sf_eeafQ/photos/Aa-ngMaryJPTi34CALqaCePrICcGIp5er59MXahREtpoHq-lS8PUES68MKzrvPwVdeMBVlZa6gYqPI73jZUliccq-aZrgUJBadDigwGAhH3fee1vSODb5VZm1smFsMbjP0GY5rakvM6usp0ChKtl9HlEEkRqxPfvUi34XNmHR6kSystu0u7JlOU47PsehK2q2jOk2ETUEyhhJol9gX77dnOYJUn056WRTTRSv3d01dXW8gEvrHmOOx24akplB47TQILn9-ElH4mOScah2QNFNp3F5H8GTaFzZJLPV8RYr_1DFZ0dQuKHuD8dey8NcZA-h0ZC4OBJAarf7AEkSzdTWlqhKHus-FJZI8JR9WZq0AhjAT1K2KsDvNt_ioo0MfpPiiR-uwJzpJ6GzFFjMV4BJoiwdaIt_enVtfyq0aIrE2X_b9752d1z/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ0x8vkEJ9WI4RED4sf_eeafQ/photos/Aa-ngMa0SGJbJc_aFAZtfg5EvBofjuKszd3PF2_vqdSHNWEsBXyEBamO63vs1lnwQe2HhsdLky18zvcFPIqeyI5oQIOg_PEcxVWbrMwN14u_adaX9p6Q003sAXolPjLq4fbNVu3w_iJPK_w6pw6qCvXiQbEZAVnHxqGPwLtpaexokZeDOWEcFeBGtOMU2CK-z70AZzCvl6SLx2GWAcRhCDI55dXhckicnpNSxDNXvTLemZGcwVZaHaru2-NttaslJyEYMnWRlaU2W6eAv4o1wFCiYP7sHUbytWOfROT24Az42ZIKaeuz3awawNghX8EBmaT2UCte_d-JxFBWcbARcpA9823HG5BL-mIo4le_RaFkGKrNNw7V1xW2fLvlrxn9ur6roD3bvwm7DRbQgtePYU1yQU_qrcxf30jV1e-rTTxLMGKuOTFt/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "04:00 PM - 06:00 PM",
+            "activity_cost": 15,
+            "distance_from_previous_km": 3.58,
+            "place_id": "ChIJ0x8vkEJ9WI4RED4sf_eeafQ",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Dinner at Carta Ajena Restaurante",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Carta Ajena Restaurante",
+            "activity_address": "Calle 31, Cl. de la Magdalena #10-77, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJyU-Jhdkv9o4RnbetX1B-eEU/photos/Aa-ngMYXhl1rtCYDCp5L-pskIuE8xxlJg6oaloND2Wga9LUoQ-ZhrjWT0xPJll9xobcAlPiDU6Fm72_Y_OG7PauixwY9dPymEL4fxm3ifKLY5qRxLjaxn66iIsqMtXxmgbnce4BG6FGLYlMpmkUmn-JCxAFX8Sk_SIrw2hJNpwyv25kfSHXBeiDMqcfqziVdtfzj-5dafOlbwtaPSGaI9Tr8wfMAyrNHYafOPQkhoJkTlIsmdz1Hd4IqV2uE9R7n-QQ0Yhu9vLCZJT0Zs_zP64fUpYVZgbar-Tg_bnWHLk2EfTXUusTIEuXGjYpgv0ZkKxKjZv9U00gJwGtUTw8JEa8pV2hOSjW0uYT_UhRHu1KrXbWrmDAioAaYBfIohoG8CojrOq6vQoDlaV3hQKIOA_ILEvuEClY/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJyU-Jhdkv9o4RnbetX1B-eEU/photos/Aa-ngMYcgD5ZlK0tH2F8bQ8pevo2TFfis2vgFnRoU3BKqrPIrH0lesvWMmQDT-FaUOzb3gSwK47yZZKJ6hP9MFFEMQ5B-9_k6fyf-cGtTp6Uz_yPzYjCknCgiuNvf2pnU7G6zmEWhtfsv0TrcR4__5RplRK4TNkI8OGkttgJ1VMovve6QEwmEjZYLjZLsi8AmE7aQHJA_CZTjyWkTXzBXxuGJTS-SxsYdb_axxcxtbSmBuQEa-fd7Ze_tqnBMfnWxgu8Xyr4PGPe3xpJVylx3RQLMxm35FIHE4H9B4ld1-PXBir8y3maafL3ydQdDENzPAFUaFJgY7m6tbWPn9ode_tWCHUJDFd3WsCnY0o0jvNlsq0whrM5-R3T6ko_IOgHIY3esI7IVrcMi53MHqHbP01rNzYxZ4Ix/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJyU-Jhdkv9o4RnbetX1B-eEU/photos/Aa-ngMZQ7YbQI_3dNUNZNO8b-3f14sDcOt0OQ0eOmm6MBGJt6hzMymJAPbbTNS9iAlynDZd39sXDHunkVDwH8qM8Db5C-_TbjATksBLmebjnuNBY4v4T6yx8o3YWRxZgQ_u3dsrFuZBHJramnmC6s09APWcNsfOzLsAvsZZW65niAL7BWsCDEU7Ie9XE_GRxdQAP6hQbT6ZgUn3T_2Sm5uYMv6N2ID6-5J8n9Hw1lvN8o4owDx3B2td12fsv10i6BqBvpmYZe3mUPv7UdTrG4-gIqiFpJK6vplagz7izHWNJwoKygxK9ZuEwqRcIrjsKahYKut-zkhDUYz71zKiBvaAqMZtssCQ21m-tIfsWMSVc8ENYn_c0EyVcw2A5aNvpO0roKmFVlruzWID4oAG2bYh-EEJ_3JgYqTL_JcjvOMK9eK5f4w/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJyU-Jhdkv9o4RnbetX1B-eEU/photos/Aa-ngMb0mNbLytWerJysZwCZzzFjdcLunXKFE3hNplHZdfGfCmY1Yi1BaxYmpWJRLih-b9waFabXnFk-IZlszJibm-VYUwOROw-lCp-a4Ro73eh0PPW9J75qWi_fJMQHRBQCPV_IMMMBMU9sEap5NJJ9jAUCaQNytwn-fVglCRUAJ4DRYia2kn-KmHwqeu_-4GWVUVeX_Z44wOPqTHOqlkYTN9AhGFh1X2mJ-ze5dt_SvcdT_u8c6Zf9kWiOCTS01dJ_MB3rq4R42EA8TUJWVxr9VEqH_wmoa7FY_vkKrH6wU8WnV3rLpBCXrcgywJ9aCCNQBiulBjVNLtoqS6QCr3fjXS_iNV1qKVT-4UPzl5T0zGyQ3P5vx8KmJKgfMtPZVBa-EdwmHeb0K_VjF8dXxmvs8ixWAARRFqHPKYHgz7deLGgPMQ/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 2.45,
+            "place_id": "ChIJyU-Jhdkv9o4RnbetX1B-eEU",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "activities": [
+          {
+            "activity_name": "Breakfast at Meeza Café , Brunch & Bar Salón",
+            "activity_description": "A convenient breakfast stop near the day's planned route.",
+            "activity_location": "Meeza Café , Brunch & Bar Salón",
+            "activity_address": "Plaza del Pozo, 26-08, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ22mYoHcv9o4RLNv_rkGTuhQ/photos/Aa-ngMYOm6YOMkeWbXsO53dRX8pJGoVaOMvksjPhxf9eW_V5twiQB4ZjYwd8vmuXPdlhYGQHxkUZr-2iqYZUQUNfgATTZHrPUokqdGB-V2QNZaX7ingof8MDIffpKryOs0NzrQUgZPwkh07jLF2mMe4TpwHEfQrlaR24Eont4YT8NjDSJxEIEt-nX2_9rNjjem9B_JWbGGzpQ3Mdjuw7HQaTVrfqyZx8RiBFRAohPMsYrw6Wq5BkNdxDCjBORzualAD6R05xQNqd9uEYyRUPQizKRz8te82ddTK5W1CGDQ8UAOKVzInq_lip16j8YHJATlmAYjqfwAY5CZC7FairtnPeCdagIZrkfsrvkk4NGFvWaRw3fMfZ8a0Ii9rto8jA9K7tfA8aU6E850Zov-iGMeZ1KMVgHCVrPZHcdxtCbud4xVT1yUPJM7FE9iLy-stkIjnd/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ22mYoHcv9o4RLNv_rkGTuhQ/photos/Aa-ngMYD9TUqa3gvntGzomcu2Cg8nXCPumNmVQRQGKPL5VAfuapqkIZhCRsUTxn4KAt3f47QHGcRwbXhH90WQ769n4SwUYl_sFAnBTtxnPMzipHujXD7dMvo1f-Qwhp7kHLAavHaJR253UyVSds_vb2wrXj90H_1ck3ANrqBeUcW-0dw66wK3vlUx5XhHToGjfx55g0iXksjxbUhXFj4v0EYRTNhSXqJ4yobZpSUMffrbl2Ncwqu79oXjDadSuwS6kpQ8WutZLzFdxSE7Vuiks7jbn6pgEY8P8jXofQgAIm6NuSRAWr_IJRBvsEAOPmT5AOeMxAm3dNmQeCRx2AGfvRdfmR2K7M3kTJZ8KYzBS34pE94OlQe83nJP1wCrGeuh2ihg6weMGrBJrQtB1EUd_kZGel0KeVXGaGnkokOfbD1RQDIZifbpsV8Teoab77JPzZ9/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ22mYoHcv9o4RLNv_rkGTuhQ/photos/Aa-ngMbx6Kslxpd8GKYcRiDp4hjPfGL7Eqh16y1PkSBY8Lp020EHFTNxUelWRaH1xYk9FEuRYKs68hrSb3busvS2_m62xNLEeoPsc1ex7NmOwbYkXv9PBXqT6EVjfHq6tmWSCKKsj69FuV9s_OmztJBYi6NodoktcX8zDG6Cl-xTBvOhmAiy7xGRoltZ_0S1dWtqk7i5MXXan6qc541jy7Ymsffk1b3R5N34_w78wWI6TSCe2IHuDx88iw8N-0fn7zYcTuvavBLM4XKURMQc7ikPj-VYk4gK6QT5QC8g-fnb3MJDdETtQIsp7uHOxGD6IUAFMxraPFgRbGITj8Yg5xeQvtvImWiQReIcNMVrc5_oW3jOUjbtJRibRuDyL_QNpjVphZzNK3-D7knMjgtjMUhRLyGaTvzD72kP9m0saT4aT1HhQpa6Y2psqL9uwebsjQSK/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ22mYoHcv9o4RLNv_rkGTuhQ/photos/Aa-ngMYA2Tw6kzTpSa8VbrUkb362ZUBTKsXyaPbN8OR1Db_74LkopTDJicqkP10ubUnvAYc6skxGPJYQdxsSNWcQ6QbaQagXasU64Eoxp17uglmhNfBxBjkIniWviUHrjvUZGyC40vG_zzBYgvcP-TYJ5XRYA6c-pMJFHdjUdu_Kg9pmXdoXtdyaoep93Jfvb1iARikv3JCc0f0T2vSVeBTw18zWyDeSjYrhRyBhHOLPhmhDNlPgeb_mNZqti9wNTCHNsq1_2wNE9ItR6z3BQeAMlpOXuSNN2EMrfWShN49xudykr63Sgf7LyLNHbw6UmFtb3LeP5f1XaSwZDRpyAh2_eYD0K_Y7qVJVD7X8H9kUh5o13GkRQIsyKe3PkCYAFHgFe11g0dOs4HzAFE3bbUfbWw-4hyq1d1uD88ijhGVu4Xc3d-jrFHQlPp8o5rQ_b_D-/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:00 AM - 09:00 AM",
+            "activity_cost": 18,
+            "distance_from_previous_km": null,
+            "place_id": "ChIJ22mYoHcv9o4RLNv_rkGTuhQ",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "San Felipe de Barajas Fort",
+            "activity_description": "Guided-style fort exploration focused on history and dramatic viewpoints; pace it yourselves and take breaks in shaded areas when needed. confirm with the operator if you want a guide/entry timing.",
+            "activity_location": "Fort area near La Boquilla / viewpoints",
+            "activity_address": "Cielo mar, La Boquilla, Cl. 31, Pie Del Cerro, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJKykMr4Iv9o4RwbGBeh5eM1Y/photos/Aa-ngMaT-wTCf7wcvugw2lkOj6xdHP2IuutCmE-eF0KpQSO-z0yPHawXs-a_7KRlXT6-rPAwHA672Oik9TKJ0MQcO5XC_ppGI7zPVyTEt3coIEo-9bo55crueiIix5__jVxGKOeeV2y3zZ-ysKX90lMc447gkSJ2D_qGWykgJ5ElKSuZ8SJAC_jJWd2mPC9rye7JrcXDxr7jT4M5bpSbhuestwqLO-XZozdW2LX0ghxs-9a7LzEgigxHUiISdkjAvtzQczrafsZnmEpoxYIDzGzbQJTDV3Hw6bzlhVha0t-CJvfrp9BEkhhiDg-4niaEmSfNtrN-uiTSWzrNuOXf4OU0VYOq8GkTCcUCYMDO2zGVc-ztRLoPQ3N0mdee1ZY1srD7BdzH9xw8M6iRsyfYoX_qCPfiTOUMXyg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJKykMr4Iv9o4RwbGBeh5eM1Y/photos/Aa-ngMbHU2F4UFSy1hJ-4tdyRjAZUyQpG5QdkzLOPdvoIpAejvQhHBGS60Dh7K8K2YZ6DLObFqUJPiHhhqHHGzf82wE8UEvUSUqxTkwYJ0WQxN43SvFXVXbXBmls--DIvT6iUkfJWfsH4LAmRrN7n5AS46gLeRviH2NRNYeWPC3LGPyVC2wRXll59DuKpwuaKULYaq64CBE78c7R_7FTllmC6Do6bsABWS-tt3suMFk8u_Mwvll2JlV62oaJ-a-HSvIWb-thNX-JjPSxbAbksfn3De8ehiD4w2qdXYQ9njC7wurbb2Ddk1IuxXnuBKuyhBUh414J2YdH84glyUJeBB_RT2hm46M9FPRGE0s3Y5UHeSBEQuj3bq2yTlsN3fGOukXEq6X2Pox6gjkq4aH3leN9y5wBNbg5/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJKykMr4Iv9o4RwbGBeh5eM1Y/photos/Aa-ngMbByLuGGGuBthCl18TtObktUNDplhrnBw-T6NIxbdBPdCCcGtw0mE-9-I0Po3vvDqH7FCLmkrMvyKtzSrkKcGwzBHtTHKIX62qkoiDcMWTR7EcRKwf7G8urlq281W9da9uB7j_D8L3Xej6HFx9tloFKnqU3Wb9b4Rjsp4QWrghYY1_IOsrCz5RGeIAQE2_cZz9os8aLIE0shesdxO71JodMG1NLXcrTwDqC1IQnc2-2B2brnZPaexZCD5fr_JAEW-rC5lomvNTueXViXvcwc6aTUsbMwlpW5MQET-k7GRjYOAjel1a8qlDvpom4oIkG3TmH4OZEr9pzUGGlq72Oo7mQa3HK-PmPLBJlBuV-uj5uBVy_y8uT4huPBihWWW2vl4tft8rjOqRrmXo8TXiCvKHbGPA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJKykMr4Iv9o4RwbGBeh5eM1Y/photos/Aa-ngMZ2SFcdzt_gDbBG9mwJWGoqOKQwTemeONJmf0dfi4CEqB2C80X-D3vM7mMbiYu9IEz79LXpbkiGJet3TzW9EVdiU22lKxKigX5l66Eg0MfgRF6SzHo7q8m4QRhgd0Kn37NLXlA5Mclu1n2pGihwJTh3DvdELSDMXujYQec-5QBxCURVjiQY1FNGagbJrj5AmGi69gLrqBUDja8s_2hu0e4-LjVOqwMQjjcY6rJiMIeScJZiAWEkwMXmk9MKuXVMW355-9iZpX02X6Q5vJlyw9ic78cYZjlDBikPyoYAlvOBGj23UAwS8zHQs08Yr-tUHMXAU9i4zY3n9yyMnSOU5uhC439DqO6XUAeZOnkAZExksTncR6_luMYJSPXzUe-5Wml5-Wl57KU2sn1ZbZUHcBpa5ndrRIg/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "09:00 AM - 12:00 PM",
+            "activity_cost": 20,
+            "distance_from_previous_km": 2.45,
+            "place_id": "ChIJKykMr4Iv9o4RwbGBeh5eM1Y",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at RESTAURANTE EL PENINSULAR",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "RESTAURANTE EL PENINSULAR",
+            "activity_address": "Cl. de la Magdalena #9-67, Getsemaní, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJxy4sfbEv9o4R-98FUJLEZqw/photos/Aa-ngMaAZdN0JzXMZ2Qdba1q2aa9dz33cJau0dTSL4uKuM9x-0yTm243ORy85OjxjOHUmJrMa-whcwxgwxNc4EAgyWYFmmtskO7PaJ12rxx9PBjZpnOwOnQkzymMiXVsigtWW1ojK9-Vd2MFKljzdvInGHFRXptOWECGlLb-31aMKb5MJbGTsobyiCZIumhNSGeHkH9UcwTEJNj9IeJ-J981G5IwffEKlFnEGWBe466YVAXl3JEwvxG8c3ySa7dYOBgUBxsmBJblavSKtbWwQhBj6E5NKN2cqn3Xj3YFeO1C38OzuNJlNNsywv2XvJ868F7TvdWM4BgP0OAowMIoOZs22rgu-9DFHZ9hJ_eXGDxJT5t908ujJH1wcqQIh3605GRbM3qucrVpFp9AsoZ2QnnUavKDZhRPcWw91lnYnSZRSuNJtQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJxy4sfbEv9o4R-98FUJLEZqw/photos/Aa-ngMbUit_dQ63npg8X9wMZWisZTpYEnAwyOtZ57iKuoQtFEEp-HDhEMgMKfWoHrX85hjkX8UithijJDyKEF6t1EhC5NRmiuSA6MCf-l2xgpRW3aNGjuE8p5YoJIwFubIvNIrAlbvteh45NYrR2v-pyjU9NyY4z0YlOLpx8qFin-_Z3sWkGbEtPi3uE6h-uayiWfmsW2a2fKwN6XOT1xEhnBiFOO3IAZkM0QBP3BWJGd-pCxl_pjYVtEe8Yf_XY4NNqWwZMljKv7sHUafPlIoq4coKv0Myoa_OLX5p3Smp_Wg9Fqrx2vI7EiWLqj9JG8B325t5T_Q5pL80YlH8lyWQtfyxTbSkmntTjB7FXepDzZDVEGLJz_ntJ6Qn_QBeh-9kSMYIyidsUaOSZsxB0oCd2pRPcJoTJ7H2GtZP3QFaiT-4O/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJxy4sfbEv9o4R-98FUJLEZqw/photos/Aa-ngMa9sE83LHPbXhsJqB7Pp5KuXVFll9GBWph_DV_UqrjrVUq-lu6OAvJLt67LU7S9XE5aSi2J4woy6qt-qoRc8NxKOG29XDqPsIr_4v3MJi7SAHp23Hl2JU7fVNLkHRc3iLcLGNNEUXSxWA_4KysB4sCdHAvTIBv2-B0zlcDc8_jqsb8tBjr_zZr-E4rdTuWkZM3JpZsAtzM6l67g7glQNEKRaJMbX9pqbK7NlhIBIfH1gIZ3kdTFFnb9YolxBQYizELuBQCuAyi2cm3BE7l5VRcta7vyik_eEkhBGF-60yG-w20UfTsqa6gs6mEKsMGAjTVfRAivWicOrjtsXDGs2HDVvyeZ4Fxedz3ymBsU_ALCfe2LtOgqKCpYuZudEIusDhSXIwyDNOYz8j8MWAkCYe0DphOg_Bnzxk9lNPX32exvCg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJxy4sfbEv9o4R-98FUJLEZqw/photos/Aa-ngMYradiveex6q2gckh4c0q-6rYJFz_C1o87M0UVaX9lE0TJRLf4Kw7_urEWZ62JgviEdSNs-qKA1CngKBilot80RGgLMWfe73VeooxBY7TpF3EdAFKtxsqcF09znnNZotIzcCHl4tbuwHrYSVlSBp3lybFxGjUswdLZeyeqj52kuMmJXtVBJCn4a-gz4R4aEM8yLytwGTG2h5LfvFvUnZnbTKP6IfIfXMqH1XSmaTL55Z0UAT8mJoUKVQWRh-rZ-Cim9BccArIimJ6_TVis4ASENLtK5UZDgJnuBy5Alwo_EkWF9ZOJnqzXD0hWTh4qEaHn0-CJXceQ0CRg_2A0CDnZ9s5ZQZ5eixSA_O5PT7-tCx_g5MEFPxNRNFrxJ4AIEq7zYgHT3QIGNwckTrcaxH1XTE9oMkiG_mtJlpMP946we/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 1.18,
+            "place_id": "ChIJxy4sfbEv9o4R-98FUJLEZqw",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Cartagena sunset brokers",
+            "activity_description": "Return to the coast for a relaxed end-of-trip wind-down with skyline/sunset-style views. confirm with the operator for the exact timing and experience format.",
+            "activity_location": "Manga (coastal access)",
+            "activity_address": "conjunto residencial los girasoles, Cra. 17 #26-90, Manga, Cartagena de Indias, Bolívar, Colombia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJQXyeEXIv9o4RFvmHaQrUsGU/photos/Aa-ngMai82AYm1U7ps6XOMaWDk4I9To6GsNwVtQhdUlvOlklPNH9V4Bhl9AmjnT2ox1IROzACx2Ksik5X4OxRcWTLh1D22J6yWzrbQqzAVfe64c5JQE-WnrZFmlCX2jE0nopYrZuTgbikoq0EA0lCAayNTuPSPiwsdep1jx-LmVx_74ZEM2uMoggs7c_FRoCXl-ZXXnJadf70wi4iJoEA_6byZL1rBEjsP0liF5l9T1p7p4KcKi7BTI-l6qtnH3MsiF0GllhBPq7xTeJVzNv8GnzdF9oAeblAMVcJWPoJL0ZJHBkelDIC7LKms66SFKTTSfkfNH9-GfNqMHQyG6Z8sALVHW7JZPsDac3m9MBOkFPE0gaiyo7o34CrnyTBBcxZFBfDgyn3FVX__Kea_kj5wf0ose8INRpdfg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJQXyeEXIv9o4RFvmHaQrUsGU/photos/Aa-ngMbPqoAf-7cNKmWXETYT-Vvu-lQIqft0P6l7BHu5YVpygqPWkKYUnQYGC22T3krkI41FGfHjoawGhEQYyhY3yAdJWWP0NmGxTwK1Ju-aEwJFTTzlHpPvrEW-PgDcm76bxSFi_HfKcKITs0m7l3OlgtGRKkAwW6_Rr3k-Pi5te82QD8rBfTvBbjgQMKpCoHLVOuM8d7cIMb3yFtRLxxla09bvTPSI3ovxTcBSYs_Eq-M-P9kmyC3nIrDxaRLZCO4zv-eV-bvOH9O5EsRELNfJqTbTsaFPbAXzdoWtwhqABK4wmUUgnsNE5uvXIloUJOqbufX-rj8N2L7A4zXx0BNWAOY6t2n4IK0Y6k-EyxVgZb9jxLlQ6Rf5FgD-4QURLXbdwlYYJWqKULP0aRHA4ccxdLxcP5E/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJQXyeEXIv9o4RFvmHaQrUsGU/photos/Aa-ngMZzUlLR65-9N5v4NYWW5R6MySV-E5QcB3FS1xn3SNLDhgErfaKkqSGCShd0HiGtdeDd8CGOONCthzbW4Nita8wapgSxyY4FJXMl4lyppVlTdB8l1ORAMCg6JVi0_-2vUCbrRK3NZtCb7CPtCEoJICu68anIvLIv38gczzvxskAqgSIf4Iw8q0uQE5U8vnluCqqYKu2b8XTvuqMr58qDTDe5AAJuKuT_FjOynbTTY72H2xeWu1l8aubfOt8bqtXay--0nhhtvvtwAKp6sSfFa3144Yzi-rhzNjAsl3DSB7XJDYYBdqasaAccUGKstrcHSck9FY7u6ytrLeLr_QvXOubEv3XPmZluZoGnAyy71n4ohMxpDOj2IHFrLAmRLqpgn37FkgyQ5VIoecMm4fvMasED2XA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJQXyeEXIv9o4RFvmHaQrUsGU/photos/Aa-ngMb8J5vPJ9DaIeeqyPbsCBnlsRTcrgsF9P6mBwE-V8kSqeITCUjE3Eae4ZweY7zgliufwPfhEXZ7gU8kA24gD7QpMV7Qd4klQ-SvtfrZ1VBnO1KuUyfW-MqQDWwNokOP9_jvtjTs1bS2UcvzzAAB_x28z6cZz62vD8-Yh3QXEGA0Z9mKW_xADTvD-O4QWNQYMXFTDHbmizVjtI3vSVIb7dJSXf1_UBOaFywC_XRJbQWKHfPtLzoZOw36_CeeUFRPbCug1LhJJpZrxffXZeCGQKnsboBsp0lmLN95GeIIN40v1z_nzCKvDom5P8YNaYkxMxwZfFlGHoboowj9IQ2VG7X_aULk-Wo91_dGFUKZnmfyM1Mf5tkID2GDzxBMLrIqu0o6rfCh3tL4wvZS1O5bmf5DhBUegOo/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "06:00 PM - 07:30 PM",
+            "activity_cost": 35,
+            "distance_from_previous_km": 2.21,
+            "place_id": "ChIJQXyeEXIv9o4RFvmHaQrUsGU",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          }
+        ]
+      }
+    ],
+    "total_cost_estimate": 2394.0,
+    "packing_tips": "Bring light breathable clothes for heat, a hat + sunscreen, and swimwear plus a small towel. For beach/water time, consider water shoes and a compact dry bag for electronics. Evenings can feel breezier—pack a light layer.",
+    "travel_tips": "Cartagena can be hot and some streets can be noisy in central areas; plan to move during earlier and later hours and use shaded pauses. For anything time-sensitive (tours, boat departures, sunset experiences), confirm details and meeting times with the operator. Also check current official entry requirements, local safety guidance, and any health advisories before travel.",
+    "source": "generated",
+    "budget_check": {
+      "budget_per_night_usd": 500.0,
+      "budget_open_ended": false,
+      "rooms": 1,
+      "estimated_stay_nightly_usd": 350.0,
+      "stay_within_budget": true,
+      "status": "ESTIMATED",
+      "note": "Estimated from map data, not a live rate. Confirm the final payable amount for your dates, party and rooms with the booking provider before booking."
+    }
+  }
+}

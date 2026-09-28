@@ -1,0 +1,959 @@
+{
+  "intake": {
+    "recent_feelings": [
+      "stretched_thin"
+    ],
+    "trip_goals": [
+      "reflection"
+    ],
+    "trip_prompt": "need_a_break",
+    "preferred_moments": [
+      "quiet_privacy",
+      "art_history_culture",
+      "spa_wellness"
+    ],
+    "preferred_environments": [
+      "small_town",
+      "mountains"
+    ],
+    "trip_pace": "one_highlight",
+    "travel_party": "solo",
+    "departure_location": "London",
+    "travel_distance": "anywhere",
+    "travel_timing": "exact_dates",
+    "check_in_date": "2027-04-12",
+    "check_out_date": "2027-04-17",
+    "trip_nights": 5,
+    "budget_per_night": 400
+  },
+  "suggestions": {
+    "session_id": "565024db-fd0f-406e-a51a-0140cfbd47ec",
+    "match_status": "matched",
+    "suggested_cities": [
+      {
+        "city_name": "Ubud",
+        "country_name": "Indonesia",
+        "number_of_days": 5,
+        "description": "You chose Reflection; our editors tag Ubud for Reflection. This is an editorial hypothesis, not a promised outcome. You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Art|Nature|Food|Yoga.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMa-Z9ZNm8EjgJBKOvhy9NXA-D8BUlYuP6hYuMBVMH28Rx17VJJcl1n6WfHC7wIT5IZokt9-VwPQKsWKBulrtd5-QW0ISyInWAvApjO5oIpnEW87rbr4I0iiQ_ef_f1V4iYS0kVcBLmMLjpLaWmA-bOeCaN4HMwJwViON3TIgUhVh8kEU0ps4xzEXZ17-cKKuTnlVM6pQ5KMk_hOBGNbo4lgjuho8Kd-HP7RTm0D3OzD6yN9gmysMmr7i597mFjMG9XxTFbyVq6xePHtrmUHR1CWMNCCdu5uG9qvCcHSWgCjP5lWN2OwIxfJX97WrardjJLmKLw80vutJuv9GErKnK32lv9Nq1PbWe9L8yBYuuQR1S_HUdXIO1EQ8NFxjl0qt3j-nF9tRiR2MBqYfYZ5ajLXMak2kVrhw0CIpbbZ-dhuAQ/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMYIWeHNj1kPTwn9xDuby8rRranr1BJ4Ox4p52F5YhFnO6fpMhfeidXkX7w6opzf-_b8MwxzSXkrn0SpnsVpmFQTOQHe8xTgxs-zf6ry3eSurl6_eRirgIWUArg3Mh7_qLhEivWBduKcZb7QqloqxXSf4zgCHiXp2xjdQdfwQgOWkvxX5jusmNCyj2QGMFkJgm34-PhfLsZY7bwXyiNbpGNk6SQSt605An93m_sKoVv2k8zFDqmI8j-EI3iZWscOhcdxeONo2meTDYXAkVi292uo5RXdlx37Cjds4se_JvbWlmdJwAtgGwGf8gshpdL4kXAuU1w8iaKo_LZ-zVCvw3FTxd3qtIpDqqT7tNxl0lrp1rcQMTHn5_TWMBrgG3PhG-s_bl2OwOs3-KtZQ7P_fEdAUx7l_Kx-UrfZ2VJZd-s/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMZgrnxEj-aNZIgQ8HgthZAun30MxjLKKUy2ODFORix23aoO0qKNOBvW203hyWSHRNTF9gWBATOR0eYzvkusEINkfLXm5hVP4Gecg_Caft0X-LRXP9BryyN2jFXFRhPncjmfekgPRn7eUwFKH9qI_swEVTw5w38YRf0EPsGEP5LXXa4GVEdT2HzMO48AH2JeyKEJ_k3hzVMd9G8kWtUB9zpPPPqC54zdw6mpCa6EzpTOYLIffWYzgUFO5MaNb2-dc7yl5K2hxg6aewUCm1J7Y7rx9M-IyP-Bluo6a7udf-dlrg6WaVJsuUKznairiw5NTwjKllCpChmlVeYkxNvERN4Zs4nAXxbLRX1K5mX2TxNmzzgnFMjwv4rl0DWcf6cYw8UWA9yeL9xrnATtJ_jQmg7ASacj-DJQ2q8Jj1xgpdQ/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMaH5J4BSFsFAqQcFx7U2_XvALhl3VgrzrtPkd4T-5tVjHSeEfP3OAX2B-WIjyGJPhUmbwh_-5PTYy--QWQrqWRW1RBr40KHB5i3_IFrQolR91JKrgDPh2DNLcZm_tN4SyLA-WNJs5DHgFmWhm3ARRDl3oSBadtgX_GpFhEolJLGZswb_eU6hGjAkXsTR39BOhAcJDR5XaCIHvzdfJLI7DLaLvOoH6MtSON50GwpXa6Yj6Kg068A-kSWYIE7JuRHmam0zjbdNLXZBwXAL_PXloGXAhlvxuc6a7x7NkRJ9xvFxEKIskQJ8fUiZEds5lVjuUG3mRxbDnlgiiuYQAu9isjtmuOAGSV0Yj9Ae2xfcLvKbF2zSMYJTFBq5KwBD7LMQjeNECJHmRlICoCbjBKjjK3w3_tA0ruYv4bp1bVTDr8X-w/media?key=REDACTED&maxHeightPx=400"
+        ],
+        "latitude": -8.5068536,
+        "longitude": 115.26247780000001,
+        "destination_id": "ID-UBU",
+        "world_region": "Asia",
+        "match_score": 100,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 10.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "You chose Reflection; our editors tag Ubud for Reflection. This is an editorial hypothesis, not a promised outcome.",
+          "You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Art|Nature|Food|Yoga.",
+          "You're drawn to Small town; catalog setting: Town|Jungle."
+        ],
+        "tradeoffs": [
+          "Check before booking: Traffic and busy core areas."
+        ],
+        "unresolved_facts": [
+          "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+          "Live stay availability and price have not been checked for your dates yet.",
+          "Nightly lodging cost is unknown, not yet compared with your $400 per room, per night budget (1 room).",
+          "Route from London (mode, transfers and travel time) has not been checked.",
+          "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+        ],
+        "warnings": [
+          "Check before booking: Traffic and busy core areas."
+        ],
+        "restriction_checks": [],
+        "distance_check": {
+          "status": "no_limit",
+          "straight_line_km": null,
+          "detail": "You're open to anywhere; route and travel time not checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+        },
+        "evidence": {
+          "destination_source_url": "https://www.indonesia.travel/uk/en/destination/bali-nusa-tenggara/bali/ubud",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Ubud",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-09-28T08:34:25.743700+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Rishikesh",
+        "country_name": "India",
+        "number_of_days": 5,
+        "description": "You chose Reflection; our editors tag Rishikesh for Reflection. This is an editorial hypothesis, not a promised outcome. You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Yoga|River|Culture.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMa-39qWQYXPT_wAszgjhUtGE4QjWRK-AgbUdYhBGDONmwKfBSgcjZD5oD0WJFCTfqtY9PaXHze0GQkeSTzrLXAAyJM8FlUKGcyncGt-CuDehX_AnThTiSmXB8fuzmRqfnzKT22sihAGAjByWwJ3QSjuVp4qmv7Uy9LEO9m-ORKsp2OGEsDTg--x1CMlivxqpv1G2XKQNXMo1QdayYU-qOf-2N4-ubgJP7EAmucgM68n1E6pvGd4-beAZsGxtuJJX5tjy-hEqzjNcIgU5_QS9K5yn7tgmJeZGdZTofWxcjdXJKzINJDLFmiBE-rjdhB0206y4Hqd_TTydX1Chgyx5X-HiG3iLNhsy9afvmfDLLIr_jH2VGiVNGz6S_W8HZgxIFAco9OlUFbgyLr6VJpeAfjo-BSJN3EZMTLaTEOccEw/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMbMOwxg2iOgkz6_G6AVcXlMXT0_MVEyOHllr1OD1j14U-xKHGhnaiB5Kp1KNhfw81MfEBXYl09hniUqb6nRsrMWSadgt-3xAVUhWscAhlKVqaEZHGk_DO_XZ1jrqlNoJE_R21Z19Z5ors2bJwWQjnTVELQKwp5onJ1G9ujQcUL-3wvKNFBbPaOhML1w_6texvgaFltB8uLj7g6nLRAUk7MV3pccNDcepiqk0f68MAQGaumrvATFqfcaTs1OhTvMAJJPY6N_mV-AOyclb_MNqELCjcXF5SlPprlQ0DLn0D4t8lWWLu1uYgFNbcnbH6b8V2qSCO2d43oeRzzhSkuFIrYyxJeiNOJ4TWQUkc0LoG2V_h54No__jjjEv2J-jNwFrTn2oRJYwzndBafCNnKncSMOQ4JeOJ3_-XgZWWdwzzo/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMZr_VQ6cZGCVzUKEH5n5yZ0d-Ui6014azGNYy0_2dJrCWnDtEsdJkGl0o9TQqseGN_JGurdSSX1-EUCLOdK8baV-ILjmJVy4XqLp6BvdOTrNZTOk-1p7GbOsAl_r-3nyF-G_mg8WAYJ3ds8YbhbpiABGu3ej-lUnU2crY8C-ABfjz47iZaGvmdsqx7NbRyVy7KUcHIqDNjvnDBXTSNmC-QkZ-RcVMxGPnXMYB97WzwBVaavqRAP5daTjXEhDwxaLSGpkNhjlTtp7_BDOqgqdYf5MU70ZJjhYeHKvbwHmLoIU-mazrMXrEq8ZBd2V1TJFPT-wulEKGOJC2dZ5rfDLURb87lfm-maCejSnhQqg2qGavsnpwHdPgfn084yE5rp9-rAt4QIpwywRGndMb0q_E5BRVb0vY_RxjEV8HX7mGNBNA/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMb25lpyEQSKu4qgxmrYUbUa8bQVPtN6ACqPwkkkjnPmqMmOGKCGiso0QA6YmgbdFELA2M4uHNFA-1xEpoAMZqDIWv-8Eiyv4TImqYrBjfQ5kkt7-d6mSuDbDbgSjFChdVg8_3pYYROJl5ZrbjoVQKFbzssOOGluRxlPP_QaU2cT-4RDu3jTGJxrNq2KhzJTcaJgH4Gs9lKxmKT7HW141LmxdhXPmwZfl0ZJAeNJDw3DfucmJhT6qPPZFeKnBGO9VsDaoHLZncnz5vPyBLGNrIUpAcTEJazE6w496DAn0JlWsgY2fnJXc-N9WwF7Onn70AK4Eoulo1Hdwc7L1t0M2BT2GJwc8DHhDnBs8McTuUGPp7aA52yLE1DFn4W0JxZAMiohZJeZ_2KTuRz5GoFr5grDORdevsfoE9Y4eoL6AqSrw-1m/media?key=REDACTED&maxHeightPx=400"
+        ],
+        "latitude": 30.115761899999995,
+        "longitude": 78.28530169999999,
+        "destination_id": "IN-RIS",
+        "world_region": "Asia",
+        "match_score": 100,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 10.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "You chose Reflection; our editors tag Rishikesh for Reflection. This is an editorial hypothesis, not a promised outcome.",
+          "You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Yoga|River|Culture.",
+          "You're drawn to Mountains; catalog setting: River|Foothills."
+        ],
+        "tradeoffs": [
+          "Check before booking: Practice traditions and comfort level vary."
+        ],
+        "unresolved_facts": [
+          "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+          "Live stay availability and price have not been checked for your dates yet.",
+          "Nightly lodging cost is unknown, not yet compared with your $400 per room, per night budget (1 room).",
+          "Route from London (mode, transfers and travel time) has not been checked.",
+          "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+        ],
+        "warnings": [
+          "Check before booking: Practice traditions and comfort level vary."
+        ],
+        "restriction_checks": [],
+        "distance_check": {
+          "status": "no_limit",
+          "straight_line_km": null,
+          "detail": "You're open to anywhere; route and travel time not checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+        },
+        "evidence": {
+          "destination_source_url": "https://www.incredibleindia.gov.in/en/uttarakhand/rishikesh/gita-bhawan",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Rishikesh",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-09-28T08:34:26.411455+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Kinosaki Onsen",
+        "country_name": "Japan",
+        "number_of_days": 5,
+        "description": "You chose Reflection; our editors tag Kinosaki Onsen for Reflection. This is an editorial hypothesis, not a promised outcome. You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Onsen|Food|Tradition.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMbBKwRV_pW8b0e5OuqyVIqbrqQCzhE0nA0l6H2dJQT7EIAsmGq5leUC2fwiSaGtJHxdKWRzjTXurFH3PNBkSZRr7dPVKuXAGhVjSn2JyDD_SC2WGlBv9cwg9G2eTP62hkDSnhmO_6ftYnW-HsFVfY3x2Vj7elXD4C_7KzZfac1_llLhGpLwMgGHioAL5k7Muxsgn2YJhSH0qGUIiaGf4Zxo7C5NILWNsOIaz-SVKyU_HsUQNuswSTMOTNQGy4lXyI9ZEmY8TscBZQ1b6NwHXwT5HdEiKO7BSIFC9bv_zDRFGTpO8cOvqoYE2s6AujJG7K2Sd9hXcsIWIclRqC0Wco3GEYeueZ0I4CIRysQ4tF5xvgiYsIFitSPGLKh4Tp057g-JjJGZCFrRw1y7KVlvafjdy9NDnR84sHcGL1va2Dh0CA/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMafcyLWzho79qG1r8q7VYr6Z0cFpMzpq99L_lJV1nkM41sIWUeZig7h_uDe7TGud0YbBaJmdTQyJ2TtvhoPnA9tBojRidS5ydE66U3R_EjKMkuNhTLmNABwJvClsIEJQDG7wt_QpVSSuAAmr7wNK3yDVuN2Xe286Os0qRq-P4_YL6F2DwcyyV0qEZ7Pn6ae0Gbpt6eUsmBYMyUJWc8NVKA7PWfHPQjX9-69IAyILB-_0-mMdErN6prZc5WOYos6Y4ohAls_T9DQrsFXZLKdsNAUX_N0OvS9iZhgHYOVF18S-uE08_Rq8bg24buPxOv19RnkbNg7hH7voZnkcQJgW3rZP9HwUhJbpCOHDhDPoTPn8O-Dm3kdSDAGbQ11ZGzYvglE-CNW8JH9T-eefsWu6Aru058/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMYkkP03y6STPgAgm6dsfSFyJt71fQb_-dtCv0fTt8jq0hA4ulkwsqR3mJMrf9srm-HSYyCIGixlGlxblBkz6dflupGMZ_B7MlPlukY0V27JWN6ugSb7rQz8Yn5p05dpHayzGTY4dJfvE6NxlwBaMP2Lh01zjD6Q2doj4Ejv9J2xTPaFkFMkOVeViaEyvHQY9VwSl1olxBf6cvobXEiKwWwB1umY5VjSivZJ9AuMm2aL6lZ1j5RAgTjS2HgT4AdGxmuRruSp6wVBF6goDNyXSzzcAvyMTXexcgeGmFYWrqe00PyJALnLf2b71vL9zBhHIZFfCBazYC7wy4vCIRwVH06JX9HCLtVWYEn8qrhiK7_Ygp15v32_F35Vvu2aM6fErmF6Zotq1NJcE3Z6WLSUyX_Eyq8VNsem4zo_z9yfBFGTRw/media?key=REDACTED&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMYQP4ecdnCEKhGbdTxR7grzUC6iwGNyvPKaJLdegfV1b0lPhIpgqJDsrhaboiNizUBGvjEDiWYcBlwhfBqowxHWOpcMHvflQglB2CgnpCC4OA6Xdj3LBST-nl0qEnOHZXiSt7ChLx18Nuap0FQazHYJGpZVB-5xoG_x3orBvKhSJL82PpqUpj4-VLRv9VGSXvk2SRf_di2ac1FLoxdTy8n8qvZyu8A3iQo7Z_jE_pIZqAAag2ePRMQm4J-WqO9qIrisY1B2jxWkiIEqWzKpun8sAP_pNQFtxjs2yAPeAfdlXOrh1RTMmjLPu4Fnand-0cAI0EJX73i5wv8JFbCe6X_kfpLVRCoH_nBha6ef_Uh54piYapQ8MO2WYdKn2iz33ykSB_Q_c-Si-Ey6OCpwA22PxqA/media?key=REDACTED&maxHeightPx=400"
+        ],
+        "latitude": 35.6241637,
+        "longitude": 134.8131005,
+        "destination_id": "JP-KIN",
+        "world_region": "Asia",
+        "match_score": 100,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 10.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "You chose Reflection; our editors tag Kinosaki Onsen for Reflection. This is an editorial hypothesis, not a promised outcome.",
+          "You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Onsen|Food|Tradition.",
+          "You're drawn to Small town; catalog setting: Small town."
+        ],
+        "tradeoffs": [
+          "Check before booking: Bath etiquette and lodging rules need confirmation."
+        ],
+        "unresolved_facts": [
+          "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+          "Live stay availability and price have not been checked for your dates yet.",
+          "Nightly lodging cost is unknown, not yet compared with your $400 per room, per night budget (1 room).",
+          "Route from London (mode, transfers and travel time) has not been checked.",
+          "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+        ],
+        "warnings": [
+          "Check before booking: Bath etiquette and lodging rules need confirmation."
+        ],
+        "restriction_checks": [],
+        "distance_check": {
+          "status": "no_limit",
+          "straight_line_km": null,
+          "detail": "You're open to anywhere; route and travel time not checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+        },
+        "evidence": {
+          "destination_source_url": "https://www.japan.travel/en/spot/2005/",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Kinosaki Onsen",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-09-28T08:34:26.859535+00:00"
+          }
+        }
+      }
+    ],
+    "response": {
+      "match_status": "matched",
+      "suggested_cities": [
+        {
+          "destination_id": "ID-UBU",
+          "city_name": "Ubud",
+          "country_name": "Indonesia",
+          "world_region": "Asia",
+          "number_of_days": 5,
+          "description": "You chose Reflection; our editors tag Ubud for Reflection. This is an editorial hypothesis, not a promised outcome. You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Art|Nature|Food|Yoga.",
+          "latitude": -8.5068536,
+          "longitude": 115.26247780000001,
+          "match_score": 100,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 10.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "You chose Reflection; our editors tag Ubud for Reflection. This is an editorial hypothesis, not a promised outcome.",
+            "You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Art|Nature|Food|Yoga.",
+            "You're drawn to Small town; catalog setting: Town|Jungle."
+          ],
+          "tradeoffs": [
+            "Check before booking: Traffic and busy core areas."
+          ],
+          "unresolved_facts": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Live stay availability and price have not been checked for your dates yet.",
+            "Nightly lodging cost is unknown, not yet compared with your $400 per room, per night budget (1 room).",
+            "Route from London (mode, transfers and travel time) has not been checked.",
+            "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+          ],
+          "warnings": [
+            "Check before booking: Traffic and busy core areas."
+          ],
+          "restriction_checks": [],
+          "distance_check": {
+            "status": "no_limit",
+            "straight_line_km": null,
+            "detail": "You're open to anywhere; route and travel time not checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+          },
+          "evidence": {
+            "destination_source_url": "https://www.indonesia.travel/uk/en/destination/bali-nusa-tenggara/bali/ubud",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Ubud",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-09-28T08:34:25.743700+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMa-Z9ZNm8EjgJBKOvhy9NXA-D8BUlYuP6hYuMBVMH28Rx17VJJcl1n6WfHC7wIT5IZokt9-VwPQKsWKBulrtd5-QW0ISyInWAvApjO5oIpnEW87rbr4I0iiQ_ef_f1V4iYS0kVcBLmMLjpLaWmA-bOeCaN4HMwJwViON3TIgUhVh8kEU0ps4xzEXZ17-cKKuTnlVM6pQ5KMk_hOBGNbo4lgjuho8Kd-HP7RTm0D3OzD6yN9gmysMmr7i597mFjMG9XxTFbyVq6xePHtrmUHR1CWMNCCdu5uG9qvCcHSWgCjP5lWN2OwIxfJX97WrardjJLmKLw80vutJuv9GErKnK32lv9Nq1PbWe9L8yBYuuQR1S_HUdXIO1EQ8NFxjl0qt3j-nF9tRiR2MBqYfYZ5ajLXMak2kVrhw0CIpbbZ-dhuAQ/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMYIWeHNj1kPTwn9xDuby8rRranr1BJ4Ox4p52F5YhFnO6fpMhfeidXkX7w6opzf-_b8MwxzSXkrn0SpnsVpmFQTOQHe8xTgxs-zf6ry3eSurl6_eRirgIWUArg3Mh7_qLhEivWBduKcZb7QqloqxXSf4zgCHiXp2xjdQdfwQgOWkvxX5jusmNCyj2QGMFkJgm34-PhfLsZY7bwXyiNbpGNk6SQSt605An93m_sKoVv2k8zFDqmI8j-EI3iZWscOhcdxeONo2meTDYXAkVi292uo5RXdlx37Cjds4se_JvbWlmdJwAtgGwGf8gshpdL4kXAuU1w8iaKo_LZ-zVCvw3FTxd3qtIpDqqT7tNxl0lrp1rcQMTHn5_TWMBrgG3PhG-s_bl2OwOs3-KtZQ7P_fEdAUx7l_Kx-UrfZ2VJZd-s/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMZgrnxEj-aNZIgQ8HgthZAun30MxjLKKUy2ODFORix23aoO0qKNOBvW203hyWSHRNTF9gWBATOR0eYzvkusEINkfLXm5hVP4Gecg_Caft0X-LRXP9BryyN2jFXFRhPncjmfekgPRn7eUwFKH9qI_swEVTw5w38YRf0EPsGEP5LXXa4GVEdT2HzMO48AH2JeyKEJ_k3hzVMd9G8kWtUB9zpPPPqC54zdw6mpCa6EzpTOYLIffWYzgUFO5MaNb2-dc7yl5K2hxg6aewUCm1J7Y7rx9M-IyP-Bluo6a7udf-dlrg6WaVJsuUKznairiw5NTwjKllCpChmlVeYkxNvERN4Zs4nAXxbLRX1K5mX2TxNmzzgnFMjwv4rl0DWcf6cYw8UWA9yeL9xrnATtJ_jQmg7ASacj-DJQ2q8Jj1xgpdQ/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/Aa-ngMaH5J4BSFsFAqQcFx7U2_XvALhl3VgrzrtPkd4T-5tVjHSeEfP3OAX2B-WIjyGJPhUmbwh_-5PTYy--QWQrqWRW1RBr40KHB5i3_IFrQolR91JKrgDPh2DNLcZm_tN4SyLA-WNJs5DHgFmWhm3ARRDl3oSBadtgX_GpFhEolJLGZswb_eU6hGjAkXsTR39BOhAcJDR5XaCIHvzdfJLI7DLaLvOoH6MtSON50GwpXa6Yj6Kg068A-kSWYIE7JuRHmam0zjbdNLXZBwXAL_PXloGXAhlvxuc6a7x7NkRJ9xvFxEKIskQJ8fUiZEds5lVjuUG3mRxbDnlgiiuYQAu9isjtmuOAGSV0Yj9Ae2xfcLvKbF2zSMYJTFBq5KwBD7LMQjeNECJHmRlICoCbjBKjjK3w3_tA0ruYv4bp1bVTDr8X-w/media?key=REDACTED&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "IN-RIS",
+          "city_name": "Rishikesh",
+          "country_name": "India",
+          "world_region": "Asia",
+          "number_of_days": 5,
+          "description": "You chose Reflection; our editors tag Rishikesh for Reflection. This is an editorial hypothesis, not a promised outcome. You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Yoga|River|Culture.",
+          "latitude": 30.115761899999995,
+          "longitude": 78.28530169999999,
+          "match_score": 100,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 10.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "You chose Reflection; our editors tag Rishikesh for Reflection. This is an editorial hypothesis, not a promised outcome.",
+            "You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Yoga|River|Culture.",
+            "You're drawn to Mountains; catalog setting: River|Foothills."
+          ],
+          "tradeoffs": [
+            "Check before booking: Practice traditions and comfort level vary."
+          ],
+          "unresolved_facts": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Live stay availability and price have not been checked for your dates yet.",
+            "Nightly lodging cost is unknown, not yet compared with your $400 per room, per night budget (1 room).",
+            "Route from London (mode, transfers and travel time) has not been checked.",
+            "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+          ],
+          "warnings": [
+            "Check before booking: Practice traditions and comfort level vary."
+          ],
+          "restriction_checks": [],
+          "distance_check": {
+            "status": "no_limit",
+            "straight_line_km": null,
+            "detail": "You're open to anywhere; route and travel time not checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+          },
+          "evidence": {
+            "destination_source_url": "https://www.incredibleindia.gov.in/en/uttarakhand/rishikesh/gita-bhawan",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Rishikesh",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-09-28T08:34:26.411455+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMa-39qWQYXPT_wAszgjhUtGE4QjWRK-AgbUdYhBGDONmwKfBSgcjZD5oD0WJFCTfqtY9PaXHze0GQkeSTzrLXAAyJM8FlUKGcyncGt-CuDehX_AnThTiSmXB8fuzmRqfnzKT22sihAGAjByWwJ3QSjuVp4qmv7Uy9LEO9m-ORKsp2OGEsDTg--x1CMlivxqpv1G2XKQNXMo1QdayYU-qOf-2N4-ubgJP7EAmucgM68n1E6pvGd4-beAZsGxtuJJX5tjy-hEqzjNcIgU5_QS9K5yn7tgmJeZGdZTofWxcjdXJKzINJDLFmiBE-rjdhB0206y4Hqd_TTydX1Chgyx5X-HiG3iLNhsy9afvmfDLLIr_jH2VGiVNGz6S_W8HZgxIFAco9OlUFbgyLr6VJpeAfjo-BSJN3EZMTLaTEOccEw/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMbMOwxg2iOgkz6_G6AVcXlMXT0_MVEyOHllr1OD1j14U-xKHGhnaiB5Kp1KNhfw81MfEBXYl09hniUqb6nRsrMWSadgt-3xAVUhWscAhlKVqaEZHGk_DO_XZ1jrqlNoJE_R21Z19Z5ors2bJwWQjnTVELQKwp5onJ1G9ujQcUL-3wvKNFBbPaOhML1w_6texvgaFltB8uLj7g6nLRAUk7MV3pccNDcepiqk0f68MAQGaumrvATFqfcaTs1OhTvMAJJPY6N_mV-AOyclb_MNqELCjcXF5SlPprlQ0DLn0D4t8lWWLu1uYgFNbcnbH6b8V2qSCO2d43oeRzzhSkuFIrYyxJeiNOJ4TWQUkc0LoG2V_h54No__jjjEv2J-jNwFrTn2oRJYwzndBafCNnKncSMOQ4JeOJ3_-XgZWWdwzzo/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMZr_VQ6cZGCVzUKEH5n5yZ0d-Ui6014azGNYy0_2dJrCWnDtEsdJkGl0o9TQqseGN_JGurdSSX1-EUCLOdK8baV-ILjmJVy4XqLp6BvdOTrNZTOk-1p7GbOsAl_r-3nyF-G_mg8WAYJ3ds8YbhbpiABGu3ej-lUnU2crY8C-ABfjz47iZaGvmdsqx7NbRyVy7KUcHIqDNjvnDBXTSNmC-QkZ-RcVMxGPnXMYB97WzwBVaavqRAP5daTjXEhDwxaLSGpkNhjlTtp7_BDOqgqdYf5MU70ZJjhYeHKvbwHmLoIU-mazrMXrEq8ZBd2V1TJFPT-wulEKGOJC2dZ5rfDLURb87lfm-maCejSnhQqg2qGavsnpwHdPgfn084yE5rp9-rAt4QIpwywRGndMb0q_E5BRVb0vY_RxjEV8HX7mGNBNA/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/Aa-ngMb25lpyEQSKu4qgxmrYUbUa8bQVPtN6ACqPwkkkjnPmqMmOGKCGiso0QA6YmgbdFELA2M4uHNFA-1xEpoAMZqDIWv-8Eiyv4TImqYrBjfQ5kkt7-d6mSuDbDbgSjFChdVg8_3pYYROJl5ZrbjoVQKFbzssOOGluRxlPP_QaU2cT-4RDu3jTGJxrNq2KhzJTcaJgH4Gs9lKxmKT7HW141LmxdhXPmwZfl0ZJAeNJDw3DfucmJhT6qPPZFeKnBGO9VsDaoHLZncnz5vPyBLGNrIUpAcTEJazE6w496DAn0JlWsgY2fnJXc-N9WwF7Onn70AK4Eoulo1Hdwc7L1t0M2BT2GJwc8DHhDnBs8McTuUGPp7aA52yLE1DFn4W0JxZAMiohZJeZ_2KTuRz5GoFr5grDORdevsfoE9Y4eoL6AqSrw-1m/media?key=REDACTED&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "JP-KIN",
+          "city_name": "Kinosaki Onsen",
+          "country_name": "Japan",
+          "world_region": "Asia",
+          "number_of_days": 5,
+          "description": "You chose Reflection; our editors tag Kinosaki Onsen for Reflection. This is an editorial hypothesis, not a promised outcome. You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Onsen|Food|Tradition.",
+          "latitude": 35.6241637,
+          "longitude": 134.8131005,
+          "match_score": 100,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 10.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "You chose Reflection; our editors tag Kinosaki Onsen for Reflection. This is an editorial hypothesis, not a promised outcome.",
+            "You picked 'Quiet and privacy', 'Art, history and culture' and 'Spa and wellness'; the catalog describes it as: Onsen|Food|Tradition.",
+            "You're drawn to Small town; catalog setting: Small town."
+          ],
+          "tradeoffs": [
+            "Check before booking: Bath etiquette and lodging rules need confirmation."
+          ],
+          "unresolved_facts": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Live stay availability and price have not been checked for your dates yet.",
+            "Nightly lodging cost is unknown, not yet compared with your $400 per room, per night budget (1 room).",
+            "Route from London (mode, transfers and travel time) has not been checked.",
+            "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
+          ],
+          "warnings": [
+            "Check before booking: Bath etiquette and lodging rules need confirmation."
+          ],
+          "restriction_checks": [],
+          "distance_check": {
+            "status": "no_limit",
+            "straight_line_km": null,
+            "detail": "You're open to anywhere; route and travel time not checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook."
+          },
+          "evidence": {
+            "destination_source_url": "https://www.japan.travel/en/spot/2005/",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Kinosaki Onsen",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-09-28T08:34:26.859535+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMbBKwRV_pW8b0e5OuqyVIqbrqQCzhE0nA0l6H2dJQT7EIAsmGq5leUC2fwiSaGtJHxdKWRzjTXurFH3PNBkSZRr7dPVKuXAGhVjSn2JyDD_SC2WGlBv9cwg9G2eTP62hkDSnhmO_6ftYnW-HsFVfY3x2Vj7elXD4C_7KzZfac1_llLhGpLwMgGHioAL5k7Muxsgn2YJhSH0qGUIiaGf4Zxo7C5NILWNsOIaz-SVKyU_HsUQNuswSTMOTNQGy4lXyI9ZEmY8TscBZQ1b6NwHXwT5HdEiKO7BSIFC9bv_zDRFGTpO8cOvqoYE2s6AujJG7K2Sd9hXcsIWIclRqC0Wco3GEYeueZ0I4CIRysQ4tF5xvgiYsIFitSPGLKh4Tp057g-JjJGZCFrRw1y7KVlvafjdy9NDnR84sHcGL1va2Dh0CA/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMafcyLWzho79qG1r8q7VYr6Z0cFpMzpq99L_lJV1nkM41sIWUeZig7h_uDe7TGud0YbBaJmdTQyJ2TtvhoPnA9tBojRidS5ydE66U3R_EjKMkuNhTLmNABwJvClsIEJQDG7wt_QpVSSuAAmr7wNK3yDVuN2Xe286Os0qRq-P4_YL6F2DwcyyV0qEZ7Pn6ae0Gbpt6eUsmBYMyUJWc8NVKA7PWfHPQjX9-69IAyILB-_0-mMdErN6prZc5WOYos6Y4ohAls_T9DQrsFXZLKdsNAUX_N0OvS9iZhgHYOVF18S-uE08_Rq8bg24buPxOv19RnkbNg7hH7voZnkcQJgW3rZP9HwUhJbpCOHDhDPoTPn8O-Dm3kdSDAGbQ11ZGzYvglE-CNW8JH9T-eefsWu6Aru058/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMYkkP03y6STPgAgm6dsfSFyJt71fQb_-dtCv0fTt8jq0hA4ulkwsqR3mJMrf9srm-HSYyCIGixlGlxblBkz6dflupGMZ_B7MlPlukY0V27JWN6ugSb7rQz8Yn5p05dpHayzGTY4dJfvE6NxlwBaMP2Lh01zjD6Q2doj4Ejv9J2xTPaFkFMkOVeViaEyvHQY9VwSl1olxBf6cvobXEiKwWwB1umY5VjSivZJ9AuMm2aL6lZ1j5RAgTjS2HgT4AdGxmuRruSp6wVBF6goDNyXSzzcAvyMTXexcgeGmFYWrqe00PyJALnLf2b71vL9zBhHIZFfCBazYC7wy4vCIRwVH06JX9HCLtVWYEn8qrhiK7_Ygp15v32_F35Vvu2aM6fErmF6Zotq1NJcE3Z6WLSUyX_Eyq8VNsem4zo_z9yfBFGTRw/media?key=REDACTED&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJvzzwnzvI_18R7pmJyu_Wa8U/photos/Aa-ngMYQP4ecdnCEKhGbdTxR7grzUC6iwGNyvPKaJLdegfV1b0lPhIpgqJDsrhaboiNizUBGvjEDiWYcBlwhfBqowxHWOpcMHvflQglB2CgnpCC4OA6Xdj3LBST-nl0qEnOHZXiSt7ChLx18Nuap0FQazHYJGpZVB-5xoG_x3orBvKhSJL82PpqUpj4-VLRv9VGSXvk2SRf_di2ac1FLoxdTy8n8qvZyu8A3iQo7Z_jE_pIZqAAag2ePRMQm4J-WqO9qIrisY1B2jxWkiIEqWzKpun8sAP_pNQFtxjs2yAPeAfdlXOrh1RTMmjLPu4Fnand-0cAI0EJX73i5wv8JFbCe6X_kfpLVRCoH_nBha6ef_Uh54piYapQ8MO2WYdKn2iz33ykSB_Q_c-Si-Ey6OCpwA22PxqA/media?key=REDACTED&maxHeightPx=400"
+          ]
+        }
+      ],
+      "no_valid_result": null,
+      "clarifications": [],
+      "guest_context": {
+        "recent_feelings": [
+          "Stretched thin"
+        ],
+        "trip_goals": [
+          {
+            "code": "reflection",
+            "label": "Reflection",
+            "definition": "Quiet and perspective to think about what matters"
+          }
+        ],
+        "trip_prompt": "I need a break",
+        "preferred_moments": [
+          "Quiet and privacy",
+          "Art, history and culture",
+          "Spa and wellness"
+        ],
+        "preferred_environments": [
+          "Small town",
+          "Mountains"
+        ],
+        "trip_pace": "One highlight each day, with plenty of free time",
+        "party": "Just me: 1 adult, 1 room",
+        "restrictions": [],
+        "timing": "2027-04-12 to 2027-04-17 (5 nights)",
+        "budget_per_night_usd": 400.0,
+        "budget_open_ended": false
+      },
+      "eligible_count": 60,
+      "excluded_count": 12,
+      "excluded_by_reason": {
+        "no_grounded_fit": 12
+      },
+      "total_candidate_count": 72,
+      "data_gaps": [
+        "No candidate has a verified nightly price yet, so budget could not filter destinations. Your budget will be applied when live stays are checked for exact dates."
+      ],
+      "origin": {
+        "status": "NOT_NEEDED"
+      },
+      "estimate_status": "Suggestions are editorial candidates. No live price, availability or route has been checked.",
+      "generated_at_utc": "2026-09-28T08:34:27.233040+00:00",
+      "intake_form": {
+        "form_id": "velari_emotional_travel_intake",
+        "form_version": 1
+      },
+      "catalog_version": {
+        "snapshot_date": "2026-09-24",
+        "candidate_count": 72,
+        "backlog_count": 928,
+        "candidates_file": "1. AI_IMPORT_DESTINATIONS.csv"
+      },
+      "intake_mapping_version": "2026-09-28.1",
+      "scoring_version": "velari-destinations-2026-09-28.1"
+    }
+  },
+  "itinerary": {
+    "activity_session_id": "9605013f-5466-4614-9db3-4eb8fc8baee7",
+    "destination_id": "ID-UBU",
+    "city": "Ubud",
+    "feeling_block": {
+      "title": "The feeling behind your journey",
+      "feelings": [
+        {
+          "code": "reflection",
+          "label": "Reflective"
+        }
+      ],
+      "headline": "THE FEELING: REFLECTIVE",
+      "intention": "You’re looking for quiet space to think about what matters, with art, culture, and wellness.",
+      "narrative": "Ubud sets a calm rhythm in the mountains, where a quiet morning ridge walk through greenery and valley views offers room for perspective. Your museum days with Balinese art, followed by a private jungle spa and an early sunrise trek, create gentle pauses for reflection at your own pace.",
+      "markdown": "**THE FEELING: REFLECTIVE**\nYou’re looking for quiet space to think about what matters, with art, culture, and wellness. Ubud sets a calm rhythm in the mountains, where a quiet morning ridge walk through greenery and valley views offers room for perspective. Your museum days with Balinese art, followed by a private jungle spa and an early sunrise trek, create gentle pauses for reflection at your own pace.",
+      "supporting_experiences": [
+        {
+          "day": 1,
+          "activity_name": "Campuhan Ridge Walk"
+        },
+        {
+          "day": 2,
+          "activity_name": "Agung Rai Museum of Art"
+        },
+        {
+          "day": 4,
+          "activity_name": "Mekar Ubud Jungle Spa by K club"
+        },
+        {
+          "day": 5,
+          "activity_name": "Mount Batur Sunrise Trekking"
+        }
+      ],
+      "note": "Describes an intention for the trip, not a promise of how you will feel.",
+      "alignment": {
+        "status": "aligned",
+        "detail": "The narrative references experiences that are in this itinerary.",
+        "checked_at_utc": "2026-09-28T08:34:54.447741+00:00",
+        "display_guidance": "Show the block at the top of the itinerary."
+      }
+    },
+    "stay": {
+      "name": "Hati Suci Sanctuary",
+      "address": "Jl. Raya Kedisah No.16, Kedisan, Kec. Tegallalang, Kabupaten Gianyar, Bali 80561, Indonesia",
+      "rating": 4.7,
+      "price_level": "PRICE_LEVEL_EXPENSIVE (approximately)",
+      "photos": [
+        "https://places.googleapis.com/v1/places/ChIJNwCfYpcY0i0RmOafto8qy1c/photos/Aa-ngMYD-0r0oSCM7ezRSq5iEjxfD4wSV0b2pbP57ix-KkF-s6f4uJihmZs0h66A9ixKMu6uYDWFXcLhjiEg51yxLljtXRgLZlb5ExxGo3YJxgIamZw7fqoCOInjIzukDaa_7hGLs-nlHXi8IPZ13WB-fa1nsl0kdnnP7UzYaCQGWa-bb8y7R08xOjnYcF39YmAQHIDObv9b43OLZHipa1YQfJL-nvOGzvQIys4RbZc6Bq2abPhBsQFynYGLOEFlPk5QOtgnknen1xhk9LV2I1rhbJV7neDDKtraTtFPAqZmM47V7zL0EOmpeZRb328OmzMCaBcxY5-d28FYgC2Lwwk7iciI9xq5y17VqLy1MIaTFiTm8JHZ4czPIUnYVE050lgxJZ0PbNM1voBAX0iW-joB1bQpjA/media?key=REDACTED&maxHeightPx=400",
+        "https://places.googleapis.com/v1/places/ChIJNwCfYpcY0i0RmOafto8qy1c/photos/Aa-ngMYn3QM_kGAviC5F3dmbLXMGsZnKU0bVY2GKsOo-O-rruvMDcjCeg1ktHTcGA9d97vjF_71DWNihI15xwC8tzINFldOyrprnjUtWJN7K_M9fyW3C4DL9uEXRA1JAEN5yXMaiyE25VPB3DUxzBhuVM44l8yskOHXHhyXWgCVwgRWAUDmvX22774wx4IXDiV8-lOXemBt1zNM96TNujXaly-E_2nPumRYVw2DEi8HMolcICTwBZBKXy7N4CAzfAvxeDHr3mi2ktdQ4vNaiPNLv7kO85NAq6CGyGcRb3s1LC3iL--6yyxZ2nyJa_e2iIsONk3A0imkC-2y70xvP-aOKmhcyDabP65HSMvK7R2Wpwc-3Xtyr5CftBOb1jDnVxwSB72ct48559aHUyg0sY48SpmTJhW4/media?key=REDACTED&maxHeightPx=400",
+        "https://places.googleapis.com/v1/places/ChIJNwCfYpcY0i0RmOafto8qy1c/photos/Aa-ngMajKcpksLHiXfHpV9Rif_lWrwjId5D7FbpaGvpVWr611N9CDOcKWWykqe-HKIOAQae87ZM2fZAMykJK75rW0mXOymFDztsv9WmX_00ByeS1QmH5B0qtgF2qk6LGiKUeFwx6VxWwZiWPtDN1QEnCq2NDTMDy1eZ_A_nqtejeR9nSAXWdBtwoEGL2kAqsfFSmJi7kYGPzvS-Rvsm-5oXq4SU7WB-RXZFCiWyqOEi0IkhsBiY0lsOabJJcb0gKBPcwtGZvYRbmUVftqpskNP465H-dBo6mDfZ2R8nRTpV2hlodxgZgc6-WEG--WlrHd4qrCMjNwdsgyBmhs4bKmbHwM0oYL8ODcy1pFEoYbqzI2SSu8SqosrjwJxwqJRaTt0yl6Q2XShq14f24hZItQGc2qyRRGoQ/media?key=REDACTED&maxHeightPx=400",
+        "https://places.googleapis.com/v1/places/ChIJNwCfYpcY0i0RmOafto8qy1c/photos/Aa-ngMYRngXK50rrEJ_s7d8jl2bJ6_qYv8N_oLoLR3SngkN0P4LTzhGk4ytBFF7KNeRJfybKPOJhWeXYcFLceQNCk4lrPiKAh5GR_MaQf0fN_4eZhn9zaR4PUh17Hzbs9sGsYmIFY0dOfvMroJA-u-ZDX4e4G6vOBtKbXIrjDRxTfnRgHU4OaHweGsTClzzQjmZ_JZZyXkt4WbJ5kKkaO31vqayUW5tULf4E7q2lu3uxLO8Ukt3ak8bt-HONQbT3jkExfnz6IXXTErOZGB4Y_pOcJtREjYvuzDV2ugLTLIbqNQF4hKwxmOf2vQugxD0bjSb8BmWBddWFRb0vWs9kX4VpY9qfoD0jUdsd9ynTQrddR-HA4tYgaKuvqZyaPvKwo01j2MMJBzt7g3HLaH2uvzFESJkTXNs/media?key=REDACTED&maxHeightPx=400"
+      ],
+      "coords": {
+        "lat": -8.4258134,
+        "lng": 115.29550759999998
+      },
+      "average_nightly_price": "$350 per night (approximately)",
+      "budget_tier": "Premium (approximately)",
+      "facilities": [
+        "Spa/wellness facilities (approximately)"
+      ],
+      "website": "Not available",
+      "estimate_note": "Unavailable price level, nightly price, budget tier, facilities values are (approximately).",
+      "price_status": "ESTIMATED",
+      "availability_status": "NOT_CHECKED"
+    },
+    "tour_plan": [
+      {
+        "day": 1,
+        "activities": [
+          {
+            "activity_name": "Campuhan Ridge Walk",
+            "activity_description": "Start with a quiet, unhurried ridge walk through greenery and valley views; pause often for perspective and stillness along the way.",
+            "activity_location": "Campuhan / Keliki area",
+            "activity_address": "Jl. Raya Ubud, Kelusa, Kec. Payangan, Kabupaten Gianyar, Bali, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ9XP0yms90i0Rn8QbqnT9E3w/photos/Aa-ngMY1AwTt_mgsSGvoapCV311evPSnpZ2J3iXRVN_D24kx7ni_pzymO6c8CBhyIT0ccoERlNS50EQEZVjBaE0zxkxFrTLWT1mXwfvWZHbcG630bj9damh9KrOat10By1xXJWCO_gbZ9NRS2Mtt8-on-cMJV-_aiOJkYOWQA-TqMydcDFsbutV7ec2UK4naSnzS37xme0FO0z5kUFzHwgX9mXTqivyKXEH5wF7Isrm26NiKwtndMVKl_X1GiHYAZSiq4CnS0hO3goZGjk3pDbUsYvfilhcWnyXelRMmb8nyWU7GTszPD-rsD7_p7Zhc-soB5ZxDLNx6av_VvMw7vtBNwxNYGQr7M_3PKj1vvhv1WtDPmQSvngR8brT1QCv3hTM02Tu0LRBRwm9ov7lRNx-R95svUzXQphN4HQNhFw7yViuvGQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ9XP0yms90i0Rn8QbqnT9E3w/photos/Aa-ngMbOMbQxBTuGOh_ZUeDDec6S3i1tj1gF1JPQVgXi8I--N44ClHrciplB4f0rHcsOw2WV0PRAK7XyiQ1o4YZ39DmSgvaQhqirDG2FN_Q104-xQRTUxVtv8UPKTafty13DzihVH5oL7ioxAsV9kTqO6JFDbEgVHsGuajPV8a-uODKKfj3mH9NR3R-YyogfOe9vRBkFnwfGLryej0WWK_Q4krFxYm0sEgZ41Ikrz4WJbOHf63yNiicAdJNO5wL6kQEgPTyPlFuTvQz-tB07Bns-3yoYJdOlIJuulxxEQHXWYcID6HDn79TgDLL1FuHIdaOMxksY6zMeULT4NxBeS7LGv-08CJSHMywYaWgI65DngulXZH4CWTck04J76_7stfZ5ebXghd77YaSmUs58YWG1zMqeMdLvPMRvwVGpwH6gryh3PQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ9XP0yms90i0Rn8QbqnT9E3w/photos/Aa-ngMYBkpIJMtinisUiRWw_EC4hWCYP3QTMj42zFnQAWlTXKQQdNfrcVswUGjQOr20Fp2045Bbb1HXDoCSS1uNcPgJzpEQHaSLFFhxUFMZHIW90qAo7H5rYIv4HwvdBxdgnvdFXUeIEMbXKrvfIzo5f1-uwe_zmtjrE8cl5QZo38IjStfaJQbWrTlLQ2QIIcKGDMjdHKr6P-gJ4FIqBJygJ-E_NDCPwS1pIcP_Szf6-0D-qxt6sBlPcIrA9Mbg1ZMti_g7Q4Rvvmmt_zwycLEFdF3Q_o3cO40DcgEY9uZ4iLYqP5fb69VgH9T2XrJRcS5omEtX0j-dhtgk3BmAXMqanSbRnS3rd64BYYS8nne2VKg99GVDxJ310DCLW6NdavS7fQqL9DJ97aYKhd1prbmVIEo2BV86wOngjZIyq50abLHs83OI5/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ9XP0yms90i0Rn8QbqnT9E3w/photos/Aa-ngMY6lWZAqx3D2P1ChQdwbUcIFYTolfEXbkp2mI-DqPF-zxG6Y8LTuGELG-rdOcTkl84jnkRBaxcT7YwReG-byMQTiTV-xDJlWi_ySD6SaE-Tb9VH9Kdwiy5rPtI4VP_U6cJru6PYZkNB4SVD0bdHrQsn8u_57YqK_-oy4jtDb6McRnuOwQHLhz2bNIO6gVucm1-A0X2l48tE9sptp9inUOY3rpJ_rHpHVelq9YnhKc1pezSSc19oTTGP8XJaql-3QWEARcyCTb__bkbloFctU_yE_OoonMor-1OdTQ3B-X_RclxN_kcIuTthfk87d_T7wUQOko5WskoZNuGEd8_-4tIi23Oyg2-OzAgoOqi4UVbIjuPZln9lpkSLKd7wuqUxbQQA8oc4jnROlA3weQfZp_vvCdAWItfgHmv1emmQbJuKatYb/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "06:30 AM - 08:30 AM",
+            "activity_cost": 10,
+            "distance_from_previous_km": 16.35,
+            "place_id": "ChIJ9XP0yms90i0Rn8QbqnT9E3w",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at Paoman Restaurant",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "Paoman Restaurant",
+            "activity_address": "Jl. Raya Bresela Jl. Raya Taro, Taro, Kec. Payangan, Kabupaten Gianyar, Bali 80572, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ6RpYuFEj0i0RjEAI0iFkNKQ/photos/Aa-ngMbA5nYv_AVo59QSWzhzbjsxMb1wMc_9cN1neih2KQmOV5aYvID1CEN6j9C_8uG8Yu_gcAfasfvqBFc6jEXF8snYokwqp6jSjX2LmiPoHGyqyHVJtnUVOqFDKheWOVjpX5UETXaXgE38ra7olVw8PRkULRgAoqlUAAqUi9pAZAnFGb3hcGo3eGR2lLjqveSPinKPC_sWMlRtra7CPIULGkVYoIvPaPxXHU_PP-XodY2qs3o1kF58erPV5yk4-g4MYNNftXL57OLfziiPBwBqFQdPLLjprje-nbKytUGEM2RoGtDQ17jyp9PWwLa9l_1r5QHadDLlJX_ruVG_dssTuMXSnencNCqmNwpALOGP3FJn3xw4L5SnSDW21Jsnw7-16g1xUP9eIa_KtQY8FtsbKcM-BcurGEo55A4HguMciEI1BSHEWy99IjDszQ3oUHTf/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ6RpYuFEj0i0RjEAI0iFkNKQ/photos/Aa-ngMYMHe00tUTizyv4z4th_9ZxuYkSMVkauc57YWWRwoN4gW-9GxuKYMlWfjv5vbXqBmfEV7ZmL6QgEesoUxi1OazrtQOvxP4cpvxz3hRV8VtY5c-CMleJaYRsCh-9zYrADbAVbVHIESV7J-3yf3wzgQ3FQ6Hc3cZOQHBTdbQF1_c_-EtFyGWJ6HTj8_kvZYyFa2FE1kRzvmKxk375QtbP8E7LMoA4NCzEt11FdeACX2LabTSe54PCm0C4UjpFr71mxO-qc0VyNiisfAnYgA2wxsVPVbRZR7zLZQYBFS-htgdww0REQnTePyHx7jEZkTRSLbEJRe7MCI1YfaVraWDMwbO5QZRIvkIaLKGvLMipe1ZqXTRT4cwoIdZAEHFVSIMnc8b3q3K_OtoUFK6lPkZ2fJFQ_D3PiwKq2S3TAckFA-bl5SKO8VPP0jWAEeWfIw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ6RpYuFEj0i0RjEAI0iFkNKQ/photos/Aa-ngMZQMYEVBK7AspY4vBGwRD1FJiQYDAQwo5ErjRgDeHXjPGnAjKOFQR2yYmtziG9N6CcAKrEsB4A84F-O35kf0CSJ5ZiHWKE8K8gOjHtpHDlS3kB-wIASc9AyMrUZaicIzGRpDQOg353YhQSh-zHYtxDBREAk4ZaQje3jGsr4Wy6TUxWmOZTbiVksNTHxdrz0eAWMRcdP5uOUB0WpMQPC-43Iodt2lzcsNbNorLlrdfN3wqF8wdziCI_Bj6SSXw5MCXvsWi1AxiJbdKxQUkJ3QkWpQm48ZxdMYDcTM3l1xEs0N0YHriYag-Ml7k4trnWdApCdhfC3sfrKGJ0XEaV_bSKZHqvL1wxH1YrMCb44avdvtD3fT9Vee_ewb_WxnpJqyvnn1ocAKO14l6x1w_a3-ObbIAkS8kTylOzQujxxXgCgaSy2tdcC8w6Hpkh-VuSk/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ6RpYuFEj0i0RjEAI0iFkNKQ/photos/Aa-ngMZgxIq6w7aGEdyAjc2XJ2FburPusN54sBJtednBcZEZUbGJblwEw8VCASn7-xAp60unUUeK29aU5CAJfKN7aOret-K5yjqQTiJSZjxvknUJwMc02vBJ4g2IoCTQ192MLFI0rH3hkkzcLP2C2GGRJGJPcNtkS2Vkyhho3C4tIbRXOms1TI8yq2C1Vmo9KZxAyNvV1W_v9zm2pI9c85PUtHnb8z8vRsMfw554Lo65SIVxo-pautfjCBaAExcE3JS7pzOrjzlKPfYRGKyVyWcPBdSs6lt5H3Sx35XEUfizCoH1VaiZIe9z-g8BydtdqXGU5OGRd_z84WJuszrtQ5mR9_ODq6aCHhyMf2kseYgHGwQG9Ntecb5t5nIFD8Li0ZFGItzMz2Et0UhOaRfOLSRcEi5UGRdxBllUkzQ0nn_KogCYBcE7yTummGqd-f6ygw/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 10.57,
+            "place_id": "ChIJ6RpYuFEj0i0RjEAI0iFkNKQ",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Dinner at Wijaya Kusuma Restaurant",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Wijaya Kusuma Restaurant",
+            "activity_address": "JL. Begawan Giri , Melinggih Kelod, Payangan, Melinggih Kelod, Kec. Gianyar, Kabupaten Gianyar, Bali 80572, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ-64a1LYj0i0RhnR3pLc5yUM/photos/Aa-ngMazShN-pB0u53LIemRFteZ0ZjRZdijkgCosoVUzjiiWPhBh9mEQgJFmlQwRbvxpDfUJobyb4KoXNK9mRWKFDlahJLNbXTY9ccwR0AUuhBYASb4jlmVleTdihKtAKWQbYBbpps5zdka6sCLVU7u9FuC3xkjjCHDHwFcCwAOQkcpwxkU7c1K6oTseSdDjEMfupWFDlk9_ZflwFC0hvrlSJMsewLhh6fGxAnesLh-3cdW7xsRULCI4vZbdyPxp8J-hEewYN4xsoSLPYUrCuxVLfXiqlRw7jQdwg-GQiDyxI6H25WuLRBPJKVY24zcxSTVvgq_jN8MeBJEz6rNhtozxcqfMfEZ3FvdDJybI-GmVNRx-vmcVVbdYfnTFGclcpcnH7l5KWcIkaFSBvDATFPCB1A1vGmgJxOk/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ-64a1LYj0i0RhnR3pLc5yUM/photos/Aa-ngMYvD-dkLXs3TSa-y28Dld7AiilbgXGEHlCOadn_k9sDn15RLijqmGb_Y8Cx0-QTipKb8ijtpL7TmEoNnkNRQ9DFduAwNqFXvy9qyJjs2Bv5Q-EDIR0hAiHLr6NUlVIIItve3YNY5317U4st0o-8SKz1dw7KOFOcJWbqbQIGN8iwxTosp-C5DY2orR94maiB-7upWgCOztE7M53z886d970N3dCYhnTKlnY0RBJApWX5NFqvbhb8sZLLLYVTrK8IonHjAKtuXcgBJgSBpZlpgCIcBj_ISGxmEu58wUxqZqDjeOSbAoJR6vFIx2I2aq2zAPYJIYqvACHHoiue308Ag_jeko09S9-bUDyRphanZfwxQjFbsFNuXvloFmf6POfQuDa1kNtP6jrIrOIehtcZihZJHydO/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ-64a1LYj0i0RhnR3pLc5yUM/photos/Aa-ngMZdGu5HFAteK0PmILZevjVsSfl7mQeE74UP8tD8CQtKRoox6TgECCDLidtENAe2VZN7VeYCWy3sWvzyKGcPa90CVrVt8TYuAcLc_vBwksWjbGrS53RYD9oQAIXtOFk-2PIdTaQGcCbUmDooVl1iNfDznROSWxcdMNcbEzoQe-tRP9Sc5WgfJ-q0jajsssN3Mflw-k-xgK58sgWCT1ycvV48uoGKJxPPcQ8ZXkY_iQpMtb5g3NW7HhgQOzVmZ6IrpVUY5an-eALx2ch6IOFBBNxFX-R9Tk7EZZPuDFkKGMGGKNr1RqbOY7kii_XbvLCCwFCCiWvmsA2gnUhtVdzfRB0jP89XDzj8PnkThNLZt1zmkS2076pm-IxGLEXvHMTPlzSEj1wMEjWOG6OG7LjV0TEshX9RXzY/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ-64a1LYj0i0RhnR3pLc5yUM/photos/Aa-ngMbFfTiFisKiZrxXV6udrcE6mzBe4U6XMVT07jUWspVPS2_zv9BosnKHdxts422_mItrbFcmh7ZBfuHmDY_JgxAnTAfQIHdZXb2pMpmJR9xOejlNQ7n0zIJ73EN0I0sYs3Y_qpmBx4jroZMoIoqE7ahB112bRZuWzXi7l_QtcyqkMlKzJEsgMO9PlVdUTfFPutTECqFm0CF4OeMZw4MBu6J2AHt_XDsPSDHURBmsuYQ07AapBIM1LbDWlk0qhibDZlyoHmfvbqoiRrcp4ugbLcP5tWK9sgrfMh0NtCa5fsHLZoxRMiWyyCu-nvWps56IUKhXlTsak-D1x2Ee6L5lBOEMXYFIaaqjI8NjVjtfDfGM9Bt5oYba7K-I-5BUSfskUOmBDNgP2ptHMl8kZRABBt8aIvfg5uU/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 6.79,
+            "place_id": "ChIJ-64a1LYj0i0RhnR3pLc5yUM",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 2,
+        "activities": [
+          {
+            "activity_name": "Breakfast at SUKA UBUD",
+            "activity_description": "A convenient breakfast stop near the day's planned route.",
+            "activity_location": "SUKA UBUD",
+            "activity_address": "Jl. Raya Pengosekan Ubud No.108, Ubud, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJzYlF7KY90i0RnPIUn6jueFc/photos/Aa-ngMYj0CzR21NtlAgWgMP04EforkwJf2uKbxIxVIC4flonqhBW5u18VtJHC91siTgqAM_DPiUePTc5eWx5sv1DOClhIkZXSvyn1pGWhI0DKuovZxHFVR0xHrBUnKWu9pFy53-LZ-7MSqPaIhBoMtwEHfOIzeNG1H-owRVraJzSkw3xHJ5nnDCqFm_13ILW57nIq6YrwfnV_PHCU7OGT_OSJix_UCswOvr76hwN0THvrWYGtvXU14fbas4hYMYDPH4xc8JPGhRys04Y9_PID-1yFhM5V8DC-wrVrscHSrJdDfsQDttwTL_hhPRhIVPoXpj5oksxtOoWA1W0YgYYZNuUuVleqfWYuSJbTNIeWLJGt3xDbHQBuzYJJOrH9vLDpbn8D1DDH-xlJ9e7KzctNhu0ZTfu1rZ2FesAOrKXHd7BLiW60A/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJzYlF7KY90i0RnPIUn6jueFc/photos/Aa-ngMaWWBGCswWBJwAEtWKcwp2nQIiJ2GoGhxSFlXIe9WrAMSZ0cn743n5XzIZMlO11jxqzxM7011ofGAR-d3Dgw78jwY9cx-jF_BKgYMVekLfMWVsyB_eJYggqbRT5kAmG-nUULHfMl7hrrjoyt0YSlGZnC5Y3LOGQYrr2iZeCPCfrk8yKB0fpeqbJC0zonLIX-xI1C5NQtmifhtQtTPfv31pkY-wbP_6eamycuLLaKxmvjuJKeQTsKQxkK-FT6A7gkp9Fv9zk6DYo-WXrx4qM28r0S3y4ppM7lgJLtlu7l0W2St7p1Se538Mgb_GCy-wkC_IsccJ3Q5eO360iPqWRVLgYytF0C3ehgOqMlrmuw-cjh8R3qfo_XcaM0OfACmSx2eHk_9SyV8jsRZKCGuy5oVE5v06Fz4ypiDJrTmFGNFwpig/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJzYlF7KY90i0RnPIUn6jueFc/photos/Aa-ngMYSkyPm1NDKdSSbUTztA_p2c8sho9a4rs_Dw35LYkdJFxNYNC9banXMZSG04E0FHTXRvGWBGI7JL0qJmY5gtZlCPZoMCWpfUFqHGUzH-8lLjhryw68FVZWTbYudZSVKnrtAVmY7KMVM2hXEQ_PJvBE_hn-spocO7vWs-18F-sO_mmJz8H9WlmKlf5rwWthd74NFitRgDZlpID2-PEUmxeQZvNkaIlpSlJ1ntLYIuYqkvTu_AszGxqS3MHJZdnapeadfB77uZ6nQIwmB_Yb2gnlMvYpxYBGLRmRr3OjWT7JWTJ6n7fjB2aRBZX23l8fz4WAlW6M9fA3N77rwDrapPjLFP82xIAzvf5Zx5oBM5c-2DTK2f-dMYwUtl-r_1PJd6KRW9jEqN9IhXsiMKyiPrs9mR68LU_l0srfBHbo0vs60cw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJzYlF7KY90i0RnPIUn6jueFc/photos/Aa-ngMZ85W6Jk8A65e4rt6LOAWPDxRTzK9LRK_alpGr4R4pn9ZdYlTpySq_Y0BBIfi8gVaWKExkpr5U9jH_2QI9ebclJyka95N0SAS9bdYG00Tst3Z4iMXwaTeDiHc32HZzV1HH_hXy4m196p70JgHDlCWoNlfChqRiXKtAPG6tzcSdLrSWYrRau-OpBzxs6G2Nf91Dfk54hgmU3AhPBORkHcWD9FH_uRXZgFB4KHKFqcOT4wlDCuzcQcCZMQUddeuTzZcJM_47e-XajWQg0KP7W9fkGWAcueS-n8gKX0k9ri1dDeL-qFD938U1ayxBqiVMfiNFbjHYemGtc1yQM8QTI-qeRzhwt7Q29HIBZ6CJWpFIarHTmVAio-fdFZbEKXY5Zn7vsdn9cRXctv8nrIYRh_g9RzTU2l-avyE_H9sPH7CkX/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:00 AM - 09:00 AM",
+            "activity_cost": 18,
+            "distance_from_previous_km": 18.22,
+            "place_id": "ChIJzYlF7KY90i0RnPIUn6jueFc",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Agung Rai Museum of Art",
+            "activity_description": "Spend time with Balinese art and cultural exhibits at a museum setting that supports slower looking and learning; go at your own rhythm.",
+            "activity_location": "Ubud (Pengosekan area)",
+            "activity_address": "Jl. Raya Pengosekan Ubud, Ubud, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJw9lGTXQ90i0RONY615P93hc/photos/Aa-ngMaTeSb5Oo7Q-qHW5JFrH5_D5p-AmCx73yYhJi_4_fSm1UWy96m5IgVEaEZED7c-r9JvWsP7Qmy6zq2oFHMobBILZTebtmf6DAZYyBQt_V4NR0OHm3IDhmjS6Iwk6018sWfrYplWTr7unk9vGK6Zx18dUz8YWq2BSuflqIqNb8sYen8uccJlANgvb96Gfr2BRHfUJuh1YPVaAq8wpmrWydCy-B8q7dojagVBS5QQEN3gqFxJqTFF7T3ct364wfg0JiAG9n3IYO8_r3v5L6NG5YchJ4J1lk2x1F70p7ekw1ZncHP8UNWGBckFCHWo1wMpgu2nZVnye5WH67I2pFkGKC8S6vZZ4r7Psbl-eXqP1OZ37v4vF6gGo3N-xRS4jlMDlSEmjSXxRgkrk5OmR56Im_X6AsDFqQXnZt64TwPOYRu1LA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJw9lGTXQ90i0RONY615P93hc/photos/Aa-ngMYQOMJDgCtku5hDHjJ64GO6Sof3qTzKVM_fsKX70ejybNoFN0jsY5k_VVPoDI8Mv81YhTwt7S-hNzyMJiLSWdtzJ33O5FuBVAYtjI4jG5oASltzg2_uRHUcvVaMPfC_E53zSTwSIuz08er2Uy4J1dmXrHMckKYPu0aj-wO4ynlPwCcAdOcNgFVO3pQ-Lpi3om_E2Qg8aTQrFOy4uHauurE1-xNoz-0CB8bDy48WOSI9-QujHAvZusWQ74dR4jSG0kv88RKa3pwSjKx70sGmzAuR9ySNQ3pg3duMwA_ZcYHWZD3_h0e6IMmfjy7wuZcYhRpTucwDfPYO_EwWWCMBqQuKrltL2T6-TEOl6rfnqhX2qaPCHYfo4VDS0O-l5xU7CnHv7f_ODWHnmEo8955zV5a7hy7xGfM/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJw9lGTXQ90i0RONY615P93hc/photos/Aa-ngMZk0c3xMYXEyX45shw7y-r9SAb-Cm7wS_x3vTeqmsaMZ5P84dmaisBE8CWTMDOWXb2v4uunQlyTmlTV8ClusrRTGEdSk1QUJm7y9eMRorYrj3glF_TsM0yg0pCc33dwb7dldJz1PnyGh-ecTh8ykO046S6lJYtIzbfHy_3jtJ1hABUZ0Iga-tBzxhMBOKa5fuPjZnAM_e46wHAVDV5q8MIplTpqnGnNtdhIfNQlL2QzXqKBtFWgeyvnra1n44V3oLAY_MzQSO_ZBMQ_-3cKImLT7SgomwzLq9PodHL7SZlUtExQ_uTnrjAhPLrBOMad046LfuPSHp5FKVyvUmAuKWAvWh6-7WQ8jUBHwcNbB7Xgm1j1ZwMgql6Ow-7NVEb0Eyjie8OzrInJiFdZ5DLFteji1g/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJw9lGTXQ90i0RONY615P93hc/photos/Aa-ngMZklKdsrRpZDxyB2wwjLXKVWO64KWldgTYd2L_lFyHFQxfDHULG5B9ph1EDejtj8lItY95upgQdYwpvQFknMRFadnY7y-Wmp1LbDMoiFP7CEa8P2WZbOj1GcWrKNZiQtgSW4qtI4ZobGXfG1C5dvEiedFWQFBEqEoRsUNbT8N11rTS0CoF1OCmu42n_cViFZMPMHr4yAUKjYWYcdUq_PdrHG0bjP23re16VRKjGyIvIH6IFN9Fr7X-bKas34-1gTWMJpNleYB0I9rDM8F6D4-RQfET57VSVjjf6gHG3czmvNsLSTa6uiJ0pF66DIK9ileEB2O6Q-l6W8VGdJ8J1S53HGrYAjli4SJB55YxlXtOuee8CH3Wq7c36j6pVqyDXtZqhke6wd_6AKb3xht2TEgwSi8f1z90/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "09:30 AM - 12:00 PM",
+            "activity_cost": 15,
+            "distance_from_previous_km": 0.59,
+            "place_id": "ChIJw9lGTXQ90i0RONY615P93hc",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at Basilico Ubud Restaurant",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "Basilico Ubud Restaurant",
+            "activity_address": "Jl. Raya Pengosekan, Mas, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJq-sJjR090i0RxPW9kxKj_YI/photos/Aa-ngMZRdRIyR1fPuu7TulDhlAx4P-OzA5-qQhOrNUCioPYaiETNSCAmAc05ZCk1CkibWrQCTJ_mV9NPedfDBidG1ehUhYO7TT_IHMK_N5xOdA1M5G47rvPxv9zf72V2Vx3-Z-SRGsM6kizdQ37YCyr09vb-oJThId8uKuwfBCb6Kmgg4JS-Cd7spfbM6h1imKj_O8oy-JTyP-5sO8SUWRN2si_Uqvq8lqSXIN-_hxBH7L-m6o9X6gQh6udWMUkFw53QrnUzzTTZjxrpFYvlwVc6QE6TitmNeY35Kg4-4bzxd_AxFYyTQw7pxAILTRAuq48kxFcM7IjwlePpIMO_NXuE38DIfJVp8z3RwwEJcBNZq7YqAPwWoGey68cu-Y-_JwIdSPw5lhjEImWLQsaAnVE71tBA-rWPRzH46ue_-k8QF1Ik2BdNHpTjNh09_D5-ZEGT/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJq-sJjR090i0RxPW9kxKj_YI/photos/Aa-ngMaEXto4fpaBlOydZhdGlmVdiyhnJ6qiGDZOfCia8a7I_m3RgODheIap9VvXgd_UIWMqGf9q6dPGTVGk0hDFXnlYuWcmtYMxTdFiTtd9mA69z2n6IZ0J7hfKhuFDb0D09-7kEtv4bz5KJTOGCCPrxbcNPA9hhj03t2dp40A2U_OrRu8OqIm0sBASeZpYgqK3gCOz2_58BgpneWPUn08_0zPJjKTkXp-R6v9lqQ1kG1imD7E7f0r9Fl2Hi3pt0Xt74CgYhxpLvSLLrUk7AKtwvknLmIRyJoS4ndJfu8LHih_VHEf2Qizn_ZCda3MSNdWgA8lDFIfYAcOC1aU50r86kC3i-6wV7jyi9B9eSOlaplgI2rA8ayIDs6V-UaCe_7EFCcshSglKPcEVbCuzwCeDnX0XLhwTlIsFXGr8ekijq2gYPlep9OuOuxqGOE0SOQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJq-sJjR090i0RxPW9kxKj_YI/photos/Aa-ngMaQiFk3viPhazaVa4LeO5-v0aDE3OihwG9rsBzN6WEZRdZKeoM36aaXyBzhpyUs17VlAu2xHU2Jc22B86CtmrrPP4hXx1zSTiq1duPdSYFm4DBQ0Uc0jpvbZqTtVX8pzsZBHVFJkYSngzpZpkRz5PodWnpR_2DkTPKWNkYb7zvFAO-6Q0p9iZulXFCnXcaZ4gJota7dRJqZSD61VXfk2g6pJ_ad9zmig2cLvS5YDG5XmGGMAfv_FeB7JIZetj_640CUOSuTUyKj_2G9JuOVnEV9sfJNnhvDpX7L2qg7hDcsxQIJimUPn1AykwQtXqI-gZlxz9XL3l7lGsn1eOnwMv_F4rhtAVjq6sX8YBYOUnhxdUgezcAxiFzApehjZQ5we463XC8e2Yfih42tVUK6JJ4y1pAto1vOAFNITIU_obym35Dm9knMx-uj5RTKnA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJq-sJjR090i0RxPW9kxKj_YI/photos/Aa-ngMYysxq6WyU5n5XKgRUPTx5j5ydelmgYZvembACnswVaBflMbgqMaW8z3OjelRcCV5DpHf9Hwct-TmBer-6apYr9YFltZgh_qMP0fqAC3iw1VPCqKJmOwqQTlF1j347oLi0xz9loYphAy-g5cwOeoZKcp8nO6oEzPADc5QNzBCOtcR6KRBRkrVBi2fABA6U1O55Qt3gDjMPO2XS6HE39zaWV4R-E477iEdKIwEuXPfs327QI72x5OeU7mHe-FONDvCJR0IL5-P9zkN6-B4ntNxv52jZ_R66abhmgjfdCnqFhNvD1LzE9zXERLI6WLy_6hXMN6iUxJH6j8vYWcChzmzXEhKpXvDmAG7vJlLeMo0cUSAMtovcBdcxpYR838Zr9LBru6HMANopuNnvbxtpw3qE3NeYaeR2di6CwzTYh_rnkziAI779uInbqkjw-hZp4/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 0.96,
+            "place_id": "ChIJq-sJjR090i0RxPW9kxKj_YI",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Dinner at NUSA Ubud",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "NUSA Ubud",
+            "activity_address": "Jl. Raya Ubud, Ubud, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ1XNWttg90i0Reg-oo7iJdj8/photos/Aa-ngMZG3GTN2R7XBv908xkrDvTCslg9r4ltrf06ilOo8_brC2gADOqK-w-KmOffXCbUqJ6gTC8XFHTfnkswihnmaygvp_FovVdtJ3S59E0nqpkiJ57sAVYKA9lOLJ2eZc5wsodz3AGZ3oMsCBOwTBo6F2R5Qg4guZVs78v3Ti9sAJsE8SLw8PXrrBYhlGMGsOW_ev9upOImTpZyWBTOajhfwEzs5mWlvLP-X_B-J4tKqqv8Qk2itiqMchnwou5E0qLhl0XyrvZZyVcnzoIn-AEzWO80agHBOT4JUZ_2qYUngjg_gCr-Q9_kz5N0_7Zj2zRmkE-TOHKA6vyvESF8G5tPxNd3fBgt_v0goD2eyRFLQP3dJ4Le_HGaR0Cd16aUYAiJqGxgCtHkWnHVTKgDEmesFjKy2vybT78Ruo18pOpj9c6xiA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ1XNWttg90i0Reg-oo7iJdj8/photos/Aa-ngMaBDm1_ld_R6qe5U3vKC5XbKobmPjCKhY47p15fJsIcX8avRNxMxbNGWesgu42TcLA2XKbZWHBYqL9ULvN_Qfn_3oXbfikKodHnzU0lO-7N38K01waeCHDTb3Q1_uSo6FRRZZRkczJ1_7eIDRJHeVLXHRhzx5ZbuzwwbQjFa7pV5U-add1mkqd8frUDhC2f31msoPpEkzda1iZMNshI-iYwSrrtQipK1zpZJAoCN2Knn208lv4yTrhSOOeGxF49VkWV9DkMKdX5bzz35UJdrBkXRu0qFBWxmE5nRd0L2tz4IEsG9hNyQKq2CAAzk6Q9bM2-0wSfTclBQC8zeshyoo4o1DFQVmMX9kQ13xp8uCYjPAi81q0NDmztoZQL8vUKZKegxecT7tlovAd0qQgaGLF0KUmJ7n9pTxdN7b3YfMwoTJ0/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ1XNWttg90i0Reg-oo7iJdj8/photos/Aa-ngMaz95ggbSqKg-V9JKI_P66ELPV2VDPCfdq00jz31qyE_KBTK9ZIFjuGG24ecD4o_80_v26P3I4sf2L1YvjxSl4Ir2F3eAMi6FiNGHXOSmvi28q4gPfMqrEhkRfsOz_mw8H8lrPrCGEqOnH5b0oKdwwWJpRx_5n0Yll_Wxc_FzQZJTxDTtGcibocFSKq0HbvDrWAVcbBPXLhX1ORXPcieI6oBJHrk2AzHTPAWpsN-8aF-jXd4m9QJfn2gxEBz7lvgBiM7VqmBUBfxfp5Pkc780MbhtZjvN8qPO68lRudaw46pHRJo41EprV3jmGxcc3jZ9yXMgCCQ4xRzeKc2MTcM9pdritNMtZW2M_zVElqT0D0cP0M282eLIaYEuW8LDC7MCpsWs5K1z3Jfa0COhHJCbdafbL2bJquvdO01o0MnrvVsXHraxF9zD_Sgwk0cw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ1XNWttg90i0Reg-oo7iJdj8/photos/Aa-ngMaufOUEP7p0jmV_1XzX0UbpQQuc-T38A-eY75OygfNA-JSrrW7sfKe36RyOkzpI07VvGeSDMmEQvWTgxoPlOsGKb5EGBV3bu8LdZbFutE-3apnXR8LPlzKHtFY08ywkWKoe21HbZzE51J9E1GU36paNNc8BWI6amBPnB5UK2isr3pniZolBV0-IiRpW7HHXqfRBNr2AzRe9jm_G7h33F9yvZS6FJmXZC3oJopoI264Rz-ASyvErtjcpRG1JkRmAfPbIIGb5lphHibjGh0G01bFDtZRPBLQWNN5rpfPDUGOFU9vkRpFpI14Wt2ftQM7rkghS6pgLfFxaMkykdrxyFoZj50HfX-60FzT1qdIawzCRE8EAS-4yJqxD-oVzAgZjyMYkA7D3VFa5Hqi4oIrGkOn2Ckd1ujm4H84Z7vrIbKkmQezT-efjw0h8f5rubwxy/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 3.09,
+            "place_id": "ChIJ1XNWttg90i0Reg-oo7iJdj8",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 3,
+        "activities": [
+          {
+            "activity_name": "Breakfast at Avocuts Coffee & Eatery",
+            "activity_description": "A convenient breakfast stop near the day's planned route.",
+            "activity_location": "Avocuts Coffee & Eatery",
+            "activity_address": "Jl. Kajeng, Ubud, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJr5JVs4A90i0RbULnL0JNzuo/photos/Aa-ngMay5WacGA5pXO-6ItzLBFgbAZyQ95EprCFMx_L3EfW_ZfT9NDipRoSZdOEpBpoUpvFAOdK-9cbKcgN4xhp24OliJl9nBS2hH_izqhbLQ14n3LioUJd2LC50brvIwT2zOUfxKkzf-6VRyK2WefHp45pFqVw0BmITG60anYwvyuu_tt8bm0T6TYdZWdeYjfsOo2p0f2BnoNOMd0_6pEzYm7mcX9RAyQw1VCPylHbYt_Jo9sOZsv-hk-EimF4nEeXswXjOoXbrtlUXQWJqJgINVzmgRHuIShKPRYpjOV9bn5Hd_t1vriBDjYdYlbLZcJjKjITJ-E4t029jQgtt19y7IuGvax68Q8nSvBHL5e_n8INZDihCY4XGDc_b0uGnHTRPiIEfmI817JMpxmHbjBGVA0iBy3-Hd75LmZFEE12ZGIbHcg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJr5JVs4A90i0RbULnL0JNzuo/photos/Aa-ngMZ7OIAftCxusRK8mlNO8eMpk9-kiS2X25yIEkhT1EkJl8wqkN83pzJLX9J-UDaVaO8zgN05eLbVPoSl6u_uL7CDoVRdbMZ7Fug9TSh9HeKjueJIZRZKs0nxFBoOLjAA3U7hrmi-5jGJ9MUJEwt4omJFZyezEeImhJSm4VEC5eAAmPAioSBQXJkQKOeQPKOngxjXyRcUnySUjVCBdFE-nYQLg5V3XpICTTTLWfrn6PjtRTxLE4kuk1nD6epDwskpzsoaMZFv-rcwuTWIiOmshg0791jgNSLoXdfCIPPeFVGHqBFswvze0osw6ioAbXV1swcUJ5cpU9bY1-fkpobRFPvjp5PCEGDUpeQqNKNmWGNnDTmTE3wFe9-QpMN5960c-RXvMNEyG0a55CsZIvns00gKvdrJghEV5uO9CzdU56Xygw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJr5JVs4A90i0RbULnL0JNzuo/photos/Aa-ngMbmW0Fu3lV6u9vZ95hWWGREytlriDhL2MnT12Cfa7XMi4ZNbnho-sZ6mfk2eJ31-vLL4J_3AGdAzWWQDI8fr2KoibDyR5BajC-u2C9nR7qMG2TM2vjmVSXiRse2iVtbpF2J4pugBfXflEpYSOHdiGD7GOng6ysMQr6QP1BJXRRBWuXtJPXODvr76O5ZIwnmKz21lxcO-pCfF78xtfQvekgYX_4FW9wVqGmuADvVWtA7jvSy1X4d0Wb6ZIFGGx6jc9bQ_gmVLak3RJOeaIV088O2HacI92mGLYmIz5w2yuP4tLirjhrnE7nHFfJGMevsv8LgtNHcgFeFXju2G0I9-tOqXv0ZtURymvWjgfy5QS9NkUf3GqaIRzGqupLhdiQVFCl4c887LYZcwFgN-95q5Z2bsm_rcFDunHcly3CELtKe/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJr5JVs4A90i0RbULnL0JNzuo/photos/Aa-ngMZXcPF9twgveoCM2OzveuKBW9hpQ5Zo3izUHRONawvIZ_XyumhzM4wXHz4a3P-4RuAoBswvr1fGGpmTq1SOBq9psIU6IrqqQ_Wmh919qKgnv_D9nxcDqZrBYtg8r26qIhVJAmDQ_zFtNODXJBo3hqYth9T__dBy94_X66JXYnJiUMbnD6xokqjCte9fHxiJGjQQwlmmI3l3X-D5z7Xmke7R9CdwF-3CRy1IfGb_YC5FMv72sTp3j_-yHgNMRDx_bReDxkT3S831mUa3uvemYxmM8DQjDoqUYiM6y6TjL-SznPQlUUckr0j058YKrxaUF3nssrCcdKTuWo9MPQD3QttQZgpk_Lw4jS6odhQ0WLSyIEpGwe3IrGPiyQXFS8NmM0TnTFTxL718vMXvwprtbMW8MX7xYisUvLiMVuqvowh1/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:00 AM - 09:00 AM",
+            "activity_cost": 18,
+            "distance_from_previous_km": 12.96,
+            "place_id": "ChIJr5JVs4A90i0RbULnL0JNzuo",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Museum Puri Lukisan",
+            "activity_description": "Browse a focused collection of traditional and modern Balinese art in a calmer museum atmosphere; take breaks to reflect as you move through rooms.",
+            "activity_location": "Ubud (central Ubud)",
+            "activity_address": "Jl. Raya Ubud, Ubud, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJMU6ErGo90i0RAoTslrmr-Bw/photos/Aa-ngMa7CvTBLS7FOAdo8EZ8RHlNI9ZqBxE3DJm3FyvgLVD59QW6XaUaW8suK5QsflG7Oxj05kRYluWXHCpwbvMJFD3ktMFluIAmJwQJuILgZZdECO2FgOyT5fId_nHhPJmYhh9_ZFZHbbqpX1M2Y2DKRg51KotXYiNBtcbn73NlLctEEE_Fc0QQp2CX4oT9y1LlpS5EP4RKVmRVJgWwRERwwGzdgeM-VmPk4XI6b52z4BtOgz64JcC376NLISeX3nnFZ-bx832ojDr2Mmm_5Jsqhez0HJqLDMHDDRmu0_4yvcwcM-UZWqRsBf-tH_OPBz2nJrydDLdhV5YobfVOskWbQHaLwjiv4dLgQod-Hs8rE7NWPuj-64kYPPef-WQa87N82AaEvHhEJo004MS34A1hsaFAMgr4XA1GkAUi9SgKRNXe-no/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJMU6ErGo90i0RAoTslrmr-Bw/photos/Aa-ngMamK7Dh4mXiKzwbLc3jadcVTnWkHv8NrMpvmZ5uMG9RSOuv-WXEGf4hfLM1Xom8r2vBQUDUeJeQclDeJZU3Ae6-jfTMyDrjrm_qq3lPCq3VMUh5gmaZT56qRoYYrnySgx0pkIVT0zYFmPdMLm6BjuOr7RJ3MKslQxz-9O501Hp_vcBwFogHMytM9Fg9w7PprdKltYShV1JMVJD-gzVkwj0c7byc9SeGK1UzWuZ-59Hf0jtpWTgJMQqbrmjpjYSrQVihgHmZwVeJIStW4Sdk6K5CXOhoRigsYJMxjkNdjDagEZIJwdJZ1JYcp8TxC-jUkoUTzi3hVLTqNWN5ia_U9XseTnIEQAY3mCD_gUTJTf4hXk-MRQPyqgD5UC7S4bYipLungeVnR_9WVriAGOe1HF7pKLvkSnqd3S3F0QMKjzPiWHKa/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJMU6ErGo90i0RAoTslrmr-Bw/photos/Aa-ngMaZsrEn3BGbPjoif-MF6KV3jFKHQGeyxhzIAQIVOr1X7_1UXwob64mHyd769X7IPLtnqJtosKZ5CN7BsCw9_64MXciLOhT4M4NTE3sEZhhdCBfu4ERg58Qsr2VUCwA5HE36bIMlZ6wOW4pZrqgPzJQfRtTgr5RJFlOCIZ2XMUgnxyoufj8Fp2t8QLWJwp2KtTcTrU9ch-W4d6Xm9YmmWozSHzafHmKBcogL2V9DbmMsHLXBo5LjHOA_nN3WBnXFqp7JGv_bVq6tQ7rDcxhob1EfLDptw6qELYKACTqwbfBu3-oBaAVv2IpMz2t17OBiVA3j71lKHmhCtw54BPShmB5DeTYeyrdK9q5rmQFDmt_6zdUvEOkuvHOg-7dRBmZcyIdeneGo_Xu-C3rT8Xe6aF9c2QErCfK7NFan1bmp6a5YXUVA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJMU6ErGo90i0RAoTslrmr-Bw/photos/Aa-ngMYGPCtiyeLGWf_SLGjBm9DxpXULe4qERV7iZYBYa4YnroWmuv-IumWZ9M_nJXix2xM32MssV86XMyebh_SldVzsq7q--6MEcUsTfkAIYFmmACqeMzksOo3dIKZAhdYNwTJPPXdWAdLoibjaziGQF-gutA4gyDUrZhQ164HAyuDv5ic7gQGydG0nbF2bWwMkJmfTzTEgSLuLjXvAxS6-NJYLTserdiKKTJxs4NxsndEUS2CalNyNHNcB_0QlOGAXro4d1-7LWFdaLMoOiqBHMQylzuw2dFvc9atGwCUBSrhZ6eXOixKTxWgT1pdV7VHswdWkyQbSKhPgyVqIjfzzEZkuwgDLDOaSwBfHjGeNmU0Vu7EqIfQb4tbVYybsFo6RQ_4q54ZOtJY5P7dPugoe1Vmjrl2s2-rRT6XV_nofQ2N-rg/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "10:00 AM - 12:30 PM",
+            "activity_cost": 15,
+            "distance_from_previous_km": 0.42,
+            "place_id": "ChIJMU6ErGo90i0RAoTslrmr-Bw",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at This Is Bali - Balinese Food & Desserts",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "This Is Bali - Balinese Food & Desserts",
+            "activity_address": "Jl. Goutama No.2, Ubud, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJR7MWORA90i0Rj7ugb0Lss4g/photos/Aa-ngMa2wxbQEorCoQnAv1SYmHl8pcXkukZI1mnK-xxSvD8WWz-jGM0Uf5fm2JsaiMufBvejvPe6KL3psxVAVqOl3Fex14jSXCrn4GSiwkVpi1oXgUnoxB3a-lrWi22H1mVZdXdrtENYZE9_q0ucwJibdG9iwWoBZ0dMleaaMy8H2bluqCSNzadfKsckcg95xRHY4Vr-67pvl5C5Oyw51wva6PmUc8cJn0tqeuNsT5h-jirhZM8MUibvyUVlQgGtdeynJE_No8pedgdSZKhuv1SpoFpDrwYHq_hns_Sv0pjnM1wg4GpWg4GUvudStYs7Xk1HDzKkzCmryVrYPljQHdAdqIYFw5RX5KY0IBcouH-tQZjcvx7q27DfA7mSaM95-llVv8rVT3-Tzh9cdZt-W7BqmlOuoO1I5YJ0YPwYpX7BiXp81Q/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJR7MWORA90i0Rj7ugb0Lss4g/photos/Aa-ngMb0daWwPhLQbPTtBhlqoWbTdpYEeNq1Iv5u7p4j8cBWlT-QFVjUB-UDfaKxSaAF8VUT_R17RYOUVTS2pO6kCtm0Naa7Y5ct1d0MRHC6Dts1uWPNPAmKNRHFcD_7oWJFkicbhcGX2OSS3mQ7R1wxlUL6drtQ4brJ0syfy5VN-7MBtjzsX5abq_OFYrCVSwB--abI_jZWsUcYV60Js5P69bX4YwGrcq9kXu0JBpKs5j9q29IDogFfPCIEgwupNVKZ7WsjmXMMJqf6sI5VNdGFlW9QrlmCISZh1_4BLuf3mFFLFcEwn-W7ZPAGl-pG309Kp0PnNDbZ2Ngwuk7qkcAS9_kTy1QSMx3RGVija6s1UIyZs7-dmUt9p35R1qngm2kuOW0AJk-CqyvDRtFWWnfv38gbNnQgFTONRVUKIvGfA6vpIA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJR7MWORA90i0Rj7ugb0Lss4g/photos/Aa-ngMaLw7rt_sxNJZDYIfDVRXiYCBar9w44n4U2QJByHWWF5x3zO7mSkXdE7b2AlZS5tDcOPDo-cLjl9YxR3w8jr3nokvEEhhOQIeJouXpnRBitiGXyOZOIBje7QVfDeCWm1D7bK6uw3QgSA31apbt_ELUvRpvnWeCKNN48Iv7yjmZPSlN7YqC9YCwveFf78Q8ZmBB3DKjiOYlostYhyvB4D2uYU_ncEXe3-eQGE7pBgguFysTqrZuDAh2SisqkAgeMv5RXZf2W3cj3V82g_HbqCC9cq7i1yU03fTABxuOKSNoh4nGPDyLOBLxV72rTTS-xNvIiRjIi1wZXsVpX8JCtUDbgRrzEYYwa_ysJ5dHXctVgQDbAosSyXuCQEZB1reLf4OAeAC4-nf8rhFvFOpXPbbNyN2HN_BCTBg7jb9RnoWbcMg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJR7MWORA90i0Rj7ugb0Lss4g/photos/Aa-ngMalJ4Lyl5W-bpwcjtPd7gYAWg4a2f9P8nWb7a_2TmC1kNLJsSs5EmlODaq3XO1W3yhprKDpKFPdQm7cq_xAnlQ5aTRPI4ZuwR3_q-wGFCIrPmk2cn3dSLqU0BXjG2YQcjVrRQI2JCcyAiiE2Lh1S4Uq2aP-pspPoPTCtfuNMMlL9SHy45Bg6gKusuo_7RyJPZhNe3au3HoAmJYRvgdBlhqNJ8b1XMkBtShzur70eVbaAg6qt3CU2iEpGD2xf3vGZ_wOexfM6NQ-1XLRgs2Ni7WIPWA8BCbB96KUXX7YfYCIJfjhx0AEkFQ4U8Nc_jU0VOtGLdCRhh3IzRa85LbDXkLfCwe0XG2fsH7Nm7Wx0yiu3RW07iTYIonC-ljfZoB3p5PGl1cvwsEbKwp_K_HQDttTlD7bG0Mz-foTsVH3d5Gb/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 1.04,
+            "place_id": "ChIJR7MWORA90i0Rj7ugb0Lss4g",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Dinner at Arcadia",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Arcadia",
+            "activity_address": "Jl. Raya Campuhan, Sayan, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJbc3OEU490i0R_hOUy3LlfYk/photos/Aa-ngMb0SoJD3-MB88leCJ1WpH6yTuKWehzp4-gSnNHhOZZEciiyUTUDCx_siw8Crs26c3YCijGEBTuRe9r-gEdYCBS_mbHIQ3wK8IQowjjplFrqjvJ3hdU3bIn0-SNyPDTYKAkOSDIfR4SOU2PrCBPyPCep5OpaV5LVrFBePnBOMLFr-9dbsxJSYYE-siYyXNkqHa8ojbu-Q1ZQSWw8TZ3P3AvSjYAS8O42iodiBMLJH9EtHtM9gL5toDkDIcoxYaM7sq2QWKlBrU0vSSOyySvwH_BZpzr6YLrjSkTxVn7tpizIy40itvBjBkcUMP0VTWRZ4w1dJQfmmKDWmijwN_SqhJbMCfmsTBdvjkMWjh1RW-ifuzWeiXj3p3PogN7rsR9I_-UKIUEVQ7DTSvyCP3OMg6HDZNk4j8WZSRl995pVDWaPfw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJbc3OEU490i0R_hOUy3LlfYk/photos/Aa-ngMZd8gbXwH-FYbjSS-eCy1yU0EZLo2nWfQJ4t9pYX1XtMS5FCNB40p5EGvbv3DSp_STTSwbAvuouCw-eEVPfADWn0Yz5Q7RcM8zjkNtEfzUbsueVT53EOemqxufXayzVtoVb1lpFo_4JXcnkaWURZ4WomE8yQUVdM86zfUqT1nzRajGZ4gp95PH3UrVwU3eAtgvP3W5vogROOz77JkUgJGwwOAxHm-NF2Bzlvz8ttTX1HrjIAIvVgiJp_EkAHr-KkWr0HuqKMOI1ATaWDAJ7hdtKohELnJTwuH0rA_wxkEqerA6HST39pe_AE4pWBd6SeqJwtWjMHTX_R9CxdJ68CpqZ2xu8wPj-S0PE7OAdBPPgVEYqUoR0nm-UAMLyM4XO_o7ndLwQRiQHLmHlADnP2dg6TQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJbc3OEU490i0R_hOUy3LlfYk/photos/Aa-ngMYh7HlyleJKvtIq2Rc-y4nzOLJgNrMkNieNpm2HcvduS_KvyddKepcV4iGEs7bO_GeYPvwhNMJwZpB0J0HC2JG9riRbDxTYQECgc7niLO7LAf7Euw9pad4E3qgGRrItci0wHhQaiD-wrNc0HbZ46XZTjXQfaMk3leVUvsyZGqMklD-qSemFhr7EX3mhwU-_zdGNfVLzWFsHdVjFTJgMDA-nZXYiBDAv-OVpN37M1dJbCU-8FXh38KXRRDUKh83xyigqynogUhQZZikz7CcpQ75MyB5u04y_Nswf58d0lBhTPmovwMQrhh6rSyTDdFClW1JuFBaDwME12fk9S7K1AERHqoY_zEWbGxDlDBiSXDuNoIa_iXI1fe3mnGD3Qflw-LBKajW5WraPMepFwZHIWaYTW4C031TJkKRo6GR3M2bQ7Q/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJbc3OEU490i0R_hOUy3LlfYk/photos/Aa-ngMaIr7K8oqaDauWrBwY9_oGG5i04e4E8vfjM4HXDktsVgEwsYcFcQMAG9UaC2ZjL4SFcauJoHHcqUJcyoRdmLb7D32IY6T1KcvGSMjcO7XOaVT7HdVxmZ7Jc_gbJ3UbcgosG7dtHRcbhU4Vr2ugFMUjyDWXJOIhpd-jaFViZEtk_QlMCZorEApAo89a6lkmHDxlk39lTrkWTHTSFh5VZjlMhDDUhWQeXeIPFdweiaU1HxYFQHsWUk0BI_OIniiLJiHn2GrU-XMZq9AlKuAtExu6uc2npmHtQ0grLpFNUjijl2J0A2peVqGsGd7wbLPjD9e2SNFIsRUprVnjmIaJNRXIZy_z0KGlplSY8xA5sWO7THH5LH6es86_L0oibjxJMiCaynMffhnKc0lh6g7Qw2rDN9lE1UJoFeu8kiRVAoaiVOQ/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 3.06,
+            "place_id": "ChIJbc3OEU490i0R_hOUy3LlfYk",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 4,
+        "activities": [
+          {
+            "activity_name": "Breakfast at DD padi waroeng",
+            "activity_description": "A convenient breakfast stop near the day's planned route.",
+            "activity_location": "DD padi waroeng",
+            "activity_address": "Jl. Raya bau-bau br. Kedisan kaja ds. Kedisan kec. Tegallalang, Kedisan, Gianyat, Kabupaten Gianyar, Bali 80561, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJk0WtSqAZ0i0R7Odbp4v2JA8/photos/Aa-ngMZXluRZ8c3n1VNpFx2Bih113c02-KVppmTKZpA3nuED6yzOM5oL9lye_40p-TJj3AgdX-rql7FpCrbzZ0trMZcDLK45pTUc-XTysT3XUYj_mFmWa01TJIiVCsmOmZSW6DU2fBqdeiKpORMV77wTqXGbHpIDVt8RAMMRVAnaB-4Ek9OMTdtkdjB4Q6aPSEdGBUmYtfl0ggpSLBnUAP7HiBdq4NPPd9fO8tLZMpw-AmWgI_gleZCrUMnim59j_K8vFvnXWBx4z3ATiqLXkiBsPZlpWUVuG2tfYopAE_3SiWiVdWM5xCxWal9JxHOjK7RQ7YlpeTZLIVMYuShUpiiklf3wqHTgM_wZQ4UeCIvNvN_IdbNfnjw4wFzoqdHZvnsgZLWBJAScxNLOYCL5Wg9pT4f0QAZRvGU5R36yzyT4pitvoDwGhOudpKCbhDockeQX/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJk0WtSqAZ0i0R7Odbp4v2JA8/photos/Aa-ngMaiJD70qf6K97nFkQaZAqzF4YdBFxsWXUS2cTV_UchOfIFTA03EuOyBTQdACMrDSv5QMsMZZr6isccPSbAINkVasZw3XSbfVEOfmBEMr32P4oPoW10X6IEUXGhBgXysbplC8KPR2ooKBnX8gH8Gch76MJrEGYBCT4uiO4kkib_8APVsH_A7ZFqSzj0MYmHX4PRMvkBDxtddA4xUtV-n962zdQxwV2OkH0dkTy8333iUEpauN095UYYolS6u7YECuT6goIh-cTUnqR8aFLfp2xdwHZNrQ6RzgE3JmDDLFeNpYvSAD1AM8AWXmNLsJImxeJwnOm2KBdO638JzA17UeORbc5utpyEdeaRu2emFWgssvomcFij3tX-Vx1XYeM6CCKkKX_-z9_bstWl2hVE0UsjlaFCx6tfBYq8xYeWrD2rq0pj2vcMvr8fHBwmT0Pxr/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJk0WtSqAZ0i0R7Odbp4v2JA8/photos/Aa-ngMb5SNiaYk5HvLRWIrFX4_Zwl_QGek5CXV2ZprN21IBqdh-X7JB59_yTGHbp6ZnL6yGFLfWk2_stVpasHmpmroyNeZF3clGeH0ipqbFRX4kQMwexY9P3myEqdf-Le7mZdG9zojICoNyehKVbuU-UTgxrPUsRujKXU76EXE3SZn_ypWR3dywhr573vWOT6gQ9OBODe8o8VWzqbewRRWm4Nj5zQL7Z-aC9RFEk5bQ67rSqW62HIr1kKqrR6G-eGQmA4Lfjy_tVpssKLP3RFjUI4taJpMYnDZkwbAAdmQ5Kb5ABBk4TwBsGtVzqxbSlrqhFAzBFBlGu6ujFkHOPjBpHIOJ6WM5MtUeb7m_lIC8k7deYvHSbCI1m0lPqzMuPPBh-98RKRXuICe1ZYN8jdUMnD3z2nYfndT__9vkz8t0bW2w3sg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJk0WtSqAZ0i0R7Odbp4v2JA8/photos/Aa-ngMYJIw85XfCuF5DHf7iJMc5NPO4Nelq6ZwuKqE8dQg1R2WnJfmWVLcdHjACgJdnEhASwnLdiooDooMqa6AIYt01uDs9VcC6X3n2e7f4Cu7bx-Zab26NhWajRtcjOU3lvzuAVp_RVbhxBvaUkKfenSnNnwcKlK9_SL3nqqkVRLSYeYuaAldd2kXpAhpp-woTIPMKflOKwKJn-Dngqggy6t1V3v4mbnazryK2__hCeAG1Ell88TbxncHTnV-PySbiwmgatK1iy-23NlAg2jhY7bDquw6W7OlPlfLpDYYWK4iFKn-ZYiz65i-LolbvleSvgi-q6bxB7wYgorUFz6ExrctG5T7fuZD8JCKzB5o72D5advh1S698beLFH8VX4-dgdfG4OklFJ09Wi7CbHGwYL-Qdd8OcuBnRZ2pJXu6MefGKixTHtLUNCtCFzLnPbI_Sh/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "08:00 AM - 09:00 AM",
+            "activity_cost": 18,
+            "distance_from_previous_km": 1.61,
+            "place_id": "ChIJk0WtSqAZ0i0R7Odbp4v2JA8",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Lunch at Junglia Bali Restaurant",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "Junglia Bali Restaurant",
+            "activity_address": "Jalan, Kedisan, Kec. Tegallalang, Kabupaten Gianyar, Bali 80561, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ4TwmejsZ0i0RfsQaOgiyP44/photos/Aa-ngMaLenPvaA_d7d-BZ0joFiofb9uHbkRivyW1oKVzi7CTOaUQutUyZM4CeoDFkISbcgAnwh3Gux7fEY_kXj8Pt0syqH1JAsJoutFo_NYtzNs_hpi13rxYNgqf3U1T-w6hIha8TS8b3cIUIK1CQ-3jjeHRtJ5SS-3ujG4mf9hI9GPzp8cgWYj6kuzasSLr24aQTTOAyB2NzlAdB8i0zmmDjhkqSnvKNrifyIxFlyD565QsqQ0lH38kzWt05sW7L-yaUM8tpxDPyaOztWRUwHDZ51xCjfJX6SauD_XrZ83wRlu0PjB2byC1QrgY5cABlI14wTGKg9hOdOvowxCrJUDDy9Bzb4FNXyrQOlvmIW2cETwL5eCQD0dH9ux89uVUapJfp7bgWyBUq5ri3Zz6amdyOnPkaWCmOtLadByp8rUtrRLbPA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ4TwmejsZ0i0RfsQaOgiyP44/photos/Aa-ngMbfXSdzOIpSiXT9_Awo1Ynsz7r4aW0A0qJ19jSGI5VwvhJynWJgEHetcKQq96h2so5ZaXTtfVHz1saGTtxNTJeuVKtvDW7BGtZhOT321hrg03_lgTZLFo8isfxaEQ1X6VbX-pH5IZJwCy7PgSMaoYrOmh5WuPD_jHWHHWgecroyR18Rl5w3iFxbZOwsWA7Wyj7FFMecr_nuQIrkEjGbz4m54A3hligrZORyN2sLD_8IT5MuWuAbcydEjfjxUEbnd9q1P3FUc7YfexBHgKasygsV1rJmssUpRRlM_KucXtSaqV9OZR8Wp4skr17d5n3-zJoUuMtTP_foKnhxxpR8TfLif3olkptLSQsrQr85Y1qlFqQX0ciIqw0P4ux-2OB0R-Kgk199442T6jvacwUqfeK2Ms9zwQBt_R4mD7Prz6WJ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ4TwmejsZ0i0RfsQaOgiyP44/photos/Aa-ngMbxdr1u4OZCc8cOCW6SeLPuGgA2cwpgNziKi5Tix4MuvQVaZNVrOGx8CgkzA9WWxuH0FB_u8z5ZrLYsdmACBKMUdXyubfXC7U1hOAoIXF87LmlndDDgjOvWl423IkkL_VOtnBvmbxLvGHdw8rtyK0MoY_1ghc6L7KesRPmcOFICDIeyMEs_IPEntH3Omtxh9N_VMFych_d2AnT4d9OjTSENETwMryJVmvThAmDDYamK7nrl_bgpyNwA029m6q95kib-62Qg5V16J-HurBSYYTFR2zmrH0eeMgS5-84XtuVB3w5kNspoe3AgeeiR5_e0Et-Io4bck0fUvhTUGWW0CkJ8QtlqCaaL2DgPD3rnmkwfcCeB64Wjo66QgBaulAWMXwmbEmhXsWp9MzW8OZYld3GzN2wU_G_7vhObN0l2N2RxfQ/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": 1.75,
+            "place_id": "ChIJ4TwmejsZ0i0RfsQaOgiyP44",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Mekar Ubud Jungle Spa by K club",
+            "activity_description": "Choose a wellness treatment at a jungle spa setting to help you slow down—focus on privacy, comfort, and a restorative pace. confirm with the operator",
+            "activity_location": "Kedisan / Tegallalang area (Ubud jungle edge)",
+            "activity_address": "Tegallalang, Jl. Raya Cebok, Kedisan, Kecamatan Ubud, Kabupaten Gianyar, Bali 80561, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJLeux43sZ0i0RbEERwWPnAhQ/photos/Aa-ngMYoMKbcnGi8qgszWVDqrIXfkg1hDHCObBSF5in7xLTWFi_-hn1pBfOlq0DLMcH2A1mRsXj6wMROSigVWVzILkHzWYEkLyNaWvJIn_bWNmtWd3uKRD77mq0667oq123imp-XIziBubeyOUqq-zX0nmqC_ZzDukSoLoTEDkMzPwcxElTIscIOPtOYker4IMQgr-irPGb52kP1PP_oNG_G8b5sg9ZYsxkp38_6BRL4681y3oSGrVcW2wtwPPR_pW0g5yGFja5MHXjrKZsx2WErfH6n4tE9KXvxaCmVTbxoG_m-2GPvREBmSFW_XQL55tFTcvaLuAnOw3IMMC22T57FMrJAQAcEivarV4-_EqUS7nXbRfBNvH14aCgvvXNoKlXSIWc_HRwUZfBRtKmkKMaFd5f-K7-mHorHfnwg2d9a5Ox0MXcI/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJLeux43sZ0i0RbEERwWPnAhQ/photos/Aa-ngMZQh038Q1hvbKgdqSaxJlqU1hYaaYcCdLtjX35tUuHDBaQut2ks_50L_1KRpRWHhij7EBl1zHR5rayNnsYu_sBbAiK9SlG_CXEWNH9BRF2v6YyOAPS-S51Mvs1aplOdx4BUH_6dJqkYjuWxwEXO9hwXS24WA7g8FE_7gMeMpMLVKTq6uKT88-PFQ6OEtKLbJ2ZpXwhAuapzmN97ytxzh1WMQj3nrv4GDpkbJkVgTtAVLixRN8zeq-i8lIPEOIR4b2lDLhz6jgrZb_9DizfMqrjFByflNQf-qpoYYBS5rijKSlofvCuUNETwYTPHAtZvTkSjrEOQyprI96xNSUsoo8ZllGh3t6iUtXaWhlJtxmTLpqayGJxD6KClWXGBS3uzB9cbNQrohUcdPdwF4H8k92_c4f8leOwxsHxpTc3Qu_td_Aw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJLeux43sZ0i0RbEERwWPnAhQ/photos/Aa-ngMZwTnTBqNybPgOmXd60srgZ6ZEvb1_AlqruZTAjVykzb7LFPgCLvHSkM_dGSGZY2H0oTesNfDfBvJsDjKBUKyqmUod21lvaUVgTjamyW7Yl5v62oZYdpZvljFyDcmnsFPvb9Ur4y_n71kuhqsr1Ozq0oCwKJEorQZx8pGn_-6FII3k3OeE0D37jusZTGjCg-xHitod6HYhBXFkFNxF7igVaW4x1I2rdzsrxGdxW5i2Qdrmh4GkuPApgTiAKK7ANwaL5bPKvgoKo-IARqCHMWLo3PKgNh1nyLbML4-6q7GETBLIXC22LDoON5JgUZyEDicC7EQ8eJU1ZHJDasZSTo4X6vjfU_NX3ya_abH-Y5iMMsSV0cY1DnN0WNVyqRm0PqmU7pAqKsHQpbo94TUjENaN4mJGXYF5ezomCd7V05vVoeZOYl6XKvkys5_4gD_Xv/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJLeux43sZ0i0RbEERwWPnAhQ/photos/Aa-ngMbBIYjZSoHrvikg6WLccIxW0O1p4RSIXQHJ8Zh50jh6a5CfwMfme_qJgs4qQemJcGJdWEsfiEZzgbELoje-fQiqRO25AkX4EL3duyBRYSJY2wgyELi-OTCUNFXuugu6mc_cbqguUoE5JOsSxUMwuzdyffkc2u6JhqyyUwtMORVkmdc9izROCcF0qJJupoag2QJQm6HLBfKW3SwG6WAf5XG1eGECVSJ7_wswbVgXoJXnLHbuZsy0WCs4OAhg1dEbJA_SNHYcABwMLtASxAkMRZTgm2cUzPY93KG3BejKFpfX-TER20qg14XpJFwJBm1DmvG1UNfkQ9iscqkySYeQG-f4H9dIY_lLbUKiC-RIk_eOBXaORqshDtJPUpy_mFN_OeL3KAYbrFLVBxpi065iyGh_rO8WdjIWQViCHKjfxLphXZMdjdGDhII3e_4yPQ/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "02:00 PM - 04:00 PM",
+            "activity_cost": 80,
+            "distance_from_previous_km": 2.31,
+            "place_id": "ChIJLeux43sZ0i0RbEERwWPnAhQ",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Dinner at Tegal Sari Resto",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Tegal Sari Resto",
+            "activity_address": "Jl. Raya Tegallalang No.5758, Tegallalang, Kec. Tegallalang, Kabupaten Gianyar, Bali 80561, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJPxEuHgAj0i0Rr8jRLPFicZE/photos/Aa-ngMZa_7rDUC8oWgRrNm1AfgajRqWvJ_tSKq-Nm_dP8dCwMpP0ZM1OtRJzBxRrNGVRUoDUlwzFKjk2Jv2AKWby8fPrYfodharsosRBc5xh8NhOMCEQkaSVjPISfV-WxmlN9a1_xKvjoxKJehQEvtcH50P4ibIlbbUm_xq-2USxcvzFoXZzHT2GHgkzxv6WST1b-Y0tWnvGagBN1l4y_JLJ-eL32yj82o5D4Shu9GyKdoBYsFB4-AVuMHYy-o31HOjHvt4e14XqPcRZz3XaYA7oAWzs8HRd5vxCtDIwxDo6Eq7fwQPpvFrPO-7Aj8H-D01hSegjtNap_tDbi4AAY5CME_WokMa2Gj-P9SiyjsmSAYUDgz71JkLLxgfALeclmlJm5SLeBLGH0HVMr9jhZPjMr5UgoUMdnSofcCRQ36YZakIP6KuLySjfwq-gIWMYSl4D/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJPxEuHgAj0i0Rr8jRLPFicZE/photos/Aa-ngMa-LqcMgFwXlmmz9u5QhJMmUJJWkk-Lx85apRRvOjXHZDjumgryIgXQP-zrEtpuIlq9loFEv-b0X0VAxgeWMbG3BoOHOlvePEhhLurOiM0aQDhxPqk3Q127uayqUqTxXruG7zYH6hqI-Xg_PliTFGPbvlXfpZkymb8-0GwwZojxm4HCk6r_GyGQLaAlIcx2xkcXl6NaPil66ISougq0t5MAR9DUStPQZbfn6Hb0VVdEGJc7OwJLPf04XZCKQTwz2q96dxJ4kWfEQWPwgwX_AS2U0bjeetiGxNT2rYUCz0XV5qfq2Dzx6cWpdkGq3hpUkF1fUomZo8QcBF_2XCKBD2NPqsE8wck4infg0yDSbCIx6OAuh0IbctQBmnYO4nBILhOmDbpCQ561OidF2i-OI9VNUNCtdEwxKZo30lDFNV-03qeT-zW1ITuNWz0joQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJPxEuHgAj0i0Rr8jRLPFicZE/photos/Aa-ngMabikVyzZ1C42w5K7awCJ6-oimYlDw2TdRlAXE1WxVcul9IUBInzcKOFIgBYq0TdLPx707nN1ynpKYEQbLHPFcEguieroE8mvjMypuCOdgGgC44zh6sJFyMcr7yepZ_td5XDn1mF3ADumRppR1dgvdeRFEVll0oXJ6RaaStHrRoYu4HN_1xk6YFwFBKjd-JELdD1ERs5cEIu2luJ26w0Zedve4zL9xRGyWE8ZgV58Ngt0ZlzpHz7o1XIhTIH6XpvbSjBBsHNWoVKEaTgqXovucX-g8uWMT0bcpQwWKAfySn1LKo_lrIJuR64mshRsQxemEJ3HOH04EXZpUmtg-JGkhw_gbONuV5pKI5P0jlhV6iQdK9QaSavARiMInA6xPkJ4712t2ETxqHA6_KBcHTtHPw6EXX3tQ4DcmzMxIwGYpQ-wlMoYsnP127t106iA/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJPxEuHgAj0i0Rr8jRLPFicZE/photos/Aa-ngMbwBxRPE74ehQPIZ325yKwEsEJk0O7Y3JY40zv4botQJAjgI6hFDTKbrOwo-uOwELzxsb25fMYhN7pw0_geZbfP17_OFBHhWWG1_ZKqE3w2bTxZP6sm9B7__FqMvVoETFM_QgU_RbrzkuNNI1CBs1Kyd0EA_jv_6fRo4gG2YQWU1n4g536bqZc2QVhsJa8h2QI-CGUN8fgLd8WJLWG3760uwIsdCr5HAlWNbRBJ-WnNNaxYfNTdbCJhH_gsMoyqOjOynGTxM_fJEENDLO_bh-QdN2X9ct32AMm8DJtYWTN_ZH9-zJG14jElXwnNQGxzoAyffZuuOB3fcLuNRZ2JtlwSOKDpFxwl71I_2M42H9cKVdkLWi_cMqIl8uPA8y802X1M8JCJGN-3uW--9SGE_5xueNFNCRwRRFRyXCOKRjESULJutWNvrfWTuBaV-ZZ8/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 3.22,
+            "place_id": "ChIJPxEuHgAj0i0Rr8jRLPFicZE",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      },
+      {
+        "day": 5,
+        "activities": [
+          {
+            "activity_name": "Mount Batur Sunrise Trekking",
+            "activity_description": "Join a sunrise trek that builds toward a wide, early-morning view—aim for a quiet, steady pace and give yourself time to take it all in. confirm with the operator",
+            "activity_location": "Ubud gateway area to Mount Batur (Tegallalang side)",
+            "activity_address": "Jl. Raya Gentong, Tegallalang, Kecamatan Ubud, Kabupaten Gianyar, Bali 80571, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJbxj3rjNH0i0RGJAQVVuUcKM/photos/Aa-ngMbephhG6VuypG3M9ULYZxG6RzkNt66Zj_YLzVK_x1RE90ud7eDF1IF_p1zI39mxcKajMbJrSw0Acf2HJ77_VwHtO2OM-gYDA4qme_580EjEFnD9tntZ1zHpneoBXbNsdMKlKqnVNwIYflBmQCA1pJzzkliI_4yXb3dkNu3uotr6oY1eEOJJazZ1-djRmvhjjE_zkuGGUw3ukklIn9RjArGgJ0zmwUggwGn6JDoYfoOD07mIj9fGHPW1LSAJcODgM7X7lemMeSbXn9Q-so7H13cF1RZsvnnLfZeY_TE-Dd2axaf3kO3-ZWuqoYYkiY6XNJE_V3JN5duWs37bqvcyiNQ0ra_3c9OAm3UKINZc_8mzaZ3obbQCkNlOU7Zt4hBTT4LarHnIaZAwQbxCyhJK4Soup6RcKuqektVuTjNjDd0FfX5yocHQn6Qmr8BXYQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJbxj3rjNH0i0RGJAQVVuUcKM/photos/Aa-ngMZVlT4njsuEz-JZWswEwR13xU4Vm84dOhDby8Vaj742qBqXylbyW7ODNlPTHimuWB38j70DmucFZiKkC4n6ZwQ3mEs1ccb4vSVx_zqFE6pCp4p5mu1bWFdrkRC5Yd453NbbcFjULcxSFPhdhE0mjNVLWeE6fxoziwd4ZabF3ZXOCO0bglEBlRul_lsddxmoUUPtVQLihaMorUE0ANIuz2J-OrL8HoVSAYRJRWZQ3SO8MSifjoekFCbzQTqa-aIJtXzydO_pl1Khylpy_-hY1lW4KUtFJj-wlFzS5_AyUfQk7s9bmlUpfCZEzia2cWrErGdiBvZPX4mTFam7nx4x4jo4EaUBjCMGqS5gia1mqfeHGOqpMD6f_BYPVjGJtwkSxpRgOiZO0hFScN4CqyQ_GhrREhJNJQ1ZMDnwh74O_MERnMMUf1gEdv6QIBKqr3UD/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJbxj3rjNH0i0RGJAQVVuUcKM/photos/Aa-ngMaq09xh_7eOIdN5J7LKBdtAZz2vydF-nU1-nBxhjwcoVgbYEsncR8wawDvC6IkEMf254zKGLtweTeSgoMf2s0qoN3SNNhkAIfxT0-vaQXotbJIZ_mY3Sikhi1l9l2lE8Np228F5wvQ_-d3NsTqE-wOpPugd23zWrcXNAA_npYwiS_8IdJVrVVH-9ma6QAt-Fo6XZfpGHF6L2anWD4W08jw3Ri1Nuy2Ejq4DM_Z9kDUHaYsx6Q-vQD-UnMVeYVthJh3hsqF2LKfs6Mf6jfUMtreQcNmCerOru-qgP070YCBJBvwGaSL95THdAjN4tx3V2bTTt-Txb2aOwn1itgiCzl-TCebo_zZvoHSuai0kV_E4OKZniWu05iYGCk_-60vCrpvYf7zEqXqoMAplYuIKwfgUnVEGAd0brzZbAXdDdYiFc_F8FiX2yQbT-EKDlIcI/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJbxj3rjNH0i0RGJAQVVuUcKM/photos/Aa-ngMZnLxPKEgNh7ObECZhpjQtBSmbTi150ZZNspjxDCO6IUjGIF22VkRpVqxjYo4Mx984jtvAmtfE5YkqFSnvgtNZbj9aY-8USOcULIHFarwHML4F7y8n2ea4CsLcDJL3c1_65vwSbMw3tcwEyWhzgcfxkt7RYQKnBSKp-dmWdpZj7cZcQ5ynrY6qvRKht5XxvvYEi8t3qM_THwWKGWCXPt9ki3grf4edi_MriQqW8KXlLd-yPk3cGCAfkUWKT2xTojxivx7gzjlmHByWQcst-rK0rjr1bPqI3RdGoNEwVxaK_r4bODRErF6dBSrAo3ZZCCk1n9nmMeCmNUuRNsbiez-56Q2PTIo05gcYWO8MBgawZt2tWEhhZfNrhG_fG6Ln7HdlwWowpNX_58ysKzZf4R4KvOj8CaeOeIBoFgei5eoUrXhAn/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "04:30 AM - 09:30 AM",
+            "activity_cost": 110,
+            "distance_from_previous_km": 7.93,
+            "place_id": "ChIJbxj3rjNH0i0RGJAQVVuUcKM",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+          },
+          {
+            "activity_name": "Lunch at Sukaluwih Coffee",
+            "activity_description": "A convenient lunch stop near the day's planned route.",
+            "activity_location": "Sukaluwih Coffee",
+            "activity_address": "G78H+QHQ, Jl. Raya Gentong, Tegallalang, Kec. Tegallalang, Kabupaten Gianyar, Bali 80561, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ5-DwdQAj0i0RWV6FeYN-wY8/photos/Aa-ngMam5CixCyo9HHTjyts6dBHZqG5kGXEp6yD-ydIR4UCEfVQ0Q09Eyj2ZzXPZCMXahaSKlTDNVthtifCjhnTyu6keUCMGbwQgeJdeCr-c2OY3cF_aS2D8YHa3dnVFfw2NNjs-CYsrs5JCzbwFWqc6kx-mCk_cfRZsKf7qtkd_sk8ngTE1ybebhK2MDaFZjOfeTSJY_4YlEtyGsHVgVu97RewPWUyC17b1mGdjoTfhuC0SxQcFt7AukXxXLUW7BhztsOJy-it4zvDTiHnZijqtCTrS-bRGRKsWxXY9znfP4onZymrJAZCvlCRE5J8weSo7gyHxaC_fouob2JuhZielK_f2vD9Dk8G4WLSav4KwuOIYP3enkRR1fdAQQAMrk7OJXkjTfuFRs35PETDyCPiWprn_1hg3WaLaCJBgrMb8BF9PLw/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ5-DwdQAj0i0RWV6FeYN-wY8/photos/Aa-ngMbMp47MJoSaewGD84BSc234JenneyYoIYnhHmlpXY1TKfmIYABRp-QlD_SirF0cVzqSbAEAy76eTDZl40cOpfFUDtq6dCxNCbSKN4jrxQbTaUPPgT_bfd70F4NGV64hNVwGMZ-T-wQ-YDb9QYaE3Usg0nNCE1X4zDNZDKopzSil1lRmWtdcvPVDcr_hyKiTUu66WoBb0PtZhWZOarcTG-_B0ezf3gV4N_2mFfhKl7WNbtf6ixPdgCTp-O7EKTpAjzJv1TSvYHg_XpPnnXVHA5gKMoh8BMX0pXZi9cGOv5mBMpLlRLMPuSKVduI-nlULoDaaPoPd66qQCXi52mQerdkBF04rr3GW_7wn0OYKi2ep3htg_bFaTMqWX3w1TNbnXajjnueRQpC4mHNJsEDvp1dGq99BOv7XbzrEriMERsnlPQ/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ5-DwdQAj0i0RWV6FeYN-wY8/photos/Aa-ngMbBPum2n7E3DDhAFhPh7PrEQMQbYAWY-JP_VZyG5ZsQpHG38h89dbFmHzklDkZqIRl8pe5UpRGTywmTGIkTjj3eGYdyv1CHFkt14qYfOkR8PG-VOkwpJxKxVHYZ553FI8rj4CzZDt5t8AWLgjQhO0Bec3rZzvgE6r_yTTkGSbhbFzliS9chRKkLydQJmmDxSjL3x_OSX3Pv0LQAu8j7D29HN7y_ljkKUK9tYBvOGvEE-UFj3p0pm7zPZpYB6K5FUxUrEHLqm0Jxe0kbR6wNhGykYb7wJ3XxglzeKwU6d4ApvUCcvMzdojHfb1slvsT5pK-D2XVc51PQxQfW9o2o4IuqHpTuVWdC0ghCHO3NVrZ8v47p7ILDGgiOR8Mq2EZ92t6N0abAl7tqYuMDQc7aK95050xHRGhJW20T3i-BTsd7/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ5-DwdQAj0i0RWV6FeYN-wY8/photos/Aa-ngMZGtIjlx8ZhJV00AWVfYF_wvaVHmIbA_opp2DcrLXUwWPAXsOvyHx5uoU-QSc5oaogVdOzfGmWwmXbPXp775BwCODaqlF3Mw5efbQn_sqmLDzirohV3Xku64wxuLylABlIKysdS25-3vk6Eha3KK01dCgEpIykAPS2kdD-nrYmnq_Ufy_cup7a5SKb8dHDU1YXU5asxYOtLNwU8BYbv3VOVoD2b6UqLFI69YlMFJW20QbB7LiyCrM_YAn1KoYADN8eHmMAkC0F241nnyLnhNGZrpcXZup2_ksLR59UM4Bv0iTIW5TVx-8rRQC5e_iAB0wvzvQSoAW2vM0gvl9A1W3v0DTVTExO3jGnn5Z6G3PyId5YYHUjC0-rGyMYd8Wp3g_dsJTdXW3QY0pJykx4TVFZsMljortQcPde85ohjSJVdaw/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "12:30 PM - 01:30 PM",
+            "activity_cost": 30,
+            "distance_from_previous_km": null,
+            "place_id": "ChIJ5-DwdQAj0i0RWV6FeYN-wY8",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          },
+          {
+            "activity_name": "Dinner at Udupi Indian Restaurant Ubud",
+            "activity_description": "A convenient dinner stop near the day's planned route.",
+            "activity_location": "Udupi Indian Restaurant Ubud",
+            "activity_address": "Jl. Raya Gentong No.123, Tegallalang, Kec. Tegallalang, Kabupaten Gianyar, Bali 80561, Indonesia",
+            "activity_image": [
+              "https://places.googleapis.com/v1/places/ChIJ-drdZ0E90i0R7COhUIbSJI4/photos/Aa-ngMahi1nxDo3C7babBXclG_HEtVcqv_ixB3xEXu5IMg6b5QvCgYaGQuPS1_kNa9QFtUyhCXW5E2hC4u4dIWgGOa8vn1LFwEd2lWS-uPXsZXWiHFq9ubKaOp0M-WOBW5F__omaedDdEcmdHmGma6LohSP1iaL-Bp26erY5P0s02n2crya0dqgtSUdf-ANTalbO-YnMd26Y81SBL79FWlXrDh6L_vavVSussbsiA-Fr5MJw_xAHBXrxFc8TCFO6IZSsrWEF49zZvJoYNcLZA_uIbz8I-2NfZKfOGk-n4rjHXPEAWUnDp2xkWSKLxLPFh7ZTped5tpQCzVdJXRTRr5kiKlQIU271GeuuiN94Wn_lI9DJBpxQ0WQFwd9_ddD0pj9chxouxhIDHnFNjNzOzNcOltQ2K0pLcBfNynDDg7GC5_tC/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ-drdZ0E90i0R7COhUIbSJI4/photos/Aa-ngMZk7N9afl9f0LC0FeuJDnRfI3k-xMP7YZNNggHC7Cko_yBL5_tVXH4aq4F4MdBcQfc3JwYSUEsMSsWUxLsGvqU58ShGxnfDnFEgHUH_oF0TGeyqhBG84Joi-bowKo8G-MSa1vAzGQxMmJFBjmWXdzfiJAvTGVjugtccbueCiZSLDe1HxNFBIxCJF5H2r67LVm1gc12w2a4QxoSq_F1sYfQ3nL_-NR8SiETG-JttDLgZ-Kz7xekpR62vOUWATa5tjsAcnK-jNL5L99I1elqwCDgPfQGSVsASiRsyIhM8ggFMv-srDCqNo8plbM2VzUVzne3mHin0u8WOehzwbLinjfM8SN1r6L0OlMH6zT4UcRI9K1_st6wmOT0F1r8p9k0y1KisRuXMstN1H4ZfLIlzcKtmBaArOQY-mR4c-6YPOWkCug/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ-drdZ0E90i0R7COhUIbSJI4/photos/Aa-ngMbMaKG53LLQStLoQXF0NbMsWye25UIXLMCOuc86D9eYz057IBwoS62rbJB07e0PpkNWErBx5hb8vfJKizQZdud_Debu6MBrvRTK2XDA7t4mq0oc5JdQAScnKamOKAedRzm2XsOT0dKKuCS2F_fbeqw_VfYUu77-dYxkj4xmq9OiehNbM8fves2nr9fV870074g4egrvA-n6worYVlETdef-IcOY9qC4FZ0LPkX-12JENgF2Tx7FeRM_UMl_C2g-rc26-xg0Yeh0a36Jeo1iA3k_D9VyTXjgYLDM-vlTSsKSN5ZXI7ZuCdbbl_P_e90luge28koEx4r8D-acKxGEWfcmcsjhGjEmtuN5z7_88h2Gd1Eep186Gh3cGQBmze1nNPA31IHXgA8nakxxUNASxp_uazrsNgLEljArgVKBTSUOXg/media?key=REDACTED&maxHeightPx=400",
+              "https://places.googleapis.com/v1/places/ChIJ-drdZ0E90i0R7COhUIbSJI4/photos/Aa-ngMbHHXK396ihqHGi8G5y17hFHLJgQJ3kFuj6cpHhmzNZ1ezbq55lwyPHfP840Hd3Qabea8ZL0RFO59497CDlDoDZjYqmfsj2pED9P67WwfK9B12lbwjRrC25wUopDzFNEnCNqiOnmLPSTGjzvZ3P2yVHJMNNndLelU6jAAqz1BdYEN_PKTB1_HngEOVo7wwXQvxTEhcNnQSTpUeZhryj9BWKuUoITd_J0wnVxHlPN7jwipXhQ_bQZzEAhfTQzLaHqol6q79r-IhzkUJBUPbl_EPrY2TvqC-RHkkYX62T89g8cOXtXI22eHKCF9JOOzSc0IO7qavDPMdQu8hR7XviZ4-3sYmthSSPn72R5JlHbpad_z6HwexqUW1TtDjiTaG865iZwuzT_XlTECuxJopC8BDRJ7NfbEo9UNf1qQdF5cXy/media?key=REDACTED&maxHeightPx=400"
+            ],
+            "activity_time": "07:00 PM - 08:30 PM",
+            "activity_cost": 55,
+            "distance_from_previous_km": 0.62,
+            "place_id": "ChIJ-drdZ0E90i0R7COhUIbSJI4",
+            "business_status": "OPERATIONAL",
+            "availability_note": "Opening hours and seating are not confirmed; check with the restaurant, including any dietary needs."
+          }
+        ]
+      }
+    ],
+    "total_cost_estimate": 2459.0,
+    "packing_tips": "Bring breathable clothing, a light rain layer, comfortable walking shoes (for uneven paths), sun protection, and a small day bag with water. For temples, pack a sarong/light cover if you have one (and keep a modest outfit handy).",
+    "travel_tips": "Ubud traffic can be slow—build buffer time and consider starting your highlight activities early. For entry requirements and any safety guidance, check current official travel and health information for Indonesia before departure, and confirm time-sensitive activities with the operator.",
+    "source": "generated",
+    "budget_check": {
+      "budget_per_night_usd": 400.0,
+      "budget_open_ended": false,
+      "rooms": 1,
+      "estimated_stay_nightly_usd": 350.0,
+      "stay_within_budget": true,
+      "status": "ESTIMATED",
+      "note": "Estimated from map data, not a live rate. Confirm the final payable amount for your dates, party and rooms with the booking provider before booking."
+    }
+  }
+}

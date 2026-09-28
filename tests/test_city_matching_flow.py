@@ -6,6 +6,7 @@ suggested in the session. See API_CITY_FLOW_DOCS.md.
 """
 
 import json
+import re
 from unittest.mock import MagicMock, patch
 
 from fastapi.testclient import TestClient
@@ -17,17 +18,46 @@ from intake_fixtures import build_intake, exact_dates, with_restriction
 client = TestClient(main.app)
 
 TOUR_PLAN_JSON = json.dumps({
-    "tour_plan": [{"day": 1, "activities": [{
-        "activity_name": "Hot spring soak",
-        "activity_description": "Unhurried soak; confirm with the operator",
-        "activity_location": "Old town",
-        "activity_time": "10:00 AM - 11:30 AM",
-        "activity_cost": 20,
-    }]}],
+    "tour_plan": [{"day": 1, "activities": [
+        {
+            "activity_name": "Hot spring soak",
+            "activity_description": "Unhurried soak; confirm with the operator",
+            "activity_location": "Old town",
+            "activity_time": "10:00 AM - 11:30 AM",
+            "activity_cost": 20,
+        },
+        {
+            "activity_name": "Garden walk",
+            "activity_description": "Quiet walk through the old gardens",
+            "activity_location": "Old town",
+            "activity_time": "03:00 PM - 04:30 PM",
+            "activity_cost": 0,
+        },
+    ]}],
     "total_cost_estimate": 20,
     "packing_tips": "Layers",
     "travel_tips": "Check official entry guidance",
 })
+
+
+def _feeling_reply(prompt: str, supports: bool = True) -> str:
+    destination = re.search(r"DESTINATION: (.+?), [^,\n]+\n", prompt).group(1)
+    return json.dumps({
+        "intention": "You want time to slow down and hear yourself think.",
+        "narrative": f"{destination}'s hot spring soak and garden walk give you unhurried room to think.",
+        "supporting_experience_ids": ["E1", "E2"],
+        "supports_feeling": supports,
+        "mismatch_reason": "" if supports else "Nothing in the plan leaves quiet time.",
+    })
+
+
+def _fake_ai(feeling_supported=lambda prompt: True) -> MagicMock:
+    """Answers itinerary prompts with TOUR_PLAN_JSON and feeling prompts with a feeling block."""
+    def reply(prompt: str) -> str:
+        if "The feeling behind your journey" in prompt:
+            return _feeling_reply(prompt, feeling_supported(prompt))
+        return TOUR_PLAN_JSON
+    return MagicMock(side_effect=reply)
 
 
 def _suggest(payload: dict):
@@ -180,20 +210,28 @@ def test_regenerate_unknown_session_is_404():
 
 # ==================== /get_tour_plan ====================
 
-def _plan(session_id: str, **body):
-    places = _tool([
+def _country_of(args: dict) -> str:
+    return args["location_name"].rsplit(",", 1)[1].strip()
+
+
+def _plan(session_id: str, ai: MagicMock = None, **body):
+    # Places are returned inside the destination's own country, as a real search would.
+    places = MagicMock()
+    places.invoke.side_effect = lambda args: [
         {"name": "Hot spring soak", "place_id": "place-open", "business_status": "OPERATIONAL",
-         "address": "1 Spring Rd", "photos": []},
+         "address": f"1 Spring Rd, {_country_of(args)}", "photos": []},
         {"name": "Hot spring soak annex", "place_id": "place-closed", "business_status": "CLOSED_PERMANENTLY",
-         "address": "2 Spring Rd", "photos": []},
-    ])
+         "address": f"2 Spring Rd, {_country_of(args)}", "photos": []},
+        {"name": "Garden walk", "place_id": "place-garden", "business_status": "OPERATIONAL",
+         "address": f"5 Garden Rd, {_country_of(args)}", "photos": []},
+    ]
     hotels = _tool([{
         "name": "Quiet Stay", "address": "3 Stay Rd", "rating": 4.6,
         "price_level": "PRICE_LEVEL_MODERATE", "photos": [], "coords": None,
     }])
     restaurants = _tool([{"name": "Cafe", "place_id": "r1", "business_status": "OPERATIONAL",
                           "address": "4 Food Rd", "photos": []}])
-    ai = MagicMock(return_value=TOUR_PLAN_JSON)
+    ai = ai or _fake_ai()
     with patch("app.router.city_content_route.get_ai_response", ai), \
          patch("app.router.city_content_route.get_detailed_tourist_places", places), \
          patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", hotels), \
@@ -222,6 +260,60 @@ def test_get_tour_plan_builds_on_the_selected_destination_with_estimates_only():
     location = f"{chosen['city_name']}, {chosen['country_name']}"
     assert places.invoke.call_args.args[0]["location_name"] == location
     assert hotels.invoke.call_args.args[0]["location_name"] == location
+
+
+def test_itinerary_opens_with_the_feeling_behind_the_journey():
+    initial = _suggest(build_intake(trip_goals=["reflection"])).json()
+    chosen = initial["suggested_cities"][0]
+    response, ai, *_ = _plan(initial["session_id"], destination_id=chosen["destination_id"])
+    assert response.status_code == 200
+    data = response.json()
+    assert list(data)[:4] == ["activity_session_id", "destination_id", "city", "feeling_block"]
+    block = data["feeling_block"]
+    assert block["headline"] == "THE FEELING: REFLECTIVE"
+    assert block["markdown"].startswith("**THE FEELING: REFLECTIVE**")
+    assert block["alignment"]["status"] == "aligned"
+    names = {a["activity_name"] for day in data["tour_plan"] for a in day["activities"]}
+    assert {item["activity_name"] for item in block["supporting_experiences"]} <= names
+    assert ai.call_count == 2  # itinerary + feeling block, no revision needed
+
+    details = client.get(f"/activity_session/{data['activity_session_id']}").json()
+    assert details["feeling_block"]["headline"] == block["headline"]
+    cached, *_ = _plan(initial["session_id"], destination_id=chosen["destination_id"])
+    assert cached.json()["feeling_block"]["headline"] == block["headline"]
+
+
+def test_itinerary_that_does_not_support_the_feeling_is_revised_once():
+    initial = _suggest(build_intake(trip_goals=["reflection"])).json()
+    chosen = initial["suggested_cities"][0]
+    calls = []
+
+    def reply(prompt: str) -> str:
+        calls.append(prompt)
+        if "The feeling behind your journey" in prompt:
+            # The first draft doesn't support the feeling; the revised draft does.
+            return _feeling_reply(prompt, supports=sum("The feeling behind your journey" in p for p in calls) > 1)
+        return TOUR_PLAN_JSON
+
+    response, *_ = _plan(initial["session_id"], ai=MagicMock(side_effect=reply), destination_id=chosen["destination_id"])
+    block = response.json()["feeling_block"]
+    assert block["alignment"]["status"] == "revised"
+    assert "Nothing in the plan leaves quiet time" in block["alignment"]["detail"]
+    revision_prompts = [p for p in calls if "REVISION REQUIRED" in p]
+    assert len(revision_prompts) == 1
+    assert "Reflective" in revision_prompts[0]
+
+
+def test_itinerary_that_still_does_not_support_the_feeling_is_flagged():
+    initial = _suggest(build_intake(trip_goals=["reflection"])).json()
+    chosen = initial["suggested_cities"][0]
+    never = _fake_ai(feeling_supported=lambda prompt: False)
+    response, *_ = _plan(initial["session_id"], ai=never, destination_id=chosen["destination_id"])
+    block = response.json()["feeling_block"]
+    assert block["alignment"]["status"] == "mismatch"
+    assert "flagged" in block["alignment"]["detail"]
+    assert block["narrative"] is None
+    assert "Do not present" in block["alignment"]["display_guidance"]
 
 
 def test_private_free_text_never_reaches_the_llm_or_travel_tools():

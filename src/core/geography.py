@@ -139,3 +139,14 @@ def same_country(first: str | None, second: str | None) -> bool:
     if not first_key or not second_key:
         return False
     return _COUNTRY_ALIASES.get(first_key, first_key) == _COUNTRY_ALIASES.get(second_key, second_key)
+
+
+def address_in_country(address: str | None, country: str | None) -> bool:
+    """True when a formatted address names the country (or a common alias of it)."""
+    address_key = f" {_normalize(address or '')} "
+    country_key = _normalize(country or "")
+    if not country_key or not address_key.strip():
+        return False
+    canonical = _COUNTRY_ALIASES.get(country_key, country_key)
+    names = {canonical} | {alias for alias, target in _COUNTRY_ALIASES.items() if target == canonical}
+    return any(f" {name} " in address_key for name in names)

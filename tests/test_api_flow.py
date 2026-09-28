@@ -55,6 +55,8 @@ class TravelPlannerFlowTests(unittest.TestCase):
         the tour-plan LLM step (Step 2) need mocking.
         """
         def fake_tour_plan_ai(prompt: str) -> str:
+            if "The feeling behind your journey" in prompt:
+                return "{}"  # Unusable answer: the block falls back to "not_assessed".
             return next(self.tour_plan_responses)
 
         def fake_city_lookup(args: dict) -> dict:
@@ -74,10 +76,18 @@ class TravelPlannerFlowTests(unittest.TestCase):
              patch("app.router.city_content_route.get_google_hotels_sorted_by_rating") as mock_hotels, \
              patch("app.router.city_content_route.calculate_distance_routes_api") as mock_distance:
             mock_lookup.invoke.side_effect = fake_city_lookup
-            mock_places.invoke.side_effect = [
-                [{"name": "Museum", "address": "1 Museum St", "photos": ["https://example.com/museum.jpg"]}],
-                [{"name": "Cafe Central", "address": "2 Cafe St", "photos": ["https://example.com/cafe.jpg"]}],
-            ]
+            place_batches = iter([
+                {"name": "Museum", "street": "1 Museum St", "photos": ["https://example.com/museum.jpg"]},
+                {"name": "Cafe Central", "street": "2 Cafe St", "photos": ["https://example.com/cafe.jpg"]},
+            ])
+
+            def fake_places(args: dict) -> list:
+                # Real results sit inside the destination's country ("City, Country").
+                place = next(place_batches)
+                country = args["location_name"].rsplit(",", 1)[1].strip()
+                return [{"name": place["name"], "address": f"{place['street']}, {country}", "photos": place["photos"]}]
+
+            mock_places.invoke.side_effect = fake_places
             mock_restaurants.invoke.return_value = [{
                 "name": "Cafe Meal",
                 "address": "3 Meal St",
