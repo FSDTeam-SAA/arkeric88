@@ -11,6 +11,9 @@ wheels/
 
 .env
 
+# Durable session storage (src/session/session_persistence.py)
+data/sessions.sqlite3*
+
 code.py
 personal/
 src/personal

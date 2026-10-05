@@ -10,7 +10,6 @@ from app.schemas.city_body import (
     RegenerateInputData,
     RegenerateActivityInputData,
     TourPlanRequestData,
-    StayInfo,
 )
 from app.schemas.intake_schema import (
     INTAKE_FORM_ID,
@@ -20,7 +19,13 @@ from app.schemas.intake_schema import (
 )
 from src.core.data_processor import ProcessData
 from src.session.city_session_store import CitySessionStore, ActivitySessionStore
-from src.tools.tools import get_detailed_tourist_places, get_google_hotels_sorted_by_rating, calculate_distance_routes_api, get_nearby_restaurants
+from src.tools.tools import (
+    compute_drive_route,
+    get_cityinfo,
+    get_detailed_tourist_places,
+    get_google_hotels_sorted_by_rating,
+    get_nearby_restaurants,
+)
 from src.core.image_registry import image_registry
 from src.core.destination_catalog import (
     Destination,
@@ -28,7 +33,7 @@ from src.core.destination_catalog import (
     get_destination,
     load_destination_candidates,
 )
-from src.core.destination_places import lookup_destination_place, lookup_missing_coordinates
+from src.core.destination_places import lookup_destination_place, lookup_missing_coordinates, lookup_name
 from src.core.destination_matching import (
     build_no_valid_result,
     build_suggestion,
@@ -36,8 +41,38 @@ from src.core.destination_matching import (
     select_diverse,
 )
 from src.core.feeling_block import assess_feeling_block, revision_note
-from src.core.geography import address_in_country
-from src.core.intake_mappings import INTAKE_MAPPING_VERSION, SCORING_VERSION
+from src.core.geography import address_in_country, same_country
+from src.core.guest_text import clean as guest_clean, dedupe, is_generic_reason, price_indication
+from src.core.itinerary_geo import (
+    EXPERIENCE,
+    MEAL,
+    add_free_time,
+    apply_transfer_day,
+    describe_meal,
+    describe_stay,
+    enforce_day,
+    is_transfer_day,
+    normalize_stops,
+    stop_for_day,
+    transfer_item,
+)
+from src.core.itinerary_pricing import build_price_breakdown, meal_cost
+from src.core.itinerary_validation import booking_status, validate_itinerary
+from src.core.travel_time import (
+    FALLBACK_ROAD_FACTOR,
+    FALLBACK_SPEED_KMH,
+    MAX_LEG_MINUTES,
+    SOURCE_ESTIMATE,
+    TravelTimes,
+    point_of,
+    straight_line_km,
+)
+from src.core.intake_mappings import (
+    INTAKE_MAPPING_VERSION,
+    SCORING_VERSION,
+    TRIP_GOAL_FEELING_WORDS,
+    TRIP_PACE_LABELS,
+)
 from src.core.origin import resolve_origin
 from src.core.trip_profile import TripProfile, build_trip_profile
 import re
@@ -104,23 +139,33 @@ def _enrich_destination_media(suggestion: dict) -> dict:
 # ==================== TOUR PLAN ENRICHMENT HELPERS ====================
 
 
+def _bias_args(bias: Optional[dict]) -> dict:
+    """Location-bias arguments for a map search, only when a point is known."""
+    if not bias or bias.get("latitude") is None or bias.get("longitude") is None:
+        return {}
+    return {"latitude": bias["latitude"], "longitude": bias["longitude"], "radius_m": bias.get("radius_m")}
+
+
 def _find_hotel(
     location: str,
     nightly_budget: float,
     budget_open_ended: bool,
     profile_search_query: str = "",
+    bias: Optional[dict] = None,
 ) -> dict:
     """
     Pick a stay from a live Google Places search: the best-rated result whose
     estimated nightly cost fits the per-room budget, else the cheapest result.
     Places has no bookable rates, so every price here is an estimate and
     availability is never claimed (IMPORT_RULES.csv "Booking search and
-    availability"). No historical property sheet is used.
+    availability"). No historical property sheet is used. `bias` keeps the
+    search around the stop's base area.
     """
     try:
         hotels = get_google_hotels_sorted_by_rating.invoke({
             "location_name": location,
             "search_query": profile_search_query or None,
+            **_bias_args(bias),
         })
         if not hotels or "error" in hotels[0]:
             return _fallback_hotel(location)
@@ -148,6 +193,7 @@ def _estimate_hotel_cost(hotel: dict) -> float:
         "PRICE_LEVEL_MODERATE": 150,
         "PRICE_LEVEL_EXPENSIVE": 250,
         "PRICE_LEVEL_LUXURY": 400,
+        "PRICE_LEVEL_VERY_EXPENSIVE": 400,
         "NOT_AVAILABLE": 150,
     }
     return price_map.get(price_str, 150)
@@ -167,6 +213,8 @@ def _fallback_hotel(city_name: str) -> dict:
         "facilities": [],
         "website": "",
         "estimate_note": "Hotel details were unavailable; displayed values are (approximately).",
+        # No real stay was found: never shown as a recommendation, never priced.
+        "is_fallback": True,
     }
 
 
@@ -182,6 +230,12 @@ def _complete_hotel_values(
     rating = float(completed.get("rating") or 0)
 
     price_level = completed.get("price_level")
+    # A price inferred from rating and budget is not real pricing data: the
+    # breakdown withholds its total instead of presenting the guess.
+    completed.setdefault(
+        "price_inferred",
+        (not price_level or price_level == "NOT_AVAILABLE") and not completed.get("average_nightly_price"),
+    )
     if not price_level or price_level == "NOT_AVAILABLE":
         if rating >= 4.8 or nightly_budget > 1000:
             price_level = "PRICE_LEVEL_LUXURY (approximately)"
@@ -321,8 +375,9 @@ def _build_profile_search_context(profile: TripProfile) -> str:
 
 _CLOSED_BUSINESS_STATUSES = {"CLOSED_PERMANENTLY", "CLOSED_TEMPORARILY"}
 _PLACE_AVAILABILITY_NOTE = (
-    "Opening hours do not confirm tickets or availability; confirm time-sensitive activities with the operator."
+    "Opening hours don't confirm tickets or availability, so please confirm time-sensitive experiences with the operator."
 )
+_UNVERIFIED_PLACE_NOTE = "We couldn't confirm this place on the map; please check the details before you go."
 
 
 def _is_open_business(place: dict) -> bool:
@@ -343,12 +398,13 @@ def _usable_place(place: dict, location: str) -> bool:
     return address_in_country(place.get("address"), location.rsplit(",", 1)[1])
 
 
-def _fetch_attraction_dataset(city_name: str, profile_search_query: str = "") -> list[dict]:
-    """Fetch all relevant attractions once for the whole itinerary."""
+def _fetch_attraction_dataset(city_name: str, profile_search_query: str = "", bias: Optional[dict] = None) -> list[dict]:
+    """Fetch all relevant attractions once per stop, biased towards the stop's base."""
     try:
         results = get_detailed_tourist_places.invoke({
             "location_name": city_name,
             "search_query": profile_search_query or None,
+            **_bias_args(bias),
         })
         if not results or _is_tool_error_list(results):
             return []
@@ -358,6 +414,9 @@ def _fetch_attraction_dataset(city_name: str, profile_search_query: str = "") ->
 
 
 def _activity_is_meal(activity: dict) -> bool:
+    if activity.get("item_type"):
+        return activity["item_type"] == MEAL
+    # Raw model drafts carry no item_type; meals are recognised by name.
     name = (activity.get("activity_name") or "").lower()
     return any(meal.lower() in name for meal in _MEAL_SCHEDULE)
 
@@ -385,20 +444,27 @@ def _enrich_activities(
     existing_plan: list | None = None,
     day_to_regenerate: int | None = None,
     profile_search_query: str = "",
+    bias: Optional[dict] = None,
+    attraction_dataset: Optional[list] = None,
+    used_place_keys: Optional[set] = None,
 ) -> list:
     """
     Match each activity to a real place: first from one shared, profile-led
-    dataset, then with a targeted search for that activity. Activities with
-    no genuine match keep their planned name and are marked unverified.
+    dataset, then with a targeted search for that activity. Matched places keep
+    their coordinates so travel times can be measured. Activities with no
+    genuine match keep their planned name and are marked unverified.
     """
-    attraction_dataset = _fetch_attraction_dataset(city_name, profile_search_query)
-    used_place_keys = _seed_used_place_keys(existing_plan, day_to_regenerate)
+    if attraction_dataset is None:
+        attraction_dataset = _fetch_attraction_dataset(city_name, profile_search_query, bias)
+    if used_place_keys is None:
+        used_place_keys = _seed_used_place_keys(existing_plan, day_to_regenerate)
     # "Ubud, Indonesia" -> {"ubud", "indonesia"}: sharing only these is not a match.
     location_tokens = frozenset(_normalize_place_text(city_name).split())
     enriched_plan = []
     for day in tour_plan:
         enriched_day = {
             "day": day.get("day"),
+            "stop": day.get("stop", 1),
             "activities": [],
         }
         for activity in day.get("activities", []):
@@ -411,7 +477,8 @@ def _enrich_activities(
             verified_photos = []
             place_id = None
             business_status = None
-            availability_note = "Place not verified on the map; confirm details before visiting."
+            coords = {}
+            availability_note = _UNVERIFIED_PLACE_NOTE
             best_match = _find_best_match(
                 attraction_dataset,
                 activity_name,
@@ -421,7 +488,7 @@ def _enrich_activities(
             )
             if best_match is None and activity_name:
                 best_match = _find_best_match(
-                    _search_activity_place(activity_name, city_name),
+                    _search_activity_place(activity_name, city_name, bias),
                     activity_name,
                     activity_location,
                     used_place_keys=used_place_keys,
@@ -433,11 +500,14 @@ def _enrich_activities(
                 verified_photos = _clean_photos(best_match.get("photos", []))
                 place_id = best_match.get("place_id")
                 business_status = best_match.get("business_status")
-                availability_note = _PLACE_AVAILABILITY_NOTE
+                coords = best_match.get("coords") or {}
+                # Shown once for the whole itinerary instead of on every activity.
+                availability_note = ""
                 match_key = _place_key(best_match)
                 if match_key:
                     used_place_keys.add(match_key)
             enriched_activity = {
+                "item_type": EXPERIENCE,
                 "activity_name": verified_name,
                 "activity_description": activity.get("activity_description", ""),
                 "activity_location": activity.get("activity_location", ""),
@@ -445,6 +515,9 @@ def _enrich_activities(
                 "activity_image": verified_photos,
                 "activity_time": activity.get("activity_time", ""),
                 "activity_cost": activity.get("activity_cost", 0),
+                "why_selected": str(activity.get("why_selected") or "").strip(),
+                "latitude": coords.get("lat"),
+                "longitude": coords.get("lng"),
                 "distance_from_previous_km": None,
                 "place_id": place_id,
                 "business_status": business_status,
@@ -528,12 +601,13 @@ def _find_best_match(
     return candidates[0][2] if candidates else None
 
 
-def _search_activity_place(activity_name: str, location: str) -> list:
+def _search_activity_place(activity_name: str, location: str, bias: Optional[dict] = None) -> list:
     """Targeted map search for one activity when the shared dataset has no match."""
     try:
         results = get_detailed_tourist_places.invoke({
             "location_name": location,
             "search_query": activity_name,
+            **_bias_args(bias),
         })
     except Exception:
         return []
@@ -556,10 +630,16 @@ def _start_minutes(time_range: str) -> int | None:
     return hour * 60 + minute
 
 
-def _choose_anchor(activities: list, meal_name: str, hotel_address: str, city_name: str) -> str:
+def _choose_anchor(activities: list, meal_name: str, hotel_address: str, city_name: str, hotel_point=None) -> dict:
+    """
+    Where a meal should be: near the first activity for breakfast, the one
+    closest to noon for lunch, the last one for dinner -- or the hotel.
+    Returns {"text", "point", "name"} so the search can be biased to the spot.
+    """
     real_activities = [activity for activity in activities if not _activity_is_meal(activity)]
+    hotel = {"text": hotel_address or city_name, "point": hotel_point, "name": "your hotel"}
     if not real_activities:
-        return hotel_address or city_name
+        return hotel
     if meal_name == "Breakfast":
         anchor = real_activities[0]
     elif meal_name == "Dinner":
@@ -569,13 +649,45 @@ def _choose_anchor(activities: list, meal_name: str, hotel_address: str, city_na
             real_activities,
             key=lambda activity: abs((_start_minutes(activity.get("activity_time", "")) or 720) - 720),
         )
-    return (
+    text = (
         anchor.get("activity_address")
         if anchor.get("activity_address") and anchor.get("activity_address") != "N/A"
         else anchor.get("activity_location")
         or hotel_address
         or city_name
     )
+    return {"text": text, "point": point_of(anchor) or hotel_point, "name": anchor.get("activity_name") or "your hotel"}
+
+
+# Search radius around the meal's anchor, and the dining price levels that
+# suit each lodging budget (pricier places are ranked last, not removed).
+MEAL_SEARCH_RADIUS_M = 3000.0
+_HIGH_DINING_LEVELS = {"PRICE_LEVEL_EXPENSIVE", "PRICE_LEVEL_VERY_EXPENSIVE"}
+_DIETARY_TERMS = (
+    "vegetarian", "vegan", "gluten-free", "gluten free", "halal", "kosher",
+    "dairy-free", "dairy free", "nut-free", "nut free", "pescatarian",
+)
+
+
+def _dining_context(profile: TripProfile) -> dict:
+    """
+    Dining search terms from the guest's answers: named dietary needs (only
+    recognised keywords from the restriction notes, never the free text
+    itself), food interest, party and budget.
+    """
+    dietary = []
+    if "food_dietary" in profile.restrictions and profile.restriction_notes:
+        notes = profile.restriction_notes.lower()
+        dietary = list(dict.fromkeys(term.replace(" ", "-") for term in _DIETARY_TERMS if term in notes))
+    terms = [*dietary]
+    if "food_drinks" in profile.moments:
+        terms.append("local favourite")
+    if profile.children:
+        terms.append("family-friendly")
+    budget_minded = not profile.budget_open_ended and profile.budget_per_night <= 150
+    if budget_minded:
+        terms.append("casual")
+    return {"query": " ".join(terms), "dietary": dietary, "budget_minded": budget_minded}
 
 
 def _find_restaurant_for_meal(
@@ -583,61 +695,96 @@ def _find_restaurant_for_meal(
     meal_name: str,
     used_restaurant_keys: set[str],
     city_name: str,
-) -> dict:
+    anchor_point=None,
+    dining: Optional[dict] = None,
+) -> Optional[dict]:
+    """Best unused, open restaurant near the anchor, or None when the search finds nothing usable."""
+    dining = dining or {}
     search_location = anchor_location or city_name
     if "," in city_name and not address_in_country(search_location, city_name.rsplit(",", 1)[1]):
         # An anchor like "Old City walls" alone can match anywhere in the world;
         # keep the search inside the destination.
         search_location = f"{search_location}, {city_name}"
+    args = {"location_name": search_location, "meal_type": meal_name.lower()}
+    if dining.get("query"):
+        args["search_query"] = dining["query"]
+    if anchor_point is not None:
+        args.update(_bias_args({"latitude": anchor_point[0], "longitude": anchor_point[1], "radius_m": MEAL_SEARCH_RADIUS_M}))
     try:
-        restaurants = get_nearby_restaurants.invoke({
-            "location_name": search_location,
-            "meal_type": meal_name.lower(),
-        })
-        if restaurants and not _is_tool_error_list(restaurants):
-            restaurants = [restaurant for restaurant in restaurants if _usable_place(restaurant, city_name)]
-        if restaurants and not _is_tool_error_list(restaurants):
-            for restaurant in restaurants:
-                key = _place_key(restaurant)
-                if key and key not in used_restaurant_keys:
-                    used_restaurant_keys.add(key)
-                    return restaurant
-            restaurant = restaurants[0]
-            key = _place_key(restaurant)
-            if key:
-                used_restaurant_keys.add(key)
-            return restaurant
+        restaurants = get_nearby_restaurants.invoke(args)
     except Exception:
-        pass
-    fallback = {
-        # Reads as "Lunch at a spot of your choice nearby".
-        "name": "a spot of your choice nearby",
-        "address": anchor_location or city_name,
-        "photos": [],
-    }
-    used_restaurant_keys.add(_place_key(fallback))
-    return fallback
+        return None
+    if not restaurants or _is_tool_error_list(restaurants):
+        return None
+    restaurants = [restaurant for restaurant in restaurants if _usable_place(restaurant, city_name)]
+    if dining.get("budget_minded"):
+        # Stable sort: keeps Google's rating order within each price group.
+        restaurants.sort(key=lambda restaurant: restaurant.get("price_level") in _HIGH_DINING_LEVELS)
+    for restaurant in restaurants:
+        key = _place_key(restaurant)
+        if key and key not in used_restaurant_keys:
+            used_restaurant_keys.add(key)
+            return restaurant
+    if restaurants:
+        restaurant = restaurants[0]
+        key = _place_key(restaurant)
+        if key:
+            used_restaurant_keys.add(key)
+        return restaurant
+    return None
 
 
-def _meal_activity(meal_name: str, restaurant: dict, anchor_location: str) -> dict:
-    time_window, cost = _MEAL_SCHEDULE[meal_name]
+def _meal_activity(meal_name: str, restaurant: Optional[dict], anchor: dict) -> dict:
+    """A meal at a real restaurant, or an intentionally open meal slot near the anchor."""
+    time_window, _base_cost = _MEAL_SCHEDULE[meal_name]
+    if restaurant is None:
+        return {
+            "item_type": MEAL,
+            "meal": meal_name,
+            "open_slot": True,
+            "activity_name": f"{meal_name} near {anchor['name']}",
+            "activity_description": f"Left open so you can choose somewhere you like near {anchor['name']}.",
+            "activity_location": anchor["text"],
+            "activity_address": "N/A",
+            "activity_image": [],
+            "activity_time": time_window,
+            "activity_cost": meal_cost(meal_name),
+            "why_selected": (
+                f"We didn't find a restaurant we could confirm near {anchor['name']}, "
+                f"so your {meal_name.lower()} is left flexible."
+            ),
+            "latitude": None,
+            "longitude": None,
+            "distance_from_previous_km": None,
+            "place_id": None,
+            "business_status": None,
+            "availability_note": "",
+        }
     restaurant_name = restaurant.get("name") or f"{meal_name} stop"
-    address = restaurant.get("address") or anchor_location or "N/A"
+    coords = restaurant.get("coords") or {}
+    price_level = restaurant.get("price_level")
     return {
+        "item_type": MEAL,
+        "meal": meal_name,
+        "open_slot": False,
         "activity_name": f"{meal_name} at {restaurant_name}",
-        "activity_description": f"A convenient {meal_name.lower()} stop near the day's planned route.",
+        "activity_description": f"{meal_name} at {restaurant_name}.",
         "activity_location": restaurant_name,
-        "activity_address": address,
+        "restaurant_name": restaurant_name,
+        "activity_address": restaurant.get("address") or anchor["text"] or "N/A",
         "activity_image": _clean_photos(restaurant.get("photos", [])),
         "activity_time": time_window,
-        "activity_cost": cost,
+        "activity_cost": meal_cost(meal_name, price_level),
+        "rating": restaurant.get("rating") or None,
+        # Guests see the label only; the raw Google code is used for the cost above and dropped.
+        "price_indication": price_indication(price_level),
+        "why_selected": "",
+        "latitude": coords.get("lat"),
+        "longitude": coords.get("lng"),
         "distance_from_previous_km": None,
         "place_id": restaurant.get("place_id"),
         "business_status": restaurant.get("business_status"),
-        "availability_note": (
-            "Opening hours and seating are not confirmed; check with the restaurant, "
-            "including any dietary needs."
-        ),
+        "availability_note": "",
     }
 
 
@@ -663,16 +810,25 @@ def _overlaps_an_activity(meal_window: str, activities: list) -> bool:
     return False
 
 
-def _add_daily_meals(tour_plan: list, hotel_address: str, city_name: str) -> list:
-    used_restaurant_keys = set()
+def _add_daily_meals(
+    tour_plan: list,
+    hotel_address: str,
+    city_name: str,
+    hotel_point=None,
+    dining: Optional[dict] = None,
+    used_restaurant_keys: Optional[set] = None,
+) -> list:
+    used_restaurant_keys = set() if used_restaurant_keys is None else used_restaurant_keys
     for day in tour_plan:
         activities = [activity for activity in day.get("activities", []) if not _activity_is_meal(activity)]
         meal_activities = []
         for meal_name, (meal_window, _cost) in _MEAL_SCHEDULE.items():
             if _overlaps_an_activity(meal_window, activities):
                 continue  # An activity already fills this time; don't double-book the guest.
-            anchor = _choose_anchor(activities, meal_name, hotel_address, city_name)
-            restaurant = _find_restaurant_for_meal(anchor, meal_name, used_restaurant_keys, city_name)
+            anchor = _choose_anchor(activities, meal_name, hotel_address, city_name, hotel_point)
+            restaurant = _find_restaurant_for_meal(
+                anchor["text"], meal_name, used_restaurant_keys, city_name, anchor["point"], dining,
+            )
             meal_activities.append(_meal_activity(meal_name, restaurant, anchor))
         day["activities"] = sorted(
             [*activities, *meal_activities],
@@ -699,93 +855,385 @@ def _merge_tour_plan_days(existing_plan: list, replacement_days: list) -> list:
     return merged
 
 
-def _calculate_distances(tour_plan: list, hotel_address: str) -> list:
-    """
-    For each day, calculate real distances using calculate_distance_routes_api:
-    - First activity: from hotel address to that activity's real address
-    - Every subsequent activity: from previous activity's real address to current
-    - Chain resets at the start of each new day (back to hotel)
-    If a tool lookup fails, distance_from_previous_km stays None.
-    """
-    for day in tour_plan:
-        activities = day.get("activities", [])
-        previous_address = hotel_address
-        for activity in activities:
-            current_address = activity.get("activity_address", "N/A")
-            if current_address and current_address != "N/A":
-                try:
-                    distance_result = calculate_distance_routes_api.invoke({
-                        "origin_address": previous_address,
-                        "destination_address": current_address,
-                    })
-                    if "error" not in distance_result:
-                        activity["distance_from_previous_km"] = distance_result.get("distance_km")
-                    else:
-                        activity["distance_from_previous_km"] = None
-                except Exception:
-                    activity["distance_from_previous_km"] = None
-            else:
-                activity["distance_from_previous_km"] = None
-            # Update previous_address for chaining (use tool-verified address even if N/A)
-            previous_address = current_address if current_address and current_address != "N/A" else previous_address
-    return tour_plan
+# ==================== ITINERARY BUILD: STOPS, GEOGRAPHY, VALIDATION ====================
+#
+# Order of work for every itinerary (client brief, Priorities 1-5):
+#   1. Stops: the model proposes one base area (or, for long trips that need
+#      another region, a few stops); normalize_stops enforces the rules.
+#   2. A real stay per stop; its coordinates are the stop's base.
+#   3. Experiences and restaurants are searched around the base and keep
+#      their coordinates.
+#   4. Every item is checked against MAX_LEG_MINUTES from the base and the
+#      previous item (Google Routes); too-far items are replaced or removed.
+#      A new stop starts with a transfer and a lighter day.
+#   5. Specific reasons, intentional free time, a price breakdown from the
+#      visible items, then the final validation and booking status.
+
+# Hotel search radius around a stop's base area, and the radius for its experiences.
+STAY_SEARCH_RADIUS_M = 15000.0
+STOP_SEARCH_RADIUS_M = 30000.0
+# A replacement further than this in a straight line cannot be within the
+# travel limit by road, so no route is requested for it.
+_REPLACEMENT_MAX_KM = MAX_LEG_MINUTES / 60 * FALLBACK_SPEED_KMH / FALLBACK_ROAD_FACTOR
 
 
-def _check_budget(tour_plan: list, hotel: dict, profile: TripProfile) -> tuple:
-    """
-    Estimated trip cost, and whether the stay fits the budget.
-
-    The budget is USD per room, per night (IMPORT_RULES.csv "Budget"), so the
-    stay is compared per room-night; activities are costed per person across
-    the party and reported in the total but never counted against the
-    lodging budget. Returns (total_cost_estimate, stay_within_budget).
-    """
-    nightly = _estimate_hotel_cost(hotel)
-    lodging_total = nightly * profile.nights * profile.rooms
-    activities_total = sum(
-        activity.get("activity_cost", 0) or 0
-        for day in tour_plan
-        for activity in day.get("activities", [])
-    ) * profile.party_size
-    within_budget = profile.budget_open_ended or nightly <= profile.budget_per_night
-    return lodging_total + activities_total, within_budget
+def _base_names(destination: Optional[Destination]) -> set:
+    if destination is None:
+        return set()
+    return {destination.destination.lower(), lookup_name(destination.destination).lower()}
 
 
-def _build_final_response(
-    hotel: dict,
+def _stop_location(base_area: str, destination: Optional[Destination], city_name: str) -> str:
+    """Map-search location for a stop: "Base area, Destination, Country"."""
+    if destination is None:
+        return base_area if base_area.lower() == city_name.lower() else f"{base_area}, {city_name}"
+    if base_area.lower() in _base_names(destination):
+        return f"{destination.destination}, {destination.country}"
+    return f"{base_area}, {destination.destination}, {destination.country}"
+
+
+def _area_point(base_area: str, destination: Optional[Destination]) -> Optional[tuple]:
+    """Coordinates of a base area, country-checked; the catalog point when the base is the destination itself."""
+    if (
+        destination is not None
+        and base_area.lower() in _base_names(destination)
+        and destination.latitude is not None
+        and destination.longitude is not None
+    ):
+        return destination.latitude, destination.longitude
+    country = destination.country if destination else None
+    try:
+        result = get_cityinfo.invoke({"city_name": base_area, "region_hint": country})
+    except Exception:
+        return None
+    if not isinstance(result, dict) or "error" in result or result.get("lat") is None or result.get("lng") is None:
+        return None
+    if country and not same_country(result.get("country"), country):
+        return None
+    return float(result["lat"]), float(result["lng"])
+
+
+def _nightly_usd(hotel: dict) -> Optional[float]:
+    """Estimated nightly rate from real map data, or None when there is no basis for one."""
+    if hotel.get("is_fallback") or hotel.get("price_inferred"):
+        return None
+    return float(_estimate_hotel_cost(hotel))
+
+
+def _plan_stops(
+    raw_stops,
+    profile: TripProfile,
+    destination: Optional[Destination],
+    city_name: str,
+    profile_search_query: str,
+    hotel_cache: dict,
+) -> list:
+    """Normalize the model's stops and give each one a real stay; the stay's location is the base."""
+    default_area = lookup_name(destination.destination) if destination else city_name
+    stops = normalize_stops(raw_stops, profile.nights, default_area)
+    for stop in stops:
+        key = stop["base_area"].lower()
+        if key not in hotel_cache:
+            area_point = _area_point(stop["base_area"], destination)
+            location = _stop_location(stop["base_area"], destination, city_name)
+            bias = (
+                {"latitude": area_point[0], "longitude": area_point[1], "radius_m": STAY_SEARCH_RADIUS_M}
+                if area_point else None
+            )
+            hotel = _find_hotel(location, profile.budget_per_night, profile.budget_open_ended, profile_search_query, bias)
+            hotel = _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
+            hotel["photos"] = _clean_photos(hotel.get("photos", []))
+            hotel_cache[key] = (hotel, area_point, location)
+        hotel, area_point, location = hotel_cache[key]
+        hotel = dict(hotel)
+        stay_point = point_of(hotel)
+        base_point = stay_point or area_point
+        stop.update(
+            location=location,
+            hotel=hotel,
+            stay_found=not hotel.get("is_fallback"),
+            nightly_usd=_nightly_usd(hotel),
+            base={
+                "latitude": base_point[0] if base_point else None,
+                "longitude": base_point[1] if base_point else None,
+                "source": "stay" if stay_point else ("base_area" if area_point else None),
+            },
+        )
+    return stops
+
+
+def _fallback_experience_reason(item: dict, profile: TripProfile) -> str:
+    """A reason tied to the guest's own answers when the model gave none worth showing."""
+    feeling = TRIP_GOAL_FEELING_WORDS[profile.goals[0]].lower()
+    moment = profile.moment_labels[0].lower() if profile.moment_labels else None
+    enjoy = f", with time for the {moment} you said you enjoy" if moment else ", at a pace that suits you"
+    return f"{item.get('activity_name', 'This experience')} gives you room to feel {feeling}{enjoy}."
+
+
+def _replacement_finder(stop: dict, dataset: list, used_place_keys: set, used_restaurant_keys: set,
+                        dining: dict, profile: TripProfile):
+    """Closer alternatives for items over the travel limit (see itinerary_geo.enforce_day)."""
+    feeling = TRIP_GOAL_FEELING_WORDS[profile.goals[0]].lower()
+
+    def experience(item: dict, base: tuple, previous: tuple) -> Optional[dict]:
+        for place in dataset:
+            point = point_of(place)
+            key = _place_key(place)
+            if point is None or (key and key in used_place_keys):
+                continue
+            if straight_line_km(base, point) > _REPLACEMENT_MAX_KM or straight_line_km(previous, point) > _REPLACEMENT_MAX_KM:
+                continue
+            if key:
+                used_place_keys.add(key)
+            name = place.get("name", "")
+            return {
+                "item_type": EXPERIENCE,
+                "activity_name": name,
+                "activity_description": f"An unhurried visit to {name}, close to your base in {stop['base_area']}.",
+                "activity_location": stop["base_area"],
+                "activity_address": place.get("address", "N/A"),
+                "activity_image": _clean_photos(place.get("photos", [])),
+                "activity_time": item.get("activity_time", ""),
+                "activity_cost": item.get("activity_cost", 0),
+                "why_selected": (
+                    f"Swapped in for {item.get('activity_name', 'the original plan')}, which is too far from your "
+                    f"base, and it still gives you room to feel {feeling}."
+                ),
+                "latitude": point[0],
+                "longitude": point[1],
+                "distance_from_previous_km": None,
+                "place_id": place.get("place_id"),
+                "business_status": place.get("business_status"),
+                "availability_note": "",
+            }
+        return None
+
+    def meal(item: dict, base: tuple, previous: tuple) -> Optional[dict]:
+        meal_name = item.get("meal") or "Lunch"
+        anchor = {"text": stop["location"], "point": previous, "name": stop["base_area"]}
+        restaurant = _find_restaurant_for_meal(
+            stop["location"], meal_name, used_restaurant_keys, stop["location"], previous, dining,
+        )
+        point = point_of(restaurant) if restaurant else None
+        if point is not None and straight_line_km(previous, point) > _REPLACEMENT_MAX_KM:
+            restaurant = None
+        return _meal_activity(meal_name, restaurant, anchor)
+
+    return lambda item, base, previous: meal(item, base, previous) if item.get("item_type") == MEAL \
+        else experience(item, base, previous)
+
+
+def _describe_items(day: dict, profile: TripProfile, dining: dict) -> None:
+    """Every recommendation gets a specific, guest-facing reason; text is cleaned of backend markers."""
+    activities = day.get("activities", [])
+    for index, item in enumerate(activities):
+        kind = item.get("item_type", EXPERIENCE)
+        item["activity_description"] = guest_clean(item.get("activity_description"))
+        if kind == EXPERIENCE:
+            reason = guest_clean(item.get("why_selected"))
+            item["why_selected"] = _fallback_experience_reason(item, profile) if is_generic_reason(reason) else reason
+        elif kind == MEAL and not item.get("open_slot"):
+            next_name = next(
+                (later.get("activity_name") for later in activities[index + 1:] if later.get("item_type") == EXPERIENCE),
+                None,
+            )
+            item["why_selected"] = describe_meal(item, item.get("meal") or "Lunch", next_name, dining.get("dietary", []))
+
+
+def _seed_used_restaurant_keys(existing_plan: Optional[list], exclude_day: Optional[int] = None) -> set:
+    """Restaurants already on the other days, so a regenerated day doesn't repeat them."""
+    keys = set()
+    for day in _dump_tour_plan(existing_plan or []):
+        if exclude_day is not None and day.get("day") == exclude_day:
+            continue
+        for item in day.get("activities", []):
+            if item.get("item_type") == MEAL and item.get("restaurant_name"):
+                key = _place_key({"name": item["restaurant_name"], "address": item.get("activity_address", "")})
+                if key:
+                    keys.add(key)
+    return keys
+
+
+def _build_days(
+    llm_days: list,
+    stops: list,
+    profile: TripProfile,
+    profile_search_query: str,
+    travel: TravelTimes,
+    existing_plan: Optional[list] = None,
+    day_to_regenerate: Optional[int] = None,
+) -> tuple:
+    """Build the given days stop by stop. Returns (days, adjustments)."""
+    dining = _dining_context(profile)
+    used_place_keys = _seed_used_place_keys(existing_plan, day_to_regenerate)
+    used_restaurant_keys = _seed_used_restaurant_keys(existing_plan, day_to_regenerate)
+    pace_phrase = TRIP_PACE_LABELS[profile.pace].lower()
+    valid_days = [day for day in llm_days or [] if isinstance(day, dict) and str(day.get("day", "")).isdigit()]
+    built, adjustments = [], []
+    for stop in stops:
+        stop_days = [
+            {**day, "day": int(day["day"]), "stop": stop["stop"]}
+            for day in valid_days
+            if stop_for_day(stops, int(day["day"]))["stop"] == stop["stop"]
+        ]
+        if not stop_days:
+            continue
+        base = point_of(stop["base"])
+        bias = {"latitude": base[0], "longitude": base[1], "radius_m": STOP_SEARCH_RADIUS_M} if base else None
+        dataset = _fetch_attraction_dataset(stop["location"], profile_search_query, bias)
+        days = _enrich_activities(
+            stop_days, stop["location"], profile_search_query=profile_search_query, bias=bias,
+            attraction_dataset=dataset, used_place_keys=used_place_keys,
+        )
+        replace = _replacement_finder(stop, dataset, used_place_keys, used_restaurant_keys, dining, profile)
+        # Experiences first, so meals are anchored to the experiences that stay in the plan.
+        for day in days:
+            adjustments.extend(enforce_day(day, stop, travel, replace))
+        days = _add_daily_meals(
+            days, stop["hotel"].get("address") or stop["location"], stop["location"], base, dining, used_restaurant_keys,
+        )
+        for day in days:
+            day["day_type"] = "standard"
+            if is_transfer_day(stops, day["day"]):
+                previous_stop = stops[stop["stop"] - 2]
+                adjustments.extend(apply_transfer_day(day, transfer_item(previous_stop, stop, compute_drive_route)))
+            # Final pass over the day as it now stands: meals checked and every travel time re-chained.
+            adjustments.extend(enforce_day(day, stop, travel, replace))
+            _describe_items(day, profile, dining)
+            add_free_time(day, pace_phrase)
+            built.append(day)
+    built.sort(key=lambda day: day["day"])
+    return built, adjustments
+
+
+def _destination_verified(destination: Optional[Destination]) -> bool:
+    if destination is None:
+        return False
+    return destination.candidate_status != "CANDIDATE_ONLY" and "REQUIRED" not in destination.source_review_status
+
+
+_FERRY_NOTE = "Your transfer includes a ferry crossing: check sailing times and book ahead in busy seasons."
+_ESTIMATED_TRAVEL_NOTE = "Some travel times are estimates, so allow a little extra time between plans."
+
+
+def _finalize_itinerary(stops: list, days: list, profile: TripProfile, destination: Optional[Destination],
+                        adjustments: list) -> dict:
+    """Stay reasons, price breakdown, final validation, booking status and guest notes (each once)."""
+    for stop in stops:
+        stop["hotel"]["why_selected"] = describe_stay(stop, days)
+    pricing = build_price_breakdown(stops, days, profile.party_size, profile.rooms, profile.nights)
+    validation = validate_itinerary(stops, days, pricing)
+    booking = booking_status(validation, stops, days, _destination_verified(destination))
+    items = [item for day in days for item in day.get("activities", [])]
+    # Only changes to planned experiences are worth a guest note; restaurant swaps are ours to make.
+    notes = [adjustment["guest_note"] for adjustment in adjustments if adjustment.get("guest_note")]
+    if any(item.get("includes_ferry") for item in items):
+        notes.append(_FERRY_NOTE)
+    if any(item.get("item_type", EXPERIENCE) == EXPERIENCE and item.get("place_id") for item in items):
+        notes.append(_PLACE_AVAILABILITY_NOTE)
+    if any(item.get("travel_time_source") == SOURCE_ESTIMATE for item in items):
+        notes.append(_ESTIMATED_TRAVEL_NOTE)
+    return {
+        "price_breakdown": pricing,
+        "total_cost_estimate": pricing["total"],
+        "validation": validation,
+        "booking_status": booking,
+        "adjustments": adjustments,
+        "guest_notes": dedupe(notes),
+    }
+
+
+def _stays_within_budget(stops: list, profile: TripProfile) -> tuple:
+    """(most expensive stay, whether every stay fits the per-room nightly budget)."""
+    priciest = max((stop["hotel"] for stop in stops), key=_estimate_hotel_cost)
+    within = profile.budget_open_ended or _estimate_hotel_cost(priciest) <= profile.budget_per_night
+    return priciest, within
+
+
+# ==================== GUEST-FACING ITINERARY ====================
+
+_STAY_ESTIMATE_NOTE = "Rates are estimates until they are confirmed with a booking provider for your dates."
+
+
+def _guest_stay(stop: dict) -> dict:
+    """The stay as a guest sees it: no internal codes, no invented facilities, estimates labelled once."""
+    hotel = stop.get("hotel") or {}
+    label = None if hotel.get("price_inferred") or hotel.get("is_fallback") else price_indication(hotel.get("price_level"))
+    nightly = stop.get("nightly_usd")
+    website = hotel.get("website") or ""
+    return {
+        "name": guest_clean(hotel.get("name", "N/A")),
+        "address": guest_clean(hotel.get("address", "N/A")),
+        "rating": float(hotel.get("rating") or 0.0),
+        "price_level": label or "",
+        "price_indication": label,
+        "photos": _clean_photos(hotel.get("photos", [])),
+        "coords": hotel.get("coords"),
+        "average_nightly_price": f"${nightly:,.0f} per night (estimate)" if nightly is not None else "",
+        "budget_tier": "",
+        "facilities": [],
+        "website": "" if website == "Not available" else website,
+        "estimate_note": _STAY_ESTIMATE_NOTE,
+        "price_status": "ESTIMATED",
+        "availability_status": "NOT_CHECKED",
+        "why_selected": hotel.get("why_selected", ""),
+        "base_area": stop.get("base_area", ""),
+        "nights": stop.get("nights"),
+    }
+
+
+def _guest_stops(stops: list) -> list:
+    return [
+        {
+            "stop": stop["stop"],
+            "base_area": stop["base_area"],
+            "nights": stop["nights"],
+            "first_day": stop["first_day"],
+            "last_day": stop["last_day"],
+            "stay": _guest_stay(stop),
+        }
+        for stop in stops
+    ]
+
+
+def _itinerary_payload(
+    activity_session_id: str,
+    destination_id: Optional[str],
+    city_name: str,
+    stops: list,
     tour_plan: list,
-    total_cost: float,
+    response: dict,
     packing_tips: str,
     travel_tips: str,
-    activity_session_id: str,
-    city_name: str,
     source: str,
 ) -> dict:
-    """Build the final response matching the required schema."""
+    """
+    Final response. The feeling block sits right after the destination. Guests
+    see: feeling_block, stops (each with its stay), tour_plan, price_breakdown,
+    booking_status.guest_label and guest_notes. `validation` and
+    `adjustments` explain what was checked and changed.
+    """
+    guest_stops = _guest_stops(stops)
     return {
         "activity_session_id": activity_session_id,
+        "destination_id": destination_id,
         "city": city_name,
-        "stay": StayInfo(
-            name=hotel.get("name", "N/A"),
-            address=hotel.get("address", "N/A"),
-            rating=hotel.get("rating", 0.0),
-            price_level=hotel.get("price_level", "NOT_AVAILABLE"),
-            photos=_clean_photos(hotel.get("photos", [])),
-            coords=hotel.get("coords"),
-            average_nightly_price=hotel.get("average_nightly_price", ""),
-            budget_tier=hotel.get("budget_tier", ""),
-            facilities=hotel.get("facilities", []),
-            website=hotel.get("website", ""),
-            estimate_note=hotel.get("estimate_note", ""),
-            price_status="ESTIMATED",
-            availability_status="NOT_CHECKED",
-        ),
+        "feeling_block": response.get("feeling_block"),
+        "booking_status": response.get("booking_status"),
+        "stay": guest_stops[0]["stay"] if guest_stops else None,
+        "stops": guest_stops,
         "tour_plan": tour_plan,
-        "total_cost_estimate": round(total_cost, 2),
-        "packing_tips": packing_tips,
-        "travel_tips": travel_tips,
+        "price_breakdown": response.get("price_breakdown"),
+        "total_cost_estimate": response.get("total_cost_estimate"),
+        "guest_notes": response.get("guest_notes", []),
+        "adjustments": response.get("adjustments", []),
+        "validation": response.get("validation"),
+        "budget_check": response.get("budget_check"),
+        "packing_tips": guest_clean(packing_tips),
+        "travel_tips": guest_clean(travel_tips),
         "source": source,
     }
+
 
 # ==================== DESTINATION SUGGESTION FLOW ====================
 
@@ -1009,33 +1457,6 @@ def _location_for(destination: Optional[Destination], fallback: str) -> str:
     return f"{destination.destination}, {destination.country}"
 
 
-def _cheaper_stay_within_budget(
-    location: str, profile: TripProfile, profile_search_query: str, tour_plan: list
-) -> Optional[tuple]:
-    """Cheapest-first search for a stay whose estimated nightly cost fits the budget."""
-    try:
-        hotels = get_google_hotels_sorted_by_rating.invoke({
-            "location_name": location,
-            "search_query": profile_search_query,
-        })
-    except Exception:
-        return None
-    if not hotels or "error" in hotels[0]:
-        return None
-    candidates = sorted(
-        (
-            _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
-            for hotel in hotels
-        ),
-        key=_estimate_hotel_cost,
-    )
-    for candidate in candidates:
-        total_cost, within_budget = _check_budget(tour_plan, candidate, profile)
-        if within_budget:
-            return candidate, total_cost
-    return None
-
-
 def _budget_check(hotel: dict, profile: TripProfile, within_budget: bool) -> dict:
     """Surface the stay/budget comparison instead of relaxing the budget silently."""
     return {
@@ -1055,12 +1476,46 @@ def _budget_check(hotel: dict, profile: TripProfile, within_budget: bool) -> dic
     }
 
 
-def _hotel_from_stay(stay) -> dict:
-    return stay.model_dump() if hasattr(stay, "model_dump") else dict(stay)
+def _stops_from_session(activity_session) -> list:
+    """Stops for sessions saved before multi-stop itineraries: one stop around the saved stay."""
+    stay = activity_session.stay.model_dump() if activity_session.stay is not None else _fallback_hotel(activity_session.city)
+    point = point_of(stay)
+    nights = max(len(activity_session.tour_plan), 1)
+    return [{
+        "stop": 1,
+        "base_area": activity_session.city,
+        "nights": nights,
+        "first_day": 1,
+        "last_day": nights,
+        "location": activity_session.city,
+        "hotel": stay,
+        "stay_found": not stay.get("is_fallback"),
+        "nightly_usd": None,
+        "base": {
+            "latitude": point[0] if point else None,
+            "longitude": point[1] if point else None,
+            "source": "stay" if point else None,
+        },
+    }]
+
+
+def _session_payload(activity_session, source: str) -> dict:
+    response = activity_session.response or {}
+    return _itinerary_payload(
+        activity_session.activity_session_id,
+        activity_session.destination_id,
+        activity_session.city,
+        response.get("stops") or _stops_from_session(activity_session),
+        _dump_tour_plan(activity_session.tour_plan),
+        response,
+        activity_session.packing_tips,
+        activity_session.travel_tips,
+        source,
+    )
 
 
 def _plan_experiences(tour_plan: list) -> list:
-    """The itinerary's actual experiences (meal stops excluded) for the feeling block."""
+    """The itinerary's actual experiences (no meals, transfers or open time) for the feeling block."""
     return [
         {
             "day": day.get("day"),
@@ -1069,7 +1524,7 @@ def _plan_experiences(tour_plan: list) -> list:
         }
         for day in _dump_tour_plan(tour_plan)
         for activity in day.get("activities", [])
-        if not _activity_is_meal(activity)
+        if activity.get("item_type", EXPERIENCE) == EXPERIENCE and not _activity_is_meal(activity)
     ]
 
 
@@ -1083,18 +1538,6 @@ def _feeling_block_for(profile: TripProfile, destination: Optional[Destination],
     )
 
 
-def _itinerary_payload(final: dict, destination_id: Optional[str], feeling_block: Optional[dict], budget_check) -> dict:
-    """Final response with the feeling block placed near the top, right after the destination."""
-    return {
-        "activity_session_id": final["activity_session_id"],
-        "destination_id": destination_id,
-        "city": final["city"],
-        "feeling_block": feeling_block,
-        **final,
-        "budget_check": budget_check,
-    }
-
-
 @router.post("/get_tour_plan")
 
 
@@ -1102,13 +1545,15 @@ async def get_tour_plan(request_data: TourPlanRequestData):
     """
     GENERATE: First time -> create a day-wise plan for a destination suggested
     in this session:
-    1. Stay search (estimated prices only)
-    2. LLM proposes activity names, descriptions, areas, times, costs
-    3. Tool enrichment: place/address/photos and meal stops
-    4. "The feeling behind your journey" block, checked against the actual
-       experiences; if the plan does not support the chosen feeling it is
-       revised once, and any remaining mismatch is flagged
-    5. Distances and budget check on the final plan
+    1. LLM proposes the base area(s) and activity names, descriptions, areas,
+       times, costs and reasons
+    2. A real stay per base (estimated prices only); its location is the base
+    3. Experiences and restaurants matched to real places around the base
+    4. Travel times from coordinates: anything over the limit is replaced or
+       removed; extra stops get a transfer and a lighter day
+    5. "Designed to help you feel" block, checked against the actual
+       experiences; revised once if the plan does not support the feeling
+    6. Price breakdown, final validation and booking status
     """
     city_session = CitySessionStore.get(request_data.session_id)
     if city_session is None:
@@ -1121,47 +1566,29 @@ async def get_tour_plan(request_data: TourPlanRequestData):
             city_name=city_name,
         )
         if activity_session is not None:
-            return {
-                "activity_session_id": activity_session.activity_session_id,
-                "destination_id": activity_session.destination_id,
-                "city": activity_session.city,
-                "feeling_block": activity_session.response.get("feeling_block"),
-                "stay": activity_session.stay,
-                "tour_plan": activity_session.tour_plan,
-                "total_cost_estimate": activity_session.total_cost_estimate,
-                "budget_check": activity_session.response.get("budget_check"),
-                "packing_tips": activity_session.packing_tips,
-                "travel_tips": activity_session.travel_tips,
-                "source": "cached",
-            }
+            return _session_payload(activity_session, "cached")
         profile = build_trip_profile(_load_session_intake(city_session.intake))
-        location = _location_for(destination, city_name)
-
-        # === STEP 1: Tool - Find stay ===
         profile_search_query = _build_profile_search_context(profile)
-        hotel = _find_hotel(location, profile.budget_per_night, profile.budget_open_ended, profile_search_query)
-        hotel = _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
-        hotel["photos"] = _clean_photos(hotel.get("photos", []))
-        hotel_address = hotel.get("address", f"City Center, {location}")
+        travel = TravelTimes()
+        hotel_cache: dict = {}
 
         def draft_itinerary(revision: str = "") -> tuple:
-            # === STEP 2: LLM proposes activities (names, descriptions, areas, times, costs only) ===
             prompt = PromptGenerator.gen_tour_plan_prompt(profile, city_name, destination, revision)
             draft = _parse_ai_response(get_ai_response(prompt))
-            # === STEP 3: Tool - Enrich activities with real places, addresses & photos ===
-            plan = _enrich_activities(draft.get("tour_plan", []), location, profile_search_query=profile_search_query)
-            return draft, _add_daily_meals(plan, hotel_address, location)
+            stops = _plan_stops(draft.get("stops"), profile, destination, city_name, profile_search_query, hotel_cache)
+            days, adjustments = _build_days(draft.get("tour_plan", []), stops, profile, profile_search_query, travel)
+            return draft, stops, days, adjustments
 
-        response, enriched_plan = draft_itinerary()
+        response, stops, enriched_plan, adjustments = draft_itinerary()
 
-        # === STEP 4: The feeling behind the journey -- revise once if the plan doesn't support it ===
+        # The feeling behind the journey -- revise once if the plan doesn't support it.
         feeling_block = _feeling_block_for(profile, destination, city_name, enriched_plan)
         if feeling_block["alignment"]["status"] == "mismatch":
             first_reason = feeling_block["alignment"]["detail"]
-            revised_response, revised_plan = draft_itinerary(revision_note(feeling_block))
-            revised_block = _feeling_block_for(profile, destination, city_name, revised_plan)
+            revised = draft_itinerary(revision_note(feeling_block))
+            revised_block = _feeling_block_for(profile, destination, city_name, revised[2])
             if revised_block["alignment"]["status"] == "aligned":
-                response, enriched_plan, feeling_block = revised_response, revised_plan, revised_block
+                (response, stops, enriched_plan, adjustments), feeling_block = revised, revised_block
                 feeling_block["alignment"]["status"] = "revised"
                 feeling_block["alignment"]["detail"] = (
                     f"The first draft did not support the chosen feeling ({first_reason}), so the itinerary was revised."
@@ -1171,54 +1598,28 @@ async def get_tour_plan(request_data: TourPlanRequestData):
                     f"{first_reason} A revised draft also could not support it, so this is flagged instead of "
                     "presented as a match."
                 )
-        packing_tips = response.get("packing_tips", "")
-        travel_tips = response.get("travel_tips", "")
 
-        # === STEP 5: Tool - Calculate real distances ===
-        enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-
-        # === STEP 6: Budget check (stay per room-night vs. the guest's budget) ===
-        total_cost, within_budget = _check_budget(enriched_plan, hotel, profile)
-        if not within_budget:
-            cheaper = _cheaper_stay_within_budget(location, profile, profile_search_query, enriched_plan)
-            if cheaper is not None:
-                hotel, total_cost = cheaper
-                within_budget = True
-                hotel["photos"] = _clean_photos(hotel.get("photos", []))
-                hotel_address = hotel.get("address", f"City Center, {location}")
-                enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-
-        response["total_cost_estimate"] = round(total_cost, 2)
-        response["budget_check"] = _budget_check(hotel, profile, within_budget)
-        response["feeling_block"] = feeling_block
-
-        # === STEP 7: Store in session ===
+        final = _finalize_itinerary(stops, enriched_plan, profile, destination, adjustments)
+        priciest, within_budget = _stays_within_budget(stops, profile)
+        response.update(
+            stops=stops,
+            feeling_block=feeling_block,
+            budget_check=_budget_check(priciest, profile, within_budget),
+            tour_plan=enriched_plan,
+            **final,
+        )
         activity_session = ActivitySessionStore.create(
             parent_session_id=request_data.session_id,
             city_name=city_name,
             tour_plan=enriched_plan,
             response=response,
-            stay_data=hotel,
-            total_cost_estimate=round(total_cost, 2),
-            packing_tips=packing_tips,
-            travel_tips=travel_tips,
+            stay_data=_guest_stay(stops[0]),
+            total_cost_estimate=final["total_cost_estimate"],
+            packing_tips=response.get("packing_tips", ""),
+            travel_tips=response.get("travel_tips", ""),
             destination_id=destination.destination_id,
         )
-        return _itinerary_payload(
-            _build_final_response(
-                hotel=hotel,
-                tour_plan=enriched_plan,
-                total_cost=total_cost,
-                packing_tips=packing_tips,
-                travel_tips=travel_tips,
-                activity_session_id=activity_session.activity_session_id,
-                city_name=city_name,
-                source="generated",
-            ),
-            destination.destination_id,
-            feeling_block,
-            response["budget_check"],
-        )
+        return _session_payload(activity_session, "generated")
     except HTTPException:
         raise
     except Exception as error:
@@ -1229,13 +1630,11 @@ async def get_tour_plan(request_data: TourPlanRequestData):
 
 async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
     """
-    REGENERATE: different day-wise activities (same destination, new plan).
-    Same pattern as generate:
-    1. LLM proposes new activity names/descriptions/areas/times/costs
-    2. Tool enrichment: place/address/photos lookup, distance recalculation, budget re-check
-    3. The feeling block is rewritten for the new plan. The guest asked for
-       these changes, so the plan is not re-planned automatically; if it no
-       longer supports the chosen feeling, the block flags the mismatch.
+    REGENERATE: different activities for the whole plan or one day, keeping
+    the same stays (bases). The new days go through the same matching,
+    travel-time enforcement, pricing and validation as a new itinerary. The
+    guest asked for these changes, so the plan is not re-planned for the
+    feeling automatically; if it no longer supports it, the block flags it.
     """
     activity_session = ActivitySessionStore.get(regenerate_data.activity_session_id)
     if activity_session is None:
@@ -1247,91 +1646,60 @@ async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
         profile = build_trip_profile(_load_session_intake(city_session.intake))
         destination = get_destination(activity_session.destination_id) if activity_session.destination_id else None
         city_name = activity_session.city
-        location = _location_for(destination, city_name)
+        stops = activity_session.response.get("stops") or _stops_from_session(activity_session)
+        day_to_regenerate = regenerate_data.day_to_regenerate
 
-        # === STEP 1: LLM proposes new activities ===
         prompt = PromptGenerator.regenerate_tour_plan_prompt(
             profile=profile,
             city_name=city_name,
             current_tour_plan=activity_session.tour_plan,
-            day_to_regenerate=regenerate_data.day_to_regenerate,
+            day_to_regenerate=day_to_regenerate,
             user_instruction=regenerate_data.user_instruction,
             destination=destination,
+            stops=stops,
         )
         generated_response = _parse_ai_response(get_ai_response(prompt))
-        llm_tour_plan = generated_response.get("tour_plan", [])
+        llm_days = generated_response.get("tour_plan", [])
+        if day_to_regenerate is not None:
+            llm_days = [day for day in llm_days if isinstance(day, dict) and day.get("day") == day_to_regenerate]
 
-        # === STEP 2: Tool enrichment ===
-        profile_search_query = _build_profile_search_context(profile)
-        if activity_session.stay:
-            hotel = _hotel_from_stay(activity_session.stay)
-        else:
-            hotel = _find_hotel(location, profile.budget_per_night, profile.budget_open_ended, profile_search_query)
-        hotel = _complete_hotel_values(hotel, location, profile.budget_per_night, profile_search_query)
-        hotel["photos"] = _clean_photos(hotel.get("photos", []))
-        hotel_address = hotel.get("address", f"City Center, {location}")
-        enriched_plan = _enrich_activities(
-            llm_tour_plan,
-            location,
-            existing_plan=activity_session.tour_plan,
-            day_to_regenerate=regenerate_data.day_to_regenerate,
-            profile_search_query=profile_search_query,
+        existing_plan = _dump_tour_plan(activity_session.tour_plan)
+        new_days, new_adjustments = _build_days(
+            llm_days, stops, profile, _build_profile_search_context(profile), TravelTimes(),
+            existing_plan=existing_plan, day_to_regenerate=day_to_regenerate,
         )
-        enriched_plan = _add_daily_meals(enriched_plan, hotel_address, location)
-        enriched_plan = _calculate_distances(enriched_plan, hotel_address)
+        if day_to_regenerate is None:
+            full_tour_plan, adjustments = new_days, new_adjustments
+        else:
+            full_tour_plan = _merge_tour_plan_days(existing_plan, new_days)
+            kept = [item for item in activity_session.response.get("adjustments", []) if item.get("day") != day_to_regenerate]
+            adjustments = [*kept, *new_adjustments]
 
-        def full_plan(plan: list) -> list:
-            if regenerate_data.day_to_regenerate is None:
-                return plan
-            return _merge_tour_plan_days(activity_session.tour_plan, plan)
-
-        full_tour_plan = full_plan(enriched_plan)
-        total_cost, within_budget = _check_budget(full_tour_plan, hotel, profile)
-        if not within_budget:
-            cheaper = _cheaper_stay_within_budget(location, profile, profile_search_query, full_tour_plan)
-            if cheaper is not None:
-                hotel, total_cost = cheaper
-                within_budget = True
-                hotel["photos"] = _clean_photos(hotel.get("photos", []))
-                hotel_address = hotel.get("address", f"City Center, {location}")
-                enriched_plan = _calculate_distances(enriched_plan, hotel_address)
-                full_tour_plan = full_plan(enriched_plan)
-
-        generated_response["total_cost_estimate"] = round(total_cost, 2)
+        final = _finalize_itinerary(stops, full_tour_plan, profile, destination, adjustments)
+        priciest, within_budget = _stays_within_budget(stops, profile)
         generated_response["tour_plan"] = full_tour_plan
         response = _merge_regenerated_field(
             previous_response=activity_session.response,
             generated_response=generated_response,
             update_field_name="tour_plan",
         )
-        response["total_cost_estimate"] = round(total_cost, 2)
-        response["budget_check"] = _budget_check(hotel, profile, within_budget)
-        response["feeling_block"] = _feeling_block_for(profile, destination, city_name, full_tour_plan)
+        response.update(
+            stops=stops,
+            feeling_block=_feeling_block_for(profile, destination, city_name, full_tour_plan),
+            budget_check=_budget_check(priciest, profile, within_budget),
+            **final,
+        )
         updated_session = ActivitySessionStore.update_response(
             activity_session_id=regenerate_data.activity_session_id,
             response=response,
-            day_to_regenerate=regenerate_data.day_to_regenerate,
+            day_to_regenerate=day_to_regenerate,
             user_instruction=regenerate_data.user_instruction or "",
-            stay_data=hotel,
-            total_cost_estimate=round(total_cost, 2),
+            stay_data=_guest_stay(stops[0]),
+            total_cost_estimate=final["total_cost_estimate"],
         )
         if updated_session is None:
             raise HTTPException(status_code=404, detail="Activity session not found.")
-        return _itinerary_payload(
-            _build_final_response(
-                hotel=hotel,
-                tour_plan=full_tour_plan,
-                total_cost=total_cost,
-                packing_tips=activity_session.packing_tips,
-                travel_tips=activity_session.travel_tips,
-                activity_session_id=updated_session.activity_session_id,
-                city_name=city_name,
-                source="regenerated",
-            ),
-            activity_session.destination_id,
-            response["feeling_block"],
-            response["budget_check"],
-        )
+        return _session_payload(updated_session, "regenerated")
     except HTTPException:
         raise
     except Exception as error:
@@ -1365,16 +1733,8 @@ async def get_activity_session_details(activity_session_id: str):
     if session is None:
         raise HTTPException(status_code=404, detail="Activity session not found.")
     return {
-        "activity_session_id": session.activity_session_id,
+        **_session_payload(session, "saved"),
         "parent_session_id": session.parent_session_id,
-        "destination_id": session.destination_id,
-        "city": session.city,
-        "feeling_block": session.response.get("feeling_block"),
-        "stay": session.stay,
-        "tour_plan": [day.model_dump() for day in session.tour_plan],
-        "total_cost_estimate": session.total_cost_estimate,
-        "packing_tips": session.packing_tips,
-        "travel_tips": session.travel_tips,
         "regeneration_history": session.history,
     }
 

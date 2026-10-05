@@ -67,7 +67,24 @@ def test_unmatched_activity_keeps_its_name_and_is_marked_unverified():
     activity = plan[0]["activities"][0]
     assert activity["activity_name"] == "Campuhan ridge walk"
     assert activity["place_id"] is None
-    assert "not verified" in activity["availability_note"]
+    assert activity["latitude"] is None
+    assert "couldn't confirm this place" in activity["availability_note"]
+
+
+def test_matched_activity_keeps_coordinates_and_its_reason():
+    plan = _plan("Campuhan ridge walk")
+    plan[0]["activities"][0]["why_selected"] = "A gentle ridge walk that suits your unhurried mornings."
+    with patch("app.router.city_content_route.get_detailed_tourist_places", _tool([
+        {"name": "Campuhan Ridge Walk", "place_id": "ridge", "business_status": "OPERATIONAL",
+         "address": "Jl. Raya Campuhan, Ubud, Bali, Indonesia", "photos": [],
+         "coords": {"lat": -8.50, "lng": 115.25}},
+    ])):
+        activity = _enrich_activities(plan, LOCATION)[0]["activities"][0]
+    assert (activity["latitude"], activity["longitude"]) == (-8.50, 115.25)
+    assert activity["item_type"] == "experience"
+    assert activity["why_selected"] == "A gentle ridge walk that suits your unhurried mornings."
+    # The generic opening-hours note is shown once per itinerary, not on every activity.
+    assert activity["availability_note"] == ""
 
 
 def test_same_sounding_place_in_another_country_is_rejected():
@@ -93,8 +110,11 @@ def test_restaurant_search_stays_inside_the_destination():
         plan = _add_daily_meals(plan, "1 Hotel Rd, Cartagena, Colombia", "Cartagena, Colombia")
     locations = {call.args[0]["location_name"] for call in restaurants.invoke.call_args_list}
     assert locations == {"Old City walls, Cartagena, Colombia"}
-    names = [activity["activity_name"] for activity in plan[0]["activities"]]
-    assert "Lunch at a spot of your choice nearby" in names
+    lunch = next(activity for activity in plan[0]["activities"] if activity["activity_name"].startswith("Lunch"))
+    # No restaurant found: an intentionally open slot, never "a convenient stop near the route".
+    assert lunch["activity_name"] == "Lunch near City walls walk"
+    assert lunch["open_slot"] is True
+    assert "convenient" not in lunch["activity_description"]
 
 
 def test_restaurant_search_keeps_an_address_already_in_the_country():

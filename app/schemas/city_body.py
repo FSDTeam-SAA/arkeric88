@@ -43,6 +43,12 @@ class StayInfo(BaseModel):
     # estimates; availability is never claimed without a live check.
     price_status: str = "ESTIMATED"
     availability_status: str = "NOT_CHECKED"
+    # Guest-facing: a price label such as "$$ · Moderate" (None when unknown)
+    # and why this stay is the base for its stop.
+    price_indication: Optional[str] = None
+    why_selected: str = ""
+    base_area: str = ""
+    nights: Optional[int] = None
 
 
 # ==================== ACTIVITY/TOUR PLAN REQUEST/RESPONSE ====================
@@ -62,12 +68,39 @@ class TourPlanActivityInput(BaseModel):
     place_id: Optional[str] = None
     business_status: Optional[str] = None
     availability_note: str = ""
+    # "experience" | "meal" | "transfer" | "free_time"
+    item_type: str = "experience"
+    # Guest-facing reason this item was selected (never generic filler).
+    why_selected: str = ""
+    latitude: Optional[float] = None
+    longitude: Optional[float] = None
+    # Travel times measured from coordinates (see src/core/travel_time.py).
+    travel_minutes_from_previous: Optional[int] = None
+    travel_from: Optional[str] = None
+    travel_minutes_from_base: Optional[int] = None
+    travel_time_source: Optional[str] = None
+    return_to_base_km: Optional[float] = None
+    # Meals: restaurant details; open_slot marks a meal left flexible on purpose.
+    meal: Optional[str] = None
+    restaurant_name: Optional[str] = None
+    rating: Optional[float] = None
+    price_level: Optional[str] = None
+    price_indication: Optional[str] = None
+    open_slot: bool = False
+    # Transfers between stops.
+    transfer_minutes: Optional[int] = None
+    transfer_buffer_minutes: Optional[int] = None
+    transfer_km: Optional[float] = None
+    includes_ferry: bool = False
 
 
 class TourPlanDayInput(BaseModel):
     """Activities for a single day."""
     day: int
     activities: List[TourPlanActivityInput]
+    # Which stop (base) this day belongs to; "transfer" days move between stops.
+    stop: int = 1
+    day_type: str = "standard"
 
 
 class TourPlanRequestData(BaseModel):
@@ -95,6 +128,8 @@ class CitySuggestionInput(BaseModel):
     city_name: str
     country_name: str
     number_of_days: int
+    # Guest display: "Designed to help you feel: **{primary_feeling}**", then description.
+    primary_feeling: Optional[str] = None
     description: Optional[str] = None
     city_image: List[str] = []
     latitude: Optional[float] = None

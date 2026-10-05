@@ -1,6 +1,6 @@
 # AI Tour Guide Platform - API Documentation & Flow Guide
 
-> **Current contract:** Step 1 takes the 11-step Velari intake and suggests destinations from `data/1. AI_IMPORT_DESTINATIONS.csv` under the rules in `data/3. IMPORT_RULES.csv`. The request examples below predate that change; use `API_CITY_FLOW_DOCS.md` and `BACKEND_INTEGRATION_GUIDE.md` for the current request and response shapes.
+> **Current contract:** Step 1 takes the 11-step Velari intake and suggests destinations from `data/1. AI_IMPORT_DESTINATIONS.csv` under the rules in `data/3. IMPORT_RULES.csv`. The request examples below predate that change; use `API_CITY_FLOW_DOCS.md` and `BACKEND_INTEGRATION_GUIDE.md` for the current request and response shapes. Itinerary responses (stops, travel-time validation, price breakdown, guest-facing fields) are described in `docs/8. ITINERARY_VALIDATION_CHANGES.md`.
 
 ## System Overview
 

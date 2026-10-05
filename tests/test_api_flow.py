@@ -73,8 +73,7 @@ class TravelPlannerFlowTests(unittest.TestCase):
              patch("src.core.destination_places.get_cityinfo") as mock_lookup, \
              patch("app.router.city_content_route.get_detailed_tourist_places") as mock_places, \
              patch("app.router.city_content_route.get_nearby_restaurants") as mock_restaurants, \
-             patch("app.router.city_content_route.get_google_hotels_sorted_by_rating") as mock_hotels, \
-             patch("app.router.city_content_route.calculate_distance_routes_api") as mock_distance:
+             patch("app.router.city_content_route.get_google_hotels_sorted_by_rating") as mock_hotels:
             mock_lookup.invoke.side_effect = fake_city_lookup
             place_batches = iter([
                 {"name": "Museum", "street": "1 Museum St", "photos": ["https://example.com/museum.jpg"]},
@@ -102,10 +101,6 @@ class TravelPlannerFlowTests(unittest.TestCase):
                 "photos": ["https://example.com/hotel.jpg"],
                 "coords": {"lat": 48.0, "lng": 2.0},
             }]
-            mock_distance.invoke.return_value = {
-                "distance_km": 2.5,
-                "duration_minutes": 10,
-            }
 
             # Step 1: rank the catalog, get real destinations with destination_id + match_score.
             initial = self.client.post("/get_suggested_city", json=build_intake())
@@ -146,11 +141,10 @@ class TravelPlannerFlowTests(unittest.TestCase):
             self.assertEqual(plan_regenerated.status_code, 200)
             self.assertEqual(plan_regenerated.json()["destination_id"], first_city["destination_id"])
             regenerated_activities = plan_regenerated.json()["tour_plan"][0]["activities"]
-            first_non_meal = next(
-                activity for activity in regenerated_activities
-                if not activity["activity_name"].startswith(("Breakfast", "Lunch", "Dinner"))
+            first_experience = next(
+                activity for activity in regenerated_activities if activity["item_type"] == "experience"
             )
-            self.assertEqual(first_non_meal["activity_name"], "Cafe Central")
+            self.assertEqual(first_experience["activity_name"], "Cafe Central")
             details = self.client.get(f"/session/{session_id}")
             self.assertEqual(details.status_code, 200)
             self.assertEqual(details.json()["intake"]["trip_goals"], ["restoration", "reflection"])

@@ -10,6 +10,8 @@ from src.core.intake_mappings import (
     TRIP_PROMPT_LABELS,
     RECENT_FEELING_LABELS,
 )
+from src.core.itinerary_geo import MIN_NIGHTS_FOR_SECOND_STOP, max_stops_for
+from src.core.travel_time import MAX_LEG_MINUTES
 from src.core.trip_profile import TripProfile
 
 _RESPONSE_FIELD_RULES = """CRITICAL - Do NOT invent or include these fields. They will be filled by a real data tool later:
@@ -18,6 +20,13 @@ _RESPONSE_FIELD_RULES = """CRITICAL - Do NOT invent or include these fields. The
    - Do NOT include any distance values (no "distance_from_previous_km" field)
    - Do NOT state that anything is available, open, bookable or sold at a given price.
    Only the fields listed in the RESPONSE FORMAT below should be included."""
+
+_WHY_SELECTED_RULE = (
+    '"why_selected" is ONE guest-facing sentence (at least 8 words) on why this activity suits THIS traveler: '
+    "tie it to their chosen feeling, the moments they enjoy, their pace or their party, and to something "
+    'specific about the place. Never write filler such as "a convenient stop", "a must-see" or '
+    '"near the route", and never mention tags, catalogs or internal labels.'
+)
 
 
 class PromptGenerator:
@@ -53,31 +62,40 @@ Design a {profile.nights}-day trip in {selected_city} shaped around how this tra
 TRAVELER PROFILE:
 {PromptGenerator._build_profile_summary(profile)}
 {PromptGenerator._build_destination_summary(destination)}{revision}
+{PromptGenerator._stop_requirement(profile, selected_city)}
 REQUIREMENTS:
-1. Create {profile.nights} days of activities.
+1. Create {profile.nights} days of activities. Each day belongs to one stop and every activity that day must be
+   in or very near that stop's base area (within about {MAX_LEG_MINUTES} minutes by road of the base, and of the
+   previous activity). Never mix activities from distant regions into the same day.
 2. Pace: {TRIP_PACE_ITINERARY_GUIDANCE[profile.pace]}
 3. {PromptGenerator._feeling_requirement(profile)}
 4. {PromptGenerator._restriction_requirement(profile)}
 5. Prefer these settings: {', '.join(profile.environment_labels)}.
 6. Suit the whole travel party ({profile.party_phrase()}).
 7. For each activity provide ONLY the activity name, a short description, the rough area/neighborhood,
-   a suggested time window, and an estimated cost per person in USD (an estimate, not a quote).
-8. Time-sensitive activities (tours, tickets, performances) must say "confirm with the operator" in the description.
-9. Do not repeat the same attraction/place on multiple days.
-10. Do NOT include breakfast, lunch, or dinner stops. The system will add those as verified restaurant activities later.
+   a suggested time window, an estimated cost per person in USD (an estimate, not a quote) and "why_selected".
+8. {_WHY_SELECTED_RULE}
+9. Time-sensitive activities (tours, tickets, performances) must say "confirm with the operator" in the description.
+10. Do not repeat the same attraction/place on multiple days.
+11. Do NOT include breakfast, lunch, or dinner stops. The system will add those as verified restaurant activities later.
 {_RESPONSE_FIELD_RULES}
 RESPONSE FORMAT (JSON ONLY):
 {{
+    "stops": [
+        {{"base_area": "Town or neighbourhood to stay in", "nights": <number of nights>}}
+    ],
     "tour_plan": [
         {{
             "day": 1,
+            "stop": 1,
             "activities": [
                 {{
                     "activity_name": "Activity Name",
                     "activity_description": "What you'll do",
                     "activity_location": "Area or neighborhood in the destination",
                     "activity_time": "HH:MM AM - HH:MM PM",
-                    "activity_cost": <estimated cost per person in USD>
+                    "activity_cost": <estimated cost per person in USD>,
+                    "why_selected": "One specific sentence tying this to the traveler's answers"
                 }}
             ]
         }}
@@ -98,8 +116,9 @@ Respond ONLY with valid JSON, no preamble.
         day_to_regenerate: Optional[int] = None,
         user_instruction: str = "",
         destination: Optional[Destination] = None,
+        stops: Optional[List[dict]] = None,
     ) -> str:
-        """Prompt for different activities (all days or one day) in the same destination."""
+        """Prompt for different activities (all days or one day) in the same destination and bases."""
         scope = f"Day {day_to_regenerate}" if day_to_regenerate else "the entire itinerary"
         instruction_context = f"\nTraveler's request: {user_instruction}" if user_instruction else ""
         current_plan_summary = PromptGenerator._build_plan_summary(current_tour_plan)
@@ -111,14 +130,19 @@ Now provide DIFFERENT activities for {scope} while keeping the rest the same.
 TRAVELER PROFILE:
 {PromptGenerator._build_profile_summary(profile)}
 {PromptGenerator._build_destination_summary(destination)}{instruction_context}
+KEEP THESE BASES (the traveler's stays do not change):
+{PromptGenerator._stops_summary(stops)}
 REQUIREMENTS:
-1. Pace: {TRIP_PACE_ITINERARY_GUIDANCE[profile.pace]}
-2. {PromptGenerator._restriction_requirement(profile)} {PromptGenerator._feeling_requirement(profile)}
-3. Suit the whole travel party ({profile.party_phrase()}).
-4. For each activity provide ONLY the activity name, a short description, the rough area/neighborhood,
-   a suggested time window, and an estimated cost per person in USD (an estimate, not a quote).
-5. Do not repeat attractions already present in the itinerary unless the traveler explicitly asked for that place.
-6. Do NOT include breakfast, lunch, or dinner stops. The system will add those as verified restaurant activities later.
+1. Every activity must be in or very near its day's base area (within about {MAX_LEG_MINUTES} minutes by road of
+   the base, and of the previous activity).
+2. Pace: {TRIP_PACE_ITINERARY_GUIDANCE[profile.pace]}
+3. {PromptGenerator._restriction_requirement(profile)} {PromptGenerator._feeling_requirement(profile)}
+4. Suit the whole travel party ({profile.party_phrase()}).
+5. For each activity provide ONLY the activity name, a short description, the rough area/neighborhood,
+   a suggested time window, an estimated cost per person in USD (an estimate, not a quote) and "why_selected".
+6. {_WHY_SELECTED_RULE}
+7. Do not repeat attractions already present in the itinerary unless the traveler explicitly asked for that place.
+8. Do NOT include breakfast, lunch, or dinner stops. The system will add those as verified restaurant activities later.
 {_RESPONSE_FIELD_RULES}
 RESPONSE FORMAT (JSON ONLY):
 {{
@@ -131,7 +155,8 @@ RESPONSE FORMAT (JSON ONLY):
                     "activity_description": "What you'll do",
                     "activity_location": "Area or neighborhood",
                     "activity_time": "HH:MM AM - HH:MM PM",
-                    "activity_cost": <estimated cost per person in USD>
+                    "activity_cost": <estimated cost per person in USD>,
+                    "why_selected": "One specific sentence tying this to the traveler's answers"
                 }}
             ]
         }}
@@ -143,6 +168,31 @@ Respond ONLY with valid JSON, no preamble.
         return prompt
 
     # ==================== HELPER METHODS ====================
+    @staticmethod
+    def _stop_requirement(profile: TripProfile, selected_city: str) -> str:
+        """One base by default; more stops only for longer trips that need another region."""
+        limit = max_stops_for(profile.nights)
+        if limit == 1:
+            return (
+                f"BASE: plan the whole trip from ONE base area in {selected_city} (a town or neighbourhood to stay in). "
+                'Return exactly one entry in "stops".'
+            )
+        return (
+            f"BASES: plan from ONE base area in {selected_city} (a town or neighbourhood to stay in) whenever the "
+            f"experiences fit within about {MAX_LEG_MINUTES} minutes of it. Only if the traveler's interests genuinely "
+            f"need a region more than {MAX_LEG_MINUTES} minutes away, use up to {limit} stops, each of at least 2 nights, "
+            f"with nights adding up to {profile.nights}. The first day at a new stop is a travel day: plan at most one "
+            f"light activity after arrival. (Trips under {MIN_NIGHTS_FOR_SECOND_STOP} nights always use one base.)"
+        )
+
+    @staticmethod
+    def _stops_summary(stops: Optional[List[dict]]) -> str:
+        if not stops:
+            return "- One base for the whole trip."
+        return "\n".join(
+            f"- Days {stop['first_day']}-{stop['last_day']}: stay in {stop['base_area']}" for stop in stops
+        )
+
     @staticmethod
     def _build_profile_summary(profile: TripProfile) -> str:
         goals = "; ".join(

@@ -17,6 +17,28 @@ def _build_profile_search_query(
     return f"{fallback_subject} in {location}" if location else fallback_subject
 
 
+# Places Text Search (New) accepts a bias circle of up to 50 km.
+MAX_BIAS_RADIUS_M = 50000.0
+
+
+def _apply_location_bias(
+    payload: dict,
+    latitude: float | None,
+    longitude: float | None,
+    radius_m: float | None,
+) -> dict:
+    """Prefer results inside a circle around a point (an itinerary base or the previous stop)."""
+    if latitude is None or longitude is None:
+        return payload
+    payload["locationBias"] = {
+        "circle": {
+            "center": {"latitude": latitude, "longitude": longitude},
+            "radius": min(float(radius_m or 20000.0), MAX_BIAS_RADIUS_M),
+        }
+    }
+    return payload
+
+
 def _extract_photo_urls(place: dict, api_key: str, max_photos: int = 4) -> list[str]:
     """Return up to `max_photos` direct image URLs for a place, if any exist."""
     photos = place.get("photos", [])
@@ -95,11 +117,15 @@ def get_cityinfo(city_name: str, region_hint: str | None = None) -> dict:
 def get_detailed_tourist_places(
     location_name: str,
     search_query: str | None = None,
+    latitude: float | None = None,
+    longitude: float | None = None,
+    radius_m: float | None = None,
 ) -> list[dict]:
     """Search for real activities using profile intent plus a location.
 
     `search_query` should describe positive desired qualities derived from the full
     traveler profile. Do not include avoided activities; filter those after retrieval.
+    `latitude`/`longitude`/`radius_m` bias results towards a circle (e.g. the itinerary base).
     Returns a list of dicts, each with: name, place_id, business_status, address,
     phone, coords, photos (up to 4 compact image IDs), and available_time
     (weekday opening hours -- not proof of ticket or activity availability).
@@ -130,6 +156,7 @@ def get_detailed_tourist_places(
     }
     if not search_query:
         payload["includedType"] = "tourist_attraction"
+    _apply_location_bias(payload, latitude, longitude, radius_m)
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=20)
         if response.status_code != 200:
@@ -171,6 +198,9 @@ def get_detailed_tourist_places(
 def get_google_hotels_sorted_by_rating(
     location_name: str,
     search_query: str | None = None,
+    latitude: float | None = None,
+    longitude: float | None = None,
+    radius_m: float | None = None,
 ) -> list[dict]:
     """Search for stays using profile intent plus a location, sorted by rating.
 
@@ -203,6 +233,7 @@ def get_google_hotels_sorted_by_rating(
         "languageCode": "en",
         "pageSize": 10,
     }
+    _apply_location_bias(payload, latitude, longitude, radius_m)
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=20)
         if response.status_code != 200:
@@ -327,6 +358,9 @@ def get_nearby_restaurants(
     location_name: str,
     meal_type: str = "meal",
     search_query: str | None = None,
+    latitude: float | None = None,
+    longitude: float | None = None,
+    radius_m: float | None = None,
 ) -> list[dict]:
     """Search for restaurants near a route anchor with optional profile intent.
 
@@ -363,6 +397,7 @@ def get_nearby_restaurants(
         "languageCode": "en",
         "pageSize": 8,
     }
+    _apply_location_bias(payload, latitude, longitude, radius_m)
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=20)
         if response.status_code != 200:
@@ -431,5 +466,122 @@ def calculate_distance_routes_api(origin_address: str, destination_address: str)
         }
     except (KeyError, IndexError):
         return {"error": "Could not parse route details.", "raw": data}
+    except Exception as e:
+        return {"error": str(e)}
+
+# ==================== COORDINATE ROUTING (itinerary validation) ====================
+#
+# Plain functions, not LLM tools: the itinerary validation step calls them
+# directly with coordinates, so travel times never depend on an address
+# string being geocoded the same way twice.
+
+ROUTE_MATRIX_URL = "https://routes.googleapis.com/distanceMatrix/v2:computeRouteMatrix"
+COMPUTE_ROUTES_URL = "https://routes.googleapis.com/directions/v2:computeRoutes"
+# Routes API limit for TRAFFIC_UNAWARE matrices is 625 elements; staying
+# well under it keeps each request small.
+MAX_MATRIX_SIDE = 10
+
+
+def _waypoint(point: tuple) -> dict:
+    return {"waypoint": {"location": {"latLng": {"latitude": point[0], "longitude": point[1]}}}}
+
+
+def _seconds(duration: str | None) -> int | None:
+    if not duration:
+        return None
+    try:
+        return int(float(str(duration).rstrip("s")))
+    except ValueError:
+        return None
+
+
+def compute_route_matrix(origins: list[tuple], destinations: list[tuple]) -> dict:
+    """Driving time and distance for every origin -> destination pair.
+
+    `origins` / `destinations` are (latitude, longitude) tuples, at most
+    MAX_MATRIX_SIDE each. Returns {"elements": [{"origin", "destination",
+    "minutes", "km", "route_found"}]} or {"error": ...}.
+    """
+    api_key = settings.google_api_key
+    if not api_key:
+        return {"error": "Missing Google Maps API key."}
+    if not origins or not destinations:
+        return {"elements": []}
+    if len(origins) > MAX_MATRIX_SIDE or len(destinations) > MAX_MATRIX_SIDE:
+        return {"error": f"At most {MAX_MATRIX_SIDE} origins and destinations per request."}
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": api_key,
+        "X-Goog-FieldMask": "originIndex,destinationIndex,duration,distanceMeters,status,condition",
+    }
+    payload = {
+        "origins": [_waypoint(point) for point in origins],
+        "destinations": [_waypoint(point) for point in destinations],
+        "travelMode": "DRIVE",
+        "routingPreference": "TRAFFIC_UNAWARE",
+    }
+    try:
+        response = requests.post(ROUTE_MATRIX_URL, json=payload, headers=headers, timeout=20)
+        if response.status_code != 200:
+            return {"error": f"HTTP {response.status_code}: {response.text}"}
+        elements = []
+        for element in response.json():
+            seconds = _seconds(element.get("duration"))
+            found = element.get("condition") == "ROUTE_EXISTS" and seconds is not None
+            elements.append({
+                # proto3 omits zero-valued indexes.
+                "origin": element.get("originIndex", 0),
+                "destination": element.get("destinationIndex", 0),
+                "minutes": round(seconds / 60) if found else None,
+                "km": round(element.get("distanceMeters", 0) / 1000, 1) if found else None,
+                "route_found": found,
+            })
+        return {"elements": elements}
+    except Exception as e:
+        return {"error": str(e)}
+
+
+def compute_drive_route(origin: tuple, destination: tuple) -> dict:
+    """One driving route between two (latitude, longitude) points.
+
+    Used for transfers between itinerary stops. Returns {"minutes", "km",
+    "includes_ferry"} or {"error": ...}. `includes_ferry` is True when any
+    step of the route is a ferry crossing.
+    """
+    api_key = settings.google_api_key
+    if not api_key:
+        return {"error": "Missing Google Maps API key."}
+    headers = {
+        "Content-Type": "application/json",
+        "X-Goog-Api-Key": api_key,
+        "X-Goog-FieldMask": "routes.distanceMeters,routes.duration,routes.legs.steps.navigationInstruction.maneuver",
+    }
+    payload = {
+        "origin": {"location": {"latLng": {"latitude": origin[0], "longitude": origin[1]}}},
+        "destination": {"location": {"latLng": {"latitude": destination[0], "longitude": destination[1]}}},
+        "travelMode": "DRIVE",
+        "routingPreference": "TRAFFIC_UNAWARE",
+    }
+    try:
+        response = requests.post(COMPUTE_ROUTES_URL, json=payload, headers=headers, timeout=20)
+        if response.status_code != 200:
+            return {"error": f"HTTP {response.status_code}: {response.text}"}
+        routes = response.json().get("routes", [])
+        if not routes:
+            return {"error": "No route found."}
+        route = routes[0]
+        seconds = _seconds(route.get("duration"))
+        if seconds is None:
+            return {"error": "Route had no duration."}
+        maneuvers = [
+            step.get("navigationInstruction", {}).get("maneuver", "")
+            for leg in route.get("legs", [])
+            for step in leg.get("steps", [])
+        ]
+        return {
+            "minutes": round(seconds / 60),
+            "km": round(route.get("distanceMeters", 0) / 1000, 1),
+            "includes_ferry": any("FERRY" in str(maneuver) for maneuver in maneuvers),
+        }
     except Exception as e:
         return {"error": str(e)}

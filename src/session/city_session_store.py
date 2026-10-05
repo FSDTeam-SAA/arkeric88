@@ -1,10 +1,13 @@
 from copy import deepcopy
-from dataclasses import dataclass, field
+from dataclasses import dataclass, field, fields
 from datetime import datetime, timezone
 from typing import Any, List, Optional
 from uuid import uuid4
 
 from app.schemas.city_body import CitySuggestionInput, StayInfo, TourPlanActivityInput, TourPlanDayInput
+from src.session import session_persistence
+
+CITY_KIND, ACTIVITY_KIND = "city", "activity"
 
 
 # ==================== CITY SESSION ====================
@@ -44,8 +47,12 @@ def _to_stay(stay_data: dict) -> StayInfo:
 
 
 def _to_day(day: dict) -> TourPlanDayInput:
+    if isinstance(day, TourPlanDayInput):
+        return day
     return TourPlanDayInput(
         day=day.get("day"),
+        stop=day.get("stop") or 1,
+        day_type=day.get("day_type") or "standard",
         activities=[
             {
                 **{key: value for key, value in act.items() if key in TourPlanActivityInput.model_fields},
@@ -58,9 +65,37 @@ def _to_day(day: dict) -> TourPlanDayInput:
     )
 
 
+def _city_payload(session: "CitySession") -> dict:
+    payload = {item.name: deepcopy(getattr(session, item.name)) for item in fields(session)}
+    payload["suggested_cities"] = [city.model_dump(mode="json") for city in session.suggested_cities]
+    return payload
+
+
+def _city_from_payload(payload: dict) -> "CitySession":
+    return CitySession(**{**payload, "suggested_cities": _to_suggestions(payload.get("suggested_cities", []))})
+
+
 class CitySessionStore:
-    """In-memory store for destination suggestion sessions."""
+    """
+    Destination suggestion sessions: kept in memory and written through to
+    durable storage (session_persistence), so a saved search can still be
+    reopened after a restart.
+    """
     _sessions: dict[str, CitySession] = {}
+
+    @classmethod
+    def _live(cls, session_id: str) -> Optional["CitySession"]:
+        session = cls._sessions.get(session_id)
+        if session is None:
+            payload = session_persistence.load(CITY_KIND, session_id)
+            if payload is not None:
+                session = _city_from_payload(payload)
+                cls._sessions[session_id] = session
+        return session
+
+    @classmethod
+    def _save(cls, session: "CitySession") -> None:
+        session_persistence.save(CITY_KIND, session.session_id, _city_payload(session))
 
     @classmethod
     def create(
@@ -93,12 +128,13 @@ class CitySessionStore:
         )
 
         cls._sessions[session_id] = session
+        cls._save(session)
         return deepcopy(session)
 
     @classmethod
     def get(cls, session_id: str) -> Optional[CitySession]:
         """Retrieve a city session by ID."""
-        session = cls._sessions.get(session_id)
+        session = cls._live(session_id)
         if session is None:
             return None
         return deepcopy(session)
@@ -114,7 +150,7 @@ class CitySessionStore:
         intake: Optional[dict] = None,
     ) -> Optional[CitySession]:
         """Replace the suggestions on regenerate (optionally with refined answers)."""
-        session = cls._sessions.get(session_id)
+        session = cls._live(session_id)
         if session is None:
             return None
 
@@ -140,12 +176,15 @@ class CitySessionStore:
             }
         )
 
+        cls._save(session)
         return deepcopy(session)
 
     @classmethod
     def delete(cls, session_id: str) -> bool:
         """Delete a city session."""
-        return cls._sessions.pop(session_id, None) is not None
+        in_memory = cls._sessions.pop(session_id, None) is not None
+        stored = session_persistence.delete(CITY_KIND, session_id)
+        return in_memory or stored
 
     @classmethod
     def list_all(cls) -> List[CitySession]:
@@ -173,9 +212,51 @@ class ActivitySession:
     destination_id: Optional[str] = None  # Catalog entry the plan was built for
 
 
+def _activity_payload(session: "ActivitySession") -> dict:
+    payload = {item.name: deepcopy(getattr(session, item.name)) for item in fields(session)}
+    payload["tour_plan"] = [day.model_dump(mode="json") for day in session.tour_plan]
+    payload["stay"] = session.stay.model_dump(mode="json") if session.stay is not None else None
+    return payload
+
+
+def _activity_from_payload(payload: dict) -> "ActivitySession":
+    return ActivitySession(**{
+        **payload,
+        "tour_plan": [_to_day(day) for day in payload.get("tour_plan", [])],
+        "stay": _to_stay(payload["stay"]) if payload.get("stay") else None,
+    })
+
+
 class ActivitySessionStore:
-    """In-memory store for activity/tour plan sessions."""
+    """
+    Itinerary sessions: kept in memory and written through to durable storage
+    (session_persistence), so a saved itinerary reopens after a restart.
+    """
     _sessions: dict[str, ActivitySession] = {}
+
+    @classmethod
+    def _live(cls, activity_session_id: str) -> Optional["ActivitySession"]:
+        session = cls._sessions.get(activity_session_id)
+        if session is None:
+            payload = session_persistence.load(ACTIVITY_KIND, activity_session_id)
+            if payload is not None:
+                session = _activity_from_payload(payload)
+                cls._sessions[activity_session_id] = session
+        return session
+
+    @classmethod
+    def _save(cls, session: "ActivitySession") -> None:
+        session_persistence.save(
+            ACTIVITY_KIND, session.activity_session_id, _activity_payload(session), session.parent_session_id,
+        )
+
+    @classmethod
+    def _children(cls, parent_session_id: str) -> List["ActivitySession"]:
+        """Every activity session of a parent, from memory and from storage."""
+        for payload in session_persistence.load_children(ACTIVITY_KIND, parent_session_id):
+            if payload["activity_session_id"] not in cls._sessions:
+                cls._sessions[payload["activity_session_id"]] = _activity_from_payload(payload)
+        return [session for session in cls._sessions.values() if session.parent_session_id == parent_session_id]
 
     @classmethod
     def create(
@@ -230,12 +311,13 @@ class ActivitySessionStore:
         )
         
         cls._sessions[activity_session_id] = session
+        cls._save(session)
         return deepcopy(session)
 
     @classmethod
     def get(cls, activity_session_id: str) -> Optional[ActivitySession]:
         """Retrieve an activity session by ID."""
-        session = cls._sessions.get(activity_session_id)
+        session = cls._live(activity_session_id)
         if session is None:
             return None
         return deepcopy(session)
@@ -250,8 +332,8 @@ class ActivitySessionStore:
         Retrieve activity session by parent session ID and city name.
         Used to check if activities already exist for this city (caching).
         """
-        for session in cls._sessions.values():
-            if session.parent_session_id == session_id and session.city == city_name:
+        for session in cls._children(session_id):
+            if session.city == city_name:
                 return deepcopy(session)
         return None
 
@@ -271,7 +353,7 @@ class ActivitySessionStore:
         - If day_to_regenerate is None: regenerate entire plan.
         - If day_to_regenerate is int: regenerate only that day.
         """
-        session = cls._sessions.get(activity_session_id)
+        session = cls._live(activity_session_id)
         if session is None:
             return None
 
@@ -318,31 +400,28 @@ class ActivitySessionStore:
             }
         )
 
+        cls._save(session)
         return deepcopy(session)
 
     @classmethod
     def delete(cls, activity_session_id: str) -> bool:
         """Delete an activity session."""
-        return cls._sessions.pop(activity_session_id, None) is not None
+        in_memory = cls._sessions.pop(activity_session_id, None) is not None
+        stored = session_persistence.delete(ACTIVITY_KIND, activity_session_id)
+        return in_memory or stored
 
     @classmethod
     def delete_by_parent(cls, parent_session_id: str) -> int:
         """Delete all activity sessions linked to a parent city session."""
-        to_delete = [
-            sid for sid, s in cls._sessions.items()
-            if s.parent_session_id == parent_session_id
-        ]
-        for sid in to_delete:
-            cls._sessions.pop(sid, None)
+        to_delete = [session.activity_session_id for session in cls._children(parent_session_id)]
+        for activity_session_id in to_delete:
+            cls.delete(activity_session_id)
         return len(to_delete)
 
     @classmethod
     def list_by_parent(cls, parent_session_id: str) -> List[ActivitySession]:
         """List all activity sessions for a given city session."""
-        return [
-            deepcopy(s) for s in cls._sessions.values()
-            if s.parent_session_id == parent_session_id
-        ]
+        return [deepcopy(session) for session in cls._children(parent_session_id)]
 
     @classmethod
     def list_all(cls) -> List[ActivitySession]:

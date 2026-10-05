@@ -18,6 +18,7 @@ from src.core.destination_matching import (
     rank_destinations,
     select_diverse,
 )
+from src.core.guest_text import has_internal_wording
 from src.core.origin import Origin
 from src.core.trip_profile import build_trip_profile
 from intake_fixtures import build_intake, exact_dates, with_restriction
@@ -234,20 +235,35 @@ def test_suggestion_ties_reasons_to_guest_labels_and_states_what_is_unverified()
     profile = _profile(build_intake(**exact_dates(nights=5)))
     item = select_diverse(rank_destinations(profile, None).ranked)[0]
     suggestion = build_suggestion(item, profile, None)
-    assert "Restoration" in suggestion["match_reasons"][0]
-    assert "not a promised outcome" in suggestion["match_reasons"][0]
+    assert "restored" in suggestion["match_reasons"][0]
+    assert suggestion["primary_feeling"] == "Restored"
     verification = suggestion["verification"]
     assert verification["candidate_status"] == "CANDIDATE_ONLY"
     assert verification["verified_nightly_usd"] is None
     assert verification["budget_status"] == "UNKNOWN"
     assert verification["price_claim"] == "NONE"
     assert verification["availability_claim"] == "NONE"
+    # Review status is kept for the team, not shown to guests.
+    assert any("Source review pending" in note for note in verification["internal_notes"])
     facts = " ".join(suggestion["unresolved_facts"])
-    assert "Source review pending" in facts
-    assert "not been checked for your dates" in facts
-    assert "official guidance" in facts
+    assert "Source review pending" not in facts
+    assert "confirmed for your dates" in facts
+    assert "entry, safety and accessibility guidance" in facts
     assert suggestion["evidence"]["destination_source_url"].startswith("http")
     assert suggestion["tradeoffs"], "every catalog row has a tradeoff to show"
+
+
+def test_guest_facing_suggestion_text_has_no_catalog_language_or_repeats():
+    profile = _profile(build_intake(**exact_dates(nights=5)))
+    for item in select_diverse(rank_destinations(profile, None).ranked):
+        suggestion = build_suggestion(item, profile, None)
+        guest_text = [suggestion["description"], *suggestion["match_reasons"], *suggestion["tradeoffs"],
+                      *suggestion["unresolved_facts"]]
+        for text in guest_text:
+            assert not has_internal_wording(text), text
+            assert "You chose" not in text and "Check before booking" not in text, text
+        lowered = [text.lower() for text in suggestion["tradeoffs"] + suggestion["unresolved_facts"]]
+        assert len(lowered) == len(set(lowered)), "each note is shown once"
 
 
 def test_flexible_timing_is_labelled_inspiration_only():

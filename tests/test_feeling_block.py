@@ -47,16 +47,26 @@ def _assess(answers, profile=None):
     return block, prompts
 
 
-def test_headline_uses_the_selected_feelings_not_destination_tags():
-    assert headline(_profile(trip_goals=["reflection"])) == "THE FEELING: REFLECTIVE"
-    assert headline(_profile(trip_goals=["connection", "discovery"])) == "THE FEELING: CONNECTED & CURIOUS"
+def test_headline_uses_the_primary_selected_feeling_not_destination_tags():
+    assert headline(_profile(trip_goals=["reflection"])) == "Designed to help you feel: Reflective"
+    # The first selected feeling is the primary one the itinerary is designed around.
+    assert headline(_profile(trip_goals=["connection", "discovery"])) == "Designed to help you feel: Connected"
 
 
-def test_aligned_block_has_bold_headline_and_real_supporting_experiences():
+def test_aligned_block_has_bold_feeling_and_one_explanation():
     block, prompts = _assess([_answer()])
     assert block["title"] == "The feeling behind your journey"
     assert block["alignment"]["status"] == "aligned"
-    assert block["markdown"].startswith("**THE FEELING: REFLECTIVE**\nYou want time to slow down")
+    assert block["primary_feeling"] == "Reflective"
+    # "Designed to help you feel: **Reflective**" then the itinerary explanation -- shown once,
+    # without repeating the intention sentence.
+    assert block["markdown"] == (
+        "Designed to help you feel: **Reflective**\n"
+        "Kyoto's moss garden walk and a small tea ceremony give you unhurried space to take in "
+        "a new place while reconnecting with your own thoughts."
+    )
+    assert block["explanation"] == block["narrative"]
+    assert "You chose" not in block["markdown"] and "Why it fits" not in block["markdown"]
     assert block["supporting_experiences"] == [
         {"day": 1, "activity_name": "Moss garden walk"},
         {"day": 2, "activity_name": "Tea ceremony"},
@@ -106,6 +116,9 @@ def test_repeated_failures_fall_back_to_headline_and_intention_only():
     assert block["narrative"] is None
     assert block["supporting_experiences"] == []
     assert block["intention"] == "You want quiet and perspective to think about what matters."
+    assert block["markdown"] == (
+        "Designed to help you feel: **Reflective**\nYou want quiet and perspective to think about what matters."
+    )
     assert "only the headline" in block["alignment"]["display_guidance"]
 
 

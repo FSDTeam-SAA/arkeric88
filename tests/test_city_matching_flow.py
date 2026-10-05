@@ -235,8 +235,7 @@ def _plan(session_id: str, ai: MagicMock = None, **body):
     with patch("app.router.city_content_route.get_ai_response", ai), \
          patch("app.router.city_content_route.get_detailed_tourist_places", places), \
          patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", hotels), \
-         patch("app.router.city_content_route.get_nearby_restaurants", restaurants), \
-         patch("app.router.city_content_route.calculate_distance_routes_api", _tool({"error": "skip"})):
+         patch("app.router.city_content_route.get_nearby_restaurants", restaurants):
         response = client.post("/get_tour_plan", json={"session_id": session_id, **body})
     return response, ai, places, hotels, restaurants
 
@@ -255,7 +254,9 @@ def test_get_tour_plan_builds_on_the_selected_destination_with_estimates_only():
     assert data["budget_check"]["stay_within_budget"] is True
     activity = next(a for a in data["tour_plan"][0]["activities"] if a["activity_name"] == "Hot spring soak")
     assert activity["place_id"] == "place-open"
-    assert "confirm" in activity["availability_note"]
+    # The opening-hours caveat is one itinerary-level note, not repeated on every activity.
+    assert activity["availability_note"] == ""
+    assert any("confirm time-sensitive experiences" in note for note in data["guest_notes"])
     assert all(a.get("place_id") != "place-closed" for a in data["tour_plan"][0]["activities"])
     location = f"{chosen['city_name']}, {chosen['country_name']}"
     assert places.invoke.call_args.args[0]["location_name"] == location
@@ -270,8 +271,8 @@ def test_itinerary_opens_with_the_feeling_behind_the_journey():
     data = response.json()
     assert list(data)[:4] == ["activity_session_id", "destination_id", "city", "feeling_block"]
     block = data["feeling_block"]
-    assert block["headline"] == "THE FEELING: REFLECTIVE"
-    assert block["markdown"].startswith("**THE FEELING: REFLECTIVE**")
+    assert block["headline"] == "Designed to help you feel: Reflective"
+    assert block["markdown"].startswith("Designed to help you feel: **Reflective**\n")
     assert block["alignment"]["status"] == "aligned"
     names = {a["activity_name"] for day in data["tour_plan"] for a in day["activities"]}
     assert {item["activity_name"] for item in block["supporting_experiences"]} <= names
@@ -374,8 +375,7 @@ def test_stay_over_budget_is_reported_not_hidden():
     with patch("app.router.city_content_route.get_ai_response", MagicMock(return_value=TOUR_PLAN_JSON)), \
          patch("app.router.city_content_route.get_detailed_tourist_places", _tool([])), \
          patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", luxury), \
-         patch("app.router.city_content_route.get_nearby_restaurants", _tool([])), \
-         patch("app.router.city_content_route.calculate_distance_routes_api", _tool({"error": "skip"})):
+         patch("app.router.city_content_route.get_nearby_restaurants", _tool([])):
         response = client.post("/get_tour_plan", json={"session_id": initial["session_id"], "destination_id": chosen})
     budget = response.json()["budget_check"]
     assert budget["stay_within_budget"] is False

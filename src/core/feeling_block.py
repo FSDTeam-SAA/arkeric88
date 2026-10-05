@@ -1,12 +1,14 @@
 """
 "The feeling behind your journey" block shown near the top of every itinerary.
 
-Rules (client brief for sample itineraries):
-- Show the traveler's SELECTED desired feeling(s) in bold. The headline is
-  built here from their trip_goals, never inferred from destination tags.
-- Two or three natural sentences on how this destination and at least two
+Rules (client brief, Priority 2):
+- "Designed to help you feel: **[primary feeling]**" -- the traveler's first
+  SELECTED feeling in bold, built from their trip_goals, never inferred from
+  destination tags. This replaces the old "You chose" / "Why it fits" copy.
+- Then one or two natural sentences on how this destination and at least two
   experiences actually in the itinerary support that feeling, using their
-  interests, pace, setting and companions where relevant.
+  interests, pace, setting and companions where relevant. The explanation is
+  shown once (the narrative, or the intention when there is no narrative).
 - Describe an opportunity or intention; never promise how they will feel.
 - If the itinerary cannot support the feeling, the caller revises the plan
   or flags the mismatch before it is displayed.
@@ -96,8 +98,16 @@ def feeling_words(profile: TripProfile) -> List[str]:
     return [TRIP_GOAL_FEELING_WORDS[goal] for goal in profile.goals]
 
 
+HEADLINE_PREFIX = "Designed to help you feel:"
+
+
+def primary_feeling(profile: TripProfile) -> str:
+    """The guest's first selected feeling: the one the itinerary is designed around."""
+    return TRIP_GOAL_FEELING_WORDS[profile.goals[0]]
+
+
 def headline(profile: TripProfile) -> str:
-    return "THE FEELING: " + " & ".join(word.upper() for word in feeling_words(profile))
+    return f"{HEADLINE_PREFIX} {primary_feeling(profile)}"
 
 
 def fallback_intention(profile: TripProfile) -> str:
@@ -108,8 +118,12 @@ def fallback_intention(profile: TripProfile) -> str:
 
 
 def _markdown(profile: TripProfile, intention: str, narrative: Optional[str]) -> str:
-    body = " ".join(part for part in (intention, narrative) if part)
-    return f"**{headline(profile)}**\n{body}"
+    """
+    "Designed to help you feel: **Reflective**" and then one explanation: the
+    narrative about this itinerary when there is one, otherwise the intention.
+    Never both, so the explanation is not repeated.
+    """
+    return f"{HEADLINE_PREFIX} **{primary_feeling(profile)}**\n{narrative or intention}"
 
 
 def _build_prompt(
@@ -224,6 +238,9 @@ def _block(profile: TripProfile, intention: str, narrative: Optional[str], suppo
             {"code": goal, "label": TRIP_GOAL_FEELING_WORDS[goal]} for goal in profile.goals
         ],
         "headline": headline(profile),
+        # Guest display: "Designed to help you feel:" + bold primary_feeling, then explanation.
+        "primary_feeling": primary_feeling(profile),
+        "explanation": narrative or intention,
         "intention": intention,
         "narrative": narrative,
         "markdown": _markdown(profile, intention, narrative),

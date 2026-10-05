@@ -24,6 +24,7 @@ from typing import Dict, Iterable, List, Optional, Set, Tuple
 
 from src.core.destination_catalog import Destination, load_destination_candidates
 from src.core.geography import great_circle_km, is_southern_hemisphere
+from src.core.guest_text import dedupe, from_pipes, lower_first, natural_list
 from src.core.intake_mappings import (
     ENVIRONMENT_KEYWORDS,
     ENVIRONMENT_LABELS,
@@ -41,6 +42,7 @@ from src.core.intake_mappings import (
     SUGGESTION_COUNT,
     TRAVEL_DISTANCE_LABELS,
     TRAVEL_DISTANCE_MAX_STRAIGHT_LINE_KM,
+    TRIP_GOAL_FEELING_WORDS,
     TRIP_GOAL_LABELS,
     TRIP_PACE_LABELS,
     CATALOG_PACE_ORDER,
@@ -171,15 +173,15 @@ def check_restriction(
     if restriction in ITINERARY_LEVEL_RESTRICTIONS:
         return RestrictionCheck(
             restriction, label, severity, "itinerary_stage",
-            "Can only be checked per restaurant, stay and activity; it will be applied as a firm "
-            "constraint when the itinerary is built and must be confirmed with each provider.",
+            "We check this for each restaurant, stay and activity when your itinerary is built; "
+            "please confirm it with each provider too.",
         )
 
     rule = RESTRICTION_CONFLICT_RULES.get(restriction)
     if rule is None:  # "other" -- free-text need the catalog cannot check.
         return RestrictionCheck(
             restriction, label, severity, "unverified",
-            "This planning need could not be checked against catalog data.",
+            "Tell us more about this need so we can plan around it for this destination.",
         )
 
     text = _combined_text(destination, rule["fields"])
@@ -187,11 +189,11 @@ def check_restriction(
         if restriction in HIGH_IMPACT_DESTINATION_RESTRICTIONS:
             return RestrictionCheck(
                 restriction, label, severity, "unverified",
-                "The catalog has no verified information about this for this destination.",
+                "We don't have confirmed information about this here yet; we'll check it before you book.",
             )
         return RestrictionCheck(
             restriction, label, severity, "no_catalog_concern",
-            "The catalog flags no concern; this has not been independently verified.",
+            "No known concern here; we'll still confirm it for your trip.",
         )
 
     concern = destination.tradeoffs_to_check or destination.setting_context
@@ -203,12 +205,11 @@ def check_restriction(
     ):
         return RestrictionCheck(
             restriction, label, severity, "seasonal_outside_dates",
-            f"The catalog notes a seasonal concern ('{concern}') that falls outside your travel months; "
-            "confirm conditions for your dates.",
+            f"{concern} is usually a concern outside your travel months; check conditions for your dates.",
         )
     return RestrictionCheck(
         restriction, label, severity, "conflict",
-        f"The catalog flags this: '{concern}'.",
+        f"Worth knowing: {concern}.",
     )
 
 
@@ -249,7 +250,7 @@ def check_distance(
                 f"In a different world region ({destination.world_region}) from your departure point, "
                 "and its distance could not be measured.",
             )
-        return DistanceCheck("not_checked", None, "This catalog entry has no coordinates, so distance was not checked.")
+        return DistanceCheck("not_checked", None, "We couldn't place this destination on the map, so its distance from you was not checked.")
 
     km = round(great_circle_km(origin.latitude, origin.longitude, latitude, longitude))
     if km > limit_km:
@@ -363,7 +364,7 @@ def score_destination(
         if check.severity == "prefer_avoid" and check.status == "conflict":
             breakdown["prefer_avoid_penalty"] -= PREFER_AVOID_PENALTY
             tradeoffs.append(
-                f"'{check.label}' is marked as prefer to avoid, and the catalog flags it here, so this option ranks lower."
+                f"You marked '{check.label}' as a preference, and it may be harder to keep to here, so this option ranks lower."
             )
 
     total = max(0.0, round(sum(breakdown.values()), 2))
@@ -486,81 +487,88 @@ def select_diverse(
 # ==================== EXPLANATION ====================
 
 def _reasons(item: ScoredDestination, profile: TripProfile) -> List[str]:
+    """
+    Guest-facing reasons tied to the guest's own answers. They describe the
+    destination in plain words -- never catalog tags, pipe-separated lists or
+    "our editors" -- and offer an opportunity rather than promise an outcome.
+    """
     destination = item.destination
     reasons: List[str] = []
     if item.matched_goals:
-        reasons.append(
-            f"You chose {_join_labels(profile.goal_labels)}; our editors tag {destination.destination} for "
-            f"{_join_labels([TRIP_GOAL_LABELS[goal] for goal in item.matched_goals])}. "
-            "This is an editorial hypothesis, not a promised outcome."
-        )
+        feelings = natural_list([TRIP_GOAL_FEELING_WORDS[goal].lower() for goal in item.matched_goals])
+        rationale = lower_first(destination.editorial_rationale)
+        reasons.append(f"Room to feel {feelings}: {rationale}." if rationale else f"Room to feel {feelings}.")
     if item.matched_moments:
-        picked = _join_labels([f"'{PREFERRED_MOMENT_LABELS[moment]}'" for moment in item.matched_moments])
-        reasons.append(f"You picked {picked}; the catalog describes it as: {destination.experience_context}.")
+        offers = natural_list(from_pipes(destination.experience_context))
+        loves = natural_list([PREFERRED_MOMENT_LABELS[moment].lower() for moment in item.matched_moments])
+        reasons.append(
+            f"It offers {offers}, a good match for your love of {loves}." if offers
+            else f"A good match for your love of {loves}."
+        )
     if item.matched_environments:
-        reasons.append(
-            f"You're drawn to {_join_labels([ENVIRONMENT_LABELS[env] for env in item.matched_environments])}; "
-            f"catalog setting: {destination.setting_context}."
-        )
-    elif item.pace_fit == "match":
-        reasons.append(
-            f"Its catalog pace ({destination.catalog_pace}) fits '{TRIP_PACE_LABELS[profile.pace]}'."
-        )
+        setting = natural_list(from_pipes(destination.setting_context))
+        wanted = natural_list([ENVIRONMENT_LABELS[env].lower() for env in item.matched_environments])
+        reasons.append(f"The {setting} setting suits your preference for {wanted}.")
+    elif item.pace_fit == "match" and destination.catalog_pace:
+        reasons.append(f"Its {destination.catalog_pace.lower()} pace fits how you like to travel.")
     return reasons[:3]
 
 
 def _tradeoffs(item: ScoredDestination, profile: TripProfile) -> List[str]:
+    """Each consideration once, in guest language."""
     destination = item.destination
     tradeoffs = list(item.tradeoffs)
     if destination.tradeoffs_to_check:
-        tradeoffs.insert(0, f"Check before booking: {destination.tradeoffs_to_check}.")
+        tradeoffs.insert(0, f"Worth knowing: {lower_first(destination.tradeoffs_to_check)}.")
     missing_goals = [goal for goal in profile.goals if goal not in item.matched_goals]
     if missing_goals:
-        tradeoffs.append(
-            f"Not tagged for {_join_labels([TRIP_GOAL_LABELS[goal] for goal in missing_goals])} in the catalog."
-        )
+        feelings = natural_list([TRIP_GOAL_FEELING_WORDS[goal].lower() for goal in missing_goals], "or")
+        tradeoffs.append(f"Fewer clear chances to feel {feelings} here than in your other options.")
     if item.pace_fit == "mismatch":
         tradeoffs.append(
-            f"Catalog pace is {destination.catalog_pace}, while you asked for '{TRIP_PACE_LABELS[profile.pace]}'; "
-            "the itinerary would need to be paced deliberately."
+            f"It's usually a {destination.catalog_pace.lower()} destination, so we'd pace your days deliberately "
+            f"to match your preferred pace ({TRIP_PACE_LABELS[profile.pace].lower()})."
         )
     for check in item.restriction_checks:
         if check.status == "seasonal_outside_dates":
             tradeoffs.append(f"{check.label}: {check.detail}")
-    return tradeoffs
+    return dedupe(tradeoffs)
 
 
 def _unresolved_facts(item: ScoredDestination, profile: TripProfile, origin: Optional[Origin]) -> List[str]:
-    destination = item.destination
-    facts = [
-        "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
-    ]
+    """
+    Only what the guest needs to know or do, each once. Internal review status
+    (source review, catalog price gaps, route checks) lives in `verification`.
+    """
+    facts = []
     if profile.has_exact_dates:
-        facts.append("Live stay availability and price have not been checked for your dates yet.")
+        facts.append("Prices and availability will be confirmed for your dates before booking.")
     else:
-        facts.append(
-            "Availability and prices need exact check-in and check-out dates; month or flexible timing is inspiration only."
-        )
-    if destination.verified_nightly_usd is None:
-        facts.append(
-            f"Nightly lodging cost is unknown, not yet compared with your ${profile.budget_per_night:,.0f} "
-            f"per room, per night budget ({profile.rooms} room{'s' if profile.rooms != 1 else ''})."
-        )
+        facts.append("Prices and availability need exact dates; until then this is inspiration only.")
     if profile.children and profile.child_ages is None:
-        facts.append("Child ages are needed before live rates can be quoted.")
-    if profile.children:
-        facts.append("Suitability for children has not been verified.")
-    if destination.catalog_pace is None:
-        facts.append("The destination's pace depends on the plan; we'll shape it to your chosen pace.")
-    departure = profile.departure_location if origin is None or origin.status != "UNVERIFIED" else "your departure point"
-    facts.append(f"Route from {departure} (mode, transfers and travel time) has not been checked.")
+        facts.append("Share the children's ages so we can check rates and age-suitable activities.")
+    elif profile.children:
+        facts.append("We'll check that each activity suits the children in your party.")
     for check in item.restriction_checks:
         if check.status in {"unverified", "itinerary_stage"}:
             facts.append(f"{check.label}: {check.detail}")
-    facts.append(
-        "Entry requirements, safety and accessibility must be checked against current official guidance for your travel details."
-    )
-    return facts
+    facts.append("Check current entry, safety and accessibility guidance for your travel details.")
+    return dedupe(facts)
+
+
+def _internal_notes(item: ScoredDestination, profile: TripProfile, origin: Optional[Origin]) -> List[str]:
+    """Review status kept for the team; never shown to guests."""
+    destination = item.destination
+    notes = ["Source review pending: catalog claims have not yet been checked against a destination-specific source."]
+    if destination.verified_nightly_usd is None:
+        notes.append(
+            f"Nightly lodging cost is unknown, not yet compared with the ${profile.budget_per_night:,.0f} per room budget."
+        )
+    if destination.catalog_pace is None:
+        notes.append("Catalog pace depends on the plan.")
+    departure = profile.departure_location if origin is None or origin.status != "UNVERIFIED" else "the departure point"
+    notes.append(f"Route from {departure} (mode, transfers and travel time) has not been checked.")
+    return notes
 
 
 def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Optional[Origin]) -> dict:
@@ -574,6 +582,8 @@ def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Opti
         "country_name": destination.country,
         "world_region": destination.world_region,
         "number_of_days": profile.nights,
+        # Guest display: "Designed to help you feel: **{primary_feeling}**", then description.
+        "primary_feeling": TRIP_GOAL_FEELING_WORDS[profile.goals[0]],
         "description": " ".join(reasons[:2]),
         "latitude": destination.latitude,
         "longitude": destination.longitude,
@@ -595,6 +605,8 @@ def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Opti
             "price_claim": "NONE",
             "availability_claim": "NONE",
             "guest_display_gate": destination.guest_display_gate,
+            # Internal review notes: for the team, never for guest display.
+            "internal_notes": _internal_notes(item, profile, origin),
         },
         "evidence": {
             "destination_source_url": destination.destination_source_url,
