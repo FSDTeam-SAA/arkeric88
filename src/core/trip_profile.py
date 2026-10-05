@@ -243,7 +243,8 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         travel_period=request.travel_period.value if request.travel_period else None,
         nights=request.trip_nights,
         travel_months=travel_months,
-        budget_per_night=float(request.budget_per_night),
+        # Not asked yet when dates are suggested at step 10 (DateRecommendationRequest).
+        budget_per_night=float(request.budget_per_night or 0),
         budget_open_ended=request.budget_open_ended,
         recent_feelings=[feeling.value for feeling in request.recent_feelings],
         trip_prompt=request.trip_prompt.value,

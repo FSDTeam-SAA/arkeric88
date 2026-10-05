@@ -25,6 +25,8 @@ class Origin:
     region: Optional[str]
     checked_at_utc: str
     detail: str = ""
+    # ISO 3166-1 alpha-2, when known (public-holiday lookups for date suggestions).
+    country_code: Optional[str] = None
 
     @property
     def has_coordinates(self) -> bool:
@@ -32,6 +34,12 @@ class Origin:
 
     def to_dict(self) -> dict:
         return asdict(self)
+
+
+def _iso_code(country: Optional[str]) -> Optional[str]:
+    """A two-letter country value sent by an autocomplete widget is already an ISO code."""
+    value = (country or "").strip()
+    return value.upper() if len(value) == 2 and value.isalpha() else None
 
 
 def _now() -> str:
@@ -52,6 +60,7 @@ def resolve_origin(
             country=country,
             region=region_for_country(country or ""),
             checked_at_utc=_now(),
+            country_code=_iso_code(country),
         )
 
     try:
@@ -82,4 +91,5 @@ def resolve_origin(
         country=lookup_country,
         region=region_for_country(lookup_country or ""),
         checked_at_utc=_now(),
+        country_code=result.get("country_code") or _iso_code(country),
     )

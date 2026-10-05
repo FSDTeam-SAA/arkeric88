@@ -1,4 +1,4 @@
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import APIRouter, HTTPException
@@ -58,6 +58,7 @@ from src.core.itinerary_geo import (
 )
 from src.core.itinerary_pricing import build_price_breakdown, meal_cost
 from src.core.itinerary_validation import booking_status, validate_itinerary
+from src.core.viator_match import attach_viator_products
 from src.core.travel_time import (
     FALLBACK_ROAD_FACTOR,
     FALLBACK_SPEED_KMH,
@@ -1106,6 +1107,13 @@ def _build_days(
     return built, adjustments
 
 
+def _travel_dates(profile: TripProfile) -> Optional[dict]:
+    """Day number -> calendar date, when the guest has exact dates."""
+    if not profile.has_exact_dates:
+        return None
+    return {day: profile.check_in_date + timedelta(days=day - 1) for day in range(1, profile.nights + 1)}
+
+
 def _destination_verified(destination: Optional[Destination]) -> bool:
     if destination is None:
         return False
@@ -1599,6 +1607,7 @@ async def get_tour_plan(request_data: TourPlanRequestData):
                     "presented as a match."
                 )
 
+        adjustments = [*adjustments, *attach_viator_products(enriched_plan, stops, _travel_dates(profile))]
         final = _finalize_itinerary(stops, enriched_plan, profile, destination, adjustments)
         priciest, within_budget = _stays_within_budget(stops, profile)
         response.update(
@@ -1668,6 +1677,7 @@ async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
             llm_days, stops, profile, _build_profile_search_context(profile), TravelTimes(),
             existing_plan=existing_plan, day_to_regenerate=day_to_regenerate,
         )
+        new_adjustments = [*new_adjustments, *attach_viator_products(new_days, stops, _travel_dates(profile))]
         if day_to_regenerate is None:
             full_tour_plan, adjustments = new_days, new_adjustments
         else:

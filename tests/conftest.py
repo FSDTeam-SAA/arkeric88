@@ -29,5 +29,11 @@ def _offline_map_lookups(monkeypatch):
     monkeypatch.setattr("app.router.city_content_route.get_cityinfo", offline)
     monkeypatch.setattr("src.core.travel_time.compute_route_matrix", lambda origins, destinations: {"error": "offline in tests"})
     monkeypatch.setattr("app.router.city_content_route.compute_drive_route", lambda origin, destination: {"error": "offline in tests"})
+    # Viator: off unless a test turns it on, even when the developer's .env has a real key.
+    monkeypatch.setattr("src.config.config_env.settings.viator_api_key", "")
+    from src.tools import viator
+    viator.clear_caches()
+    # Date suggestions: no climate record unless a test supplies one.
+    monkeypatch.setattr("app.router.dates_route.monthly_climate", lambda latitude, longitude: {"error": "offline in tests"})
     yield
     clear_place_cache()

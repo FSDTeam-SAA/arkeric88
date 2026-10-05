@@ -357,3 +357,31 @@ class TravelIntakeRequest(BaseModel):
     def budget_open_ended(self) -> bool:
         """True when the guest chose the slider's "$7,000+" top value."""
         return self.budget_per_night >= BUDGET_MAXIMUM
+
+
+class DateRecommendationRequest(TravelIntakeRequest):
+    """
+    POST /recommend_travel_dates request body: the guest's answers to steps
+    1-9 plus the step-10 timing choice (flexible, or a month/season) and the
+    number of nights. The budget (step 11) is not needed yet. A date range
+    and the chosen destination are optional and make the suggestion sharper.
+    """
+
+    budget_per_night: Optional[float] = Field(default=None, ge=BUDGET_MINIMUM, le=BUDGET_MAXIMUM)
+    earliest_check_in: Optional[date] = None
+    latest_check_out: Optional[date] = None
+    destination_id: Optional[str] = Field(default=None, max_length=50)
+
+    @model_validator(mode="after")
+    def _validate_date_request(self):
+        if self.travel_timing == TravelTiming.exact_dates:
+            raise ValueError("The guest already chose exact dates; date suggestions are for flexible or month/season timing.")
+        if self.earliest_check_in and self.earliest_check_in < date.today():
+            raise ValueError("earliest_check_in cannot be in the past.")
+        if self.earliest_check_in and self.latest_check_out and self.latest_check_out <= self.earliest_check_in:
+            raise ValueError("latest_check_out must be after earliest_check_in.")
+        return self
+
+    @property
+    def budget_open_ended(self) -> bool:
+        return bool(self.budget_per_night) and self.budget_per_night >= BUDGET_MAXIMUM

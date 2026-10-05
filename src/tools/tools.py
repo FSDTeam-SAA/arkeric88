@@ -92,14 +92,17 @@ def get_cityinfo(city_name: str, region_hint: str | None = None) -> dict:
             return {"error": f"No city found for '{city_name}'."}
         place = places[0]
         country = "N/A"
+        country_code = None
         for component in place.get("addressComponents", []):
             if "country" in component.get("types", []):
                 country = component.get("longText", "N/A")
+                country_code = component.get("shortText")  # ISO 3166-1 alpha-2
                 break
         location = place.get("location", {})
         data = {
             "city_name": place.get("displayName", {}).get("text", city_name),
             "country": country,
+            "country_code": country_code,
             "lat": location.get("latitude"),
             "lng": location.get("longitude"),
             "photos": _extract_photo_ids(place, api_key) or ["No photos available"],

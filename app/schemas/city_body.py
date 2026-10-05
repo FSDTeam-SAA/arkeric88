@@ -87,7 +87,15 @@ class TourPlanActivityInput(BaseModel):
     price_level: Optional[str] = None
     price_indication: Optional[str] = None
     open_slot: bool = False
+    # Viator product for this experience (src/core/viator_match.py): booking link,
+    # rating, "from" price or the price on the travel date, and whether it runs that day.
+    viator: Optional[Dict[str, Any]] = None
+    # "viator_schedule" | "viator_from_price" | None (estimate from the plan)
+    price_source: Optional[str] = None
+    # "SCHEDULED" when Viator's schedule lists the experience on the travel date.
+    availability_status: Optional[str] = None
     # Transfers between stops.
+    transfer_from: Optional[str] = None
     transfer_minutes: Optional[int] = None
     transfer_buffer_minutes: Optional[int] = None
     transfer_km: Optional[float] = None

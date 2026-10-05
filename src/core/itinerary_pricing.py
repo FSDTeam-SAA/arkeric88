@@ -72,7 +72,9 @@ def build_price_breakdown(stops: List[dict], days: List[dict], party_size: int, 
         else:
             accommodation += subtotal
 
-    experiences_pp = sum(float(item.get("activity_cost") or 0) for item in items if item.get("item_type", EXPERIENCE) == EXPERIENCE)
+    experiences = [item for item in items if item.get("item_type", EXPERIENCE) == EXPERIENCE]
+    experiences_pp = sum(float(item.get("activity_cost") or 0) for item in experiences)
+    viator_priced = sum(str(item.get("price_source") or "").startswith("viator") for item in experiences)
     dining_pp = sum(float(item.get("activity_cost") or 0) for item in items if item.get("item_type") == MEAL)
 
     local_km = sum(
@@ -96,7 +98,9 @@ def build_price_breakdown(stops: List[dict], days: List[dict], party_size: int, 
             "label": "Experiences",
             "amount": _round(experiences_pp * party_size),
             "per_person": _round(experiences_pp),
-            "basis": f"Per person × {guests}",
+            "basis": f"Per person × {guests}" + (
+                f"; {viator_priced} of {len(experiences)} priced from Viator" if viator_priced else ""
+            ),
         },
         {
             "category": "dining",

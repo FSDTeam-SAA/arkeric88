@@ -1,6 +1,7 @@
 import os
 
 from app.router.city_content_route import router as city_content_router
+from app.router.dates_route import router as dates_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -20,3 +21,4 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(city_content_router)
+app.include_router(dates_router)

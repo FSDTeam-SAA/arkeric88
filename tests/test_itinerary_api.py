@@ -245,6 +245,33 @@ def test_feeling_block_is_written_from_experiences_only():
     assert "Transfer from" not in listed and "Open time" not in listed and "Lunch at" not in listed
 
 
+def test_viator_products_price_the_experiences_when_configured(monkeypatch):
+    monkeypatch.setattr("src.config.config_env.settings.viator_api_key", "test-key")
+    kayak = {"productCode": "K1", "title": "Sea kayak Tide pools tour", "productUrl": "https://www.viator.com/k1",
+             "reviews": {"totalReviews": 80, "combinedAverageRating": 4.8},
+             "pricing": {"summary": {"fromPrice": 95.0}, "currency": "USD"}}
+    searches = []
+
+    def search(term, destination_id, start, end):
+        searches.append((term, destination_id, start))
+        return {"products": [kayak]}
+
+    monkeypatch.setattr("src.tools.viator.get_destinations", lambda: [
+        {"destination_id": 7, "name": "North Bay", "type": "CITY", "latitude": NORTH[0], "longitude": NORTH[1]},
+        {"destination_id": 8, "name": "South Point", "type": "CITY", "latitude": SOUTH[0], "longitude": SOUTH[1]},
+    ])
+    monkeypatch.setattr("src.tools.viator.search_products", search)
+    monkeypatch.setattr("src.tools.viator.availability_schedule", lambda code: {"error": "no schedule"})
+    data = _new_itinerary()
+    tide_pools = next(item for item in _items(data) if item["activity_name"] == "Tide pools")
+    assert tide_pools["viator"]["product_code"] == "K1"
+    assert tide_pools["activity_cost"] == 95.0 and tide_pools["price_source"] == "viator_from_price"
+    assert {destination for _, destination, _ in searches} == {7, 8}, "each stop searches its own Viator destination"
+    assert all(start for _, _, start in searches), "exact dates are passed to the search"
+    experiences = next(line for line in data["price_breakdown"]["lines"] if line["category"] == "experiences")
+    assert "priced from Viator" in experiences["basis"]
+
+
 def test_saved_itinerary_reopens_with_the_same_stops_and_checks():
     data = _new_itinerary()
     saved = client.get(f"/activity_session/{data['activity_session_id']}").json()
