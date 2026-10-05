@@ -9,7 +9,6 @@ wheels/
 # Virtual environments
 .venv
 
-.env
 
 # Durable session storage (src/session/session_persistence.py)
 data/sessions.sqlite3*
@@ -19,3 +18,5 @@ personal/
 src/personal
 # data/
 # *.md
+config.bat
+node_modules
