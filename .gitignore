@@ -10,6 +10,7 @@ wheels/
 .venv
 
 .env
+.env.viator.sandbox
 
 # Durable session storage (src/session/session_persistence.py)
 data/sessions.sqlite3*
