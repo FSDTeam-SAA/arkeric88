@@ -12,4 +12,5 @@ dependencies = [
     "langgraph>=1.2.7",
     "pydantic-settings>=2.14.2",
     "pytest>=9.1.1",
+    "requests>=2.32.0",
 ]

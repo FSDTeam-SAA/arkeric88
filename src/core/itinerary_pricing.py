@@ -57,7 +57,10 @@ def build_price_breakdown(stops: List[dict], days: List[dict], party_size: int, 
     for stop in stops:
         nightly = stop.get("nightly_usd")
         hotel_name = (stop.get("hotel") or {}).get("name", stop["base_area"])
-        subtotal = None if nightly is None else nightly * stop["nights"] * rooms
+        # A supplier offer total already includes its included taxes/fees. Do
+        # not reconstruct it from rounded nightly values or add charges twice.
+        live_total = stop.get("live_total")
+        subtotal = live_total if live_total is not None else (None if nightly is None else nightly * stop["nights"] * rooms)
         stays.append({
             "stay": hotel_name,
             "base_area": stop["base_area"],
@@ -65,7 +68,7 @@ def build_price_breakdown(stops: List[dict], days: List[dict], party_size: int, 
             "nights": stop["nights"],
             "rooms": rooms,
             "subtotal": _round(subtotal),
-            "basis": "per room, per night",
+            "basis": "verified live offer total" if live_total is not None else "per room, per night",
         })
         if subtotal is None:
             missing.append(f"no nightly price for {hotel_name}")

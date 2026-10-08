@@ -89,3 +89,40 @@ def delete(kind: str, session_id: str) -> bool:
     with _connect(path) as connection:
         cursor = connection.execute("DELETE FROM sessions WHERE kind = ? AND id = ?", (kind, session_id))
     return cursor.rowcount > 0
+
+
+# Hotel supplier mappings are static-ish evidence, unlike live prices.  Keep
+# them in the application's existing SQLite store, not in a process cache.
+def save_hotel_mapping(google_place_id: str, provider: str, provider_hotel_id: str, payload: dict) -> None:
+    path = db_path()
+    if not path:
+        return
+    with _connect(path) as connection:
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS hotel_provider_mappings ("
+            "google_place_id TEXT NOT NULL, provider TEXT NOT NULL, provider_hotel_id TEXT NOT NULL, "
+            "payload TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY (google_place_id, provider))"
+        )
+        connection.execute(
+            "INSERT OR REPLACE INTO hotel_provider_mappings "
+            "(google_place_id, provider, provider_hotel_id, payload, updated_at) "
+            "VALUES (?, ?, ?, ?, datetime('now'))",
+            (google_place_id, provider, provider_hotel_id, json.dumps(payload)),
+        )
+
+
+def load_hotel_mapping(google_place_id: str, provider: str) -> Optional[dict]:
+    path = db_path()
+    if not path or not os.path.exists(path):
+        return None
+    with _connect(path) as connection:
+        connection.execute(
+            "CREATE TABLE IF NOT EXISTS hotel_provider_mappings ("
+            "google_place_id TEXT NOT NULL, provider TEXT NOT NULL, provider_hotel_id TEXT NOT NULL, "
+            "payload TEXT NOT NULL, updated_at TEXT NOT NULL, PRIMARY KEY (google_place_id, provider))"
+        )
+        row = connection.execute(
+            "SELECT payload FROM hotel_provider_mappings WHERE google_place_id = ? AND provider = ?",
+            (google_place_id, provider),
+        ).fetchone()
+    return json.loads(row[0]) if row else None

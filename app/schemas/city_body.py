@@ -1,4 +1,4 @@
-from pydantic import BaseModel, ConfigDict
+from pydantic import BaseModel, ConfigDict, Field
 from typing import Any, Dict, List, Optional
 
 
@@ -49,6 +49,14 @@ class StayInfo(BaseModel):
     why_selected: str = ""
     base_area: str = ""
     nights: Optional[int] = None
+    live_rate_status: str = "NOT_REQUESTED"
+    provider: Optional[str] = None
+    total_price: Optional[float] = None
+    currency: Optional[str] = None
+    room_offers: List[Dict[str, Any]] = []
+    included_taxes_and_fees: List[Dict[str, Any]] = []
+    payable_at_property: List[Dict[str, Any]] = []
+    fee_disclosure: str = ""
 
 
 # ==================== ACTIVITY/TOUR PLAN REQUEST/RESPONSE ====================
@@ -123,6 +131,18 @@ class TourPlanRequestData(BaseModel):
     session_id: str
     selected_city: str = ""
     destination_id: Optional[str] = None
+
+
+class HotelRateRefreshInput(BaseModel):
+    """Explicit live-rate request for a saved itinerary; no booking occurs."""
+    guest_nationality: str
+    room_occupancies: List[Dict[str, Any]] = Field(default_factory=list)
+    currency: str = "USD"
+
+
+class HotelPrebookInput(BaseModel):
+    """Revalidate an existing itinerary offer; payment and booking stay disabled."""
+    offer_id: str
 
 
 class CitySuggestionInput(BaseModel):

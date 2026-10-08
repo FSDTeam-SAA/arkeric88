@@ -52,6 +52,8 @@ class TripProfile:
     children: int
     rooms: int
     child_ages: Optional[List[int]]
+    guest_nationality: Optional[str]
+    hotel_room_occupancies: Optional[List[dict]]
 
     # restriction code -> "must_avoid" | "prefer_avoid"
     restrictions: Dict[str, str]
@@ -233,6 +235,8 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         children=request.party_children,
         rooms=request.party_rooms,
         child_ages=list(request.party_child_ages) if request.party_child_ages is not None else None,
+        guest_nationality=request.guest_nationality,
+        hotel_room_occupancies=list(request.hotel_room_occupancies) if request.hotel_room_occupancies is not None else None,
         restrictions=restrictions,
         restriction_notes=request.restriction_notes,
         departure_location=request.departure_location,

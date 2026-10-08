@@ -48,6 +48,7 @@ dependencies = [
     { name = "langgraph" },
     { name = "pydantic-settings" },
     { name = "pytest" },
+    { name = "requests" },
 ]
 
 [package.metadata]
@@ -59,6 +60,7 @@ requires-dist = [
     { name = "langgraph", specifier = ">=1.2.7" },
     { name = "pydantic-settings", specifier = ">=2.14.2" },
     { name = "pytest", specifier = ">=9.1.1" },
+    { name = "requests", specifier = ">=2.32.0" },
 ]
 
 [[package]]

@@ -205,6 +205,10 @@ class TravelIntakeRequest(BaseModel):
     party_children: Optional[int] = Field(default=None, ge=0, le=20)
     party_rooms: Optional[int] = Field(default=None, ge=1, le=20)
     party_child_ages: Optional[List[int]] = None
+    # Optional checkout data.  It is intentionally not required for discovery
+    # or emotionally-led recommendations, but is required before live rates.
+    guest_nationality: Optional[str] = Field(default=None, pattern=r"^[A-Za-z]{2}$")
+    hotel_room_occupancies: Optional[List[dict]] = None
 
     # Step 8 -- optional.
     activity_restrictions: List[ActivityRestriction] = Field(default_factory=list)
@@ -295,6 +299,19 @@ class TravelIntakeRequest(BaseModel):
                 raise ValueError("party_child_ages must list one age per child.")
             if any(age < 0 or age > 17 for age in self.party_child_ages):
                 raise ValueError("party_child_ages must be between 0 and 17.")
+        if self.guest_nationality:
+            self.guest_nationality = self.guest_nationality.upper()
+        if self.hotel_room_occupancies is not None:
+            if len(self.hotel_room_occupancies) != self.party_rooms:
+                raise ValueError("hotel_room_occupancies must contain one entry per room.")
+            try:
+                adults = sum(int(room.get("adults", 0)) for room in self.hotel_room_occupancies)
+                children = sum(len(room.get("children", [])) for room in self.hotel_room_occupancies)
+                valid_rooms = all(int(room.get("adults", 0)) >= 1 for room in self.hotel_room_occupancies)
+            except (AttributeError, TypeError, ValueError) as error:
+                raise ValueError("Each hotel_room_occupancy must contain adults and optional children ages.") from error
+            if not valid_rooms or adults != self.party_adults or children != self.party_children:
+                raise ValueError("hotel_room_occupancies must match the selected adults, children and rooms.")
 
     def _validate_restrictions(self) -> None:
         if not _unique(self.activity_restrictions):

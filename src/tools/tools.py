@@ -225,6 +225,7 @@ def get_google_hotels_sorted_by_rating(
             "places.location,"
             "places.rating,"
             "places.nationalPhoneNumber,"
+            "places.id,"
             "places.photos"
         ),
     }
@@ -250,6 +251,7 @@ def get_google_hotels_sorted_by_rating(
             hotel_list.append(
                 {
                     "name": place.get("displayName", {}).get("text", "N/A"),
+                    "place_id": place.get("id"),
                     "rating": place.get("rating", 0.0),
                     "phone": place.get("nationalPhoneNumber", "No phone number listed"),
                     "price_level": place.get("priceLevel", "NOT_AVAILABLE"),

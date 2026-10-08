@@ -9,6 +9,8 @@ from src.service.chat_services import get_ai_response
 from app.schemas.city_body import (
     RegenerateInputData,
     RegenerateActivityInputData,
+    HotelPrebookInput,
+    HotelRateRefreshInput,
     TourPlanRequestData,
 )
 from app.schemas.intake_schema import (
@@ -59,6 +61,14 @@ from src.core.itinerary_geo import (
 from src.core.itinerary_pricing import build_price_breakdown, meal_cost
 from src.core.itinerary_validation import booking_status, validate_itinerary
 from src.core.viator_match import attach_viator_products
+from src.core.hotel_rates import (
+    HotelRateRequest,
+    HotelProviderError,
+    build_occupancies,
+    enrich_hotel_with_live_rates,
+    get_liteapi_provider,
+    request_from_profile,
+)
 from src.core.travel_time import (
     FALLBACK_ROAD_FACTOR,
     FALLBACK_SPEED_KMH,
@@ -170,12 +180,16 @@ def _find_hotel(
         })
         if not hotels or "error" in hotels[0]:
             return _fallback_hotel(location)
-        if budget_open_ended:
-            return hotels[0]
-        for hotel in hotels:
-            if _estimate_hotel_cost(hotel) <= nightly_budget:
-                return hotel
-        return min(hotels, key=_estimate_hotel_cost)
+        eligible = hotels if budget_open_ended else [hotel for hotel in hotels if _estimate_hotel_cost(hotel) <= nightly_budget]
+        selected = eligible[0] if eligible else min(hotels, key=_estimate_hotel_cost)
+        # Retain only profile-filtered, geographically biased Google results
+        # as controlled live-rate fallbacks.  They are never LLM inventions
+        # and the original selected property is excluded before retrying.
+        selected = dict(selected)
+        selected["_rate_fallback_candidates"] = [
+            dict(hotel) for hotel in eligible if _place_key(hotel) != _place_key(selected)
+        ]
+        return selected
     except Exception:
         return _fallback_hotel(location)
 
@@ -963,6 +977,41 @@ def _plan_stops(
     return stops
 
 
+def _enrich_stops_with_live_rates(stops: list, profile: TripProfile, request: Optional[HotelRateRequest] = None) -> list:
+    """Enrich Google-selected stays without replacing their emotional/geographic fit."""
+    try:
+        request = request or request_from_profile(profile)
+    except ValueError as error:
+        for stop in stops:
+            stop["hotel"].setdefault("live_rate_status", "NOT_REQUESTED")
+            stop["hotel"].setdefault("live_rate_note", str(error))
+        return stops
+    provider = get_liteapi_provider()
+    for stop in stops:
+        hotel = enrich_hotel_with_live_rates(stop["hotel"], request, provider)
+        if hotel.get("live_rate_status") in {"UNAVAILABLE", "UNMATCHED"}:
+            attempted = {_place_key(hotel)}
+            for candidate in hotel.get("_rate_fallback_candidates", []):
+                candidate_key = _place_key(candidate)
+                if not candidate_key or candidate_key in attempted:
+                    continue
+                attempted.add(candidate_key)
+                fallback = enrich_hotel_with_live_rates(candidate, request, provider)
+                if fallback.get("price_status") == "LIVE":
+                    fallback["rate_fallback_from"] = hotel.get("name")
+                    fallback["rate_fallback_reason"] = (
+                        "The first emotionally matched stay was not available for these dates; "
+                        "this nearby, profile-filtered alternative has live availability."
+                    )
+                    hotel = fallback
+                    break
+        stop["hotel"] = hotel
+        if hotel.get("price_status") == "LIVE" and hotel.get("live_total") is not None:
+            stop["nightly_usd"] = hotel.get("nightly_usd")
+            stop["live_total"] = hotel["live_total"]
+    return stops
+
+
 def _fallback_experience_reason(item: dict, profile: TripProfile) -> str:
     """A reason tied to the guest's own answers when the model gave none worth showing."""
     feeling = TRIP_GOAL_FEELING_WORDS[profile.goals[0]].lower()
@@ -1177,13 +1226,25 @@ def _guest_stay(stop: dict) -> dict:
         "price_indication": label,
         "photos": _clean_photos(hotel.get("photos", [])),
         "coords": hotel.get("coords"),
-        "average_nightly_price": f"${nightly:,.0f} per night (estimate)" if nightly is not None else "",
+        "average_nightly_price": (
+            f"{hotel.get('live_currency', 'USD')} {nightly:,.2f} per room, per night"
+            if hotel.get("price_status") == "LIVE" and nightly is not None
+            else (f"${nightly:,.0f} per night (estimate)" if nightly is not None else "")
+        ),
         "budget_tier": "",
         "facilities": [],
         "website": "" if website == "Not available" else website,
-        "estimate_note": _STAY_ESTIMATE_NOTE,
-        "price_status": "ESTIMATED",
-        "availability_status": "NOT_CHECKED",
+        "estimate_note": "" if hotel.get("price_status") == "LIVE" else _STAY_ESTIMATE_NOTE,
+        "price_status": hotel.get("price_status", "ESTIMATED"),
+        "availability_status": hotel.get("availability_status", "NOT_CHECKED"),
+        "live_rate_status": hotel.get("live_rate_status", "NOT_REQUESTED"),
+        "provider": (hotel.get("live_rates") or {}).get("provider"),
+        "total_price": hotel.get("live_total"),
+        "currency": hotel.get("live_currency"),
+        "room_offers": (hotel.get("live_rates") or {}).get("offers", []),
+        "included_taxes_and_fees": ((hotel.get("live_rates") or {}).get("offers") or [{}])[0].get("included_taxes_and_fees", []),
+        "payable_at_property": ((hotel.get("live_rates") or {}).get("offers") or [{}])[0].get("payable_at_property", []),
+        "fee_disclosure": ((hotel.get("live_rates") or {}).get("offers") or [{}])[0].get("fee_disclosure", ""),
         "why_selected": hotel.get("why_selected", ""),
         "base_area": stop.get("base_area", ""),
         "nights": stop.get("nights"),
@@ -1584,6 +1645,7 @@ async def get_tour_plan(request_data: TourPlanRequestData):
             prompt = PromptGenerator.gen_tour_plan_prompt(profile, city_name, destination, revision)
             draft = _parse_ai_response(get_ai_response(prompt))
             stops = _plan_stops(draft.get("stops"), profile, destination, city_name, profile_search_query, hotel_cache)
+            stops = _enrich_stops_with_live_rates(stops, profile)
             days, adjustments = _build_days(draft.get("tour_plan", []), stops, profile, profile_search_query, travel)
             return draft, stops, days, adjustments
 
@@ -1633,6 +1695,64 @@ async def get_tour_plan(request_data: TourPlanRequestData):
         raise
     except Exception as error:
         raise HTTPException(status_code=500, detail=str(error)) from error
+
+
+@router.post("/activity_session/{activity_session_id}/hotel-rates")
+async def refresh_hotel_rates(activity_session_id: str, rate_input: HotelRateRefreshInput):
+    """Fetch current supplier offers for existing Google-selected itinerary stays."""
+    activity_session = ActivitySessionStore.get(activity_session_id)
+    if activity_session is None:
+        raise HTTPException(status_code=404, detail="Activity session not found.")
+    city_session = CitySessionStore.get(activity_session.parent_session_id)
+    if city_session is None:
+        raise HTTPException(status_code=404, detail="Parent city session not found.")
+    profile = build_trip_profile(_load_session_intake(city_session.intake))
+    if not profile.has_exact_dates:
+        raise HTTPException(status_code=422, detail="Exact check-in and check-out dates are required for live hotel rates.")
+    try:
+        occupancies = build_occupancies(
+            adults=profile.adults, children=profile.children, rooms=profile.rooms,
+            child_ages=profile.child_ages, room_occupancies=rate_input.room_occupancies,
+        )
+    except ValueError as error:
+        raise HTTPException(status_code=422, detail=str(error)) from error
+    request = HotelRateRequest(
+        checkin=profile.check_in_date.isoformat(), checkout=profile.check_out_date.isoformat(),
+        guest_nationality=rate_input.guest_nationality.upper(), currency=rate_input.currency.upper(),
+        occupancies=occupancies, nights=profile.nights,
+    )
+    stops = activity_session.response.get("stops") or _stops_from_session(activity_session)
+    stops = _enrich_stops_with_live_rates(stops, profile, request)
+    destination = get_destination(activity_session.destination_id) if activity_session.destination_id else None
+    days = _dump_tour_plan(activity_session.tour_plan)
+    final = _finalize_itinerary(stops, days, profile, destination, activity_session.response.get("adjustments", []))
+    response = {**activity_session.response, "stops": stops, "tour_plan": days, **final}
+    updated = ActivitySessionStore.update_response(
+        activity_session_id, response, stay_data=_guest_stay(stops[0]), total_cost_estimate=final["total_cost_estimate"],
+    )
+    return _session_payload(updated, "live_rates_refreshed")
+
+
+@router.post("/activity_session/{activity_session_id}/hotel-prebook")
+async def prebook_hotel_offer(activity_session_id: str, prebook_input: HotelPrebookInput):
+    """Revalidate one displayed offer.  This endpoint never takes payment or creates a booking."""
+    activity_session = ActivitySessionStore.get(activity_session_id)
+    if activity_session is None:
+        raise HTTPException(status_code=404, detail="Activity session not found.")
+    stops = activity_session.response.get("stops") or []
+    known_offer_ids = {
+        offer.get("offer_id")
+        for stop in stops for offer in ((stop.get("hotel") or {}).get("live_rates") or {}).get("offers", [])
+    }
+    if prebook_input.offer_id not in known_offer_ids:
+        raise HTTPException(status_code=404, detail="Offer is not part of this itinerary's current live rates.")
+    provider = get_liteapi_provider()
+    if provider is None:
+        raise HTTPException(status_code=503, detail="Live hotel provider is not configured.")
+    try:
+        return {"provider": provider.name, "booking_enabled": False, "prebook": provider.prebook(prebook_input.offer_id)}
+    except HotelProviderError as error:
+        raise HTTPException(status_code=503, detail=str(error)) from error
 
 @router.post("/regenerate_tour_plan")
 
