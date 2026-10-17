@@ -4,7 +4,14 @@ from datetime import date
 from unittest.mock import MagicMock, patch
 
 from src.core.itinerary_pricing import build_price_breakdown
-from src.core.viator_match import attach_viator_products, best_product, nearest_destination, schedule_on
+from src.core.viator_match import (
+    attach_viator_products,
+    best_product,
+    drop_incomplete_viator,
+    is_complete_viator,
+    nearest_destination,
+    schedule_on,
+)
 from src.tools import viator
 
 TOFINO = (49.153, -125.907)
@@ -108,10 +115,10 @@ STOPS = [{"stop": 1, "base_area": "Tofino", "nights": 2, "first_day": 1, "last_d
           "base": {"latitude": TOFINO[0], "longitude": TOFINO[1]}, "nightly_usd": 200.0, "hotel": {"name": "Inn"}}]
 
 
-def _attach(days, travel_dates=None):
+def _attach(days, travel_dates=None, products=(WHALES, KAYAK)):
     return attach_viator_products(
         days, STOPS, travel_dates,
-        search=lambda term, destination_id, start, end: {"products": [WHALES, KAYAK]},
+        search=lambda term, destination_id, start, end: {"products": list(products)},
         schedule=lambda code: SCHEDULE,
         destinations=DESTINATIONS,
         usd_rate=lambda currency: 0.73,
@@ -127,26 +134,63 @@ def test_exact_dates_use_the_schedule_price_and_flag_days_it_does_not_run():
     assert kayak["viator"]["runs_on_date"] is True
     assert kayak["activity_cost"] == round(140.0 * 0.73, 2) and kayak["price_source"] == "viator_schedule"
     assert kayak["availability_status"] == "SCHEDULED"
+    assert is_complete_viator(kayak)
     assert "viator" not in days[0]["activities"][1], "meals are never matched to tours"
     sold_out = days[1]["activities"][0]
-    assert sold_out["viator"]["runs_on_date"] is False
+    assert "viator" not in sold_out, "an unscheduled product is never sent: the backend rejects it"
+    assert sold_out["activity_cost"] == 60 and "price_source" not in sold_out
     assert sold_out.get("availability_status") is None
     assert [note["day"] for note in notes] == [2]
     assert "isn't scheduled on Viator for Wednesday 9 June" in notes[0]["guest_note"]
 
 
-def test_without_dates_the_from_price_is_used():
+def test_without_dates_nothing_is_attached_or_searched():
     days = _days()
-    assert _attach(days) == []
+    searched = []
+    notes = attach_viator_products(
+        days, STOPS, None,
+        search=lambda *args: searched.append(args) or {"products": [KAYAK]},
+        schedule=lambda code: SCHEDULE, destinations=DESTINATIONS, usd_rate=lambda currency: 0.73,
+    )
+    assert notes == [] and searched == []
     kayak = days[0]["activities"][0]
-    assert kayak["activity_cost"] == 129.0 and kayak["price_source"] == "viator_from_price"
-    assert kayak["viator"]["runs_on_date"] is None
+    assert "viator" not in kayak and kayak["activity_cost"] == 60
+
+
+def test_a_product_without_a_booking_link_is_not_attached():
+    days = _days()
+    whale_days = [{"day": 1, "stop": 1, "activities": [
+        {"item_type": "experience", "activity_name": "Whale watching cruise", "activity_cost": 80},
+    ]}]
+    _attach(whale_days, {1: date(2027, 6, 8)}, products=[WHALES])
+    assert "viator" not in whale_days[0]["activities"][0]
+    assert whale_days[0]["activities"][0]["activity_cost"] == 80
+    _attach(days, {1: date(2027, 6, 8)}, products=[KAYAK])
+    assert is_complete_viator(days[0]["activities"][0])
+
+
+def test_incomplete_viator_items_from_saved_sessions_are_cleaned():
+    days = [{"day": 1, "activities": [
+        {"item_type": "experience", "activity_name": "Kayak", "activity_cost": 129.0, "price_source": "viator_from_price",
+         "viator": {"product_code": "123KAYAK", "title": "Kayak", "booking_url": "https://www.viator.com/x"}},
+        {"item_type": "experience", "activity_name": "Kayak", "activity_cost": 102.2, "price_source": "viator_schedule",
+         "availability_status": "SCHEDULED",
+         "viator": {"product_code": "123KAYAK", "title": "Kayak", "booking_url": "https://www.viator.com/x"}},
+        {"item_type": "experience", "activity_name": "Whales", "activity_cost": 150.0, "price_source": "viator_schedule",
+         "availability_status": "SCHEDULED", "viator": {"product_code": "9WHALE", "title": "Whales", "booking_url": None}},
+        {"item_type": "experience", "activity_name": "Beach walk", "activity_cost": 0, "viator": None, "price_source": None},
+    ]}]
+    assert drop_incomplete_viator(days) == 2
+    unscheduled, complete, no_link, plain = days[0]["activities"]
+    assert "viator" not in unscheduled and "price_source" not in unscheduled
+    assert is_complete_viator(complete)
+    assert "viator" not in no_link and "availability_status" not in no_link
+    assert plain == {"item_type": "experience", "activity_name": "Beach walk", "activity_cost": 0, "viator": None, "price_source": None}
 
 
 def test_price_breakdown_says_how_many_experiences_are_priced_from_viator():
     days = _days()
-    _attach(days)
-    days[1]["activities"][0].pop("price_source")
+    _attach(days, {1: date(2027, 6, 8), 2: date(2027, 6, 9)})  # Day 2 is sold out, so stays an estimate.
     experiences = next(line for line in build_price_breakdown(STOPS, days, 2, 1, 2)["lines"] if line["category"] == "experiences")
     assert experiences["basis"] == "Per person × 2 guests; 1 of 2 priced from Viator"
 

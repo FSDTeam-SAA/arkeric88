@@ -1,5 +1,6 @@
+import logging
 from datetime import datetime, timedelta, timezone
-from typing import Optional
+from typing import Callable, Optional
 
 from fastapi import APIRouter, HTTPException
 from pydantic import ValidationError
@@ -60,7 +61,7 @@ from src.core.itinerary_geo import (
 )
 from src.core.itinerary_pricing import build_price_breakdown, meal_cost
 from src.core.itinerary_validation import booking_status, validate_itinerary
-from src.core.viator_match import attach_viator_products
+from src.core.viator_match import attach_viator_products, drop_incomplete_viator
 from src.core.hotel_rates import (
     HotelRateRequest,
     HotelProviderError,
@@ -88,6 +89,30 @@ from src.core.origin import resolve_origin
 from src.core.trip_profile import TripProfile, build_trip_profile
 import re
 router = APIRouter()
+logger = logging.getLogger(__name__)
+
+# A paid itinerary generation is run again this many times in total before the
+# guest sees an error: model output and map/provider calls fail intermittently.
+GENERATION_ATTEMPTS = 3
+
+
+def _with_retries(generate: Callable[[], dict], task: str) -> dict:
+    """
+    Run `generate` again when an attempt fails for a reason a fresh attempt
+    can fix (unparseable model output, a provider or map error). Request
+    errors (4xx) are the caller's to fix, so they are raised at once.
+    """
+    for attempt in range(1, GENERATION_ATTEMPTS + 1):
+        try:
+            return generate()
+        except HTTPException as error:
+            if error.status_code < 500 or attempt == GENERATION_ATTEMPTS:
+                raise
+            logger.warning("%s attempt %d/%d failed: %s", task, attempt, GENERATION_ATTEMPTS, error.detail)
+        except Exception as error:
+            if attempt == GENERATION_ATTEMPTS:
+                raise
+            logger.warning("%s attempt %d/%d failed: %s", task, attempt, GENERATION_ATTEMPTS, error, exc_info=True)
 
 
 def _parse_ai_response(response_text: str) -> dict:
@@ -1176,6 +1201,7 @@ _ESTIMATED_TRAVEL_NOTE = "Some travel times are estimates, so allow a little ext
 def _finalize_itinerary(stops: list, days: list, profile: TripProfile, destination: Optional[Destination],
                         adjustments: list) -> dict:
     """Stay reasons, price breakdown, final validation, booking status and guest notes (each once)."""
+    drop_incomplete_viator(days)
     for stop in stops:
         stop["hotel"]["why_selected"] = describe_stay(stop, days)
     pricing = build_price_breakdown(stops, days, profile.party_size, profile.rooms, profile.nights)
@@ -1570,12 +1596,15 @@ def _stops_from_session(activity_session) -> list:
 
 def _session_payload(activity_session, source: str) -> dict:
     response = activity_session.response or {}
+    tour_plan = _dump_tour_plan(activity_session.tour_plan)
+    # Sessions saved before incomplete Viator matches were dropped would otherwise be rejected again.
+    drop_incomplete_viator(tour_plan)
     return _itinerary_payload(
         activity_session.activity_session_id,
         activity_session.destination_id,
         activity_session.city,
         response.get("stops") or _stops_from_session(activity_session),
-        _dump_tour_plan(activity_session.tour_plan),
+        tour_plan,
         response,
         activity_session.packing_tips,
         activity_session.travel_tips,
@@ -1638,59 +1667,63 @@ async def get_tour_plan(request_data: TourPlanRequestData):
             return _session_payload(activity_session, "cached")
         profile = build_trip_profile(_load_session_intake(city_session.intake))
         profile_search_query = _build_profile_search_context(profile)
-        travel = TravelTimes()
-        hotel_cache: dict = {}
 
-        def draft_itinerary(revision: str = "") -> tuple:
-            prompt = PromptGenerator.gen_tour_plan_prompt(profile, city_name, destination, revision)
-            draft = _parse_ai_response(get_ai_response(prompt))
-            stops = _plan_stops(draft.get("stops"), profile, destination, city_name, profile_search_query, hotel_cache)
-            stops = _enrich_stops_with_live_rates(stops, profile)
-            days, adjustments = _build_days(draft.get("tour_plan", []), stops, profile, profile_search_query, travel)
-            return draft, stops, days, adjustments
+        def generate() -> dict:
+            travel = TravelTimes()
+            hotel_cache: dict = {}
 
-        response, stops, enriched_plan, adjustments = draft_itinerary()
+            def draft_itinerary(revision: str = "") -> tuple:
+                prompt = PromptGenerator.gen_tour_plan_prompt(profile, city_name, destination, revision)
+                draft = _parse_ai_response(get_ai_response(prompt))
+                stops = _plan_stops(draft.get("stops"), profile, destination, city_name, profile_search_query, hotel_cache)
+                stops = _enrich_stops_with_live_rates(stops, profile)
+                days, adjustments = _build_days(draft.get("tour_plan", []), stops, profile, profile_search_query, travel)
+                return draft, stops, days, adjustments
 
-        # The feeling behind the journey -- revise once if the plan doesn't support it.
-        feeling_block = _feeling_block_for(profile, destination, city_name, enriched_plan)
-        if feeling_block["alignment"]["status"] == "mismatch":
-            first_reason = feeling_block["alignment"]["detail"]
-            revised = draft_itinerary(revision_note(feeling_block))
-            revised_block = _feeling_block_for(profile, destination, city_name, revised[2])
-            if revised_block["alignment"]["status"] == "aligned":
-                (response, stops, enriched_plan, adjustments), feeling_block = revised, revised_block
-                feeling_block["alignment"]["status"] = "revised"
-                feeling_block["alignment"]["detail"] = (
-                    f"The first draft did not support the chosen feeling ({first_reason}), so the itinerary was revised."
-                )
-            else:
-                feeling_block["alignment"]["detail"] = (
-                    f"{first_reason} A revised draft also could not support it, so this is flagged instead of "
-                    "presented as a match."
-                )
+            response, stops, enriched_plan, adjustments = draft_itinerary()
 
-        adjustments = [*adjustments, *attach_viator_products(enriched_plan, stops, _travel_dates(profile))]
-        final = _finalize_itinerary(stops, enriched_plan, profile, destination, adjustments)
-        priciest, within_budget = _stays_within_budget(stops, profile)
-        response.update(
-            stops=stops,
-            feeling_block=feeling_block,
-            budget_check=_budget_check(priciest, profile, within_budget),
-            tour_plan=enriched_plan,
-            **final,
-        )
-        activity_session = ActivitySessionStore.create(
-            parent_session_id=request_data.session_id,
-            city_name=city_name,
-            tour_plan=enriched_plan,
-            response=response,
-            stay_data=_guest_stay(stops[0]),
-            total_cost_estimate=final["total_cost_estimate"],
-            packing_tips=response.get("packing_tips", ""),
-            travel_tips=response.get("travel_tips", ""),
-            destination_id=destination.destination_id,
-        )
-        return _session_payload(activity_session, "generated")
+            # The feeling behind the journey -- revise once if the plan doesn't support it.
+            feeling_block = _feeling_block_for(profile, destination, city_name, enriched_plan)
+            if feeling_block["alignment"]["status"] == "mismatch":
+                first_reason = feeling_block["alignment"]["detail"]
+                revised = draft_itinerary(revision_note(feeling_block))
+                revised_block = _feeling_block_for(profile, destination, city_name, revised[2])
+                if revised_block["alignment"]["status"] == "aligned":
+                    (response, stops, enriched_plan, adjustments), feeling_block = revised, revised_block
+                    feeling_block["alignment"]["status"] = "revised"
+                    feeling_block["alignment"]["detail"] = (
+                        f"The first draft did not support the chosen feeling ({first_reason}), so the itinerary was revised."
+                    )
+                else:
+                    feeling_block["alignment"]["detail"] = (
+                        f"{first_reason} A revised draft also could not support it, so this is flagged instead of "
+                        "presented as a match."
+                    )
+
+            adjustments = [*adjustments, *attach_viator_products(enriched_plan, stops, _travel_dates(profile))]
+            final = _finalize_itinerary(stops, enriched_plan, profile, destination, adjustments)
+            priciest, within_budget = _stays_within_budget(stops, profile)
+            response.update(
+                stops=stops,
+                feeling_block=feeling_block,
+                budget_check=_budget_check(priciest, profile, within_budget),
+                tour_plan=enriched_plan,
+                **final,
+            )
+            activity_session = ActivitySessionStore.create(
+                parent_session_id=request_data.session_id,
+                city_name=city_name,
+                tour_plan=enriched_plan,
+                response=response,
+                stay_data=_guest_stay(stops[0]),
+                total_cost_estimate=final["total_cost_estimate"],
+                packing_tips=response.get("packing_tips", ""),
+                travel_tips=response.get("travel_tips", ""),
+                destination_id=destination.destination_id,
+            )
+            return _session_payload(activity_session, "generated")
+
+        return _with_retries(generate, "Itinerary generation")
     except HTTPException:
         raise
     except Exception as error:
@@ -1778,58 +1811,61 @@ async def regenerate_tour_plan(regenerate_data: RegenerateActivityInputData):
         stops = activity_session.response.get("stops") or _stops_from_session(activity_session)
         day_to_regenerate = regenerate_data.day_to_regenerate
 
-        prompt = PromptGenerator.regenerate_tour_plan_prompt(
-            profile=profile,
-            city_name=city_name,
-            current_tour_plan=activity_session.tour_plan,
-            day_to_regenerate=day_to_regenerate,
-            user_instruction=regenerate_data.user_instruction,
-            destination=destination,
-            stops=stops,
-        )
-        generated_response = _parse_ai_response(get_ai_response(prompt))
-        llm_days = generated_response.get("tour_plan", [])
-        if day_to_regenerate is not None:
-            llm_days = [day for day in llm_days if isinstance(day, dict) and day.get("day") == day_to_regenerate]
+        def generate() -> dict:
+            prompt = PromptGenerator.regenerate_tour_plan_prompt(
+                profile=profile,
+                city_name=city_name,
+                current_tour_plan=activity_session.tour_plan,
+                day_to_regenerate=day_to_regenerate,
+                user_instruction=regenerate_data.user_instruction,
+                destination=destination,
+                stops=stops,
+            )
+            generated_response = _parse_ai_response(get_ai_response(prompt))
+            llm_days = generated_response.get("tour_plan", [])
+            if day_to_regenerate is not None:
+                llm_days = [day for day in llm_days if isinstance(day, dict) and day.get("day") == day_to_regenerate]
 
-        existing_plan = _dump_tour_plan(activity_session.tour_plan)
-        new_days, new_adjustments = _build_days(
-            llm_days, stops, profile, _build_profile_search_context(profile), TravelTimes(),
-            existing_plan=existing_plan, day_to_regenerate=day_to_regenerate,
-        )
-        new_adjustments = [*new_adjustments, *attach_viator_products(new_days, stops, _travel_dates(profile))]
-        if day_to_regenerate is None:
-            full_tour_plan, adjustments = new_days, new_adjustments
-        else:
-            full_tour_plan = _merge_tour_plan_days(existing_plan, new_days)
-            kept = [item for item in activity_session.response.get("adjustments", []) if item.get("day") != day_to_regenerate]
-            adjustments = [*kept, *new_adjustments]
+            existing_plan = _dump_tour_plan(activity_session.tour_plan)
+            new_days, new_adjustments = _build_days(
+                llm_days, stops, profile, _build_profile_search_context(profile), TravelTimes(),
+                existing_plan=existing_plan, day_to_regenerate=day_to_regenerate,
+            )
+            new_adjustments = [*new_adjustments, *attach_viator_products(new_days, stops, _travel_dates(profile))]
+            if day_to_regenerate is None:
+                full_tour_plan, adjustments = new_days, new_adjustments
+            else:
+                full_tour_plan = _merge_tour_plan_days(existing_plan, new_days)
+                kept = [item for item in activity_session.response.get("adjustments", []) if item.get("day") != day_to_regenerate]
+                adjustments = [*kept, *new_adjustments]
 
-        final = _finalize_itinerary(stops, full_tour_plan, profile, destination, adjustments)
-        priciest, within_budget = _stays_within_budget(stops, profile)
-        generated_response["tour_plan"] = full_tour_plan
-        response = _merge_regenerated_field(
-            previous_response=activity_session.response,
-            generated_response=generated_response,
-            update_field_name="tour_plan",
-        )
-        response.update(
-            stops=stops,
-            feeling_block=_feeling_block_for(profile, destination, city_name, full_tour_plan),
-            budget_check=_budget_check(priciest, profile, within_budget),
-            **final,
-        )
-        updated_session = ActivitySessionStore.update_response(
-            activity_session_id=regenerate_data.activity_session_id,
-            response=response,
-            day_to_regenerate=day_to_regenerate,
-            user_instruction=regenerate_data.user_instruction or "",
-            stay_data=_guest_stay(stops[0]),
-            total_cost_estimate=final["total_cost_estimate"],
-        )
-        if updated_session is None:
-            raise HTTPException(status_code=404, detail="Activity session not found.")
-        return _session_payload(updated_session, "regenerated")
+            final = _finalize_itinerary(stops, full_tour_plan, profile, destination, adjustments)
+            priciest, within_budget = _stays_within_budget(stops, profile)
+            generated_response["tour_plan"] = full_tour_plan
+            response = _merge_regenerated_field(
+                previous_response=activity_session.response,
+                generated_response=generated_response,
+                update_field_name="tour_plan",
+            )
+            response.update(
+                stops=stops,
+                feeling_block=_feeling_block_for(profile, destination, city_name, full_tour_plan),
+                budget_check=_budget_check(priciest, profile, within_budget),
+                **final,
+            )
+            updated_session = ActivitySessionStore.update_response(
+                activity_session_id=regenerate_data.activity_session_id,
+                response=response,
+                day_to_regenerate=day_to_regenerate,
+                user_instruction=regenerate_data.user_instruction or "",
+                stay_data=_guest_stay(stops[0]),
+                total_cost_estimate=final["total_cost_estimate"],
+            )
+            if updated_session is None:
+                raise HTTPException(status_code=404, detail="Activity session not found.")
+            return _session_payload(updated_session, "regenerated")
+
+        return _with_retries(generate, "Itinerary regeneration")
     except HTTPException:
         raise
     except Exception as error:

@@ -9,12 +9,18 @@ similarity alone. It then supplies:
 - a bookable Viator product (code, title, booking link with our partner ID,
   rating and review count);
 - a per-person price: the price for the travel date from Viator's
-  availability schedule when the guest has exact dates, otherwise Viator's
-  "from" price;
+  availability schedule, or Viator's "from" price when the schedule gives no
+  adult price (the guest must have exact dates);
 - whether the product runs on that date according to its schedule.
 
 A schedule is not a live availability check (that happens at booking), so an
 experience is marked SCHEDULED, never CONFIRMED.
+
+The backend accepts a Viator experience only when it is complete: SCHEDULED,
+with a product code, title, booking link and a Viator price. Anything less
+(no exact dates, not running that day, no booking link or price) is left as a
+plain experience instead, because one half-matched tour fails the whole
+itinerary request.
 """
 
 import re
@@ -31,6 +37,9 @@ MAX_DESTINATION_KM = 60.0
 BROAD_DESTINATION_TYPES = {"COUNTRY", "REGION", "CONTINENT", "STATE", "PROVINCE"}
 WEEKDAY_CODES = ("MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", "SATURDAY", "SUNDAY")
 ADULT_BANDS = ("ADULT", "TRAVELER")
+SCHEDULED = "SCHEDULED"
+VIATOR_PRICE_SOURCES = ("viator_schedule", "viator_from_price")
+REQUIRED_PRODUCT_FIELDS = ("product_code", "title", "booking_url")
 
 _FILLER = {
     "a", "an", "and", "at", "by", "for", "from", "in", "of", "on", "the", "to", "with", "tour", "tours",
@@ -133,6 +142,39 @@ def _product_info(product: dict) -> dict:
     }
 
 
+def is_complete_viator(item: dict) -> bool:
+    """A scheduled experience with a Viator product code, title, booking link and Viator price."""
+    info = item.get("viator") or {}
+    return (
+        item.get("item_type", EXPERIENCE) == EXPERIENCE
+        and item.get("availability_status") == SCHEDULED
+        and item.get("price_source") in VIATOR_PRICE_SOURCES
+        and item.get("activity_cost") is not None
+        and all(info.get(field) for field in REQUIRED_PRODUCT_FIELDS)
+    )
+
+
+def drop_incomplete_viator(days: List[dict]) -> int:
+    """
+    Remove Viator data from every item that is not a complete Viator
+    experience (in place), so it goes out as a plain experience. Covers days
+    built before the contract was enforced. Returns how many were cleaned.
+    """
+    cleaned = 0
+    for day in days:
+        for item in day.get("activities", []) or []:
+            viator_priced = str(item.get("price_source") or "").startswith("viator")
+            if not (item.get("viator") or viator_priced) or is_complete_viator(item):
+                continue
+            item.pop("viator", None)
+            if viator_priced:
+                item.pop("price_source", None)
+            if item.get("availability_status") == SCHEDULED:
+                item.pop("availability_status", None)
+            cleaned += 1
+    return cleaned
+
+
 def attach_viator_products(
     days: List[dict],
     stops: List[dict],
@@ -170,10 +212,12 @@ def attach_viator_products(
         if viator_destination is None:
             continue
         travel_date = (travel_dates or {}).get(day.get("day"))
+        if travel_date is None:
+            continue  # Without a date nothing can be SCHEDULED, so no product could be attached.
+        iso = travel_date.isoformat()
         for item in day.get("activities", []):
             if item.get("item_type", EXPERIENCE) != EXPERIENCE:
                 continue
-            iso = travel_date.isoformat() if travel_date else None
             result = search(item.get("activity_name", ""), viator_destination["destination_id"], iso, iso)
             if "error" in result:
                 continue
@@ -182,7 +226,7 @@ def attach_viator_products(
                 continue
             info = _product_info(product)
             price, source = info["from_price"], "viator_from_price"
-            if travel_date and info["product_code"]:
+            if info["product_code"]:
                 details = schedule(info["product_code"])
                 if "error" not in details:
                     on_date = schedule_on(details, travel_date)
@@ -205,10 +249,12 @@ def attach_viator_products(
                         if rate is not None:
                             info["date_price"] = round(on_date["adult_price"] * rate, 2)
                             price, source = info["date_price"], "viator_schedule"
-            item["viator"] = info
-            if price is not None:
-                item["activity_cost"] = round(float(price), 2)
-                item["price_source"] = source
-            if info["runs_on_date"]:
-                item["availability_status"] = "SCHEDULED"
+            matched = {
+                "viator": info,
+                "activity_cost": round(float(price), 2) if price is not None else None,
+                "price_source": source,
+                "availability_status": SCHEDULED if info["runs_on_date"] else None,
+            }
+            if is_complete_viator({**item, **matched}):
+                item.update(matched)
     return notes

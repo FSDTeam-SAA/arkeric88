@@ -245,31 +245,88 @@ def test_feeling_block_is_written_from_experiences_only():
     assert "Transfer from" not in listed and "Open time" not in listed and "Lunch at" not in listed
 
 
-def test_viator_products_price_the_experiences_when_configured(monkeypatch):
+KAYAK_PRODUCT = {"productCode": "K1", "title": "Sea kayak Tide pools tour", "productUrl": "https://www.viator.com/k1",
+                 "reviews": {"totalReviews": 80, "combinedAverageRating": 4.8},
+                 "pricing": {"summary": {"fromPrice": 95.0}, "currency": "USD"}}
+# Runs every day, without a per-date adult price: the "from" price is used.
+RUNS_DAILY = {"currency": "USD", "bookableItems": [{"seasons": [{"startDate": "2020-01-01", "pricingRecords": [{}]}]}]}
+
+
+def _viator(monkeypatch, schedule) -> list:
     monkeypatch.setattr("src.config.config_env.settings.viator_api_key", "test-key")
-    kayak = {"productCode": "K1", "title": "Sea kayak Tide pools tour", "productUrl": "https://www.viator.com/k1",
-             "reviews": {"totalReviews": 80, "combinedAverageRating": 4.8},
-             "pricing": {"summary": {"fromPrice": 95.0}, "currency": "USD"}}
     searches = []
 
     def search(term, destination_id, start, end):
         searches.append((term, destination_id, start))
-        return {"products": [kayak]}
+        return {"products": [KAYAK_PRODUCT]}
 
     monkeypatch.setattr("src.tools.viator.get_destinations", lambda: [
         {"destination_id": 7, "name": "North Bay", "type": "CITY", "latitude": NORTH[0], "longitude": NORTH[1]},
         {"destination_id": 8, "name": "South Point", "type": "CITY", "latitude": SOUTH[0], "longitude": SOUTH[1]},
     ])
     monkeypatch.setattr("src.tools.viator.search_products", search)
-    monkeypatch.setattr("src.tools.viator.availability_schedule", lambda code: {"error": "no schedule"})
+    monkeypatch.setattr("src.tools.viator.availability_schedule", lambda code: schedule)
+    return searches
+
+
+def test_viator_products_price_the_experiences_when_configured(monkeypatch):
+    searches = _viator(monkeypatch, RUNS_DAILY)
     data = _new_itinerary()
     tide_pools = next(item for item in _items(data) if item["activity_name"] == "Tide pools")
     assert tide_pools["viator"]["product_code"] == "K1"
     assert tide_pools["activity_cost"] == 95.0 and tide_pools["price_source"] == "viator_from_price"
+    assert tide_pools["availability_status"] == "SCHEDULED"
     assert {destination for _, destination, _ in searches} == {7, 8}, "each stop searches its own Viator destination"
     assert all(start for _, _, start in searches), "exact dates are passed to the search"
     experiences = next(line for line in data["price_breakdown"]["lines"] if line["category"] == "experiences")
     assert "priced from Viator" in experiences["basis"]
+
+
+def test_unscheduled_viator_products_never_reach_the_backend(monkeypatch):
+    """The backend rejects the whole itinerary for one Viator item that is not a complete scheduled experience."""
+    _viator(monkeypatch, {"error": "no schedule"})
+    data = _new_itinerary()
+    tide_pools = next(item for item in _items(data) if item["activity_name"] == "Tide pools")
+    assert tide_pools.get("viator") is None and tide_pools["activity_cost"] == 25
+    assert not str(tide_pools.get("price_source") or "").startswith("viator")
+
+
+def test_a_failed_generation_is_retried_instead_of_failing_the_paid_request():
+    initial = client.post("/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
+    good = _ai(PLAN).side_effect
+    failures = []
+
+    def flaky(prompt):
+        if "The feeling behind your journey" not in prompt and not failures:
+            failures.append(prompt)
+            return "Sorry, I could not finish that."  # Not JSON: the first attempt fails.
+        return good(prompt)
+
+    response = _post("/get_tour_plan", {"session_id": initial["session_id"],
+                                        "destination_id": initial["suggested_cities"][0]["destination_id"]},
+                     MagicMock(side_effect=flaky))
+    assert response.status_code == 200, response.text
+    assert len(failures) == 1 and response.json()["tour_plan"]
+
+
+def test_retries_stop_at_the_limit_and_never_repeat_request_errors():
+    from fastapi import HTTPException
+    from app.router.city_content_route import GENERATION_ATTEMPTS, _with_retries
+
+    always_fails = MagicMock(side_effect=RuntimeError("provider down"))
+    try:
+        _with_retries(always_fails, "test")
+        raise AssertionError("expected the last failure to be raised")
+    except RuntimeError:
+        pass
+    assert always_fails.call_count == GENERATION_ATTEMPTS
+
+    bad_request = MagicMock(side_effect=HTTPException(status_code=404, detail="not found"))
+    try:
+        _with_retries(bad_request, "test")
+    except HTTPException as error:
+        assert error.status_code == 404
+    assert bad_request.call_count == 1
 
 
 def test_saved_itinerary_reopens_with_the_same_stops_and_checks():
