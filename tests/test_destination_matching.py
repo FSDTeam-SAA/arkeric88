@@ -19,7 +19,7 @@ from src.core.destination_matching import (
     select_diverse,
 )
 from src.core.guest_text import has_internal_wording
-from src.core.origin import Origin
+from src.core.origin import Origin, resolve_origin
 from src.core.trip_profile import build_trip_profile
 from intake_fixtures import build_intake, exact_dates, with_restriction
 
@@ -89,13 +89,38 @@ def test_seasonal_concern_is_not_cleared_without_known_dates():
 def test_unknown_high_impact_must_avoid_is_not_a_pass():
     profile = _profile(with_restriction(build_intake(), "mobility_accessibility", "must_avoid"))
     result = rank_destinations(profile, None)
+    # A catalog flag ("Cobblestones may affect mobility") excludes the destination...
+    assert "MX-SMA" in _excluded_ids(result, "must_avoid:mobility_accessibility")
+    # ...and an unknown is kept but ranked lower and stated, never shown as suitable.
+    assert result.ranked
+    for item in result.ranked:
+        check = item.restriction_checks[0]
+        assert check.status == "unverified"
+        assert item.breakdown["unverified_must_avoid_penalty"] < 0
+        assert any("must plan around" in tradeoff for tradeoff in item.tradeoffs)
+    suggestion = build_suggestion(result.ranked[0], profile, None)
+    assert any(fact.startswith("Mobility or accessibility:") for fact in suggestion["unresolved_facts"])
+
+
+def test_no_valid_result_names_the_blocking_constraint():
+    remote = Origin("GUEST_SUPPLIED", -50.0, -130.0, "New Zealand", "oceania", "2026-10-29T00:00:00+00:00")
+    profile = _profile(build_intake(trip_goals=["growth"], preferred_moments=["music_nightlife"], travel_distance="nearby"))
+    result = rank_destinations(profile, remote)
     assert result.ranked == []
     no_result = build_no_valid_result(result, profile)
     assert no_result["relaxed_automatically"] is False
-    constraints = {item["constraint"] for item in no_result["blocking_constraints"]}
-    assert "unverified_high_impact:mobility_accessibility" in constraints
-    assert "must_avoid:mobility_accessibility" in constraints
-    assert "prefer to avoid" in no_result["question"]
+    assert no_result["blocking_constraints"][0]["constraint"] == "travel_distance"
+
+
+def test_generic_catalog_reminders_never_count_as_a_restriction_conflict():
+    # Every enriched row ends "Confirm ... guest accessibility, suitable dates and any
+    # required transfers." That template must not exclude it for long drives.
+    pardubice = get_destination("NE-1159140667")
+    profile = _profile(with_restriction(build_intake(), "no_long_drives", "must_avoid"))
+    assert "transfers" in pardubice.tradeoffs_to_check
+    assert check_restriction("no_long_drives", "must_avoid", pardubice, profile).status == "no_catalog_concern"
+    result = rank_destinations(profile, None)
+    assert len(_excluded_ids(result, "must_avoid:no_long_drives")) < 200
 
 
 def test_prefer_avoid_high_impact_keeps_options_but_flags_them_unverified():
@@ -172,7 +197,26 @@ def test_unlocated_origin_skips_distance_screening_and_says_so():
     profile = _profile(build_intake(travel_distance="nearby"))
     result = rank_destinations(profile, unverified)
     assert not _excluded_ids(result, "travel_distance")
-    assert any("departure point could not be located" in gap for gap in result.data_gaps)
+    assert any("could not be matched on the map" in gap for gap in result.data_gaps)
+
+
+def test_unlocated_origin_with_a_known_country_keeps_nearby_in_its_region():
+    unverified = Origin("UNVERIFIED", None, None, "Portugal", "europe", "2026-10-29T00:00:00+00:00")
+    profile = _profile(build_intake(travel_distance="nearby"))
+    result = rank_destinations(profile, unverified)
+    assert result.ranked
+    assert all(item.destination.world_region == "Europe" for item in result.ranked)
+    assert all(item.distance.status == "not_checked" for item in result.ranked)
+    assert any("limited to Europe" in gap for gap in result.data_gaps)
+
+
+def test_departure_left_for_later_still_ranks_everything():
+    profile = _profile(build_intake(departure_location=None, travel_distance="nearby"))
+    assert not profile.departure_known
+    result = rank_destinations(profile, resolve_origin(None))
+    assert not _excluded_ids(result, "travel_distance")
+    assert all(item.breakdown["travel_distance"] == 5 for item in result.ranked)
+    assert any("No departure location yet" in gap for gap in result.data_gaps)
 
 
 def test_anywhere_scores_full_travel_distance():
@@ -204,6 +248,56 @@ def test_select_diverse_returns_up_to_three_distinct_countries_in_score_order():
     assert [i.total_score for i in selected] == sorted((i.total_score for i in selected), reverse=True)
 
 
+def test_select_diverse_never_repeats_a_country_even_under_another_spelling():
+    # The catalog spells it both "United States" (Sedona) and "United States of America" (Atlanta).
+    result = rank_destinations(_profile(build_intake()), None)
+    us = [item for item in result.ranked if item.destination.country in {"United States", "United States of America"}]
+    assert {item.destination.country for item in us} == {"United States", "United States of America"}
+    assert len(select_diverse(us)) == 1
+
+
+def test_equal_scores_are_not_ordered_by_catalog_id():
+    # Ties used to go to the alphabetically first IDs for every guest; now the
+    # order depends on the answers, and the same answers give the same order.
+    def tied_order(**overrides):
+        ranked = rank_destinations(_profile(build_intake(**overrides)), None).ranked
+        top = ranked[0].total_score
+        return [item.destination_id for item in ranked if item.total_score == top]
+
+    first = tied_order(preferred_environments=["surprise_me"])
+    assert first == tied_order(preferred_environments=["surprise_me"])
+    assert len(first) > 1
+    assert first != sorted(first) or tied_order(preferred_environments=["surprise_me"], trip_nights=6) != first
+
+
+def test_location_enriched_rows_rank_below_an_equal_editorial_match():
+    result = rank_destinations(_profile(build_intake()), None)
+    enriched = next(item for item in result.ranked if item.destination.is_location_enriched)
+    assert enriched.breakdown["evidence_penalty"] == -10
+    editorial = next(item for item in result.ranked if not item.destination.is_location_enriched)
+    assert editorial.breakdown["evidence_penalty"] == 0
+
+
+def test_primary_goal_carries_more_of_the_desired_outcome_points():
+    equal = _profile(build_intake(trip_goals=["restoration", "reflection"]))
+    weighted = _profile(build_intake(trip_goals=["restoration", "reflection"], primary_trip_goal="reflection"))
+    assert weighted.goals[0] == "reflection"
+    by_id = {item.destination_id: item for item in rank_destinations(weighted, None).ranked}
+    plain = {item.destination_id: item for item in rank_destinations(equal, None).ranked}
+    reflection_only = get_destination("NE-1159151389")  # Hiroshima: Reflection; Discovery
+    restoration_only = get_destination("NE-1159150791")  # Valencia: Restoration; Discovery
+    assert by_id[reflection_only.destination_id].breakdown["desired_outcomes"] == 24
+    assert by_id[restoration_only.destination_id].breakdown["desired_outcomes"] == 16
+    assert plain[reflection_only.destination_id].breakdown["desired_outcomes"] == 20
+
+
+def test_explorer_counts_as_a_partial_adventure_match():
+    profile = _profile(build_intake(trip_goals=["adventure"]))
+    by_id = {item.destination_id: item for item in rank_destinations(profile, None).ranked}
+    assert by_id["NE-1159140667"].breakdown["desired_outcomes"] == 20  # Pardubice: Explorer only
+    assert by_id["NZ-QUE"].breakdown["desired_outcomes"] == 40  # Queenstown: Adventurer
+
+
 def test_select_diverse_skips_excluded_ids():
     result = rank_destinations(_profile(build_intake()), None)
     first = select_diverse(result.ranked)
@@ -211,11 +305,12 @@ def test_select_diverse_skips_excluded_ids():
     assert not _ids(first) & _ids(second)
 
 
-def test_backlog_destinations_are_never_ranked():
+def test_all_1000_destinations_are_considered():
     result = rank_destinations(_profile(build_intake(preferred_environments=["surprise_me"])), None)
+    assert result.total_candidate_count == 1000
+    assert len(result.ranked) + len(result.exclusions) == 1000
     backlog_ids = {row["destination_id"] for row in load_discovery_backlog()}
-    assert not _ids(result.ranked) & backlog_ids
-    assert result.total_candidate_count == 72
+    assert len(_ids(result.ranked) & backlog_ids) > 500
 
 
 def test_goal_with_no_catalog_coverage_is_reported_as_a_data_gap():
@@ -238,7 +333,7 @@ def test_suggestion_ties_reasons_to_guest_labels_and_states_what_is_unverified()
     assert "restored" in suggestion["match_reasons"][0]
     assert suggestion["primary_feeling"] == "Restored"
     verification = suggestion["verification"]
-    assert verification["candidate_status"] == "CANDIDATE_ONLY"
+    assert verification["candidate_status"] in {"CANDIDATE_ONLY", "LOCATION_ENRICHED"}
     assert verification["verified_nightly_usd"] is None
     assert verification["budget_status"] == "UNKNOWN"
     assert verification["price_claim"] == "NONE"
@@ -250,7 +345,8 @@ def test_suggestion_ties_reasons_to_guest_labels_and_states_what_is_unverified()
     assert "confirmed for your dates" in facts
     assert "entry, safety and accessibility guidance" in facts
     assert suggestion["evidence"]["destination_source_url"].startswith("http")
-    assert suggestion["tradeoffs"], "every catalog row has a tradeoff to show"
+    if item.destination.specific_tradeoffs:
+        assert suggestion["tradeoffs"]
 
 
 def test_guest_facing_suggestion_text_has_no_catalog_language_or_repeats():
@@ -264,6 +360,20 @@ def test_guest_facing_suggestion_text_has_no_catalog_language_or_repeats():
             assert "You chose" not in text and "Check before booking" not in text, text
         lowered = [text.lower() for text in suggestion["tradeoffs"] + suggestion["unresolved_facts"]]
         assert len(lowered) == len(set(lowered)), "each note is shown once"
+
+
+@pytest.mark.parametrize("destination_id", ["NE-1159151261", "NE-1159151605", "NE-1159140667"])
+def test_card_text_has_no_staff_wording_or_catalog_templates(destination_id):
+    # Barcelona (tourism-listing row), Shanghai and Pardubice (location-enriched rows).
+    profile = _profile(build_intake(trip_goals=["discovery", "inspiration"], preferred_moments=["art_history_culture"]))
+    item = next(i for i in rank_destinations(profile, None).ranked if i.destination_id == destination_id)
+    suggestion = build_suggestion(item, profile, None)
+    text = " ".join([*suggestion["match_reasons"], *suggestion["tradeoffs"]]).lower()
+    for staff in ("editorial interpretation", "consider when guest", "verify dates, occupancy",
+                  "required transfers", "packed schedule"):
+        assert staff not in text, text
+    if destination_id == "NE-1159151605":
+        assert "Shanghai offers" in suggestion["match_reasons"][0]
 
 
 def test_flexible_timing_is_labelled_inspiration_only():

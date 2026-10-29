@@ -82,6 +82,7 @@ from src.core.travel_time import (
 from src.core.intake_mappings import (
     INTAKE_MAPPING_VERSION,
     SCORING_VERSION,
+    SUGGESTION_COUNT,
     TRIP_GOAL_FEELING_WORDS,
     TRIP_PACE_LABELS,
 )
@@ -1380,6 +1381,14 @@ def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozens
     else:
         match_status = "matched"
 
+    data_gaps = list(result.data_gaps)
+    if 0 < len(suggestions) < SUGGESTION_COUNT:
+        # Each option is from a different country; a country is never repeated to fill a slot.
+        data_gaps.append(
+            f"Only {len(suggestions)} {'country has' if len(suggestions) == 1 else 'countries have'} a destination "
+            "that fits your answers, so we're showing fewer options rather than two from the same country."
+        )
+
     response = {
         "match_status": match_status,
         "suggested_cities": suggestions,
@@ -1390,8 +1399,11 @@ def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozens
         "excluded_count": len(result.exclusions),
         "excluded_by_reason": result.excluded_by_reason(),
         "total_candidate_count": result.total_candidate_count,
-        "data_gaps": result.data_gaps,
-        "origin": origin.to_dict() if origin is not None else {"status": "NOT_NEEDED"},
+        "data_gaps": data_gaps,
+        "origin": (
+            origin.to_dict() if origin is not None
+            else {"status": "NOT_NEEDED", "input_text": request.departure_location}
+        ),
         "estimate_status": (
             "Suggestions are editorial candidates. No live price, availability or route has been checked."
         ),

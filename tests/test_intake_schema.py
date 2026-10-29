@@ -7,6 +7,7 @@ from pathlib import Path
 import pytest
 from pydantic import ValidationError
 
+from src.core.trip_profile import build_trip_profile
 from app.schemas.intake_schema import (
     ActivityRestriction,
     PreferredEnvironment,
@@ -163,8 +164,9 @@ def test_stored_intake_with_past_check_in_can_be_reread():
     ({"travel_party": "family", "party_adults": 1, "party_children": 0, "party_rooms": 2}, "party_rooms"),
     ({"travel_party": "family", "party_adults": 2, "party_children": 2, "party_child_ages": [5]}, "one age per child"),
     ({"travel_party": "family", "party_adults": 2, "party_children": 1, "party_child_ages": [19]}, "between 0 and 17"),
-    ({"departure_location": "   "}, "departure_location"),
+    ({"travel_distance": None}, "travel_distance is required"),
     ({"departure_latitude": 38.7}, "together"),
+    ({"primary_trip_goal": "adventure"}, "primary_trip_goal"),
     ({"travel_timing": "month_season"}, "travel_period"),
     ({"trip_nights": None}, "trip_nights"),
     ({"trip_nights": 0}, "greater than or equal to 1"),
@@ -177,6 +179,25 @@ def test_invalid_payloads_are_rejected(overrides, message):
     with pytest.raises(ValidationError) as error:
         TravelIntakeRequest(**build_intake(**overrides))
     assert message in str(error.value)
+
+
+@pytest.mark.parametrize("departure", [None, "", "   "])
+def test_departure_can_be_left_for_later(departure):
+    request = TravelIntakeRequest(**build_intake(
+        departure_location=departure, travel_distance=None,
+        departure_latitude=38.7, departure_longitude=-9.1, departure_country="Portugal",
+    ))
+    assert request.departure_location is None and not request.departure_known
+    assert request.travel_distance.value == "anywhere"
+    # Stale autocomplete values don't outlive the departure they described.
+    assert request.departure_latitude is None and request.departure_country is None
+
+
+def test_primary_trip_goal_must_be_selected_and_goes_first():
+    request = TravelIntakeRequest(**build_intake(trip_goals=["restoration", "reflection"], primary_trip_goal="reflection"))
+    profile = build_trip_profile(request)
+    assert profile.goals == ["reflection", "restoration"]
+    assert profile.goal_weights == {"reflection": 0.6, "restoration": pytest.approx(0.4)}
 
 
 @pytest.mark.parametrize("overrides, message", [

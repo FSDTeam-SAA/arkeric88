@@ -59,8 +59,9 @@ def _extract_photo_ids(place: dict, api_key: str, max_photos: int = 4) -> list[s
 
 
 @tool
-def get_cityinfo(city_name: str, region_hint: str | None = None) -> dict:
+def get_cityinfo(city_name: str, region_hint: str | None = None, any_place: bool = False) -> dict:
     """Look up a city by name, using a region hint to disambiguate matching names.
+    Set any_place to also match airports and other non-city places.
     Returns a dict with: city_name, country, lat, lng, and photos
     (up to 4 compact image IDs). Resolve image IDs to URLs before returning
     the final API response.
@@ -80,9 +81,10 @@ def get_cityinfo(city_name: str, region_hint: str | None = None) -> dict:
     }
     payload = {
         "textQuery": f"{city_name}, {region_hint}" if region_hint else city_name,
-        "includedType": "locality",
         "languageCode": "en",
     }
+    if not any_place:
+        payload["includedType"] = "locality"
     try:
         response = requests.post(url, headers=headers, json=payload, timeout=20)
         if response.status_code != 200:
@@ -101,6 +103,7 @@ def get_cityinfo(city_name: str, region_hint: str | None = None) -> dict:
         location = place.get("location", {})
         data = {
             "city_name": place.get("displayName", {}).get("text", city_name),
+            "formatted_address": place.get("formattedAddress"),
             "country": country,
             "country_code": country_code,
             "lat": location.get("latitude"),

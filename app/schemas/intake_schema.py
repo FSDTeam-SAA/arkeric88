@@ -182,8 +182,10 @@ class TravelIntakeRequest(BaseModel):
     recent_feelings: List[RecentFeeling] = Field(min_length=1, max_length=2)
     recent_feelings_other: Optional[str] = Field(default=None, max_length=500)
 
-    # Step 2 -- the primary emotional signal.
+    # Step 2 -- the primary emotional signal. primary_trip_goal optionally
+    # names the strongest of the selected goals; without it they count equally.
     trip_goals: List[TripGoal] = Field(min_length=1, max_length=2)
+    primary_trip_goal: Optional[TripGoal] = None
 
     # Step 3
     trip_prompt: TripPrompt
@@ -217,11 +219,13 @@ class TravelIntakeRequest(BaseModel):
 
     # Step 9. Coordinates/country are optional extras a places-autocomplete
     # widget can send; without them the backend geocodes departure_location.
-    departure_location: str = Field(min_length=1, max_length=200)
+    # A missing or blank departure_location means "Decide later": destinations
+    # are still suggested, with no distance filter or travel-time claims.
+    departure_location: Optional[str] = Field(default=None, max_length=200)
     departure_latitude: Optional[float] = Field(default=None, ge=-90, le=90)
     departure_longitude: Optional[float] = Field(default=None, ge=-180, le=180)
     departure_country: Optional[str] = Field(default=None, max_length=100)
-    travel_distance: TravelDistance
+    travel_distance: Optional[TravelDistance] = None
 
     # Step 10
     travel_timing: TravelTiming
@@ -280,6 +284,9 @@ class TravelIntakeRequest(BaseModel):
         if PreferredEnvironment.surprise_me in self.preferred_environments and len(self.preferred_environments) > 1:
             raise ValueError("'surprise_me' cannot be combined with another preferred environment.")
 
+        if self.primary_trip_goal is not None and self.primary_trip_goal not in self.trip_goals:
+            raise ValueError("primary_trip_goal must be one of the selected trip_goals.")
+
     def _validate_party(self) -> None:
         defaults = PARTY_DEFAULTS[self.travel_party]
         if self.travel_party == TravelParty.solo:
@@ -335,8 +342,17 @@ class TravelIntakeRequest(BaseModel):
 
     def _validate_departure(self) -> None:
         if _blank(self.departure_location):
-            raise ValueError("departure_location is required.")
+            # "Decide later": nothing to locate, so stale autocomplete extras are dropped.
+            self.departure_location = None
+            self.departure_latitude = None
+            self.departure_longitude = None
+            self.departure_country = None
+            if self.travel_distance is None:
+                self.travel_distance = TravelDistance.anywhere
+            return
         self.departure_location = self.departure_location.strip()
+        if self.travel_distance is None:
+            raise ValueError("travel_distance is required when a departure_location is given.")
         if (self.departure_latitude is None) != (self.departure_longitude is None):
             raise ValueError("Send departure_latitude and departure_longitude together.")
 
@@ -374,6 +390,10 @@ class TravelIntakeRequest(BaseModel):
     def budget_open_ended(self) -> bool:
         """True when the guest chose the slider's "$7,000+" top value."""
         return self.budget_per_night >= BUDGET_MAXIMUM
+
+    @property
+    def departure_known(self) -> bool:
+        return self.departure_location is not None
 
 
 class DateRecommendationRequest(TravelIntakeRequest):

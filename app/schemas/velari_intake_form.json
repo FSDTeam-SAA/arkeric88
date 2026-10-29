@@ -112,6 +112,19 @@
           "label": "Growth",
           "description": "An experience that helps you stretch or make a change"
         }
+      ],
+      "conditionalFields": [
+        {
+          "key": "primary_trip_goal",
+          "type": "single_choice",
+          "label": "Which matters most?",
+          "optionsFrom": "trip_goals",
+          "showWhen": {
+            "field": "trip_goals",
+            "minSelections": 2
+          },
+          "required": false
+        }
       ]
     },
     {
@@ -457,13 +470,20 @@
           "type": "text",
           "label": "Departure city or airport",
           "placeholder": "Search your city or departure airport",
-          "required": true
+          "required": false,
+          "acceptUnmatchedText": true,
+          "decideLaterLabel": "Decide later",
+          "decideLaterValue": null
         },
         {
           "key": "travel_distance",
           "type": "single_choice",
           "label": "Travel distance",
-          "required": true,
+          "required": false,
+          "requiredWhen": {
+            "field": "departure_location",
+            "isNotEmpty": true
+          },
           "options": [
             {
               "value": "nearby",

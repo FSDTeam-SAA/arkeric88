@@ -99,9 +99,10 @@ EARTH_RADIUS_KM = 6371.0
 
 def region_for_country(country: str) -> str | None:
     """Return the world region key (e.g. "europe") for a known country."""
-    country_key = _normalize(country)
+    key = _normalize(country)
+    canonical = _COUNTRY_ALIASES.get(key, key)
     for region, countries in REGION_COUNTRIES.items():
-        if country_key in countries:
+        if key in countries or canonical in countries:
             return region
     return None
 
@@ -129,16 +130,26 @@ _COUNTRY_ALIASES = {
     "united states of america": "united states",
     "uk": "united kingdom",
     "czech republic": "czechia",
+    # Spellings used side by side in the destination catalog.
+    "the bahamas": "bahamas",
+    "the gambia": "gambia",
+    "cape verde": "cabo verde",
+    "east timor": "timor leste",
 }
+
+
+def country_key(country: str | None) -> str:
+    """One canonical key per country ("United States of America" == "USA" == "United States")."""
+    key = _normalize(country or "")
+    return _COUNTRY_ALIASES.get(key, key)
 
 
 def same_country(first: str | None, second: str | None) -> bool:
     """Compare country names from different sources (catalog vs. map lookup)."""
-    first_key = _normalize(first or "")
-    second_key = _normalize(second or "")
+    first_key, second_key = country_key(first), country_key(second)
     if not first_key or not second_key:
         return False
-    return _COUNTRY_ALIASES.get(first_key, first_key) == _COUNTRY_ALIASES.get(second_key, second_key)
+    return first_key == second_key
 
 
 def address_in_country(address: str | None, country: str | None) -> bool:

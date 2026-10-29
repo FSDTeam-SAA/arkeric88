@@ -83,14 +83,32 @@ def test_get_suggested_city_returns_two_to_three_catalog_destinations():
     for city in cities:
         assert city["destination_id"]
         assert isinstance(city["match_score"], int)
-        assert city["match_reasons"] and city["tradeoffs"] and city["unresolved_facts"]
-        assert city["verification"]["candidate_status"] == "CANDIDATE_ONLY"
+        assert city["match_reasons"] and city["unresolved_facts"]
+        assert city["verification"]["candidate_status"] in {"CANDIDATE_ONLY", "LOCATION_ENRICHED"}
+        assert city["verification"]["evidence_tier"] in {"editorial", "location_enriched"}
         assert city["evidence"]["place_lookup"]["outcome"] == "UNVERIFIED"  # offline in tests
     body = data["response"]
-    assert body["total_candidate_count"] == 72
+    assert body["total_candidate_count"] == 1000
     assert body["catalog_version"]["backlog_count"] == 928
-    assert body["origin"] == {"status": "NOT_NEEDED"}
+    assert body["catalog_version"]["location_enriched_count"] == 928
+    assert body["origin"] == {"status": "NOT_NEEDED", "input_text": "Lisbon"}
     assert body["guest_context"]["trip_goals"][0]["label"] == "Restoration"
+
+
+# A guest-supplied point in the South Pacific: only the three Oceania rows
+# without catalog coordinates (Byron hinterland, Rotorua, Queenstown) can't be
+# measured and stay in range; every other destination is beyond "Nearby".
+REMOTE_NEARBY = dict(
+    travel_distance="nearby", departure_location="Pacific test point",
+    departure_latitude=-50.0, departure_longitude=-130.0, departure_country="New Zealand",
+)
+
+
+def test_no_country_is_repeated_and_fewer_options_are_explained():
+    data = _suggest(build_intake(**REMOTE_NEARBY)).json()
+    cities = data["suggested_cities"]
+    assert [city["destination_id"] for city in cities] == ["AU-BYR", "NZ-ROT"]
+    assert any("showing fewer options" in gap for gap in data["response"]["data_gaps"])
 
 
 def test_old_questionnaire_payload_is_rejected():
@@ -102,16 +120,54 @@ def test_old_questionnaire_payload_is_rejected():
     assert response.status_code == 422
 
 
+BLOCKED = build_intake(trip_goals=["growth"], preferred_moments=["music_nightlife"], **REMOTE_NEARBY)
+
+
 def test_no_valid_result_names_the_constraint_instead_of_relaxing_it():
-    payload = with_restriction(build_intake(), "mobility_accessibility", "must_avoid")
-    response = _suggest(payload)
+    response = _suggest(BLOCKED)
     assert response.status_code == 200
     data = response.json()
     assert data["match_status"] == "no_valid_result"
     assert data["suggested_cities"] == []
     no_result = data["response"]["no_valid_result"]
     assert no_result["relaxed_automatically"] is False
-    assert no_result["blocking_constraints"][0]["field"] == "restriction_severity_mobility_accessibility"
+    assert no_result["blocking_constraints"][0]["field"] == "travel_distance"
+
+
+def test_mobility_must_avoid_still_suggests_destinations_and_flags_the_check():
+    data = _suggest(with_restriction(build_intake(), "mobility_accessibility", "must_avoid")).json()
+    assert data["match_status"] == "matched"
+    for city in data["suggested_cities"]:
+        check = city["restriction_checks"][0]
+        assert check["status"] == "unverified"
+        assert any(fact.startswith("Mobility or accessibility:") for fact in city["unresolved_facts"])
+        assert city["score_breakdown"]["unverified_must_avoid_penalty"] < 0
+    excluded = data["response"]["excluded_by_reason"]
+    assert excluded.get("must_avoid:mobility_accessibility", 0) > 0  # e.g. "Cobblestones may affect mobility"
+
+
+def test_decide_later_departure_still_suggests_destinations():
+    payload = build_intake(travel_distance="nearby")
+    payload.pop("departure_location")
+    data = _suggest(payload).json()
+    assert data["match_status"] == "matched" and data["suggested_cities"]
+    body = data["response"]
+    assert body["origin"]["status"] == "NOT_PROVIDED"
+    assert any(item["field"] == "departure_location" for item in body["clarifications"])
+    for city in data["suggested_cities"]:
+        assert city["distance_check"]["status"] == "not_checked"
+        assert any("departure city" in fact for fact in city["unresolved_facts"])
+
+
+def test_unmatched_departure_keeps_the_guests_words_and_their_world_region():
+    # Offline in tests, so the city and the any-place (airport) lookups both fail.
+    data = _suggest(build_intake(travel_distance="nearby", departure_location="Austin, TX, USA")).json()
+    origin = data["response"]["origin"]
+    assert origin["status"] == "UNVERIFIED"
+    assert origin["input_text"] == "Austin, TX, USA"
+    assert origin["region"] == "north america"
+    assert data["suggested_cities"]
+    assert all(city["world_region"] == "North America" for city in data["suggested_cities"])
 
 
 def test_departure_geocode_receives_only_the_departure_place():
@@ -150,7 +206,7 @@ def test_guest_supplied_coordinates_skip_the_geocode():
 # ==================== /regenerate_suggested_city ====================
 
 def test_regenerate_never_repeats_until_exhausted_then_404():
-    initial = _suggest(build_intake()).json()
+    initial = _suggest(build_intake(**REMOTE_NEARBY)).json()
     session_id = initial["session_id"]
     seen = {city["destination_id"] for city in initial["suggested_cities"]}
     for _ in range(40):
@@ -167,18 +223,18 @@ def test_regenerate_never_repeats_until_exhausted_then_404():
 
 
 def test_regenerate_with_intake_updates_lets_the_guest_flex_a_constraint():
-    blocked = _suggest(with_restriction(build_intake(), "mobility_accessibility", "must_avoid")).json()
+    blocked = _suggest(BLOCKED).json()
     assert blocked["match_status"] == "no_valid_result"
     response = client.post("/regenerate_suggested_city", json={
         "session_id": blocked["session_id"],
-        "user_instruction": "It's workable with planning",
-        "intake_updates": {"restriction_severity_mobility_accessibility": "prefer_avoid"},
+        "user_instruction": "Happy to fly further",
+        "intake_updates": {"travel_distance": "anywhere"},
     })
     assert response.status_code == 200
     data = response.json()
     assert data["match_status"] == "matched"
     details = client.get(f"/session/{blocked['session_id']}").json()
-    assert details["intake"]["restriction_severity"] == {"mobility_accessibility": "prefer_avoid"}
+    assert details["intake"]["travel_distance"] == "anywhere"
     assert details["shown_destination_ids"] == [c["destination_id"] for c in data["suggested_cities"]]
     assert details["regeneration_history"][-1]["intake_updated"] is True
 
@@ -350,8 +406,11 @@ def test_get_tour_plan_rejects_destinations_not_suggested_in_the_session():
     assert response.status_code == 400
     response, *_ = _plan(initial["session_id"], selected_city="Atlantis")
     assert response.status_code == 400
-    backlog_id = load_discovery_backlog()[0]["destination_id"]
+    # Backlog rows are imported now, but still can't be planned unless suggested.
+    backlog_id = next(row["destination_id"] for row in load_discovery_backlog() if row["destination_id"] not in shown)
     response, *_ = _plan(initial["session_id"], destination_id=backlog_id)
+    assert response.status_code == 400
+    response, *_ = _plan(initial["session_id"], destination_id="NOT-A-DESTINATION")
     assert response.status_code == 404
 
 

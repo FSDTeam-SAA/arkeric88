@@ -10,17 +10,21 @@ from app.schemas.intake_schema import (
     TravelIntakeRequest,
     TripPace,
 )
+from src.core import destination_catalog as catalog
 from src.core import intake_mappings as mappings
 from src.core.destination_catalog import (
     CATALOG_SNAPSHOT_DATE,
     DATA_DIR,
     EXPECTED_BACKLOG_COUNT,
     EXPECTED_CANDIDATE_COUNT,
+    EXPECTED_EDITORIAL_COUNT,
     get_catalog_version,
     get_destination,
     load_destination_candidates,
     load_discovery_backlog,
     parse_goals,
+    parse_paces,
+    parse_secondary_goals,
 )
 
 
@@ -32,34 +36,50 @@ def _csv_rows(suffix: str) -> list:
 
 # ==================== catalog integrity ====================
 
-def test_counts_match_import_rules_version_and_scope():
+def test_counts_match_import_rules_import_verification():
     rules = {row["Rule"]: row["Required behavior"] for row in _csv_rows("IMPORT_RULES.csv")}
-    scope = rules["Version and scope"]
-    assert CATALOG_SNAPSHOT_DATE in scope
-    assert f"{EXPECTED_CANDIDATE_COUNT} editorial candidate records" in scope
-    assert f"{EXPECTED_BACKLOG_COUNT} geographic backlog records" in scope
-    assert len(load_destination_candidates()) == EXPECTED_CANDIDATE_COUNT
+    assert "1,000 rows and 1,000 unique destination_id values" in rules["Import verification"]
+    candidates = load_destination_candidates()
+    assert len(_csv_rows("AI_IMPORT_DESTINATIONS.csv")) == EXPECTED_CANDIDATE_COUNT == len(candidates) == 1000
+    assert len({destination.destination_id for destination in candidates}) == EXPECTED_CANDIDATE_COUNT
     assert len(load_discovery_backlog()) == EXPECTED_BACKLOG_COUNT
-    assert get_catalog_version()["candidate_count"] == EXPECTED_CANDIDATE_COUNT
+    version = get_catalog_version()
+    assert version["candidate_count"] == EXPECTED_CANDIDATE_COUNT
+    assert version["editorial_count"] == EXPECTED_EDITORIAL_COUNT
+    assert version["location_enriched_count"] == EXPECTED_BACKLOG_COUNT
+    assert version["snapshot_date"] == CATALOG_SNAPSHOT_DATE
 
 
-def test_candidate_ids_are_unique_and_never_in_the_backlog():
-    candidate_ids = [destination.destination_id for destination in load_destination_candidates()]
-    backlog_ids = {row["destination_id"] for row in load_discovery_backlog()}
-    assert len(candidate_ids) == len(set(candidate_ids))
-    assert not set(candidate_ids) & backlog_ids
+def test_original_72_rows_come_first_and_keep_their_status():
+    candidates = load_destination_candidates()
+    assert all(d.candidate_status == "CANDIDATE_ONLY" for d in candidates[:EXPECTED_EDITORIAL_COUNT])
+    assert all(d.candidate_status == "LOCATION_ENRICHED" for d in candidates[EXPECTED_EDITORIAL_COUNT:])
 
 
-def test_backlog_ids_never_resolve_to_a_destination():
+def test_every_backlog_row_is_imported_into_the_catalog():
     for row in load_discovery_backlog():
-        assert row["import_status"] == "NOT_ELIGIBLE"
-        assert get_destination(row["destination_id"]) is None
+        assert row["import_status"] == "ENRICHED_IN_IMPORT"
+        destination = get_destination(row["destination_id"])
+        assert destination is not None and destination.is_location_enriched
+
+
+def test_duplicate_ids_in_a_catalogue_update_keep_the_first_row(monkeypatch):
+    rows = list(_csv_rows("AI_IMPORT_DESTINATIONS.csv"))
+    duplicate = {**rows[0], "destination": "Imposter"}
+    monkeypatch.setattr(catalog, "_read_rows", lambda suffix: [*rows, duplicate])
+    load_destination_candidates.cache_clear()
+    try:
+        loaded = load_destination_candidates()
+        assert len(loaded) == EXPECTED_CANDIDATE_COUNT
+        assert loaded[0].destination == rows[0]["destination"]
+    finally:
+        load_destination_candidates.cache_clear()
 
 
 def test_every_candidate_stays_unverified_and_price_unknown():
     for destination in load_destination_candidates():
-        assert destination.candidate_status == "CANDIDATE_ONLY"
-        assert destination.source_review_status == "SOURCE_CLAIM_REVIEW_REQUIRED"
+        assert destination.candidate_status in {"CANDIDATE_ONLY", "LOCATION_ENRICHED"}
+        assert destination.source_review_status in {"SOURCE_CLAIM_REVIEW_REQUIRED", "EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK"}
         assert destination.live_lodging_status == "NOT_CHECKED"
         # Blank means UNKNOWN, never zero.
         assert destination.verified_nightly_usd is None
@@ -74,16 +94,34 @@ def test_every_candidate_has_at_least_one_recognized_theme():
 
 def test_both_theme_vocabularies_normalize_to_trip_goals():
     assert parse_goals("Explorer|Connector|Reflector") == ("discovery", "connection", "reflection")
+    assert parse_goals("Explorer|Connector|Inspirer") == ("discovery", "connection", "inspiration")
     assert parse_goals("Discovery; Inspiration") == ("discovery", "inspiration")
     assert parse_goals("Restorer|Restoration") == ("restoration",)
+    assert parse_secondary_goals("Explorer|Connector") == ("adventure",)
+    assert parse_secondary_goals("Explorer|Adventurer") == ()
 
 
 def test_catalog_pace_values_are_understood():
+    assert parse_paces("Gentle|Balanced") == ("Gentle", "Balanced")
     for destination in load_destination_candidates():
-        if destination.catalog_pace is None:
+        if not destination.catalog_paces:
             assert destination.pace_context.lower().startswith("guest-dependent")
-        else:
-            assert destination.catalog_pace in mappings.CATALOG_PACE_ORDER
+        assert set(destination.catalog_paces) <= set(mappings.CATALOG_PACE_ORDER)
+
+
+def test_template_clauses_are_left_out_of_matching_and_guest_text():
+    pardubice = get_destination("NE-1159140667")
+    assert "required transfers" in pardubice.tradeoffs_to_check
+    assert "required transfers" not in pardubice.specific_tradeoffs
+    assert "required transfers" not in pardubice.field_text("tradeoffs_to_check")
+    assert "packed schedule" not in pardubice.guest_rationale
+    barcelona = get_destination("NE-1159151261")
+    assert barcelona.specific_tradeoffs == "Crowding and visitor pressure"
+    assert "editorial interpretation" not in barcelona.guest_rationale
+    assert not barcelona.guest_rationale.lower().startswith("consider when")
+    # Short templates that still describe the place are kept.
+    rotorua = get_destination("NZ-ROT")
+    assert rotorua.specific_tradeoffs == rotorua.tradeoffs_to_check
 
 
 # ==================== mapping coverage ====================

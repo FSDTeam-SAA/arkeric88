@@ -18,6 +18,7 @@ from src.core.intake_mappings import (
     ENVIRONMENT_LABELS,
     ITINERARY_LEVEL_RESTRICTIONS,
     PREFERRED_MOMENT_LABELS,
+    PRIMARY_GOAL_SHARE,
     RECENT_FEELING_LABELS,
     RESTRICTION_LABELS,
     SEASON_PERIODS,
@@ -59,7 +60,8 @@ class TripProfile:
     restrictions: Dict[str, str]
     restriction_notes: Optional[str]
 
-    departure_location: str
+    # None when the guest chose "Decide later".
+    departure_location: Optional[str]
     travel_distance: str
 
     travel_timing: str
@@ -77,8 +79,18 @@ class TripProfile:
     has_private_context: bool
 
     clarifications: List[dict] = field(default_factory=list)
+    # goal -> share of the desired-outcome points (sums to 1). The strongest
+    # goal, when named, is goals[0].
+    goal_weights: Dict[str, float] = field(default_factory=dict)
 
     # ---------- derived views ----------
+
+    @property
+    def departure_known(self) -> bool:
+        return self.departure_location is not None
+
+    def goal_weight(self, goal: str) -> float:
+        return self.goal_weights.get(goal, 1 / len(self.goals))
 
     @property
     def party_size(self) -> int:
@@ -199,6 +211,13 @@ def _clarifications(request: TravelIntakeRequest, restrictions: Dict[str, str]) 
             "question": "How old are the children? Live room rates and some activities depend on ages.",
         })
 
+    if not request.departure_known:
+        questions.append({
+            "field": "departure_location",
+            "blocking": False,
+            "question": "Where would you leave from? Add it whenever you know, and we'll check travel distance and times.",
+        })
+
     if request.trip_prompt.value == "something_else":
         questions.append({
             "field": "trip_prompt",
@@ -209,7 +228,19 @@ def _clarifications(request: TravelIntakeRequest, restrictions: Dict[str, str]) 
     return questions
 
 
+def _goals_and_weights(request: TravelIntakeRequest) -> tuple:
+    """Selected goals, strongest first, and each goal's share of the desired-outcome points."""
+    goals = [goal.value for goal in request.trip_goals]
+    primary = request.primary_trip_goal.value if request.primary_trip_goal else None
+    if primary is None or len(goals) == 1:
+        return goals, {goal: 1 / len(goals) for goal in goals}
+    goals = [primary, *[goal for goal in goals if goal != primary]]
+    rest = (1 - PRIMARY_GOAL_SHARE) / (len(goals) - 1)
+    return goals, {goal: PRIMARY_GOAL_SHARE if goal == primary else rest for goal in goals}
+
+
 def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
+    goals, goal_weights = _goals_and_weights(request)
     restrictions = {
         restriction.value: request.restriction_severity[restriction].value
         for restriction in request.activity_restrictions
@@ -224,7 +255,8 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         travel_months = []
 
     return TripProfile(
-        goals=[goal.value for goal in request.trip_goals],
+        goals=goals,
+        goal_weights=goal_weights,
         moments=[moment.value for moment in request.preferred_moments],
         environments=environments,
         surprise_me="surprise_me" in environments,
@@ -240,6 +272,7 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         restrictions=restrictions,
         restriction_notes=request.restriction_notes,
         departure_location=request.departure_location,
+        # The schema fills "anywhere" when a departure is left for later.
         travel_distance=request.travel_distance.value,
         travel_timing=request.travel_timing.value,
         check_in_date=request.check_in_date,

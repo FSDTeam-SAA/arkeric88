@@ -1,0 +1,21 @@
+﻿VELARI | CATALOGUE RELEASE AUDIT,Value,Interpretation / owner
+Unique destination location records,1000,All IDs unique across main import
+Existing editorial candidates,72,Original source seed records
+Additional location-enriched records,928,Geographic source plus inferred tags; not destination-specific research
+Rows available in production import,1000,AI_IMPORT_DESTINATIONS contains all records
+Rows with coordinates,972,Geocoding still required for missing values
+Verified live hotel rates,0,None asserted; integrate provider on request
+Verified activity availability,0,None asserted; query Viator live
+Eligibility,DISCOVERY ONLY,No source-backed venue/rate claims without API confirmation
+Consolidated working inventory,CATALOGUE_MASTER_1000,"Research and operational QA view, not a production recommendation feed"
+Hotels represented as validated structured records,0,"This is a destination list, NOT a 1,000-hotel inventory"
+Required hotel catalogue fields,property_id; name; destination_id; coordinates; accommodation type; provider ID,Keep separate from destination list; use reliable property identifiers
+Required live search inputs,check-in/out; guests and ages; rooms; currency; market; travel constraints,Cannot assert lodging availability or prices without successful date-specific API result
+Activity validation,Viator product ID; date; travelers; availability; price; cancellation,Activity ideas from editorial data are not Viator-confirmed bookings
+Transit validation,Google Maps route result and travel mode; timestamp,Do not infer live travel time from static destination coordinates
+Origin safeguards,Fallback to city/state or airport; clarify once and allow manual override,Avoid repeated geolocation-lookup loops
+Matching order,hard constraints → live travel feasibility → emotional goals → interests → pacing,Reject impossible matches before ranking emotional relevance
+Source requirement,destination-specific authoritative URL + observed evidence + last checked,Generic national tourism homepages are not destination-specific evidence
+Copy requirement,No medical/wellness results guaranteed,Use careful claims about experience characteristics and suitability
+PDF parity,Use same validated results object as on-screen itinerary,"No invented hotel prices, travel times, or activities in PDF"
+Recommended next milestone,"Research prioritized destination records, then property-level catalogue","Expand genuinely useful, source-supported inventory incrementally"

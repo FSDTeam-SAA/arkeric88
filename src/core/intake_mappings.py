@@ -13,8 +13,8 @@ Bump INTAKE_MAPPING_VERSION whenever a mapping or threshold changes so each
 session records which ruleset produced its suggestions.
 """
 
-INTAKE_MAPPING_VERSION = "2026-09-28.1"
-SCORING_VERSION = "velari-destinations-2026-09-28.1"
+INTAKE_MAPPING_VERSION = "2026-10-29.1"
+SCORING_VERSION = "velari-destinations-2026-10-29.1"
 
 # ---------------------------------------------------------------------------
 # Guest-facing labels, copied verbatim from the intake form so explanations
@@ -171,7 +171,7 @@ SEASON_PERIODS = {"spring", "summer", "autumn", "winter"}
 # ---------------------------------------------------------------------------
 INTAKE_KEY_TO_FORM_FIELDS = {
     "current_feeling": ["recent_feelings", "recent_feelings_other"],
-    "desired_outcomes": ["trip_goals"],
+    "desired_outcomes": ["trip_goals", "primary_trip_goal"],
     "trip_trigger": ["trip_prompt", "trip_prompt_other"],
     "experience_interests": ["preferred_moments"],
     "settings": ["preferred_environments"],
@@ -189,10 +189,10 @@ INTAKE_KEY_TO_FORM_FIELDS = {
 PRIVATE_FREE_TEXT_FIELDS = ("recent_feelings_other", "trip_prompt_other")
 
 # ---------------------------------------------------------------------------
-# Catalog theme vocabulary -> trip_goals. The 28 editorial rows use traveler
-# names (Restorer, Explorer...) and the rest use outcome names (Discovery...).
-# IMPORT_RULES.csv "Emotion interpretation": themes are editorial hypotheses
-# and can blend -- a match is never a promise of an emotional result.
+# Catalog theme vocabulary -> trip_goals. Most rows use traveler names
+# (Restorer, Explorer, Inspirer...) and some use outcome names (Discovery...).
+# IMPORT_RULES.csv "Emotional themes": tags are broad matching hints and can
+# blend -- a match is never a promise of an emotional result.
 # ---------------------------------------------------------------------------
 CATALOG_THEME_TO_GOAL = {
     "restorer": "restoration",
@@ -200,6 +200,7 @@ CATALOG_THEME_TO_GOAL = {
     "explorer": "discovery",
     "adventurer": "adventure",
     "reflector": "reflection",
+    "inspirer": "inspiration",
     "restoration": "restoration",
     "connection": "connection",
     "discovery": "discovery",
@@ -209,6 +210,12 @@ CATALOG_THEME_TO_GOAL = {
     "reflection": "reflection",
     "growth": "growth",
 }
+
+# IMPORT_RULES.csv maps Explorer to "Discovery/Adventure". Discovery is the
+# primary reading; adventure counts only as a partial match, so the 900+
+# Explorer-tagged towns don't all rank as full adventure destinations.
+CATALOG_THEME_SECONDARY_GOALS = {"explorer": ("adventure",)}
+SECONDARY_GOAL_STRENGTH = 0.5
 
 # ---------------------------------------------------------------------------
 # preferred_moments -> regex fragments matched (whole word) against the
@@ -232,7 +239,7 @@ MOMENT_KEYWORDS = {
         r"hot water", r"onsen", r"atoll",
     ],
     "movement_adventure": [
-        r"hiking", r"adventure", r"movement", r"active", r"outdoor", r"trails?",
+        r"hiking", r"adventure", r"movement", r"active", r"outdoors?", r"trails?",
         r"challenge", r"reef experiences",
     ],
     "quiet_privacy": [
@@ -356,9 +363,13 @@ RESTRICTION_RISK_SEASON = {
 }
 
 # Restrictions whose suitability depends on the destination itself and is
-# high-impact: with "must avoid", an unknown (no catalog evidence either way)
-# is NOT a pass and the destination is excluded.
+# high-impact. With "must avoid", a catalog flag excludes the destination; an
+# unknown (no catalog evidence either way) is never presented as a pass: the
+# destination ranks lower and the suggestion says the need is still to be
+# checked. Excluding every unknown left a mobility-restricted guest with no
+# destinations at all, since no catalog row confirms accessibility.
 HIGH_IMPACT_DESTINATION_RESTRICTIONS = {"mobility_accessibility"}
+UNVERIFIED_MUST_AVOID_PENALTY = 8
 
 # Restrictions that cannot be judged at destination level at all; they are
 # carried forward as hard constraints for the stay/restaurant/activity stage
@@ -391,5 +402,16 @@ SCORE_WEIGHTS = {
 }
 PREFER_AVOID_PENALTY = 8
 
-# IMPORT_RULES.csv "Guest explanation": return 2-3 diverse options.
+# When the guest names a strongest desired outcome, it carries this share of
+# the desired-outcome points; the other selected outcome shares the rest.
+PRIMARY_GOAL_SHARE = 0.6
+
+# IMPORT_RULES.csv "Destination matching confidence": the 928 location-enriched
+# rows carry heuristic travel tags, so they "rank lower until enriched". At 10
+# points a heuristic row must match clearly more of the guest's answers (more
+# than one extra interest) to outrank an edited candidate.
+LOCATION_ENRICHED_PENALTY = 10
+
+# IMPORT_RULES.csv "Guest explanation": return 2-3 diverse options, each from a
+# different country. Fewer are returned rather than repeating a country.
 SUGGESTION_COUNT = 3
