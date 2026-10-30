@@ -16,8 +16,11 @@ distance. No departure at all ("Decide later") is NOT_PROVIDED.
 Only the departure text is sent to the lookup -- no other intake field.
 """
 
+import re
+import unicodedata
 from dataclasses import asdict, dataclass
 from datetime import datetime, timezone
+from difflib import SequenceMatcher
 from typing import Optional
 
 from src.core.geography import region_for_country
@@ -71,16 +74,51 @@ def country_from_text(text: Optional[str]) -> Optional[str]:
     return parts[-1] if region_for_country(parts[-1]) else None
 
 
+def _plain(text: Optional[str]) -> str:
+    text = unicodedata.normalize("NFKD", text or "").encode("ascii", "ignore").decode("ascii")
+    return re.sub(r"[^a-z0-9]", "", text.lower())
+
+
+def matches_typed_place(departure_location: str, result: dict) -> bool:
+    """
+    True when the map's match is the place the guest typed. Google's text
+    search returns its nearest guess for anything, so "Testville, TX" comes
+    back as Stephenville, TX, a different town than the one the guest
+    named. Accept containment either way ("Ho Chi Minh" / "Ho Chi Minh
+    City"), small typos (similarity >= 0.8) and short codes such as "NYC" or
+    "AUS" that only an airport or city search can resolve.
+    """
+    typed = _plain(departure_location.split(",")[0])
+    if len(typed) <= 4 and departure_location.split(",")[0].strip().isalpha():
+        return True
+    for name in (result.get("city_name"), (result.get("formatted_address") or "").split(",")[0]):
+        found = _plain(name)
+        if found and (typed in found or found in typed or SequenceMatcher(None, typed, found).ratio() >= 0.8):
+            return True
+    return False
+
+
 def _lookup(departure_location: str) -> dict:
-    """City first, then any place (airports); network failures are never fatal."""
+    """
+    City first, then any place (airports); network failures are never fatal.
+    A match for a different place than the one typed is not used.
+    """
     result: dict = {}
     for args in ({"city_name": departure_location}, {"city_name": departure_location, "any_place": True}):
         try:
             result = get_cityinfo.invoke(args)
         except Exception as error:  # Network/credential failure -- never fatal.
             result = {"error": str(error)}
-        if isinstance(result, dict) and "error" not in result and result.get("lat") is not None and result.get("lng") is not None:
+        if not (isinstance(result, dict) and "error" not in result and result.get("lat") is not None and result.get("lng") is not None):
+            continue
+        if matches_typed_place(departure_location, result):
             return result
+        matched = result.get("formatted_address") or result.get("city_name")
+        result = {
+            "error": f"The map matched a different place ({matched}).",
+            "mismatch": matched,
+            "mismatch_country": result.get("country") if result.get("country") not in (None, "", "N/A") else None,
+        }
     return result if isinstance(result, dict) else {"error": "Unexpected lookup result."}
 
 
@@ -122,6 +160,11 @@ def resolve_origin(
     lookup_lat, lookup_lng = result.get("lat"), result.get("lng")
     if "error" in result or lookup_lat is None or lookup_lng is None:
         fallback_country = country or country_from_text(departure_location)
+        if fallback_country is None and "," in departure_location:
+            # "Testville, TX": the town is unknown, but the map placed its guess
+            # in the state the guest named, so that country is kept for the
+            # world region only -- never for a distance.
+            fallback_country = result.get("mismatch_country")
         return Origin(
             status=UNVERIFIED,
             latitude=None,
@@ -129,7 +172,12 @@ def resolve_origin(
             country=fallback_country,
             region=region_for_country(fallback_country or ""),
             checked_at_utc=_now(),
-            detail="Departure location could not be matched on the map; travel distance was not measured.",
+            detail=(
+                f"Departure location could not be matched on the map (the closest result, {result['mismatch']}, "
+                "is a different place); travel distance was not measured."
+                if result.get("mismatch") else
+                "Departure location could not be matched on the map; travel distance was not measured."
+            ),
             country_code=_iso_code(country),
             input_text=departure_location,
         )

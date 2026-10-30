@@ -228,7 +228,7 @@ def test_guest_facing_output_has_no_backend_values():
     assert data["stops"][0]["stay"]["price_level"] == "$$ · Moderate"
     assert data["stops"][0]["stay"]["facilities"] == []
     block = data["feeling_block"]
-    assert block["markdown"].startswith("Designed to help you feel: **Restored**\n")
+    assert block["markdown"].startswith("Designed to help you feel: **Restored and reflective**\n")
 
 
 def test_feeling_block_is_written_from_experiences_only():

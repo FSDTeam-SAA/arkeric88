@@ -91,7 +91,9 @@ def test_get_suggested_city_returns_two_to_three_catalog_destinations():
     assert body["total_candidate_count"] == 1000
     assert body["catalog_version"]["backlog_count"] == 928
     assert body["catalog_version"]["location_enriched_count"] == 928
-    assert body["origin"] == {"status": "NOT_NEEDED", "input_text": "Lisbon"}
+    # The departure is located even for "Open to anywhere" (travel effort); offline it stays unverified.
+    assert body["origin"]["status"] == "UNVERIFIED" and body["origin"]["input_text"] == "Lisbon"
+    assert body["general_notes"] == ["Check current entry, safety and accessibility guidance for your travel details."]
     assert body["guest_context"]["trip_goals"][0]["label"] == "Restoration"
 
 

@@ -448,6 +448,51 @@
           ]
         },
         {
+          "key": "accessibility_needs",
+          "type": "multiple_choice",
+          "label": "What should we check for you?",
+          "prompt": "Optional. This stays a firm requirement; it helps us check each stay and activity.",
+          "showWhen": {
+            "field": "activity_restrictions",
+            "includes": "mobility_accessibility"
+          },
+          "required": false,
+          "multiple": true,
+          "options": [
+            {
+              "value": "step_free_access",
+              "label": "Step-free access"
+            },
+            {
+              "value": "limited_walking",
+              "label": "Limited walking"
+            },
+            {
+              "value": "wheelchair_user",
+              "label": "Wheelchair user"
+            },
+            {
+              "value": "accessible_transport",
+              "label": "Accessible transport"
+            },
+            {
+              "value": "other",
+              "label": "Something else"
+            }
+          ]
+        },
+        {
+          "key": "accessibility_needs_other",
+          "type": "text",
+          "label": "Tell us what you need",
+          "placeholder": "For example: a walk-in shower, no more than 200 m on foot",
+          "showWhen": {
+            "field": "accessibility_needs",
+            "includes": "other"
+          },
+          "required": false
+        },
+        {
           "key": "restriction_notes",
           "type": "textarea",
           "label": "Other planning needs",
@@ -621,6 +666,31 @@
             {
               "value": "december",
               "label": "December"
+            }
+          ]
+        },
+        {
+          "key": "travel_window",
+          "type": "field_group",
+          "label": "When could you travel? (optional)",
+          "showWhen": {
+            "field": "travel_timing",
+            "equals": "flexible"
+          },
+          "keepTravelTiming": true,
+          "fields": [
+            {
+              "key": "earliest_check_in",
+              "type": "date",
+              "label": "Earliest check-in",
+              "required": false
+            },
+            {
+              "key": "latest_check_out",
+              "type": "date",
+              "label": "Latest check-out",
+              "required": false,
+              "minimumField": "earliest_check_in"
             }
           ]
         },

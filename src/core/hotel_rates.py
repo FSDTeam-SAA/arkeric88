@@ -218,6 +218,32 @@ def normalise_rates(payload: dict, nights: int) -> dict:
     return {"hotels": normalised_hotels, "checked_at_utc": datetime.now(timezone.utc).isoformat()}
 
 
+# A supplier name that adds a brand or "Hotel" to Google's name ("The
+# Driskill" / "The Driskill, in The Unbound Collection by Hyatt") fails the
+# similarity check. Containment is accepted only for a distinctive name and a
+# property at practically the same spot, so "Hilton" can't match a different
+# Hilton down the road.
+BRANDED_NAME_MIN_CHARS = 6
+BRANDED_NAME_MAX_METERS = 250
+
+
+def _branded_name_match(google_hotel: dict, scored: list) -> Optional[tuple]:
+    google_name = _normalise(google_hotel.get("name"))
+    matches = []
+    for item in scored:
+        _, distance, candidate, _ = item
+        supplier_name = _normalise(candidate.get("name") or candidate.get("hotelName"))
+        shorter, longer = sorted((google_name, supplier_name), key=len)
+        if (
+            len(shorter) >= BRANDED_NAME_MIN_CHARS
+            and shorter in longer
+            and distance is not None
+            and distance <= BRANDED_NAME_MAX_METERS
+        ):
+            matches.append(item)
+    return min(matches, key=lambda item: item[1]) if matches else None
+
+
 class LiteAPIProvider:
     """Nuitee Connect adapter.  All supplier-specific field handling stays here."""
 
@@ -287,7 +313,10 @@ class LiteAPIProvider:
         # Require a strong name plus geographic/address corroboration.
         close_enough = distance is not None and distance <= 1500
         name_similarity = SequenceMatcher(None, _normalise(google_hotel.get("name")), _normalise(candidate.get("name") or candidate.get("hotelName"))).ratio()
-        if score < 0.82 or name_similarity < 0.82 or not close_enough:
+        branded = _branded_name_match(google_hotel, scored) if score < 0.82 or name_similarity < 0.82 or not close_enough else None
+        if branded is not None:
+            score, distance, candidate, candidate_id = branded
+        elif score < 0.82 or name_similarity < 0.82 or not close_enough:
             return {"status": "UNMATCHED", "reason": "No supplier property could be matched with sufficient confidence."}
         match = {
             "status": "MATCHED",

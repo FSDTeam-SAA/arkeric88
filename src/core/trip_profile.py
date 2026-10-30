@@ -13,8 +13,9 @@ from dataclasses import dataclass, field
 from datetime import date, timedelta
 from typing import Dict, List, Optional
 
-from app.schemas.intake_schema import TravelIntakeRequest
+from app.schemas.intake_schema import TravelIntakeRequest, TripGoal
 from src.core.intake_mappings import (
+    ACCESSIBILITY_NEED_LABELS,
     ENVIRONMENT_LABELS,
     ITINERARY_LEVEL_RESTRICTIONS,
     PREFERRED_MOMENT_LABELS,
@@ -25,6 +26,7 @@ from src.core.intake_mappings import (
     TRAVEL_PERIOD_LABELS,
     TRAVEL_PERIOD_TO_MONTHS,
     TRIP_GOAL_DEFINITIONS,
+    TRIP_GOAL_FEELING_WORDS,
     TRIP_GOAL_LABELS,
     TRIP_PACE_LABELS,
     TRIP_PACE_TO_CATALOG_PACE,
@@ -59,6 +61,8 @@ class TripProfile:
     # restriction code -> "must_avoid" | "prefer_avoid"
     restrictions: Dict[str, str]
     restriction_notes: Optional[str]
+    accessibility_needs: List[str]
+    accessibility_needs_other: Optional[str]
 
     # None when the guest chose "Decide later".
     departure_location: Optional[str]
@@ -70,6 +74,9 @@ class TripProfile:
     travel_period: Optional[str]
     nights: int
     travel_months: List[int]
+    # Optional window for flexible or month/season timing.
+    earliest_check_in: Optional[date]
+    latest_check_out: Optional[date]
 
     budget_per_night: float
     budget_open_ended: bool
@@ -109,6 +116,28 @@ class TripProfile:
         return self.travel_timing == "exact_dates"
 
     @property
+    def feelings(self) -> List[str]:
+        """One feeling word per selected goal, strongest first: ["Restored", "Reflective"]."""
+        return [TRIP_GOAL_FEELING_WORDS[goal] for goal in self.goals]
+
+    @property
+    def feeling_label(self) -> str:
+        """Every selected goal as one phrase: "Restored and reflective"."""
+        words = self.feelings
+        if len(words) == 1:
+            return words[0]
+        return " and ".join([words[0], *[word.lower() for word in words[1:]]])
+
+    @property
+    def accessibility_need_labels(self) -> List[str]:
+        labels = [ACCESSIBILITY_NEED_LABELS[need] for need in self.accessibility_needs if need != "other"]
+        if self.accessibility_needs_other:
+            labels.append(self.accessibility_needs_other)
+        elif "other" in self.accessibility_needs:
+            labels.append(ACCESSIBILITY_NEED_LABELS["other"])
+        return labels
+
+    @property
     def goal_labels(self) -> List[str]:
         return [TRIP_GOAL_LABELS[goal] for goal in self.goals]
 
@@ -124,15 +153,23 @@ class TripProfile:
         phrases = []
         for code, severity in self.restrictions.items():
             verb = "Must avoid" if severity == "must_avoid" else "Prefer to avoid"
-            phrases.append(f"{verb}: {RESTRICTION_LABELS[code]}")
+            detail = ""
+            if code == "mobility_accessibility" and self.accessibility_need_labels:
+                detail = f" ({', '.join(self.accessibility_need_labels)})"
+            phrases.append(f"{verb}: {RESTRICTION_LABELS[code]}{detail}")
         return phrases
 
     def timing_phrase(self) -> str:
         if self.has_exact_dates:
             return f"{self.check_in_date.isoformat()} to {self.check_out_date.isoformat()} ({self.nights} nights)"
+        window = ""
+        if self.earliest_check_in or self.latest_check_out:
+            start = self.earliest_check_in.isoformat() if self.earliest_check_in else "now"
+            end = self.latest_check_out.isoformat() if self.latest_check_out else "open"
+            window = f", available {start} to {end}"
         if self.travel_period:
-            return f"{TRAVEL_PERIOD_LABELS[self.travel_period]}, {self.nights} nights (dates not fixed)"
-        return f"Flexible dates, {self.nights} nights"
+            return f"{TRAVEL_PERIOD_LABELS[self.travel_period]}, {self.nights} nights (dates not fixed{window})"
+        return f"Flexible dates, {self.nights} nights{window}"
 
     def party_phrase(self) -> str:
         parts = [f"{self.adults} adult{'s' if self.adults != 1 else ''}"]
@@ -150,6 +187,7 @@ class TripProfile:
                 {"code": goal, "label": TRIP_GOAL_LABELS[goal], "definition": TRIP_GOAL_DEFINITIONS[goal]}
                 for goal in self.goals
             ],
+            "feeling_label": self.feeling_label,
             "trip_prompt": TRIP_PROMPT_LABELS[self.trip_prompt],
             "preferred_moments": self.moment_labels,
             "preferred_environments": self.environment_labels,
@@ -157,6 +195,13 @@ class TripProfile:
             "party": self.party_phrase(),
             "restrictions": self.restriction_phrases(),
             "timing": self.timing_phrase(),
+            "travel_window": (
+                {
+                    "earliest_check_in": self.earliest_check_in.isoformat() if self.earliest_check_in else None,
+                    "latest_check_out": self.latest_check_out.isoformat() if self.latest_check_out else None,
+                }
+                if self.earliest_check_in or self.latest_check_out else None
+            ),
             "budget_per_night_usd": self.budget_per_night,
             "budget_open_ended": self.budget_open_ended,
         }
@@ -181,6 +226,16 @@ def _clarifications(request: TravelIntakeRequest, restrictions: Dict[str, str]) 
             "field": "restriction_notes",
             "blocking": False,
             "question": "You marked an 'Other' restriction as something you must avoid. What should we plan around?",
+        })
+
+    if restrictions.get("mobility_accessibility") == "must_avoid" and not request.accessibility_needs:
+        questions.append({
+            "field": "accessibility_needs",
+            "blocking": False,
+            "question": (
+                "What should we check for your mobility or accessibility needs, such as step-free access, "
+                "limited walking or accessible transport? We'll use it to check each stay and activity."
+            ),
         })
 
     for code in sorted(ITINERARY_LEVEL_RESTRICTIONS & set(restrictions)):
@@ -228,9 +283,16 @@ def _clarifications(request: TravelIntakeRequest, restrictions: Dict[str, str]) 
     return questions
 
 
+_FORM_GOAL_ORDER = [goal.value for goal in TripGoal]
+
+
 def _goals_and_weights(request: TravelIntakeRequest) -> tuple:
-    """Selected goals, strongest first, and each goal's share of the desired-outcome points."""
-    goals = [goal.value for goal in request.trip_goals]
+    """
+    Selected goals, strongest first, and each goal's share of the desired-outcome
+    points. Without a named main goal the form's own order is used, never the
+    order the goals were clicked in, so the same answers always read the same way.
+    """
+    goals = sorted((goal.value for goal in request.trip_goals), key=_FORM_GOAL_ORDER.index)
     primary = request.primary_trip_goal.value if request.primary_trip_goal else None
     if primary is None or len(goals) == 1:
         return goals, {goal: 1 / len(goals) for goal in goals}
@@ -251,6 +313,8 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         travel_months = _months_between(request.check_in_date, request.check_out_date)
     elif request.travel_period:
         travel_months = list(TRAVEL_PERIOD_TO_MONTHS[request.travel_period.value])
+    elif request.earliest_check_in and request.latest_check_out:
+        travel_months = _months_between(request.earliest_check_in, request.latest_check_out)
     else:
         travel_months = []
 
@@ -271,6 +335,8 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         hotel_room_occupancies=list(request.hotel_room_occupancies) if request.hotel_room_occupancies is not None else None,
         restrictions=restrictions,
         restriction_notes=request.restriction_notes,
+        accessibility_needs=[need.value for need in request.accessibility_needs],
+        accessibility_needs_other=request.accessibility_needs_other,
         departure_location=request.departure_location,
         # The schema fills "anywhere" when a departure is left for later.
         travel_distance=request.travel_distance.value,
@@ -280,6 +346,8 @@ def build_trip_profile(request: TravelIntakeRequest) -> TripProfile:
         travel_period=request.travel_period.value if request.travel_period else None,
         nights=request.trip_nights,
         travel_months=travel_months,
+        earliest_check_in=request.earliest_check_in,
+        latest_check_out=request.latest_check_out,
         # Not asked yet when dates are suggested at step 10 (DateRecommendationRequest).
         budget_per_night=float(request.budget_per_night or 0),
         budget_open_ended=request.budget_open_ended,

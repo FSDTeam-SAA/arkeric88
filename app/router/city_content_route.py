@@ -83,10 +83,10 @@ from src.core.intake_mappings import (
     INTAKE_MAPPING_VERSION,
     SCORING_VERSION,
     SUGGESTION_COUNT,
-    TRIP_GOAL_FEELING_WORDS,
     TRIP_PACE_LABELS,
 )
-from src.core.origin import resolve_origin
+from src.core.origin import not_provided, resolve_origin
+from src.core.price_estimates import coverage as price_estimate_coverage
 from src.core.trip_profile import TripProfile, build_trip_profile
 import re
 router = APIRouter()
@@ -1040,16 +1040,16 @@ def _enrich_stops_with_live_rates(stops: list, profile: TripProfile, request: Op
 
 def _fallback_experience_reason(item: dict, profile: TripProfile) -> str:
     """A reason tied to the guest's own answers when the model gave none worth showing."""
-    feeling = TRIP_GOAL_FEELING_WORDS[profile.goals[0]].lower()
+    feeling = profile.feeling_label.lower()
     moment = profile.moment_labels[0].lower() if profile.moment_labels else None
     enjoy = f", with time for the {moment} you said you enjoy" if moment else ", at a pace that suits you"
-    return f"{item.get('activity_name', 'This experience')} gives you room to feel {feeling}{enjoy}."
+    return f"{item.get('activity_name', 'This experience')} suits a trip that leaves you feeling {feeling}{enjoy}."
 
 
 def _replacement_finder(stop: dict, dataset: list, used_place_keys: set, used_restaurant_keys: set,
                         dining: dict, profile: TripProfile):
     """Closer alternatives for items over the travel limit (see itinerary_geo.enforce_day)."""
-    feeling = TRIP_GOAL_FEELING_WORDS[profile.goals[0]].lower()
+    feeling = profile.feeling_label.lower()
 
     def experience(item: dict, base: tuple, previous: tuple) -> Optional[dict]:
         for place in dataset:
@@ -1073,7 +1073,7 @@ def _replacement_finder(stop: dict, dataset: list, used_place_keys: set, used_re
                 "activity_cost": item.get("activity_cost", 0),
                 "why_selected": (
                     f"Swapped in for {item.get('activity_name', 'the original plan')}, which is too far from your "
-                    f"base, and it still gives you room to feel {feeling}."
+                    f"base, and it still suits a trip that leaves you feeling {feeling}."
                 ),
                 "latitude": point[0],
                 "longitude": point[1],
@@ -1349,13 +1349,15 @@ def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozens
     Run the deterministic destination matcher and build the response body.
     Returns (response, destination_ids_shown). No LLM call happens here; the
     only network calls are the departure geocode and coordinate lookups for
-    catalog rows without coordinates (both skipped when the guest is open to
-    anywhere) and the per-suggestion photo lookup. None of them receives any
-    intake field besides the departure place name.
+    catalog rows without coordinates (both skipped when the departure is left
+    for later) and the per-suggestion photo lookup. None of them receives any
+    intake field besides the departure place name. The departure is located
+    even for "Open to anywhere": travel effort against trip length is scored
+    for every guest whose departure point is known.
     """
     profile = build_trip_profile(request)
     origin = None
-    if profile.travel_distance != "anywhere":
+    if profile.departure_known:
         origin = resolve_origin(
             request.departure_location,
             request.departure_latitude,
@@ -1383,10 +1385,10 @@ def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozens
 
     data_gaps = list(result.data_gaps)
     if 0 < len(suggestions) < SUGGESTION_COUNT:
-        # Each option is from a different country; a country is never repeated to fill a slot.
+        # A near-duplicate (same country and close by, or the same kind of place) never fills a slot.
         data_gaps.append(
-            f"Only {len(suggestions)} {'country has' if len(suggestions) == 1 else 'countries have'} a destination "
-            "that fits your answers, so we're showing fewer options rather than two from the same country."
+            f"Only {len(suggestions)} clearly different destination{' fits' if len(suggestions) == 1 else 's fit'} "
+            "your answers, so we're showing fewer options rather than repeating a similar place."
         )
 
     response = {
@@ -1400,13 +1402,14 @@ def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozens
         "excluded_by_reason": result.excluded_by_reason(),
         "total_candidate_count": result.total_candidate_count,
         "data_gaps": data_gaps,
-        "origin": (
-            origin.to_dict() if origin is not None
-            else {"status": "NOT_NEEDED", "input_text": request.departure_location}
-        ),
+        "origin": origin.to_dict() if origin is not None else not_provided().to_dict(),
         "estimate_status": (
-            "Suggestions are editorial candidates. No live price, availability or route has been checked."
+            "Suggestions are editorial candidates. Prices shown are modelled estimates; no live price, "
+            "availability or route has been checked."
         ),
+        # Shown once for the whole result, not repeated on every card.
+        "general_notes": ["Check current entry, safety and accessibility guidance for your travel details."],
+        "price_estimates": price_estimate_coverage(),
         "generated_at_utc": _utc_now(),
         "intake_form": {"form_id": INTAKE_FORM_ID, "form_version": INTAKE_FORM_VERSION},
         "catalog_version": get_catalog_version(),

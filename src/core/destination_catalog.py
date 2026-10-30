@@ -70,6 +70,12 @@ _STAFF_PREFIX = re.compile(r"^\s*consider when (?:the )?guest seeks [^:]*:\s*", 
 # "an immersion-led city break rather than a quiet retreat" describes what the
 # place is NOT; keyword matching must not read "quiet" as a feature.
 _CONTRAST_CLAUSE = re.compile(r"\b(?:rather than|instead of|not suited to)\b[^.;]*", re.IGNORECASE)
+# Editor shorthand in two tradeoffs ("Driving and wine focus may not suit
+# guest") reads as a judgment about the person; guests see neutral wording.
+_STAFF_PHRASES = (
+    (re.compile(r"\bmay not suit (?:the |every )?guests?\b", re.IGNORECASE), "may not suit everyone"),
+    (re.compile(r"\bguests seeking\b", re.IGNORECASE), "travelers seeking"),
+)
 
 _CATALOG_PACES = {"gentle": "Gentle", "balanced": "Balanced", "active": "Active"}
 
@@ -218,10 +224,16 @@ def _guest_rationale(text: str) -> str:
     return _STAFF_PREFIX.sub("", text).strip()
 
 
+def _guest_wording(text: str) -> str:
+    for pattern, replacement in _STAFF_PHRASES:
+        text = pattern.sub(replacement, text)
+    return text
+
+
 def _to_destination(row: Dict[str, str], boilerplate: FrozenSet[str] = frozenset()) -> Destination:
     themes = row.get("editorial_themes", "")
     paces = parse_paces(row.get("pace_context", ""))
-    specific_tradeoffs = _without_boilerplate(row.get("tradeoffs_to_check", ""), boilerplate)
+    specific_tradeoffs = _guest_wording(_without_boilerplate(row.get("tradeoffs_to_check", ""), boilerplate))
     guest_rationale = _guest_rationale(_without_boilerplate(row.get("editorial_rationale", ""), boilerplate))
     return Destination(
         destination_id=row["destination_id"],

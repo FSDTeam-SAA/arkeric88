@@ -2,13 +2,16 @@
 Deterministic destination matching for the Velari intake.
 
 Pipeline (IMPORT_RULES.csv), with no LLM anywhere in it:
-1. Hard exclusions before ranking: must-avoid conflicts, unknown high-impact
-   suitability, straight-line distance beyond the guest's tolerance, and a
-   verified nightly price above budget. Budget is never relaxed silently.
+1. Hard exclusions before ranking: must-avoid conflicts, straight-line
+   distance beyond the guest's tolerance, and a verified nightly price above
+   budget. Budget is never relaxed silently.
 2. Weighted scoring: desired outcomes (primary), experience interests,
-   setting, pace and travel-distance fit; prefer-avoid is a penalty with an
-   explained tradeoff.
-3. Diverse selection of 2-3 options (distinct countries, varied settings).
+   setting, pace and travel fit. Adjustments, each with an explained
+   tradeoff: prefer-avoid conflicts, unconfirmed must-avoid needs, travel
+   effort against trip length, estimated price against budget, and the
+   heuristic catalogue rows.
+3. Diverse selection of 1-3 options: no near-duplicates (a country may repeat
+   only for a clearly different place), varied settings.
 4. Explanations tied to the guest's own answer labels and the specific
    catalog field that was checked, plus tradeoffs and unresolved facts.
 
@@ -27,11 +30,16 @@ from src.core.destination_catalog import Destination, load_destination_candidate
 from src.core.geography import country_key, great_circle_km, is_southern_hemisphere
 from src.core.guest_text import dedupe, from_pipes, lower_first, natural_list
 from src.core.intake_mappings import (
+    BUDGET_ABOVE_PENALTY,
+    BUDGET_STRETCH_PENALTY,
     ENVIRONMENT_KEYWORDS,
     ENVIRONMENT_LABELS,
+    GOAL_EXPERIENCE_KEYWORDS,
     HIGH_IMPACT_DESTINATION_RESTRICTIONS,
     ITINERARY_LEVEL_RESTRICTIONS,
     LOCATION_ENRICHED_PENALTY,
+    MATCH_LABELS,
+    MAX_SUGGESTIONS_PER_COUNTRY,
     MOMENT_GOAL_SIGNALS,
     MOMENT_KEYWORDS,
     MOMENT_PACE_SIGNALS,
@@ -40,17 +48,29 @@ from src.core.intake_mappings import (
     RESTRICTION_CONFLICT_RULES,
     RESTRICTION_LABELS,
     RESTRICTION_RISK_SEASON,
+    SAME_COUNTRY_MIN_SEPARATION_KM,
     SCORE_WEIGHTS,
     SUGGESTION_COUNT,
     TRAVEL_DISTANCE_LABELS,
     TRAVEL_DISTANCE_MAX_STRAIGHT_LINE_KM,
-    TRIP_GOAL_FEELING_WORDS,
+    TRAVEL_EFFORT_MAX_PENALTY,
+    TRAVEL_EFFORT_MIN_NIGHTS,
     TRIP_GOAL_LABELS,
     TRIP_PACE_LABELS,
     CATALOG_PACE_ORDER,
     UNVERIFIED_MUST_AVOID_PENALTY,
 )
 from src.core.origin import Origin
+from src.core.price_estimates import (
+    FITS,
+    LIKELY_ABOVE,
+    MAY_STRETCH,
+    UNKNOWN,
+    PriceEstimate,
+    budget_fit,
+    load_price_estimates,
+    price_estimate,
+)
 from src.core.trip_profile import TripProfile, season_months_are_assumed
 
 # Score window within which a lower-ranked option may be preferred to vary
@@ -112,6 +132,12 @@ class ScoredDestination:
     tradeoffs: List[str] = field(default_factory=list)
     # Orders equal scores; see _tie_breaker.
     tie_breaker: str = ""
+    price: Optional[PriceEstimate] = None
+    budget_fit: str = UNKNOWN
+    # Fewest nights that make the journey worthwhile; None when distance is unknown.
+    suggested_min_nights: Optional[int] = None
+    # Catalog coordinates, or map-lookup ones for a row without any.
+    point: Optional[Tuple[float, float]] = None
 
     @property
     def destination_id(self) -> str:
@@ -244,7 +270,17 @@ def check_distance(
     """`looked_up`: map-lookup coordinates for a catalog row that has none."""
     limit_km = TRAVEL_DISTANCE_MAX_STRAIGHT_LINE_KM[profile.travel_distance]
     if limit_km is None:
-        return DistanceCheck("no_limit", None, "You're open to anywhere; route and travel time not checked.")
+        km = _straight_line_km(destination, origin, looked_up)
+        if km is None and origin is not None and origin.has_coordinates:
+            # Unmeasured while others are measured: half credit, as for any unknown
+            # distance, so it can't outrank a measured option by escaping the effort check.
+            return DistanceCheck("not_checked", None, "We couldn't place this destination on the map, so its distance from you was not checked.")
+        if km is None:
+            return DistanceCheck("no_limit", None, "You're open to anywhere; route and travel time not checked.")
+        return DistanceCheck(
+            "no_limit", km,
+            f"About {km:,} km in a straight line; the actual route, mode and transfers have not been checked.",
+        )
     if origin is None or not origin.provided:
         return DistanceCheck(
             "not_checked", None, "Add your departure city whenever you know it, and we'll check the distance from you.",
@@ -292,11 +328,43 @@ def check_distance(
     )
 
 
-def _distance_points(check: DistanceCheck) -> float:
+def _straight_line_km(
+    destination: Destination, origin: Optional[Origin], looked_up: Optional[Tuple[float, float]]
+) -> Optional[int]:
+    if origin is None or not origin.has_coordinates:
+        return None
+    latitude, longitude = destination.latitude, destination.longitude
+    if (latitude is None or longitude is None) and looked_up is not None:
+        latitude, longitude = looked_up
+    if latitude is None or longitude is None:
+        return None
+    return round(great_circle_km(origin.latitude, origin.longitude, latitude, longitude))
+
+
+def suggested_min_nights(km: float) -> int:
+    """The fewest nights that make a journey of this straight-line length worthwhile."""
+    for limit_km, nights in TRAVEL_EFFORT_MIN_NIGHTS:
+        if limit_km is None or km <= limit_km:
+            return nights
+    return TRAVEL_EFFORT_MIN_NIGHTS[-1][1]
+
+
+def _travel_points(check: DistanceCheck, nights: int) -> Tuple[float, float, Optional[int]]:
+    """
+    (travel points, travel-effort penalty, suggested minimum nights). A measured
+    journey that is long for the trip earns part of the travel points and a
+    penalty in proportion to the shortfall: 5 nights on a 9-night journey keeps
+    5/9 of the points and loses 4/9 of the maximum penalty. It ranks lower; it
+    is never excluded for it.
+    """
     weight = SCORE_WEIGHTS["travel_distance"]
-    if check.status in {"no_limit", "within_straight_line_limit"}:
-        return float(weight)
-    return weight / 2  # Distance unknown: half credit.
+    if check.status not in {"no_limit", "within_straight_line_limit"}:
+        return weight / 2, 0.0, None  # Distance unknown: half credit.
+    if check.straight_line_km is None:
+        return float(weight), 0.0, None
+    minimum = suggested_min_nights(check.straight_line_km)
+    ratio = min(1.0, nights / minimum)
+    return weight * ratio, -TRAVEL_EFFORT_MAX_PENALTY * (1 - ratio), minimum
 
 
 def _setting_category(destination: Destination) -> str:
@@ -346,8 +414,7 @@ def score_destination(
     ]
     for check in checks:
         if _is_hard_exclusion(check):
-            reason = "must_avoid" if check.status == "conflict" else "unverified_high_impact"
-            return None, Exclusion(destination.destination_id, f"{reason}:{check.restriction}", check.detail)
+            return None, Exclusion(destination.destination_id, f"must_avoid:{check.restriction}", check.detail)
 
     distance = check_distance(destination, profile, origin, looked_up)
     if distance.status == "beyond_tolerance":
@@ -380,15 +447,20 @@ def score_destination(
         else [env for env in profile.environments if _matches(ENVIRONMENT_KEYWORDS[env], setting_text)]
     )
     pace_fit = _pace_fit(destination, profile)
+    travel_points, travel_penalty, minimum_nights = _travel_points(distance, profile.nights)
+    estimate = price_estimate(destination.destination_id)
+    fit = budget_fit(estimate, profile.budget_per_night, profile.budget_open_ended)
 
     breakdown = {
         "desired_outcomes": SCORE_WEIGHTS["desired_outcomes"] * goal_share,
         "experience_interests": SCORE_WEIGHTS["experience_interests"] * len(matched_moments) / len(profile.moments),
         "settings": float(SCORE_WEIGHTS["settings"]) if (profile.surprise_me or matched_environments) else 0.0,
         "pace": SCORE_WEIGHTS["pace"] * _PACE_POINTS[pace_fit],
-        "travel_distance": _distance_points(distance),
+        "travel_distance": travel_points,
         "prefer_avoid_penalty": 0.0,
         "unverified_must_avoid_penalty": 0.0,
+        "travel_effort_penalty": travel_penalty,
+        "budget_penalty": {MAY_STRETCH: -float(BUDGET_STRETCH_PENALTY), LIKELY_ABOVE: -float(BUDGET_ABOVE_PENALTY)}.get(fit, 0.0),
         # IMPORT_RULES.csv "Destination matching confidence": heuristic tags rank lower.
         "evidence_penalty": -float(LOCATION_ENRICHED_PENALTY) if destination.is_location_enriched else 0.0,
     }
@@ -406,6 +478,22 @@ def score_destination(
                 f"You told us '{check.label}' is something you must plan around. We don't have confirmed information "
                 "about it here yet, so this option ranks lower until we check each stay and activity for you."
             )
+    if minimum_nights is not None and profile.nights < minimum_nights:
+        tradeoffs.append(
+            f"A long journey for a {profile.nights}-night trip: about {distance.straight_line_km:,} km from "
+            f"{_home(profile)} in a straight line, so travel takes a large share of your time. It suits "
+            f"{minimum_nights} nights or more best."
+        )
+    if fit == LIKELY_ABOVE:
+        tradeoffs.append(
+            f"Likely above your ${profile.budget_per_night:,.0f} nightly budget: stays here are estimated at about "
+            f"${estimate.low:,.0f}-${estimate.high:,.0f} per room, per night (an estimate, not a quote)."
+        )
+    elif fit == MAY_STRETCH:
+        tradeoffs.append(
+            f"May stretch your ${profile.budget_per_night:,.0f} nightly budget: typical stays here are estimated at "
+            f"about ${estimate.typical:,.0f} per room, per night, with some from ${estimate.low:,.0f}."
+        )
 
     total = max(0.0, round(sum(breakdown.values()), 2))
     breakdown = {key: round(value, 2) for key, value in breakdown.items()}
@@ -422,6 +510,14 @@ def score_destination(
         restriction_checks=checks,
         distance=distance,
         tradeoffs=tradeoffs,
+        price=estimate,
+        budget_fit=fit,
+        suggested_min_nights=minimum_nights,
+        point=(
+            (destination.latitude, destination.longitude)
+            if destination.latitude is not None and destination.longitude is not None
+            else looked_up
+        ),
     ), None
 
 
@@ -434,9 +530,9 @@ def _data_gaps(
             gaps.append(
                 f"No candidate destination is tagged for {TRIP_GOAL_LABELS[goal]} yet, so ranking relied on your other answers."
             )
-    if all(destination.verified_nightly_usd is None for destination in catalog):
+    if not load_price_estimates() and all(destination.verified_nightly_usd is None for destination in catalog):
         gaps.append(
-            "No candidate has a verified nightly price yet, so budget could not filter destinations. "
+            "No destination has a nightly price yet, so budget could not shape these suggestions. "
             "Your budget will be applied when live stays are checked for exact dates."
         )
     if profile.travel_distance != "anywhere":
@@ -454,7 +550,10 @@ def _data_gaps(
                 and destination.destination_id not in looked_up
             )
             if missing:
-                gaps.append(f"{missing} candidates could not be located on the map, so their distance from you was not checked.")
+                gaps.append(
+                    f"{missing} destination{' was' if missing == 1 else 's were'} not located on the map, "
+                    "so distance from you was not checked for them."
+                )
     if season_months_are_assumed(profile):
         gaps.append("Season names were read as Northern-hemisphere months for heat and cold checks.")
     return gaps
@@ -513,23 +612,43 @@ def rank_destinations(
 
 # ==================== SELECTION ====================
 
+def _repeats(item: ScoredDestination, chosen: List[ScoredDestination]) -> bool:
+    """
+    True when `item` would make the shortlist repetitive: its country is
+    already used twice, or it is in the same country as a pick it is close to
+    or shares a setting with. Unknown coordinates count as close.
+    """
+    country = country_key(item.destination.country)
+    same_country = [other for other in chosen if country_key(other.destination.country) == country]
+    if not same_country:
+        return False
+    if len(same_country) >= MAX_SUGGESTIONS_PER_COUNTRY:
+        return True
+    for other in same_country:
+        if other.setting_category == item.setting_category:
+            return True
+        if item.point is None or other.point is None or great_circle_km(*item.point, *other.point) < SAME_COUNTRY_MIN_SEPARATION_KM:
+            return True
+    return False
+
+
 def select_diverse(
     ranked: List[ScoredDestination],
     exclude_ids: Set[str] = frozenset(),
     limit: int = SUGGESTION_COUNT,
 ) -> List[ScoredDestination]:
     """
-    Best-first shortlist with distinct countries and, where close in score,
-    varied settings. A country is never repeated: when fewer countries are
-    eligible than there are slots, fewer options are returned.
+    Best-first shortlist without near-duplicates and, where close in score,
+    with varied settings. Two strong options may share a country when they
+    are clearly different places (see _repeats); when too few qualify, fewer
+    options are returned.
     """
     pool = [item for item in ranked if item.destination_id not in exclude_ids]
     chosen: List[ScoredDestination] = []
-    used_countries: Set[str] = set()
     used_settings: Set[str] = set()
 
     while pool and len(chosen) < limit:
-        eligible = [item for item in pool if country_key(item.destination.country) not in used_countries]
+        eligible = [item for item in pool if not _repeats(item, chosen)]
         if not eligible:
             break
         pick = eligible[0]
@@ -541,7 +660,6 @@ def select_diverse(
                     pick = alternative
                     break
         chosen.append(pick)
-        used_countries.add(country_key(pick.destination.country))
         used_settings.add(pick.setting_category)
         pool.remove(pick)
 
@@ -551,11 +669,20 @@ def select_diverse(
 
 # ==================== EXPLANATION ====================
 
+_GENERIC_SETTINGS = {"regional destination", "destination", "region"}
+_TAG_SPLIT = re.compile(r"\s*(?:\||,|;|\band\b)\s*", re.IGNORECASE)
+
+
+def _tags(value: str) -> List[str]:
+    """Catalog "Art|Nature|Food" or "Architecture, culture, and coast" -> ["art", "nature", "food"]."""
+    return [tag.strip().lower() for tag in _TAG_SPLIT.split(value or "") if tag and tag.strip()]
+
+
 def _rationale_phrase(destination: Destination) -> str:
     """
-    The rationale's first sentence, to follow "Room to feel ...:". Staff
-    wording is already gone (Destination.guest_rationale); a sentence that
-    starts with the place's name keeps its capital ("Shanghai offers ...").
+    The rationale's first sentence. Staff wording is already gone
+    (Destination.guest_rationale); a sentence that starts with the place's
+    name keeps its capital ("Shanghai offers ...").
     """
     first = re.split(r"(?<=[.!?])\s+", destination.guest_rationale.strip(), maxsplit=1)[0].rstrip(" .;,")
     if not first:
@@ -565,32 +692,102 @@ def _rationale_phrase(destination: Destination) -> str:
     return lower_first(first)
 
 
-def _reasons(item: ScoredDestination, profile: TripProfile) -> List[str]:
+def _introduction(destination: Destination) -> str:
     """
-    Guest-facing reasons tied to the guest's own answers. They describe the
-    destination in plain words -- never catalog tags, pipe-separated lists or
-    "our editors" -- and offer an opportunity rather than promise an outcome.
+    What the place is and what a stay there offers -- no matching language.
+    A rationale that already describes the place by name is used as written.
+    """
+    rationale = _rationale_phrase(destination)
+    if rationale and rationale.split()[0] in destination.destination.split():
+        return f"{rationale}."
+    experiences = natural_list(_tags(destination.experience_context))
+    settings = [tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS]
+    setting = f", in a {natural_list(settings)} setting" if settings else ""
+    if experiences:
+        return f"{destination.destination} is known for {experiences}{setting}."
+    if rationale:
+        return f"{destination.destination}: {rationale}."
+    return ""
+
+
+def _home(profile: TripProfile) -> str:
+    """The guest's own name for where they leave from ("Austin" from "Austin, Texas")."""
+    return (profile.departure_location or "").split(",")[0].strip() or "your departure point"
+
+
+def _moment_evidence(destination: Destination, moment: str) -> Optional[str]:
+    """What at this destination backs a chosen moment: its own tags, else its pace."""
+    tags = [tag for tag in _tags(destination.experience_context) if _matches(MOMENT_KEYWORDS[moment], tag)]
+    if tags:
+        return natural_list(tags[:2])
+    paces = set(destination.catalog_paces) & MOMENT_PACE_SIGNALS.get(moment, set())
+    if paces:
+        return f"a {sorted(paces)[0].lower()} pace"
+    return None
+
+
+def _goal_experiences(destination: Destination, goal: str) -> List[str]:
+    tags = _tags(destination.experience_context) + [
+        tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS
+    ]
+    return [tag for tag in dict.fromkeys(tags) if _matches(GOAL_EXPERIENCE_KEYWORDS[goal], tag)][:3]
+
+
+def _goal_reasons(item: ScoredDestination) -> List[str]:
+    """
+    One line per group of selected goals, naming the destination's own
+    experiences that support them ("For restoration and reflection: yoga,
+    nature and jungle."). Goals backed by the same experiences share a line.
     """
     destination = item.destination
-    reasons: List[str] = []
-    if item.matched_goals:
-        feelings = natural_list([TRIP_GOAL_FEELING_WORDS[goal].lower() for goal in item.matched_goals])
-        rationale = _rationale_phrase(destination)
-        reasons.append(f"Room to feel {feelings}: {rationale}." if rationale else f"Room to feel {feelings}.")
+    groups: Dict[tuple, List[str]] = {}
+    for goal in item.matched_goals:
+        groups.setdefault(tuple(_goal_experiences(destination, goal)), []).append(goal)
+    lines = []
+    for experiences, goals in groups.items():
+        labels = natural_list([TRIP_GOAL_LABELS[goal].lower() for goal in goals])
+        support = natural_list(experiences) or _rationale_phrase(destination)
+        lines.append(f"For {labels}: {support}." if support else f"Suited to {labels}.")
+    return lines
+
+
+def _reasons(item: ScoredDestination, profile: TripProfile) -> List[str]:
+    """
+    Guest-facing reasons tied to the guest's own answers, each saying something
+    the introduction doesn't: which experiences support the selected goals,
+    which chosen moments and setting it fits, and when the journey suits the
+    trip length. Never catalog tags, pipe-separated lists or "our editors".
+    """
+    destination = item.destination
+    reasons: List[str] = _goal_reasons(item)
     if item.matched_moments:
-        offers = natural_list(from_pipes(destination.experience_context))
-        loves = natural_list([PREFERRED_MOMENT_LABELS[moment].lower() for moment in item.matched_moments])
-        reasons.append(
-            f"It offers {offers}, a good match for your love of {loves}." if offers
-            else f"A good match for your love of {loves}."
-        )
+        parts = []
+        for moment in item.matched_moments:
+            label = PREFERRED_MOMENT_LABELS[moment].lower()
+            evidence = _moment_evidence(destination, moment)
+            parts.append(f"{label} ({evidence})" if evidence and evidence not in label else label)
+        reasons.append(f"It has what you're drawn to: {'; '.join(parts)}.")
     if item.matched_environments:
-        setting = natural_list(from_pipes(destination.setting_context))
+        setting = natural_list([tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS])
         wanted = natural_list([ENVIRONMENT_LABELS[env].lower() for env in item.matched_environments])
-        reasons.append(f"The {setting} setting suits your preference for {wanted}.")
+        reasons.append(f"The {setting} setting suits your preference for {wanted}." if setting else f"It suits your preference for {wanted}.")
     elif item.pace_fit == "match" and destination.catalog_pace:
         reasons.append(f"Its {destination.catalog_pace.lower()} pace fits how you like to travel.")
-    return reasons[:3]
+    if (
+        item.suggested_min_nights is not None
+        and item.distance.straight_line_km is not None
+        and item.suggested_min_nights <= profile.nights
+        and item.distance.straight_line_km <= 4000
+    ):
+        reasons.append(
+            f"About {item.distance.straight_line_km:,} km from {_home(profile)} in a straight line, "
+            f"a comfortable distance for {profile.nights} nights."
+        )
+    return reasons[:4]
+
+
+def match_label(score: float) -> str:
+    return next(label for threshold, label in MATCH_LABELS if score >= threshold)
 
 
 def _tradeoffs(item: ScoredDestination, profile: TripProfile) -> List[str]:
@@ -601,8 +798,12 @@ def _tradeoffs(item: ScoredDestination, profile: TripProfile) -> List[str]:
         tradeoffs.insert(0, f"Worth knowing: {lower_first(destination.specific_tradeoffs.rstrip('.'))}.")
     missing_goals = [goal for goal in profile.goals if goal not in item.matched_goals]
     if missing_goals:
-        feelings = natural_list([TRIP_GOAL_FEELING_WORDS[goal].lower() for goal in missing_goals], "or")
-        tradeoffs.append(f"Fewer clear chances to feel {feelings} here than in your other options.")
+        missing = natural_list([TRIP_GOAL_LABELS[goal].lower() for goal in missing_goals], "or")
+        matched = natural_list([TRIP_GOAL_LABELS[goal].lower() for goal in item.matched_goals])
+        tradeoffs.append(
+            f"Offers less for {missing} than for {matched}." if matched
+            else f"Offers less for {missing} than your other options; it was chosen for the experiences you picked."
+        )
     if item.pace_fit == "mismatch":
         tradeoffs.append(
             f"It's usually a {destination.catalog_pace.lower()} destination, so we'd pace your days deliberately "
@@ -620,10 +821,17 @@ def _unresolved_facts(item: ScoredDestination, profile: TripProfile, origin: Opt
     (source review, catalog price gaps, route checks) lives in `verification`.
     """
     facts = []
-    if profile.has_exact_dates:
+    if item.price is not None:
+        facts.append(
+            f"Estimated stays: about ${item.price.low:,.0f}-${item.price.high:,.0f} per room, per night "
+            f"(typically ${item.price.typical:,.0f}). This is an estimate, not a quote; "
+            + ("we'll confirm real prices for your dates before booking." if profile.has_exact_dates
+               else "real prices are checked once you choose dates.")
+        )
+    elif profile.has_exact_dates:
         facts.append("Prices and availability will be confirmed for your dates before booking.")
     else:
-        facts.append("Prices and availability need exact dates; until then this is inspiration only.")
+        facts.append("Prices and availability are checked once you choose dates.")
     if profile.children and profile.child_ages is None:
         facts.append("Share the children's ages so we can check rates and age-suitable activities.")
     elif profile.children:
@@ -632,8 +840,10 @@ def _unresolved_facts(item: ScoredDestination, profile: TripProfile, origin: Opt
         facts.append("Add your departure city to see the travel distance and time from home.")
     for check in item.restriction_checks:
         if check.status in {"unverified", "itinerary_stage"}:
-            facts.append(f"{check.label}: {check.detail}")
-    facts.append("Check current entry, safety and accessibility guidance for your travel details.")
+            label = check.label
+            if check.restriction == "mobility_accessibility" and profile.accessibility_need_labels:
+                label = f"{label} ({', '.join(profile.accessibility_need_labels).lower()})"
+            facts.append(f"{label}: {check.detail}")
     return dedupe(facts)
 
 
@@ -641,10 +851,17 @@ def _internal_notes(item: ScoredDestination, profile: TripProfile, origin: Optio
     """Review status kept for the team; never shown to guests."""
     destination = item.destination
     notes = ["Source review pending: catalog claims have not yet been checked against a destination-specific source."]
-    if destination.verified_nightly_usd is None:
+    if destination.verified_nightly_usd is None and item.price is None:
         notes.append(
             f"Nightly lodging cost is unknown, not yet compared with the ${profile.budget_per_night:,.0f} per room budget."
         )
+    elif destination.verified_nightly_usd is None:
+        notes.append(
+            f"Budget fit ({item.budget_fit}) uses a modelled estimate (typical ${item.price.typical:,.0f} per room, "
+            f"per night, two adults), not a live rate."
+        )
+        if profile.adults + profile.children > 2 * profile.rooms:
+            notes.append("More than two guests per room: the two-adult estimate may understate the cost.")
     if not destination.catalog_paces:
         notes.append("Catalog pace depends on the plan.")
     if destination.is_location_enriched:
@@ -668,12 +885,17 @@ def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Opti
         "country_name": destination.country,
         "world_region": destination.world_region,
         "number_of_days": profile.nights,
-        # Guest display: "Designed to help you feel: **{primary_feeling}**", then description.
-        "primary_feeling": TRIP_GOAL_FEELING_WORDS[profile.goals[0]],
-        "description": " ".join(reasons[:2]),
+        # Guest display: "Designed to help you feel: **{primary_feeling}**" -- every
+        # selected goal, main goal first ("Restored and reflective").
+        "primary_feeling": profile.feeling_label,
+        "feelings": profile.feelings,
+        # What the place is; "match_reasons" says why it fits. No sentence is in both.
+        "description": _introduction(destination),
         "latitude": destination.latitude,
         "longitude": destination.longitude,
         "match_score": round(item.total_score),
+        # Show this to guests instead of the number; the score is for staff.
+        "match_label": match_label(item.total_score),
         "score_breakdown": item.breakdown,
         "match_reasons": reasons,
         "tradeoffs": tradeoffs,
@@ -690,8 +912,20 @@ def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Opti
             "source_review_status": destination.source_review_status,
             "live_lodging_status": destination.live_lodging_status,
             "verified_nightly_usd": destination.verified_nightly_usd,
-            "budget_status": "UNKNOWN" if destination.verified_nightly_usd is None else "WITHIN_BUDGET",
-            "price_claim": "NONE",
+            "budget_status": item.budget_fit if destination.verified_nightly_usd is None else "WITHIN_BUDGET",
+            # Modelled estimate (USD per room, per night, two adults): never a rate.
+            "price_estimate": (
+                {
+                    "low_usd": item.price.low,
+                    "typical_usd": item.price.typical,
+                    "high_usd": item.price.high,
+                    "basis": "per room, per night, two adults",
+                    "estimated_stay_total_usd": round(item.price.typical * profile.rooms * profile.nights),
+                    "status": "ESTIMATE",
+                }
+                if item.price is not None else None
+            ),
+            "price_claim": "ESTIMATE" if item.price is not None else "NONE",
             "availability_claim": "NONE",
             "guest_display_gate": destination.guest_display_gate,
             # Internal review notes: for the team, never for guest display.
@@ -716,16 +950,10 @@ _FLEX_FIELDS = {
 
 
 def _blocking_constraint(reason: str, count: int, profile: TripProfile) -> dict:
-    if reason.startswith(("must_avoid:", "unverified_high_impact:")):
-        kind, restriction = reason.split(":", 1)
+    if reason.startswith("must_avoid:"):
+        restriction = reason.split(":", 1)[1]
         label = RESTRICTION_LABELS[restriction]
-        if kind == "unverified_high_impact":
-            explanation = (
-                f"'{label}' is marked as something you must plan around, and {count} destinations have no "
-                "verified information about it yet. We won't treat unknown as suitable."
-            )
-        else:
-            explanation = f"'{label}' is marked as must avoid, and the catalog flags it at {count} destinations."
+        explanation = f"'{label}' is marked as must avoid, and it is a known concern at {count} destinations."
         return {
             "constraint": reason,
             "field": f"restriction_severity_{restriction}",
@@ -753,12 +981,16 @@ def build_no_valid_result(result: MatchResult, profile: TripProfile) -> dict:
     """IMPORT_RULES.csv "No valid result": name the blocking constraints and ask which may flex."""
     counts = sorted(result.excluded_by_reason().items(), key=lambda item: (-item[1], item[0]))
     blocking = [_blocking_constraint(reason, count, profile) for reason, count in counts]
-    high_impact = [item for item in blocking if item["constraint"].startswith("unverified_high_impact:")]
+    high_impact = [
+        item for item in blocking
+        if item["constraint"].split(":", 1)[-1] in HIGH_IMPACT_DESTINATION_RESTRICTIONS
+    ]
     if high_impact:
+        # A mandatory need is never something we ask the guest to downgrade.
         question = (
-            "Could you tell us more about what you need (in 'Other planning needs'), so we can check specific "
-            "stays and activities? Or, if it's workable, mark it as 'I'd prefer to avoid this' and we'll show "
-            "options with the checks still to do."
+            "We couldn't find a destination that fits your other answers and is free of known concerns for your "
+            "mobility or accessibility needs. Your requirement stays as it is: could another answer, such as the "
+            "setting or travel distance, change?"
         )
     else:
         question = "No destination fits every answer. Which of these could flex?"

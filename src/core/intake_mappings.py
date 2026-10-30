@@ -13,8 +13,8 @@ Bump INTAKE_MAPPING_VERSION whenever a mapping or threshold changes so each
 session records which ruleset produced its suggestions.
 """
 
-INTAKE_MAPPING_VERSION = "2026-10-29.1"
-SCORING_VERSION = "velari-destinations-2026-10-29.1"
+INTAKE_MAPPING_VERSION = "2026-10-30.1"
+SCORING_VERSION = "velari-destinations-2026-10-30.1"
 
 # ---------------------------------------------------------------------------
 # Guest-facing labels, copied verbatim from the intake form so explanations
@@ -129,6 +129,17 @@ RESTRICTION_LABELS = {
     "other": "Other",
 }
 
+# Question 8 follow-up under "Mobility or accessibility": what the guest needs,
+# so stays and activities can be checked without asking them to soften a
+# must-avoid requirement.
+ACCESSIBILITY_NEED_LABELS = {
+    "step_free_access": "Step-free access",
+    "limited_walking": "Limited walking",
+    "wheelchair_user": "Wheelchair user",
+    "accessible_transport": "Accessible transport",
+    "other": "Something else",
+}
+
 RESTRICTION_SEVERITY_LABELS = {
     "must_avoid": "I must avoid this",
     "prefer_avoid": "I’d prefer to avoid this",
@@ -177,9 +188,15 @@ INTAKE_KEY_TO_FORM_FIELDS = {
     "settings": ["preferred_environments"],
     "pace": ["trip_pace"],
     "party": ["travel_party", "party_adults", "party_children", "party_child_ages", "party_rooms"],
-    "constraints": ["activity_restrictions", "restriction_severity", "restriction_notes"],
+    "constraints": [
+        "activity_restrictions", "restriction_severity", "restriction_notes",
+        "accessibility_needs", "accessibility_needs_other",
+    ],
     "origin_radius": ["departure_location", "travel_distance"],
-    "dates_duration": ["travel_timing", "check_in_date", "check_out_date", "travel_period", "trip_nights"],
+    "dates_duration": [
+        "travel_timing", "check_in_date", "check_out_date", "travel_period", "trip_nights",
+        "earliest_check_in", "latest_check_out",
+    ],
     "nightly_budget": ["budget_per_night"],
 }
 
@@ -259,6 +276,36 @@ MOMENT_KEYWORDS = {
         r"learning", r"craft", r"craftsmanship", r"creative", r"creativity",
         r"cultural learning", r"art",
     ],
+}
+
+# trip_goals -> the kinds of experience that make each goal concrete on a card
+# ("To feel restored: yoga and nature"). Matched against the destination's own
+# experience and setting tags; a goal with no matching tag falls back to the
+# destination's rationale.
+GOAL_EXPERIENCE_KEYWORDS = {
+    "restoration": [
+        r"spa", r"wellness", r"yoga", r"hot springs", r"onsen", r"thermal", r"beach(?:es)?", r"nature",
+        r"quiet", r"retreats?", r"islands?", r"lakes?", r"river", r"ocean", r"jungle", r"forests?",
+    ],
+    "reflection": [
+        r"yoga", r"meditation", r"temples?", r"spiritual", r"nature", r"quiet", r"desert", r"stargazing",
+        r"monaster(?:y|ies)", r"gardens?", r"red rocks", r"river", r"jungle", r"forests?", r"foothills",
+    ],
+    "discovery": [
+        r"cultur(?:e|al)", r"food", r"history", r"heritage", r"markets?", r"architecture", r"museums?",
+        r"neighbou?rhoods?", r"coffee", r"wine", r"local heritage", r"traditions?",
+    ],
+    "inspiration": [
+        r"arts?", r"architecture", r"design", r"music", r"creative", r"craft", r"museums?",
+        r"galler(?:y|ies)", r"landscapes?", r"red rocks",
+    ],
+    "adventure": [
+        r"hiking", r"trails?", r"div(?:e|ing)", r"surf\w*", r"trek\w*", r"wildlife", r"reef", r"adventure",
+        r"outdoors?", r"kayak\w*", r"geothermal",
+    ],
+    "connection": [r"food", r"wine", r"community", r"markets?", r"beach(?:es)?", r"cooking", r"dining"],
+    "celebration": [r"wine", r"food", r"nightlife", r"music", r"beach(?:es)?", r"spa", r"dining"],
+    "growth": [r"learning", r"craft", r"hiking", r"cultur(?:e|al)", r"language", r"workshops?", r"yoga"],
 }
 
 # Structured catalog fields that also evidence a moment, beyond keywords.
@@ -412,6 +459,30 @@ PRIMARY_GOAL_SHARE = 0.6
 # than one extra interest) to outrank an edited candidate.
 LOCATION_ENRICHED_PENALTY = 10
 
-# IMPORT_RULES.csv "Guest explanation": return 2-3 diverse options, each from a
-# different country. Fewer are returned rather than repeating a country.
+# IMPORT_RULES.csv "Guest explanation": return 2-3 diverse options. The aim is
+# to avoid repetitive destinations, not to rule out two strong options in one
+# country: a country may appear twice when the two places are far enough
+# apart and differ in setting (Tucson and Sedona, both Arizona desert, would
+# not). Fewer are returned, with an explanation, rather than a near-duplicate.
 SUGGESTION_COUNT = 3
+MAX_SUGGESTIONS_PER_COUNTRY = 2
+SAME_COUNTRY_MIN_SEPARATION_KM = 300
+
+# Travel effort against trip length, used whenever the departure point is
+# located (including "Open to anywhere"). Straight-line km from home -> the
+# fewest nights that make that journey worthwhile. Shorter trips lose part of
+# the travel points and take a penalty in proportion to the shortfall, so a
+# 5-night trip from Austin to Bali ranks below an equally good nearer option
+# without being ruled out.
+TRAVEL_EFFORT_MIN_NIGHTS = ((1500, 2), (4000, 4), (8000, 6), (None, 9))
+TRAVEL_EFFORT_MAX_PENALTY = 20
+
+# Preliminary budget fit from the modelled price estimates (USD per room, per
+# night, two adults). Estimates rank, never exclude: "may stretch" when only
+# the low estimate is within budget, "likely above" when even the low
+# estimate is over. An open-ended budget is never penalised.
+BUDGET_STRETCH_PENALTY = 5
+BUDGET_ABOVE_PENALTY = 10
+
+# Guest-facing label instead of the raw score; the number stays for staff.
+MATCH_LABELS = ((85, "Excellent match"), (70, "Strong match"), (55, "Good match"), (0, "Possible match"))

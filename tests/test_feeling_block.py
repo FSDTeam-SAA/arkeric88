@@ -47,10 +47,15 @@ def _assess(answers, profile=None):
     return block, prompts
 
 
-def test_headline_uses_the_primary_selected_feeling_not_destination_tags():
+def test_headline_names_every_selected_feeling_not_destination_tags():
     assert headline(_profile(trip_goals=["reflection"])) == "Designed to help you feel: Reflective"
-    # The first selected feeling is the primary one the itinerary is designed around.
-    assert headline(_profile(trip_goals=["connection", "discovery"])) == "Designed to help you feel: Connected"
+    # Both selected goals, in the form's order whatever order they were clicked in.
+    assert headline(_profile(trip_goals=["connection", "discovery"])) == "Designed to help you feel: Connected and curious"
+    assert headline(_profile(trip_goals=["discovery", "connection"])) == "Designed to help you feel: Connected and curious"
+    # A named main goal comes first.
+    assert headline(_profile(trip_goals=["connection", "discovery"], primary_trip_goal="discovery")) == (
+        "Designed to help you feel: Curious and connected"
+    )
 
 
 def test_aligned_block_has_bold_feeling_and_one_explanation():

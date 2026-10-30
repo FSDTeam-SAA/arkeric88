@@ -31,6 +31,8 @@ def _offline_map_lookups(monkeypatch):
     monkeypatch.setattr("app.router.city_content_route.compute_drive_route", lambda origin, destination: {"error": "offline in tests"})
     # Viator: off unless a test turns it on, even when the developer's .env has a real key.
     monkeypatch.setattr("src.config.config_env.settings.viator_api_key", "")
+    # LiteAPI likewise: never a live rate search from a test run.
+    monkeypatch.setattr("src.config.config_env.settings.liteapi_enabled", False)
     from src.tools import viator
     viator.clear_caches()
     # Date suggestions: no climate record unless a test supplies one.

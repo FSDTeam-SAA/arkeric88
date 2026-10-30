@@ -120,6 +120,14 @@ class RestrictionSeverity(str, Enum):
     prefer_avoid = "prefer_avoid"
 
 
+class AccessibilityNeed(str, Enum):
+    step_free_access = "step_free_access"
+    limited_walking = "limited_walking"
+    wheelchair_user = "wheelchair_user"
+    accessible_transport = "accessible_transport"
+    other = "other"
+
+
 class TravelDistance(str, Enum):
     nearby = "nearby"
     manageable_flight = "manageable_flight"
@@ -216,6 +224,9 @@ class TravelIntakeRequest(BaseModel):
     activity_restrictions: List[ActivityRestriction] = Field(default_factory=list)
     restriction_severity: Dict[ActivityRestriction, RestrictionSeverity] = Field(default_factory=dict)
     restriction_notes: Optional[str] = Field(default=None, max_length=1000)
+    # Shown under "Mobility or accessibility"; dropped when it isn't selected.
+    accessibility_needs: List[AccessibilityNeed] = Field(default_factory=list)
+    accessibility_needs_other: Optional[str] = Field(default=None, max_length=500)
 
     # Step 9. Coordinates/country are optional extras a places-autocomplete
     # widget can send; without them the backend geocodes departure_location.
@@ -233,6 +244,11 @@ class TravelIntakeRequest(BaseModel):
     check_out_date: Optional[date] = None
     travel_period: Optional[TravelPeriod] = None
     trip_nights: Optional[int] = Field(default=None, ge=1, le=MAX_TRIP_NIGHTS)
+    # Optional travel window for flexible or month/season timing ("any 5 nights
+    # between 1 and 20 December"). Kept separate from trip_nights and never
+    # turned into exact dates.
+    earliest_check_in: Optional[date] = None
+    latest_check_out: Optional[date] = None
 
     # Step 11 -- USD per room, per night, for the listed guests.
     currency: Literal["USD"] = "USD"
@@ -340,6 +356,15 @@ class TravelIntakeRequest(BaseModel):
         if _blank(self.restriction_notes):
             self.restriction_notes = None
 
+        if ActivityRestriction.mobility_accessibility in self.activity_restrictions:
+            if not _unique(self.accessibility_needs):
+                raise ValueError("accessibility_needs must not contain duplicates.")
+            if AccessibilityNeed.other not in self.accessibility_needs or _blank(self.accessibility_needs_other):
+                self.accessibility_needs_other = None
+        else:
+            self.accessibility_needs = []
+            self.accessibility_needs_other = None
+
     def _validate_departure(self) -> None:
         if _blank(self.departure_location):
             # "Decide later": nothing to locate, so stale autocomplete extras are dropped.
@@ -386,6 +411,15 @@ class TravelIntakeRequest(BaseModel):
         if self.trip_nights is None:
             raise ValueError("trip_nights is required.")
 
+        if self.travel_timing == TravelTiming.exact_dates:
+            self.earliest_check_in = None
+            self.latest_check_out = None
+        else:
+            if self.earliest_check_in and self.earliest_check_in < date.today() and not allow_past_check_in:
+                raise ValueError("earliest_check_in cannot be in the past.")
+            if self.earliest_check_in and self.latest_check_out and self.latest_check_out <= self.earliest_check_in:
+                raise ValueError("latest_check_out must be after earliest_check_in.")
+
     @property
     def budget_open_ended(self) -> bool:
         """True when the guest chose the slider's "$7,000+" top value."""
@@ -405,18 +439,12 @@ class DateRecommendationRequest(TravelIntakeRequest):
     """
 
     budget_per_night: Optional[float] = Field(default=None, ge=BUDGET_MINIMUM, le=BUDGET_MAXIMUM)
-    earliest_check_in: Optional[date] = None
-    latest_check_out: Optional[date] = None
     destination_id: Optional[str] = Field(default=None, max_length=50)
 
     @model_validator(mode="after")
     def _validate_date_request(self):
         if self.travel_timing == TravelTiming.exact_dates:
             raise ValueError("The guest already chose exact dates; date suggestions are for flexible or month/season timing.")
-        if self.earliest_check_in and self.earliest_check_in < date.today():
-            raise ValueError("earliest_check_in cannot be in the past.")
-        if self.earliest_check_in and self.latest_check_out and self.latest_check_out <= self.earliest_check_in:
-            raise ValueError("latest_check_out must be after earliest_check_in.")
         return self
 
     @property

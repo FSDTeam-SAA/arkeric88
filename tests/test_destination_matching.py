@@ -321,7 +321,7 @@ def test_goal_with_no_catalog_coverage_is_reported_as_a_data_gap():
 
 def test_budget_gap_is_reported_while_no_prices_are_verified():
     result = rank_destinations(_profile(build_intake()), None)
-    assert any("verified nightly price" in gap for gap in result.data_gaps)
+    assert any("nightly price yet" in gap for gap in result.data_gaps)
 
 
 # ==================== explanation ====================
@@ -330,8 +330,10 @@ def test_suggestion_ties_reasons_to_guest_labels_and_states_what_is_unverified()
     profile = _profile(build_intake(**exact_dates(nights=5)))
     item = select_diverse(rank_destinations(profile, None).ranked)[0]
     suggestion = build_suggestion(item, profile, None)
-    assert "restored" in suggestion["match_reasons"][0]
-    assert suggestion["primary_feeling"] == "Restored"
+    assert suggestion["match_reasons"][0].startswith("For restoration")
+    # Both selected goals, main goal first -- not just the first one clicked.
+    assert suggestion["primary_feeling"] == "Restored and reflective"
+    assert suggestion["feelings"] == ["Restored", "Reflective"]
     verification = suggestion["verification"]
     assert verification["candidate_status"] in {"CANDIDATE_ONLY", "LOCATION_ENRICHED"}
     assert verification["verified_nightly_usd"] is None
@@ -343,7 +345,8 @@ def test_suggestion_ties_reasons_to_guest_labels_and_states_what_is_unverified()
     facts = " ".join(suggestion["unresolved_facts"])
     assert "Source review pending" not in facts
     assert "confirmed for your dates" in facts
-    assert "entry, safety and accessibility guidance" in facts
+    # General travel guidance is shown once per result (general_notes), not on every card.
+    assert "entry, safety and accessibility guidance" not in facts
     assert suggestion["evidence"]["destination_source_url"].startswith("http")
     if item.destination.specific_tradeoffs:
         assert suggestion["tradeoffs"]
@@ -373,14 +376,14 @@ def test_card_text_has_no_staff_wording_or_catalog_templates(destination_id):
                   "required transfers", "packed schedule"):
         assert staff not in text, text
     if destination_id == "NE-1159151605":
-        assert "Shanghai offers" in suggestion["match_reasons"][0]
+        assert suggestion["description"].startswith("Shanghai offers")
 
 
-def test_flexible_timing_is_labelled_inspiration_only():
+def test_flexible_timing_says_prices_come_with_dates():
     profile = _profile(build_intake())
     item = rank_destinations(profile, None).ranked[0]
     facts = " ".join(build_suggestion(item, profile, None)["unresolved_facts"])
-    assert "inspiration only" in facts
+    assert "checked once you choose dates" in facts
 
 
 @pytest.mark.parametrize("field_name", ["recent_feelings_other", "trip_prompt_other"])

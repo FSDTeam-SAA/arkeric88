@@ -102,8 +102,8 @@ HEADLINE_PREFIX = "Designed to help you feel:"
 
 
 def primary_feeling(profile: TripProfile) -> str:
-    """The guest's first selected feeling: the one the itinerary is designed around."""
-    return TRIP_GOAL_FEELING_WORDS[profile.goals[0]]
+    """Every selected feeling, main one first ("Restored and reflective"), as on the destination cards."""
+    return profile.feeling_label
 
 
 def headline(profile: TripProfile) -> str:
