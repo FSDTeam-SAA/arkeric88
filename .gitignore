@@ -9,7 +9,6 @@ wheels/
 # Virtual environments
 .venv
 
-.env
 .env.viator.sandbox
 
 # Durable session storage (src/session/session_persistence.py)
@@ -20,3 +19,5 @@ personal/
 src/personal
 # data/
 # *.md
+config.bat
+node_modules
