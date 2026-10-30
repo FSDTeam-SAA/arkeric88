@@ -1,0 +1,15 @@
+services:
+  api:
+    image: tauhidhasansaa/arkeric88:latest
+    container_name: arkeric88-api
+    restart: unless-stopped
+    # Keep a .env file next to this compose file (see .env.example).
+    env_file:
+      - .env
+    ports:
+      - "8000:8000"
+    volumes:
+      - sessions_data:/app/storage
+
+volumes:
+  sessions_data:

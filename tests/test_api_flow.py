@@ -103,7 +103,7 @@ class TravelPlannerFlowTests(unittest.TestCase):
             }]
 
             # Step 1: rank the catalog, get real destinations with destination_id + match_score.
-            initial = self.client.post("/v2/get_suggested_city", json=build_intake())
+            initial = self.client.post("/v1/get_suggested_city", json=build_intake())
             self.assertEqual(initial.status_code, 200)
             suggested_cities = initial.json()["suggested_cities"]
             self.assertTrue(suggested_cities)
@@ -116,7 +116,7 @@ class TravelPlannerFlowTests(unittest.TestCase):
 
             # Regenerate: deterministic, excludes destinations already shown.
             regenerated = self.client.post(
-                "/v2/regenerate_suggested_city",
+                "/v1/regenerate_suggested_city",
                 json={"session_id": session_id, "user_instruction": "something different"},
             )
             self.assertEqual(regenerated.status_code, 200)
@@ -125,13 +125,13 @@ class TravelPlannerFlowTests(unittest.TestCase):
 
             # Step 2: select a destination by destination_id, get activities.
             plan = self.client.post(
-                "/v2/get_tour_plan",
+                "/v1/get_tour_plan",
                 json={"session_id": session_id, "destination_id": first_city["destination_id"]},
             )
             self.assertEqual(plan.status_code, 200)
             self.assertEqual(plan.json()["source"], "generated")
             plan_regenerated = self.client.post(
-                "/v2/regenerate_tour_plan",
+                "/v1/regenerate_tour_plan",
                 json={
                     "activity_session_id": plan.json()["activity_session_id"],
                     "day_to_regenerate": 1,
@@ -145,7 +145,7 @@ class TravelPlannerFlowTests(unittest.TestCase):
                 activity for activity in regenerated_activities if activity["item_type"] == "experience"
             )
             self.assertEqual(first_experience["activity_name"], "Cafe Central")
-            details = self.client.get(f"/v2/session/{session_id}")
+            details = self.client.get(f"/v1/session/{session_id}")
             self.assertEqual(details.status_code, 200)
             self.assertEqual(details.json()["intake"]["trip_goals"], ["restoration", "reflection"])
             self.assertEqual(len(details.json()["suggested_cities"]), len(regenerated_ids))

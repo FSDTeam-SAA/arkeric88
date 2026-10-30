@@ -1,0 +1,29 @@
+# Secrets are passed at runtime, never baked into the image
+.env
+.env.*
+
+# Git, editor and Python caches
+.git
+.gitignore
+.vscode
+.venv
+.pytest_cache
+**/__pycache__
+**/*.py[oc]
+
+# Not needed at runtime
+docs
+tests
+README.md
+test.py
+google_places_example.py
+new.json
+response.json
+Dockerfile
+.dockerignore
+docker-compose.yml
+
+# Local sessions, and source files the API does not load
+data/sessions.sqlite3*
+data/*.xlsx
+data/*.json

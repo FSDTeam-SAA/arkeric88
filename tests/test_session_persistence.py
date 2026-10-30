@@ -16,9 +16,9 @@ def _restart() -> None:
 
 
 def test_saved_search_reopens_after_a_restart():
-    created = client.post("/v2/get_suggested_city", json=build_intake()).json()
+    created = client.post("/v1/get_suggested_city", json=build_intake()).json()
     _restart()
-    reopened = client.get(f"/v2/session/{created['session_id']}")
+    reopened = client.get(f"/v1/session/{created['session_id']}")
     assert reopened.status_code == 200
     assert [city["destination_id"] for city in reopened.json()["suggested_cities"]] == [
         city["destination_id"] for city in created["suggested_cities"]
@@ -48,21 +48,21 @@ def test_saved_itinerary_reopens_after_a_restart():
 
 
 def test_deleting_a_search_removes_it_from_storage_too():
-    created = client.post("/v2/get_suggested_city", json=build_intake()).json()
-    assert client.delete(f"/v2/session/{created['session_id']}").status_code == 200
+    created = client.post("/v1/get_suggested_city", json=build_intake()).json()
+    assert client.delete(f"/v1/session/{created['session_id']}").status_code == 200
     _restart()
-    assert client.get(f"/v2/session/{created['session_id']}").status_code == 404
+    assert client.get(f"/v1/session/{created['session_id']}").status_code == 404
 
 
 def test_unknown_session_is_still_a_clear_404():
-    response = client.get("/v2/session/does-not-exist")
+    response = client.get("/v1/session/does-not-exist")
     assert response.status_code == 404
     assert response.json()["detail"] == "Session not found."
 
 
 def test_cross_origin_requests_are_allowed():
     response = client.options(
-        "/v2/get_suggested_city",
+        "/v1/get_suggested_city",
         headers={"Origin": "https://app.example.com", "Access-Control-Request-Method": "POST"},
     )
     assert response.status_code == 200

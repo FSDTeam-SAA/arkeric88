@@ -37,6 +37,7 @@ from src.core.price_estimates import (
     parse_price_rows,
 )
 from src.core.trip_profile import build_trip_profile
+from src.tools.tools import _extract_photo_urls
 from intake_fixtures import build_intake, exact_dates
 
 AUSTIN = Origin(
@@ -256,6 +257,14 @@ def test_reasons_never_repeat_an_introduction_built_from_the_rationale():
     suggestion = build_suggestion(item, profile, None)
     assert suggestion["description"].startswith("Tuzla offers")
     assert not any(suggestion["description"].rstrip(".") in reason for reason in suggestion["match_reasons"])
+
+
+def test_photos_are_requested_at_the_largest_size_google_allows():
+    urls = _extract_photo_urls({"photos": [{"name": "places/abc/photos/def"}]}, "test-key")
+    assert urls == [
+        "https://places.googleapis.com/v1/places/abc/photos/def/media"
+        "?key=test-key&maxHeightPx=4800&maxWidthPx=4800"
+    ]
 
 
 def test_any_country_spelled_two_ways_gets_one_name():

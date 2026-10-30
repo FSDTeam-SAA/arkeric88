@@ -1,7 +1,7 @@
 # Client test request bodies (October 2026 customer tests)
 
-The client's five questionnaire tests as `POST /v2/get_suggested_city` bodies, for Swagger
-(`http://localhost:8000/docs` → **POST /v2/get_suggested_city** → *Try it out* → paste a file).
+The client's five questionnaire tests as `POST /v1/get_suggested_city` bodies, for Swagger
+(`http://localhost:8000/docs` → **POST /v1/get_suggested_city** → *Try it out* → paste a file).
 The old path `/get_suggested_city` still works and gives the same result.
 Each file differs from Test 1 only where the client's test changed it.
 

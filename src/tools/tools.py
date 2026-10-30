@@ -39,6 +39,11 @@ def _apply_location_bias(
     return payload
 
 
+# Places Photos needs a size and rejects anything above 4800, so this is the
+# closest to "no limit": each photo comes back at its original size up to 4800 px.
+PHOTO_MAX_PX = 4800
+
+
 def _extract_photo_urls(place: dict, api_key: str, max_photos: int = 4) -> list[str]:
     """Return up to `max_photos` direct image URLs for a place, if any exist."""
     photos = place.get("photos", [])
@@ -48,7 +53,7 @@ def _extract_photo_urls(place: dict, api_key: str, max_photos: int = 4) -> list[
         if resource_name:
             urls.append(
                 f"https://places.googleapis.com/v1/{resource_name}/media"
-                f"?key={api_key}&maxHeightPx=400"
+                f"?key={api_key}&maxHeightPx={PHOTO_MAX_PX}&maxWidthPx={PHOTO_MAX_PX}"
             )
     return urls
 

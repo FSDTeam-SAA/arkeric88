@@ -61,7 +61,7 @@ def _fake_ai(feeling_supported=lambda prompt: True) -> MagicMock:
 
 
 def _suggest(payload: dict):
-    return client.post("/v2/get_suggested_city", json=payload)
+    return client.post("/v1/get_suggested_city", json=payload)
 
 
 def _tool(return_value) -> MagicMock:
@@ -212,7 +212,7 @@ def test_regenerate_never_repeats_until_exhausted_then_404():
     session_id = initial["session_id"]
     seen = {city["destination_id"] for city in initial["suggested_cities"]}
     for _ in range(40):
-        response = client.post("/v2/regenerate_suggested_city", json={"session_id": session_id})
+        response = client.post("/v1/regenerate_suggested_city", json={"session_id": session_id})
         if response.status_code == 404:
             break
         assert response.status_code == 200
@@ -227,7 +227,7 @@ def test_regenerate_never_repeats_until_exhausted_then_404():
 def test_regenerate_with_intake_updates_lets_the_guest_flex_a_constraint():
     blocked = _suggest(BLOCKED).json()
     assert blocked["match_status"] == "no_valid_result"
-    response = client.post("/v2/regenerate_suggested_city", json={
+    response = client.post("/v1/regenerate_suggested_city", json={
         "session_id": blocked["session_id"],
         "user_instruction": "Happy to fly further",
         "intake_updates": {"travel_distance": "anywhere"},
@@ -235,7 +235,7 @@ def test_regenerate_with_intake_updates_lets_the_guest_flex_a_constraint():
     assert response.status_code == 200
     data = response.json()
     assert data["match_status"] == "matched"
-    details = client.get(f"/v2/session/{blocked['session_id']}").json()
+    details = client.get(f"/v1/session/{blocked['session_id']}").json()
     assert details["intake"]["travel_distance"] == "anywhere"
     assert details["shown_destination_ids"] == [c["destination_id"] for c in data["suggested_cities"]]
     assert details["regeneration_history"][-1]["intake_updated"] is True
@@ -243,7 +243,7 @@ def test_regenerate_with_intake_updates_lets_the_guest_flex_a_constraint():
 
 def test_regenerate_party_change_does_not_carry_stale_counts():
     initial = _suggest(build_intake(travel_party="family", party_adults=2, party_children=2)).json()
-    response = client.post("/v2/regenerate_suggested_city", json={
+    response = client.post("/v1/regenerate_suggested_city", json={
         "session_id": initial["session_id"],
         "intake_updates": {"travel_party": "solo"},
     })
@@ -252,17 +252,17 @@ def test_regenerate_party_change_does_not_carry_stale_counts():
 
 def test_regenerate_with_invalid_update_is_422_and_keeps_the_session():
     initial = _suggest(build_intake()).json()
-    response = client.post("/v2/regenerate_suggested_city", json={
+    response = client.post("/v1/regenerate_suggested_city", json={
         "session_id": initial["session_id"],
         "intake_updates": {"trip_goals": ["restoration", "growth", "adventure"]},
     })
     assert response.status_code == 422
-    details = client.get(f"/v2/session/{initial['session_id']}").json()
+    details = client.get(f"/v1/session/{initial['session_id']}").json()
     assert details["intake"]["trip_goals"] == ["restoration", "reflection"]
 
 
 def test_regenerate_unknown_session_is_404():
-    response = client.post("/v2/regenerate_suggested_city", json={"session_id": "missing"})
+    response = client.post("/v1/regenerate_suggested_city", json={"session_id": "missing"})
     assert response.status_code == 404
 
 
@@ -294,7 +294,7 @@ def _plan(session_id: str, ai: MagicMock = None, **body):
          patch("app.router.city_content_route.get_detailed_tourist_places", places), \
          patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", hotels), \
          patch("app.router.city_content_route.get_nearby_restaurants", restaurants):
-        response = client.post("/v2/get_tour_plan", json={"session_id": session_id, **body})
+        response = client.post("/v1/get_tour_plan", json={"session_id": session_id, **body})
     return response, ai, places, hotels, restaurants
 
 
@@ -336,7 +336,7 @@ def test_itinerary_opens_with_the_feeling_behind_the_journey():
     assert {item["activity_name"] for item in block["supporting_experiences"]} <= names
     assert ai.call_count == 2  # itinerary + feeling block, no revision needed
 
-    details = client.get(f"/v2/activity_session/{data['activity_session_id']}").json()
+    details = client.get(f"/v1/activity_session/{data['activity_session_id']}").json()
     assert details["feeling_block"]["headline"] == block["headline"]
     cached, *_ = _plan(initial["session_id"], destination_id=chosen["destination_id"])
     assert cached.json()["feeling_block"]["headline"] == block["headline"]
@@ -389,7 +389,7 @@ def test_private_free_text_never_reaches_the_llm_or_travel_tools():
     sent = repr(ai.call_args_list) + repr(places.invoke.call_args_list) + repr(hotels.invoke.call_args_list) \
         + repr(restaurants.invoke.call_args_list)
     assert "PRIVATE" not in sent
-    assert "PRIVATE" not in repr(client.get(f"/v2/session/{initial['session_id']}").json()["regeneration_history"])
+    assert "PRIVATE" not in repr(client.get(f"/v1/session/{initial['session_id']}").json()["regeneration_history"])
 
 
 def test_get_tour_plan_accepts_a_suggested_city_by_name():
@@ -437,7 +437,7 @@ def test_stay_over_budget_is_reported_not_hidden():
          patch("app.router.city_content_route.get_detailed_tourist_places", _tool([])), \
          patch("app.router.city_content_route.get_google_hotels_sorted_by_rating", luxury), \
          patch("app.router.city_content_route.get_nearby_restaurants", _tool([])):
-        response = client.post("/v2/get_tour_plan", json={"session_id": initial["session_id"], "destination_id": chosen})
+        response = client.post("/v1/get_tour_plan", json={"session_id": initial["session_id"], "destination_id": chosen})
     budget = response.json()["budget_check"]
     assert budget["stay_within_budget"] is False
     assert "not changed" in budget["note"]
