@@ -1,0 +1,662 @@
+{
+  "http_status": 200,
+  "fields_not_supported_by_this_build": [],
+  "body": {
+    "session_id": "ca126235-b37b-415a-b83e-7f1311ccf143",
+    "match_status": "matched",
+    "suggested_cities": [
+      {
+        "city_name": "Ubud",
+        "country_name": "Indonesia",
+        "number_of_days": 5,
+        "primary_feeling": "Restored and reflective",
+        "description": "Ubud is known for art, nature, food and yoga, in a town and jungle setting.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLfi4G6goWeMUzNVEljr7DlfiGZy5R7PlDx-sb2VpLJJFJdj2y6RvsN65x2iJYDYV5gcjJ6Jd5JbX8n0ijCh-xvHkYdvgRl7mKkUO_v_k3EX_Zwx5ZDHei7ymMVKQWqTM9DWOY0tHRKp9O7IDluYnDH-2XEsEj9Bk8l-I_YVQOdfFgpSEBqhLDPimGMQKFh5TU9v9ZXF9a4Y4PBV4cs3229yMp7L9c2oZZA48rFSdPg0QLhue6IuZVrNiVqR00BdnvFV0oPtUGzOLWRwgFdBd6uA_48Zx_-Z-Jg6ky17U6XJD3HMbFNLUc19B4MkcjGeV1pMbVEX1bpM_kcTKIS3AyN3bqvNX74Z4_ONnF-I6uAoGpX4a67FUSaWH9kEhRqgHN4zHIBGfnHLa4iMKZr7k4vP3ts/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLeAG4Ukc6DNW5kZ6cPKoEYUJdLAzaWSYT1vhhETvxivSxTVLBAx8OR02cmPsXQZnOreIuzKsEs8Vvc-YePpCOtJTC_cb0ActstWUm3PJMrjyHG_jMLJXYsV2vD_BSZe5OXGBqquEt-6QTe5MiBBD733-Z3kt0avNLb-KnpxA2KnVDwyUmkbPtYhwuxfGE-Raq3kuvbL8pohvO43md6yjL1PpSWBPC_2GZ_GvWWXqs8lheOBrmNjOTG2i3QCwSzrsvyF-m_I-ZYk_-sk-HHT_37BkBPuY_QMfFOehK0HfvpTyA27nZI-XK8-172V1NB7cRFWR4oRDso-o0N42qZ4APmRoIsipZno8kkPUpEDogh-6zZbUdKJrXeORWB5rGuDmkvCYSgbXihhDvcLEupkNN9RTyH744I/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLcU9sXA4gCmqyV_a_q0C2zgwQvAQnR5HkdNYyXZy7fqNF16pT7cSunH6HO3TIxW9F1PTb-bwYY9whWp_UT8jHDsdgdetma4OdASfP5fgS1stHfq85_ORXSX0StrZnXnSqVMX_twSp8G46x_fXjQ0ravT2_WzYqTx0DQ8MaIRu0xdd5gvtKhuobhRcSnswD6nMQvX7A5CNiunh75xVZTQsepA-62ON7M8HQBfbTXuPSlZ8MA_mYHWClaC6QEx3EuPIroM0kQAEmYnMoT7deO5eGwxF4O_zUua1XyHGpaFBVy78JlTgHHmaEGwp90uEeieu35DDPPwanRijwfevrfC4EHuqphwk63mAN4xGz2aaTXeRpFAuBBnPMVzjsZo8sB_ge3SLTyHqq3HnAWi06WYw0-XA/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLdTaVr0o9QKUANROPlLF_lybdeU0NIjARIs73xoODQF1IHFyqpYhckas0zD0fKKYTPDDo6JNMESRSh1SMqyrvmsRiQVwCrDtMpIcaW6h50EEdKbKnzx_Oz9vIwnN6rGTZNOqDCknC-EIj8EJhSEFsZ_zNRiXzajTO9_P46NJjlslZvaLPih-RjlcWyDcMmfmgNdXiC3nknt-BtSS_q-OmP-vLF53hmNM6RgouZV1j1Lo4SZ0dXmFLXpozAQAqmwN8XMfG10w1LYUB8kOQ9-J3UXT7qEnDveBcFh5UTT8H_drclABUyVC3xAoWjlEFjKpxg3LZNtTamZBUYKGGlhAq_K9KcUFjqy5eX1SJ8IzLT7P8pJNTi-a5WEKr1mxMIBa1jMK4KbiHqGSa7BTE1FOo8tBHY/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+        ],
+        "latitude": -8.5068536,
+        "longitude": 115.26247780000001,
+        "destination_id": "ID-UBU",
+        "world_region": "Asia",
+        "match_score": 87,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 25.0,
+          "settings": 15.0,
+          "pace": 10.0,
+          "travel_distance": 5.56,
+          "prefer_avoid_penalty": 0.0,
+          "unverified_must_avoid_penalty": 0.0,
+          "travel_effort_penalty": -8.89,
+          "budget_penalty": 0.0,
+          "evidence_penalty": 0.0
+        },
+        "match_reasons": [
+          "For restoration and reflection: nature, yoga and jungle.",
+          "It has what you're drawn to: nature and wildlife; quiet and privacy (a gentle pace); spa and wellness (yoga).",
+          "The town and jungle setting suits your preference for forest or jungle."
+        ],
+        "tradeoffs": [
+          "Worth knowing: traffic and busy core areas.",
+          "A long journey for a 5-night trip: about 15,820 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+        ],
+        "unresolved_facts": [
+          "Prices and availability are checked once you choose dates."
+        ],
+        "warnings": [
+          "Worth knowing: traffic and busy core areas.",
+          "A long journey for a 5-night trip: about 15,820 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+        ],
+        "restriction_checks": [
+          {
+            "restriction": "no_intense_activity",
+            "label": "No intense activity",
+            "severity": "prefer_avoid",
+            "status": "no_catalog_concern",
+            "detail": "No known concern here; we'll still confirm it for your trip."
+          }
+        ],
+        "distance_check": {
+          "status": "no_limit",
+          "straight_line_km": 15820,
+          "detail": "About 15,820 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "evidence_tier": "editorial",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_estimate": null,
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+          "internal_notes": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+            "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+          ]
+        },
+        "evidence": {
+          "destination_source_url": "https://www.indonesia.travel/uk/en/destination/bali-nusa-tenggara/bali/ubud",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Ubud",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-10-30T06:31:30.460180+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Rishikesh",
+        "country_name": "India",
+        "number_of_days": 5,
+        "primary_feeling": "Restored and reflective",
+        "description": "Rishikesh is known for yoga, river and culture, in a river and foothills setting.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLfH8F9UTWbgicJaFZXJlouOrrwG9I7HyC0CJ_vuSfNibfI2R_xbmmuPfbxaPsrkTSYjrdV63flxNm85YY8ao8I-TdDuKMT3-Abbp8FJxmu-G4apdAe1jTrfTosWna_OFubEdVl3GEP4sLbUmzXbZBB1y21DBgsnRewHLh3w8Y0UixzDPrZ4jW9GmeZryuMw2Ity8pVLZrnNOJlXICaXpIAjsXTvekeGq0ew6xROSNa02Q8Zsl7Kk3n8Ot4Wv_G1n3Qx3-x3iuAhr0i6P4ibCSBIsu-_sXI9Dp8x4VwmfNdINzNzN06MJTuN1PX0s2AIOr0-QoO9uhef4phy-0HMzSItIxqQ8vQEx-Tl9d4nskcrNqoYRDMUbom0qTgv8ofOFpAyn71jrlKfPUamnR5Gprf2g2U/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLdDkm5SIMyP5QXDxUyj5lzpsfcc2kTaxDGBmvyFSaXjHZQA2TcHMbU1Pukm_LxwYBhadx6iB7yFdTRT9RDOVs7HTlMEk_-7R7CHpxX9YTcM6_VGUgm_-F1B9Kc1vso_t6LE28-L6QLJDwO1aa5pLBM2Ebkok1L66WV4bCEgdeD0jucoc0jmHXHUUW0nret3JhYM0gMpwb5H0NtvPIW2MWgBMfmIEzzGP5cqreTWHem9TeZCu8tPJZqa4NAUfUCWYt5z_RZ6Ti5fEDASkyUV5UJpzQzAeWdYzy61f_5JRkqi1QHVmllC3g7A0pEBVDOMzhPFN6jYNa-KVflssSa1YF4hlNRWOqysB8bMUIeJhui2LIRAR4N8NmJg908KgVmk20mngKHDMZdUlogA9np9gudsNMB0hnTHyAutXHVt8I5_Ag/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLdLMqPQBgc9dY0uWV3JKeehVPexZcHVLwauNnnVMXUvsqqzyhTP9ZJPjZ8vh7NE-XKQx0v-LNANTgWgEZWqbViDXj1ldOjRzORO3-_GOMNGr8AuGVAAIud0S8DYI8pDq_uuhNL1aqh56HC7zhIwN_GshlGo8VaRJAFcoQ-L9nnkvTvgUV6k9_rcattqycjkxriigxTTDslxFQjK_iFM_oejgmlxCL7b8feXCCys4fGVuBMLWyYFW4MOPu6hC-VFe3NqvSdKbEq0CmXGGf0oIpRCYcxLy3UZ_h4q0fOyOW09D-8rPrkKawkDG9jLAINfQGCBwcCzfrlQhtXbzuHaoRfNUFicZBmcyd4_xY6OAxsoCdFaXhGr_8RAAQRGghPzwV0jB5_zN5A2jyTXeVwbSvM3h-Z0lDw/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLfx_sXl5DtPtNtsblXu-0voXA0VFLsCrf74SS3C6gJvT9P6Gjo_Ebt1d2mWH7RzQIiDX1mX7m0ZB3KtD1pNtUcUs8AeNwqVK8RnCZuqpJkInNgXb6Ylc0u9Hto00mYHogOe-vnIDMsXGbye5jvsE7qkRNfgdTyaSnNj1i6oOXftSMQglpEhkrzt0Mer-SELpyGjrVTG8uufEXUifzK2UiZAWrII9lG3V7eOU6qOZWTRXRBc5X2wDIsnxZNzmTyZk8rCLc7ffd0cAtLx-8ZdAsgdfsnt4PNxMwnrJAa3CdDir_E5yclmwRC7CQJMSNn3LynB_5q9HuAK2Y76DW_jjbrfh1PzKVNjb0n4jAxupJWjM2lxk1wDbAlKchXKKu4SdFWnbSEG2Eo2n-S3VPZbB4IBSTNo/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+        ],
+        "latitude": 30.115761899999995,
+        "longitude": 78.28530169999999,
+        "destination_id": "IN-RIS",
+        "world_region": "Asia",
+        "match_score": 78,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 16.67,
+          "settings": 15.0,
+          "pace": 10.0,
+          "travel_distance": 5.56,
+          "prefer_avoid_penalty": 0.0,
+          "unverified_must_avoid_penalty": 0.0,
+          "travel_effort_penalty": -8.89,
+          "budget_penalty": 0.0,
+          "evidence_penalty": 0.0
+        },
+        "match_reasons": [
+          "For restoration: yoga and river.",
+          "For reflection: yoga, river and foothills.",
+          "It has what you're drawn to: quiet and privacy (a gentle pace); spa and wellness (yoga).",
+          "The river and foothills setting suits your preference for mountains."
+        ],
+        "tradeoffs": [
+          "Worth knowing: practice traditions and comfort level vary.",
+          "A long journey for a 5-night trip: about 13,288 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+        ],
+        "unresolved_facts": [
+          "Prices and availability are checked once you choose dates."
+        ],
+        "warnings": [
+          "Worth knowing: practice traditions and comfort level vary.",
+          "A long journey for a 5-night trip: about 13,288 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+        ],
+        "restriction_checks": [
+          {
+            "restriction": "no_intense_activity",
+            "label": "No intense activity",
+            "severity": "prefer_avoid",
+            "status": "no_catalog_concern",
+            "detail": "No known concern here; we'll still confirm it for your trip."
+          }
+        ],
+        "distance_check": {
+          "status": "no_limit",
+          "straight_line_km": 13288,
+          "detail": "About 13,288 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "evidence_tier": "editorial",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_estimate": null,
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+          "internal_notes": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+            "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+          ]
+        },
+        "evidence": {
+          "destination_source_url": "https://www.incredibleindia.gov.in/en/uttarakhand/rishikesh/gita-bhawan",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Rishikesh",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-10-30T06:31:30.436827+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Sedona",
+        "country_name": "United States",
+        "number_of_days": 5,
+        "primary_feeling": "Restored and reflective",
+        "description": "Sedona is known for red rocks, hiking and art, in a desert setting.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLc89mxIFL-S36hjVua9hPBdlRLS5-7z0KEd5PSIiVvrPMaNQCOrbvSTtuY6kD-RI005vdEbUXdSEHQfjzMuLym6GyJzmhLV-F6prP7Rhf7iTjTTjzTm384XtWRSt-_HO54TiN7Nc37To_7M4aQSfjx7neHDe66zN9j_CfxNiR26T4R-6WyaXWwx516VxZjBYqB9p-mQZGssZXxaoptu7wMtAt-j1Ee1I91RSQhXjCBOu8eOPNYrw_eYbwDxtEjH2JdELGs12R5rIUkxhOjC0sxUWTYJFPddNZ38hf7I1wmOFMyiWg-1R0caQPCP8mTdFNMVSeM76lAEAezRER-Qf1y2ph19OGY_lQT72ugcH6bAyCUKz2UkbhY_-uA6cZJKgamrJq0h8ZRmB_XEMBnKmpi062w/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLfxQObKeOxrZAMrk_OpGgvtMEXTlIgl7N8yW8j2pNmWO-FP3pxyCdDK0MvvC_lzbl3crCzX7RbWoUs2e-tifwAuwe-9NGShlBIGbBXGxRS_L8Xotdw_7csyXdRUJKunsMmn-UPKPl3AkPFH4aiHYR2G8Eop3GZIjfMtJ87Qd5rGXyDWsKtU7cyuj1qR6yis2H4P5MVBjUn8kf2QkJKZkuEfng-F3fojA1pMQZfoKSfJzXkA9b1CnrxyhggjJT3Nl0xhXjRR3uT16Sg4Wfap1DKGk_U4V3_jQT1wNmvmuUnLpcBLqD4tzsFya3B48JAyzGV3y8KuCA2L0BVF0OKtpXYa8G785PQM6FKcZl0E-cCvM-iFPbsK_T-zk-5rsqae3tFU0L0ZNP60YGVjZdIr5vMiiNWeYynEYomS5dflL6VebQ/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLepBLMlG1wq_gXLP1Sn96nd7MHeVW9UpgJ1FALwugvlbr46O4R4nUt8wfmOUhXzdz_SaiNd4tJCar-fHml9HnN1pIN5mv9GaA1TNRw_Kg6shT3dRZenzqh9npaLnAXyLl6YPZLDjP1aS_hkGA95GNybiUIH-x6kZHxURrMIYtetiaEc6Y06CTdR79qlWQTT_zrL1jQQSLfOs2ZG2Wttm_XlOBORxhApwBA-6gunSfp-4t5P4ZyqEsXPgsAk1N8dl4tCbP92IOqwQjXq18CBEKvL-Xu42N9a4DnTQsVBBuLuaAfm2l0qwM4z_LQ9sPfgXqqHWKX2wJI2kkYIvYhhuT-DM4tV38d5vXWqj1s7GfzIyOfZJHGaSlzdGvwWNeZP8u0tH-ACDu5_VenSZKP0vkG4hqak_4O-ZPLF6iWONE8aNA/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLd4m2PLiikM8Vmn3hEYPmF_bx1aFsdgCHeIS1HKeIGpQjzp1CoOiqvkiM5G8nn-UQZiHeAttFCOYpbpZfbfJ5QZHaEUOOsevgEo4rj4mPu5CAfgdaH87LfyfBtMDFmRfSYoYlct4jlyX9twomGQCccfB6fMF_-mWPKeNIjAgdp0mNdLXJqc91gus9Vz7TvLxwA-pX9E-oBm62Q-8c_sNM7lKvTdL3JztcwS5YkYetyGZeC59uCjh3FacrPQzjZD-Pn3BTC2aOgpArbtVayjUiyyffIMI2psF1JHQBQfbZ1F9fiqqzpqoSQ8FW3KbxCWBFLxBzXEiGFmWBmujMDFyQEjLalEJKV5igHdIyG9TwW_H5jIMHoFUzMc8i_qML1Yg33FVIYlo0shkk1ZhnhLAh1xZ2k/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+        ],
+        "latitude": 34.86175980000001,
+        "longitude": -111.81394360000002,
+        "destination_id": "US-SED",
+        "world_region": "North America",
+        "match_score": 72,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 16.67,
+          "settings": 0.0,
+          "pace": 5.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0,
+          "unverified_must_avoid_penalty": 0.0,
+          "travel_effort_penalty": -0.0,
+          "budget_penalty": 0.0,
+          "evidence_penalty": 0.0
+        },
+        "match_reasons": [
+          "For restoration: visual landscape and reflective time.",
+          "For reflection: red rocks and desert.",
+          "It has what you're drawn to: nature and wildlife (red rocks); quiet and privacy.",
+          "About 1,413 km from Austin in a straight line, a comfortable distance for 5 nights."
+        ],
+        "tradeoffs": [
+          "Worth knowing: popular trails can be crowded.",
+          "Its desert setting isn't one you picked (mountains, forest or jungle), so it ranks lower for setting."
+        ],
+        "unresolved_facts": [
+          "Prices and availability are checked once you choose dates."
+        ],
+        "warnings": [
+          "Worth knowing: popular trails can be crowded.",
+          "Its desert setting isn't one you picked (mountains, forest or jungle), so it ranks lower for setting."
+        ],
+        "restriction_checks": [
+          {
+            "restriction": "no_intense_activity",
+            "label": "No intense activity",
+            "severity": "prefer_avoid",
+            "status": "no_catalog_concern",
+            "detail": "No known concern here; we'll still confirm it for your trip."
+          }
+        ],
+        "distance_check": {
+          "status": "no_limit",
+          "straight_line_km": 1413,
+          "detail": "About 1,413 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "evidence_tier": "editorial",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_estimate": null,
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+          "internal_notes": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+            "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+          ]
+        },
+        "evidence": {
+          "destination_source_url": "https://visitsedona.com/",
+          "source_scope": "Tourism destination source; verify specific itinerary",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Sedona",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-10-30T06:31:29.793653+00:00"
+          }
+        }
+      }
+    ],
+    "response": {
+      "match_status": "matched",
+      "suggested_cities": [
+        {
+          "destination_id": "ID-UBU",
+          "city_name": "Ubud",
+          "country_name": "Indonesia",
+          "world_region": "Asia",
+          "number_of_days": 5,
+          "primary_feeling": "Restored and reflective",
+          "feelings": [
+            "Restored",
+            "Reflective"
+          ],
+          "description": "Ubud is known for art, nature, food and yoga, in a town and jungle setting.",
+          "latitude": -8.5068536,
+          "longitude": 115.26247780000001,
+          "match_score": 87,
+          "match_label": "Excellent match",
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 25.0,
+            "settings": 15.0,
+            "pace": 10.0,
+            "travel_distance": 5.56,
+            "prefer_avoid_penalty": 0.0,
+            "unverified_must_avoid_penalty": 0.0,
+            "travel_effort_penalty": -8.89,
+            "budget_penalty": 0.0,
+            "evidence_penalty": 0.0
+          },
+          "match_reasons": [
+            "For restoration and reflection: nature, yoga and jungle.",
+            "It has what you're drawn to: nature and wildlife; quiet and privacy (a gentle pace); spa and wellness (yoga).",
+            "The town and jungle setting suits your preference for forest or jungle."
+          ],
+          "tradeoffs": [
+            "Worth knowing: traffic and busy core areas.",
+            "A long journey for a 5-night trip: about 15,820 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+          ],
+          "unresolved_facts": [
+            "Prices and availability are checked once you choose dates."
+          ],
+          "warnings": [
+            "Worth knowing: traffic and busy core areas.",
+            "A long journey for a 5-night trip: about 15,820 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+          ],
+          "restriction_checks": [
+            {
+              "restriction": "no_intense_activity",
+              "label": "No intense activity",
+              "severity": "prefer_avoid",
+              "status": "no_catalog_concern",
+              "detail": "No known concern here; we'll still confirm it for your trip."
+            }
+          ],
+          "distance_check": {
+            "status": "no_limit",
+            "straight_line_km": 15820,
+            "detail": "About 15,820 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "evidence_tier": "editorial",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_estimate": null,
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+            "internal_notes": [
+              "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+              "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+              "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+            ]
+          },
+          "evidence": {
+            "destination_source_url": "https://www.indonesia.travel/uk/en/destination/bali-nusa-tenggara/bali/ubud",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Ubud",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-10-30T06:31:30.460180+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLfi4G6goWeMUzNVEljr7DlfiGZy5R7PlDx-sb2VpLJJFJdj2y6RvsN65x2iJYDYV5gcjJ6Jd5JbX8n0ijCh-xvHkYdvgRl7mKkUO_v_k3EX_Zwx5ZDHei7ymMVKQWqTM9DWOY0tHRKp9O7IDluYnDH-2XEsEj9Bk8l-I_YVQOdfFgpSEBqhLDPimGMQKFh5TU9v9ZXF9a4Y4PBV4cs3229yMp7L9c2oZZA48rFSdPg0QLhue6IuZVrNiVqR00BdnvFV0oPtUGzOLWRwgFdBd6uA_48Zx_-Z-Jg6ky17U6XJD3HMbFNLUc19B4MkcjGeV1pMbVEX1bpM_kcTKIS3AyN3bqvNX74Z4_ONnF-I6uAoGpX4a67FUSaWH9kEhRqgHN4zHIBGfnHLa4iMKZr7k4vP3ts/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLeAG4Ukc6DNW5kZ6cPKoEYUJdLAzaWSYT1vhhETvxivSxTVLBAx8OR02cmPsXQZnOreIuzKsEs8Vvc-YePpCOtJTC_cb0ActstWUm3PJMrjyHG_jMLJXYsV2vD_BSZe5OXGBqquEt-6QTe5MiBBD733-Z3kt0avNLb-KnpxA2KnVDwyUmkbPtYhwuxfGE-Raq3kuvbL8pohvO43md6yjL1PpSWBPC_2GZ_GvWWXqs8lheOBrmNjOTG2i3QCwSzrsvyF-m_I-ZYk_-sk-HHT_37BkBPuY_QMfFOehK0HfvpTyA27nZI-XK8-172V1NB7cRFWR4oRDso-o0N42qZ4APmRoIsipZno8kkPUpEDogh-6zZbUdKJrXeORWB5rGuDmkvCYSgbXihhDvcLEupkNN9RTyH744I/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLcU9sXA4gCmqyV_a_q0C2zgwQvAQnR5HkdNYyXZy7fqNF16pT7cSunH6HO3TIxW9F1PTb-bwYY9whWp_UT8jHDsdgdetma4OdASfP5fgS1stHfq85_ORXSX0StrZnXnSqVMX_twSp8G46x_fXjQ0ravT2_WzYqTx0DQ8MaIRu0xdd5gvtKhuobhRcSnswD6nMQvX7A5CNiunh75xVZTQsepA-62ON7M8HQBfbTXuPSlZ8MA_mYHWClaC6QEx3EuPIroM0kQAEmYnMoT7deO5eGwxF4O_zUua1XyHGpaFBVy78JlTgHHmaEGwp90uEeieu35DDPPwanRijwfevrfC4EHuqphwk63mAN4xGz2aaTXeRpFAuBBnPMVzjsZo8sB_ge3SLTyHqq3HnAWi06WYw0-XA/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJw8kin3M90i0RHD13a_2Ko1Q/photos/AV-0GLdTaVr0o9QKUANROPlLF_lybdeU0NIjARIs73xoODQF1IHFyqpYhckas0zD0fKKYTPDDo6JNMESRSh1SMqyrvmsRiQVwCrDtMpIcaW6h50EEdKbKnzx_Oz9vIwnN6rGTZNOqDCknC-EIj8EJhSEFsZ_zNRiXzajTO9_P46NJjlslZvaLPih-RjlcWyDcMmfmgNdXiC3nknt-BtSS_q-OmP-vLF53hmNM6RgouZV1j1Lo4SZ0dXmFLXpozAQAqmwN8XMfG10w1LYUB8kOQ9-J3UXT7qEnDveBcFh5UTT8H_drclABUyVC3xAoWjlEFjKpxg3LZNtTamZBUYKGGlhAq_K9KcUFjqy5eX1SJ8IzLT7P8pJNTi-a5WEKr1mxMIBa1jMK4KbiHqGSa7BTE1FOo8tBHY/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "IN-RIS",
+          "city_name": "Rishikesh",
+          "country_name": "India",
+          "world_region": "Asia",
+          "number_of_days": 5,
+          "primary_feeling": "Restored and reflective",
+          "feelings": [
+            "Restored",
+            "Reflective"
+          ],
+          "description": "Rishikesh is known for yoga, river and culture, in a river and foothills setting.",
+          "latitude": 30.115761899999995,
+          "longitude": 78.28530169999999,
+          "match_score": 78,
+          "match_label": "Strong match",
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 16.67,
+            "settings": 15.0,
+            "pace": 10.0,
+            "travel_distance": 5.56,
+            "prefer_avoid_penalty": 0.0,
+            "unverified_must_avoid_penalty": 0.0,
+            "travel_effort_penalty": -8.89,
+            "budget_penalty": 0.0,
+            "evidence_penalty": 0.0
+          },
+          "match_reasons": [
+            "For restoration: yoga and river.",
+            "For reflection: yoga, river and foothills.",
+            "It has what you're drawn to: quiet and privacy (a gentle pace); spa and wellness (yoga).",
+            "The river and foothills setting suits your preference for mountains."
+          ],
+          "tradeoffs": [
+            "Worth knowing: practice traditions and comfort level vary.",
+            "A long journey for a 5-night trip: about 13,288 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+          ],
+          "unresolved_facts": [
+            "Prices and availability are checked once you choose dates."
+          ],
+          "warnings": [
+            "Worth knowing: practice traditions and comfort level vary.",
+            "A long journey for a 5-night trip: about 13,288 km from Austin in a straight line, so travel takes a large share of your time. It suits 9 nights or more best."
+          ],
+          "restriction_checks": [
+            {
+              "restriction": "no_intense_activity",
+              "label": "No intense activity",
+              "severity": "prefer_avoid",
+              "status": "no_catalog_concern",
+              "detail": "No known concern here; we'll still confirm it for your trip."
+            }
+          ],
+          "distance_check": {
+            "status": "no_limit",
+            "straight_line_km": 13288,
+            "detail": "About 13,288 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "evidence_tier": "editorial",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_estimate": null,
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+            "internal_notes": [
+              "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+              "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+              "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+            ]
+          },
+          "evidence": {
+            "destination_source_url": "https://www.incredibleindia.gov.in/en/uttarakhand/rishikesh/gita-bhawan",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Rishikesh",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-10-30T06:31:30.436827+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLfH8F9UTWbgicJaFZXJlouOrrwG9I7HyC0CJ_vuSfNibfI2R_xbmmuPfbxaPsrkTSYjrdV63flxNm85YY8ao8I-TdDuKMT3-Abbp8FJxmu-G4apdAe1jTrfTosWna_OFubEdVl3GEP4sLbUmzXbZBB1y21DBgsnRewHLh3w8Y0UixzDPrZ4jW9GmeZryuMw2Ity8pVLZrnNOJlXICaXpIAjsXTvekeGq0ew6xROSNa02Q8Zsl7Kk3n8Ot4Wv_G1n3Qx3-x3iuAhr0i6P4ibCSBIsu-_sXI9Dp8x4VwmfNdINzNzN06MJTuN1PX0s2AIOr0-QoO9uhef4phy-0HMzSItIxqQ8vQEx-Tl9d4nskcrNqoYRDMUbom0qTgv8ofOFpAyn71jrlKfPUamnR5Gprf2g2U/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLdDkm5SIMyP5QXDxUyj5lzpsfcc2kTaxDGBmvyFSaXjHZQA2TcHMbU1Pukm_LxwYBhadx6iB7yFdTRT9RDOVs7HTlMEk_-7R7CHpxX9YTcM6_VGUgm_-F1B9Kc1vso_t6LE28-L6QLJDwO1aa5pLBM2Ebkok1L66WV4bCEgdeD0jucoc0jmHXHUUW0nret3JhYM0gMpwb5H0NtvPIW2MWgBMfmIEzzGP5cqreTWHem9TeZCu8tPJZqa4NAUfUCWYt5z_RZ6Ti5fEDASkyUV5UJpzQzAeWdYzy61f_5JRkqi1QHVmllC3g7A0pEBVDOMzhPFN6jYNa-KVflssSa1YF4hlNRWOqysB8bMUIeJhui2LIRAR4N8NmJg908KgVmk20mngKHDMZdUlogA9np9gudsNMB0hnTHyAutXHVt8I5_Ag/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLdLMqPQBgc9dY0uWV3JKeehVPexZcHVLwauNnnVMXUvsqqzyhTP9ZJPjZ8vh7NE-XKQx0v-LNANTgWgEZWqbViDXj1ldOjRzORO3-_GOMNGr8AuGVAAIud0S8DYI8pDq_uuhNL1aqh56HC7zhIwN_GshlGo8VaRJAFcoQ-L9nnkvTvgUV6k9_rcattqycjkxriigxTTDslxFQjK_iFM_oejgmlxCL7b8feXCCys4fGVuBMLWyYFW4MOPu6hC-VFe3NqvSdKbEq0CmXGGf0oIpRCYcxLy3UZ_h4q0fOyOW09D-8rPrkKawkDG9jLAINfQGCBwcCzfrlQhtXbzuHaoRfNUFicZBmcyd4_xY6OAxsoCdFaXhGr_8RAAQRGghPzwV0jB5_zN5A2jyTXeVwbSvM3h-Z0lDw/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJEfGTz2c-CTkR_huUb0qAeMw/photos/AV-0GLfx_sXl5DtPtNtsblXu-0voXA0VFLsCrf74SS3C6gJvT9P6Gjo_Ebt1d2mWH7RzQIiDX1mX7m0ZB3KtD1pNtUcUs8AeNwqVK8RnCZuqpJkInNgXb6Ylc0u9Hto00mYHogOe-vnIDMsXGbye5jvsE7qkRNfgdTyaSnNj1i6oOXftSMQglpEhkrzt0Mer-SELpyGjrVTG8uufEXUifzK2UiZAWrII9lG3V7eOU6qOZWTRXRBc5X2wDIsnxZNzmTyZk8rCLc7ffd0cAtLx-8ZdAsgdfsnt4PNxMwnrJAa3CdDir_E5yclmwRC7CQJMSNn3LynB_5q9HuAK2Y76DW_jjbrfh1PzKVNjb0n4jAxupJWjM2lxk1wDbAlKchXKKu4SdFWnbSEG2Eo2n-S3VPZbB4IBSTNo/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "US-SED",
+          "city_name": "Sedona",
+          "country_name": "United States",
+          "world_region": "North America",
+          "number_of_days": 5,
+          "primary_feeling": "Restored and reflective",
+          "feelings": [
+            "Restored",
+            "Reflective"
+          ],
+          "description": "Sedona is known for red rocks, hiking and art, in a desert setting.",
+          "latitude": 34.86175980000001,
+          "longitude": -111.81394360000002,
+          "match_score": 72,
+          "match_label": "Strong match",
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 16.67,
+            "settings": 0.0,
+            "pace": 5.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0,
+            "unverified_must_avoid_penalty": 0.0,
+            "travel_effort_penalty": -0.0,
+            "budget_penalty": 0.0,
+            "evidence_penalty": 0.0
+          },
+          "match_reasons": [
+            "For restoration: visual landscape and reflective time.",
+            "For reflection: red rocks and desert.",
+            "It has what you're drawn to: nature and wildlife (red rocks); quiet and privacy.",
+            "About 1,413 km from Austin in a straight line, a comfortable distance for 5 nights."
+          ],
+          "tradeoffs": [
+            "Worth knowing: popular trails can be crowded.",
+            "Its desert setting isn't one you picked (mountains, forest or jungle), so it ranks lower for setting."
+          ],
+          "unresolved_facts": [
+            "Prices and availability are checked once you choose dates."
+          ],
+          "warnings": [
+            "Worth knowing: popular trails can be crowded.",
+            "Its desert setting isn't one you picked (mountains, forest or jungle), so it ranks lower for setting."
+          ],
+          "restriction_checks": [
+            {
+              "restriction": "no_intense_activity",
+              "label": "No intense activity",
+              "severity": "prefer_avoid",
+              "status": "no_catalog_concern",
+              "detail": "No known concern here; we'll still confirm it for your trip."
+            }
+          ],
+          "distance_check": {
+            "status": "no_limit",
+            "straight_line_km": 1413,
+            "detail": "About 1,413 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "evidence_tier": "editorial",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_estimate": null,
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+            "internal_notes": [
+              "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+              "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+              "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+            ]
+          },
+          "evidence": {
+            "destination_source_url": "https://visitsedona.com/",
+            "source_scope": "Tourism destination source; verify specific itinerary",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Sedona",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-10-30T06:31:29.793653+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLc89mxIFL-S36hjVua9hPBdlRLS5-7z0KEd5PSIiVvrPMaNQCOrbvSTtuY6kD-RI005vdEbUXdSEHQfjzMuLym6GyJzmhLV-F6prP7Rhf7iTjTTjzTm384XtWRSt-_HO54TiN7Nc37To_7M4aQSfjx7neHDe66zN9j_CfxNiR26T4R-6WyaXWwx516VxZjBYqB9p-mQZGssZXxaoptu7wMtAt-j1Ee1I91RSQhXjCBOu8eOPNYrw_eYbwDxtEjH2JdELGs12R5rIUkxhOjC0sxUWTYJFPddNZ38hf7I1wmOFMyiWg-1R0caQPCP8mTdFNMVSeM76lAEAezRER-Qf1y2ph19OGY_lQT72ugcH6bAyCUKz2UkbhY_-uA6cZJKgamrJq0h8ZRmB_XEMBnKmpi062w/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLfxQObKeOxrZAMrk_OpGgvtMEXTlIgl7N8yW8j2pNmWO-FP3pxyCdDK0MvvC_lzbl3crCzX7RbWoUs2e-tifwAuwe-9NGShlBIGbBXGxRS_L8Xotdw_7csyXdRUJKunsMmn-UPKPl3AkPFH4aiHYR2G8Eop3GZIjfMtJ87Qd5rGXyDWsKtU7cyuj1qR6yis2H4P5MVBjUn8kf2QkJKZkuEfng-F3fojA1pMQZfoKSfJzXkA9b1CnrxyhggjJT3Nl0xhXjRR3uT16Sg4Wfap1DKGk_U4V3_jQT1wNmvmuUnLpcBLqD4tzsFya3B48JAyzGV3y8KuCA2L0BVF0OKtpXYa8G785PQM6FKcZl0E-cCvM-iFPbsK_T-zk-5rsqae3tFU0L0ZNP60YGVjZdIr5vMiiNWeYynEYomS5dflL6VebQ/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLepBLMlG1wq_gXLP1Sn96nd7MHeVW9UpgJ1FALwugvlbr46O4R4nUt8wfmOUhXzdz_SaiNd4tJCar-fHml9HnN1pIN5mv9GaA1TNRw_Kg6shT3dRZenzqh9npaLnAXyLl6YPZLDjP1aS_hkGA95GNybiUIH-x6kZHxURrMIYtetiaEc6Y06CTdR79qlWQTT_zrL1jQQSLfOs2ZG2Wttm_XlOBORxhApwBA-6gunSfp-4t5P4ZyqEsXPgsAk1N8dl4tCbP92IOqwQjXq18CBEKvL-Xu42N9a4DnTQsVBBuLuaAfm2l0qwM4z_LQ9sPfgXqqHWKX2wJI2kkYIvYhhuT-DM4tV38d5vXWqj1s7GfzIyOfZJHGaSlzdGvwWNeZP8u0tH-ACDu5_VenSZKP0vkG4hqak_4O-ZPLF6iWONE8aNA/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLd4m2PLiikM8Vmn3hEYPmF_bx1aFsdgCHeIS1HKeIGpQjzp1CoOiqvkiM5G8nn-UQZiHeAttFCOYpbpZfbfJ5QZHaEUOOsevgEo4rj4mPu5CAfgdaH87LfyfBtMDFmRfSYoYlct4jlyX9twomGQCccfB6fMF_-mWPKeNIjAgdp0mNdLXJqc91gus9Vz7TvLxwA-pX9E-oBm62Q-8c_sNM7lKvTdL3JztcwS5YkYetyGZeC59uCjh3FacrPQzjZD-Pn3BTC2aOgpArbtVayjUiyyffIMI2psF1JHQBQfbZ1F9fiqqzpqoSQ8FW3KbxCWBFLxBzXEiGFmWBmujMDFyQEjLalEJKV5igHdIyG9TwW_H5jIMHoFUzMc8i_qML1Yg33FVIYlo0shkk1ZhnhLAh1xZ2k/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+          ]
+        }
+      ],
+      "no_valid_result": null,
+      "clarifications": [],
+      "guest_context": {
+        "recent_feelings": [
+          "Stretched thin"
+        ],
+        "trip_goals": [
+          {
+            "code": "restoration",
+            "label": "Restoration",
+            "definition": "Space to slow down and feel less pulled in every direction"
+          },
+          {
+            "code": "reflection",
+            "label": "Reflection",
+            "definition": "Quiet and perspective to think about what matters"
+          }
+        ],
+        "feeling_label": "Restored and reflective",
+        "trip_prompt": "I need a break",
+        "preferred_moments": [
+          "Nature and wildlife",
+          "Quiet and privacy",
+          "Spa and wellness"
+        ],
+        "preferred_environments": [
+          "Mountains",
+          "Forest or jungle"
+        ],
+        "trip_pace": "One highlight each day, with plenty of free time",
+        "party": "My partner and me: 2 adults, 1 room",
+        "restrictions": [
+          "Prefer to avoid: No intense activity"
+        ],
+        "timing": "Flexible dates, 5 nights, available 2026-12-01 to 2026-12-21",
+        "travel_window": {
+          "earliest_check_in": "2026-12-01",
+          "latest_check_out": "2026-12-21"
+        },
+        "budget_per_night_usd": 300.0,
+        "budget_open_ended": false
+      },
+      "eligible_count": 956,
+      "excluded_count": 44,
+      "excluded_by_reason": {
+        "no_grounded_fit": 44
+      },
+      "total_candidate_count": 1000,
+      "data_gaps": [
+        "No destination has a nightly price yet, so budget could not shape these suggestions. Your budget will be applied when live stays are checked for exact dates."
+      ],
+      "origin": {
+        "status": "GEOCODED",
+        "latitude": 30.267152999999997,
+        "longitude": -97.7430608,
+        "country": "United States",
+        "region": "north america",
+        "checked_at_utc": "2026-10-30T06:31:36.581230+00:00",
+        "detail": "",
+        "country_code": "US",
+        "input_text": "Austin, Texas",
+        "normalized_name": "Austin, TX, USA"
+      },
+      "estimate_status": "Suggestions are editorial candidates. Prices shown are modelled estimates; no live price, availability or route has been checked.",
+      "general_notes": [
+        "Check current entry, safety and accessibility guidance for your travel details."
+      ],
+      "price_estimates": {
+        "file": null,
+        "destinations_with_estimates": 0
+      },
+      "generated_at_utc": "2026-10-30T06:31:36.663781+00:00",
+      "intake_form": {
+        "form_id": "velari_emotional_travel_intake",
+        "form_version": 1
+      },
+      "catalog_version": {
+        "release": "v3",
+        "snapshot_date": "2026-10-28",
+        "candidate_count": 1000,
+        "editorial_count": 72,
+        "location_enriched_count": 928,
+        "without_coordinates_count": 28,
+        "backlog_count": 928,
+        "candidates_file": "1. AI_IMPORT_DESTINATIONS.csv"
+      },
+      "intake_mapping_version": "2026-10-30.1",
+      "scoring_version": "velari-destinations-2026-10-30.1"
+    }
+  }
+}

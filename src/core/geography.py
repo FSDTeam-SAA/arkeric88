@@ -1,6 +1,8 @@
 """Country-to-region validation for hard destination constraints."""
 
 import re
+from collections import Counter
+from typing import Dict, Iterable
 
 
 def _normalize(value: str) -> str:
@@ -142,6 +144,32 @@ def country_key(country: str | None) -> str:
     """One canonical key per country ("United States of America" == "USA" == "United States")."""
     key = _normalize(country or "")
     return _COUNTRY_ALIASES.get(key, key)
+
+
+# Preferred guest-facing spelling where one is agreed; other countries keep
+# the catalog's own most common spelling (see country_spellings).
+_COUNTRY_DISPLAY_NAMES = {
+    "united states": "United States",
+    "united kingdom": "United Kingdom",
+    "czechia": "Czechia",
+}
+
+
+def country_spellings(countries: Iterable[str]) -> Dict[str, str]:
+    """
+    One spelling per country for a whole catalog: {country_key: spelling}.
+    The preferred name when there is one, else the spelling used most often
+    (first seen on a tie), so a catalogue update that mixes "UK" and "United
+    Kingdom" still shows one name.
+    """
+    counts: Dict[str, Counter] = {}
+    for country in countries:
+        if country and country.strip():
+            counts.setdefault(country_key(country), Counter())[country.strip()] += 1
+    return {
+        key: _COUNTRY_DISPLAY_NAMES.get(key) or spellings.most_common(1)[0][0]
+        for key, spellings in counts.items()
+    }
 
 
 def same_country(first: str | None, second: str | None) -> bool:

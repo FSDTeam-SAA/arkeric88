@@ -142,7 +142,7 @@ def _post(path: str, body: dict, ai: MagicMock):
 
 
 def _new_itinerary():
-    initial = client.post("/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
+    initial = client.post("/v2/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
     chosen = initial["suggested_cities"][0]
     response = _post("/get_tour_plan", {"session_id": initial["session_id"], "destination_id": chosen["destination_id"]},
                      _ai(PLAN))
@@ -236,7 +236,7 @@ def test_feeling_block_is_written_from_experiences_only():
     ai = _ai(PLAN)
     original = ai.side_effect
     ai.side_effect = lambda prompt: (prompts.append(prompt), original(prompt))[1]
-    initial = client.post("/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
+    initial = client.post("/v2/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
     _post("/get_tour_plan", {"session_id": initial["session_id"],
                              "destination_id": initial["suggested_cities"][0]["destination_id"]}, ai)
     feeling_prompt = next(prompt for prompt in prompts if "The feeling behind your journey" in prompt)
@@ -292,7 +292,7 @@ def test_unscheduled_viator_products_never_reach_the_backend(monkeypatch):
 
 
 def test_a_failed_generation_is_retried_instead_of_failing_the_paid_request():
-    initial = client.post("/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
+    initial = client.post("/v2/get_suggested_city", json=build_intake(**exact_dates(nights=5))).json()
     good = _ai(PLAN).side_effect
     failures = []
 
@@ -331,7 +331,7 @@ def test_retries_stop_at_the_limit_and_never_repeat_request_errors():
 
 def test_saved_itinerary_reopens_with_the_same_stops_and_checks():
     data = _new_itinerary()
-    saved = client.get(f"/activity_session/{data['activity_session_id']}").json()
+    saved = client.get(f"/v2/activity_session/{data['activity_session_id']}").json()
     assert saved["stops"] == data["stops"]
     assert saved["price_breakdown"] == data["price_breakdown"]
     assert saved["validation"]["status"] == data["validation"]["status"]

@@ -35,7 +35,7 @@ def _recommend(body: dict, ai=None, climate=None):
     ai = ai or MagicMock(side_effect=Exception("model unavailable"))
     with patch("app.router.dates_route.get_ai_response", ai), \
          patch("app.router.dates_route.monthly_climate", lambda lat, lng: climate or {"error": "offline"}):
-        return client.post("/recommend_travel_dates", json=body)
+        return client.post("/v2/recommend_travel_dates", json=body)
 
 
 def _all_options(data: dict) -> list:
@@ -205,7 +205,7 @@ def test_private_free_text_never_reaches_the_model():
 
 
 def test_a_chosen_destination_uses_its_own_climate():
-    initial = client.post("/get_suggested_city", json=build_intake()).json()
+    initial = client.post("/v2/get_suggested_city", json=build_intake()).json()
     chosen = initial["suggested_cities"][0]
     seen = []
 
@@ -217,7 +217,7 @@ def test_a_chosen_destination_uses_its_own_climate():
     with patch("app.router.dates_route.get_ai_response", MagicMock(side_effect=Exception("no model"))), \
          patch("app.router.dates_route.monthly_climate", climate), \
          patch("app.router.dates_route.lookup_destination_place", lambda destination: located):
-        data = client.post("/recommend_travel_dates", json=_body(destination_id=chosen["destination_id"],
+        data = client.post("/v2/recommend_travel_dates", json=_body(destination_id=chosen["destination_id"],
                                                                 travel_distance="anywhere")).json()
     assert data["basis"]["climate"]["place"] == chosen["city_name"]
     assert seen, "the destination's coordinates were used for climate"

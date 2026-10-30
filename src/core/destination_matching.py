@@ -692,6 +692,25 @@ def _rationale_phrase(destination: Destination) -> str:
     return lower_first(first)
 
 
+# Vowel letters with a consonant sound ("a university town") and the reverse ("an hour").
+_A_BEFORE = ("uni", "use", "usu", "eu", "one", "once")
+_AN_BEFORE = ("hour", "honest", "heir")
+
+
+def _article(phrase: str) -> str:
+    word = phrase.lower()
+    if word.startswith(_AN_BEFORE):
+        return "an"
+    if word.startswith(_A_BEFORE):
+        return "a"
+    return "an" if word[:1] in "aeiou" else "a"
+
+
+def _setting_phrase(destination: Destination) -> str:
+    """The catalog setting in guest words ("town and jungle"), or "" when generic."""
+    return natural_list([tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS])
+
+
 def _introduction(destination: Destination) -> str:
     """
     What the place is and what a stay there offers -- no matching language.
@@ -701,8 +720,8 @@ def _introduction(destination: Destination) -> str:
     if rationale and rationale.split()[0] in destination.destination.split():
         return f"{rationale}."
     experiences = natural_list(_tags(destination.experience_context))
-    settings = [tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS]
-    setting = f", in a {natural_list(settings)} setting" if settings else ""
+    settings = _setting_phrase(destination)
+    setting = f", in {_article(settings)} {settings} setting" if settings else ""
     if experiences:
         return f"{destination.destination} is known for {experiences}{setting}."
     if rationale:
@@ -743,10 +762,13 @@ def _goal_reasons(item: ScoredDestination) -> List[str]:
     groups: Dict[tuple, List[str]] = {}
     for goal in item.matched_goals:
         groups.setdefault(tuple(_goal_experiences(destination, goal)), []).append(goal)
+    # The rationale backs a goal only when the introduction doesn't already say it.
+    rationale = _rationale_phrase(destination)
+    fallback = "" if rationale and rationale in _introduction(destination) else rationale
     lines = []
     for experiences, goals in groups.items():
         labels = natural_list([TRIP_GOAL_LABELS[goal].lower() for goal in goals])
-        support = natural_list(experiences) or _rationale_phrase(destination)
+        support = natural_list(experiences) or fallback
         lines.append(f"For {labels}: {support}." if support else f"Suited to {labels}.")
     return lines
 
@@ -768,7 +790,7 @@ def _reasons(item: ScoredDestination, profile: TripProfile) -> List[str]:
             parts.append(f"{label} ({evidence})" if evidence and evidence not in label else label)
         reasons.append(f"It has what you're drawn to: {'; '.join(parts)}.")
     if item.matched_environments:
-        setting = natural_list([tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS])
+        setting = _setting_phrase(destination)
         wanted = natural_list([ENVIRONMENT_LABELS[env].lower() for env in item.matched_environments])
         reasons.append(f"The {setting} setting suits your preference for {wanted}." if setting else f"It suits your preference for {wanted}.")
     elif item.pace_fit == "match" and destination.catalog_pace:
@@ -804,6 +826,10 @@ def _tradeoffs(item: ScoredDestination, profile: TripProfile) -> List[str]:
             f"Offers less for {missing} than for {matched}." if matched
             else f"Offers less for {missing} than your other options; it was chosen for the experiences you picked."
         )
+    setting = _setting_phrase(destination)
+    if not profile.surprise_me and not item.matched_environments and setting:
+        wanted = ", ".join(ENVIRONMENT_LABELS[env].lower() for env in profile.environments)
+        tradeoffs.append(f"Its {setting} setting isn't one you picked ({wanted}), so it ranks lower for setting.")
     if item.pace_fit == "mismatch":
         tradeoffs.append(
             f"It's usually a {destination.catalog_pace.lower()} destination, so we'd pace your days deliberately "

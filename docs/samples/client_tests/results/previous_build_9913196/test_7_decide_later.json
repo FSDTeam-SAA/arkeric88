@@ -1,0 +1,92 @@
+{
+  "http_status": 422,
+  "fields_not_supported_by_this_build": [
+    "primary_trip_goal"
+  ],
+  "body": {
+    "detail": [
+      {
+        "type": "missing",
+        "loc": [
+          "body",
+          "departure_location"
+        ],
+        "msg": "Field required",
+        "input": {
+          "recent_feelings": [
+            "stretched_thin"
+          ],
+          "trip_goals": [
+            "restoration",
+            "reflection"
+          ],
+          "trip_prompt": "need_a_break",
+          "preferred_moments": [
+            "nature_wildlife",
+            "quiet_privacy",
+            "spa_wellness"
+          ],
+          "preferred_environments": [
+            "mountains",
+            "forest_jungle"
+          ],
+          "trip_pace": "one_highlight",
+          "travel_party": "couple",
+          "party_adults": 2,
+          "party_children": 0,
+          "party_rooms": 1,
+          "activity_restrictions": [
+            "no_intense_activity"
+          ],
+          "restriction_severity": {
+            "no_intense_activity": "prefer_avoid"
+          },
+          "travel_timing": "flexible",
+          "trip_nights": 5,
+          "budget_per_night": 300
+        }
+      },
+      {
+        "type": "missing",
+        "loc": [
+          "body",
+          "travel_distance"
+        ],
+        "msg": "Field required",
+        "input": {
+          "recent_feelings": [
+            "stretched_thin"
+          ],
+          "trip_goals": [
+            "restoration",
+            "reflection"
+          ],
+          "trip_prompt": "need_a_break",
+          "preferred_moments": [
+            "nature_wildlife",
+            "quiet_privacy",
+            "spa_wellness"
+          ],
+          "preferred_environments": [
+            "mountains",
+            "forest_jungle"
+          ],
+          "trip_pace": "one_highlight",
+          "travel_party": "couple",
+          "party_adults": 2,
+          "party_children": 0,
+          "party_rooms": 1,
+          "activity_restrictions": [
+            "no_intense_activity"
+          ],
+          "restriction_severity": {
+            "no_intense_activity": "prefer_avoid"
+          },
+          "travel_timing": "flexible",
+          "trip_nights": 5,
+          "budget_per_night": 300
+        }
+      }
+    ]
+  }
+}

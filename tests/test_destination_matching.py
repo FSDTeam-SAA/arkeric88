@@ -18,6 +18,7 @@ from src.core.destination_matching import (
     rank_destinations,
     select_diverse,
 )
+from src.core.geography import country_key
 from src.core.guest_text import has_internal_wording
 from src.core.origin import Origin, resolve_origin
 from src.core.trip_profile import build_trip_profile
@@ -249,10 +250,11 @@ def test_select_diverse_returns_up_to_three_distinct_countries_in_score_order():
 
 
 def test_select_diverse_never_repeats_a_country_even_under_another_spelling():
-    # The catalog spells it both "United States" (Sedona) and "United States of America" (Atlanta).
+    # The catalog spells it both "United States" (Sedona) and "United States of America" (Atlanta);
+    # rows are loaded under one spelling, and the selection compares canonical keys either way.
     result = rank_destinations(_profile(build_intake()), None)
-    us = [item for item in result.ranked if item.destination.country in {"United States", "United States of America"}]
-    assert {item.destination.country for item in us} == {"United States", "United States of America"}
+    us = [item for item in result.ranked if country_key(item.destination.country) == "united states"]
+    assert {get_destination("US-SED").country, get_destination("NE-1159151489").country} == {"United States"}
     assert len(select_diverse(us)) == 1
 
 

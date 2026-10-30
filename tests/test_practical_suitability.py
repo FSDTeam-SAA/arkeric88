@@ -24,7 +24,7 @@ from src.core.destination_matching import (
     select_diverse,
     suggested_min_nights,
 )
-from src.core.geography import country_key
+from src.core.geography import country_key, country_spellings
 from src.core.hotel_rates import _branded_name_match
 from src.core.origin import Origin, matches_typed_place, resolve_origin
 from src.core.price_estimates import (
@@ -228,6 +228,56 @@ def test_both_goals_are_shown_and_a_missing_one_is_explained():
     assert suggestion["primary_feeling"] == "Curious and inspired"
     assert suggestion["match_reasons"][0] == "For discovery: coffee and culture."
     assert "Offers less for inspiration than for discovery." in suggestion["tradeoffs"]
+
+
+def test_one_country_is_spelled_one_way_on_every_card():
+    # The catalog writes both "United States" and "United States of America"; a
+    # Nearby shortlist from Austin showed both side by side.
+    assert get_destination("US-TUC").country == "United States"
+    shortlist = _shortlist(_profile(travel_distance="nearby"))
+    countries = [build_suggestion(item, _profile(travel_distance="nearby"), AUSTIN)["country_name"] for item in shortlist]
+    assert "United States of America" not in countries
+
+
+def test_setting_the_guest_did_not_pick_is_stated_as_a_tradeoff():
+    profile = _profile()
+    sedona = build_suggestion(_ranked(profile)["US-SED"], profile, AUSTIN)
+    assert "Its desert setting isn't one you picked (mountains, forest or jungle), so it ranks lower for setting." in sedona["tradeoffs"]
+    ubud = build_suggestion(_ranked(profile)["ID-UBU"], profile, AUSTIN)
+    assert not any("isn't one you picked" in line for line in ubud["tradeoffs"])
+
+
+def test_reasons_never_repeat_an_introduction_built_from_the_rationale():
+    # Location-enriched rows often have no experience tag backing the goal; the
+    # fallback used to be the rationale sentence the introduction already shows.
+    profile = _profile(trip_goals=["reflection"], departure_location=None, travel_distance=None)
+    tuzla = next(d for d in destination_matching.load_destination_candidates() if d.destination == "Tuzla")
+    item = _ranked(profile, origin=None)[tuzla.destination_id]
+    suggestion = build_suggestion(item, profile, None)
+    assert suggestion["description"].startswith("Tuzla offers")
+    assert not any(suggestion["description"].rstrip(".") in reason for reason in suggestion["match_reasons"])
+
+
+def test_any_country_spelled_two_ways_gets_one_name():
+    # Not only the United States: a future catalogue update may mix other spellings.
+    spellings = country_spellings(["UK", "United Kingdom", "UK", "The Bahamas", "Bahamas", "Bahamas", "Peru"])
+    assert spellings["united kingdom"] == "United Kingdom"  # preferred name wins over the more common "UK"
+    assert spellings["bahamas"] == "Bahamas"  # otherwise the most common spelling
+    assert spellings["peru"] == "Peru"
+
+
+@pytest.mark.parametrize("phrase, article", [
+    ("island", "an"), ("alpine lake", "an"), ("urban / regional gateway", "an"), ("desert", "a"),
+    ("university town", "a"), ("one-street village", "a"), ("hour from the coast", "an"),
+])
+def test_article(phrase, article):
+    assert destination_matching._article(phrase) == article
+
+
+def test_introduction_uses_the_right_article():
+    profile = _profile(departure_location=None, travel_distance=None)
+    baa = build_suggestion(_ranked(profile, origin=None)["MV-BAA"], profile, None)
+    assert baa["description"].endswith("in an island setting.")
 
 
 def test_goal_click_order_never_changes_the_label_or_results():

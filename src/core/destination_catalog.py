@@ -30,6 +30,7 @@ from functools import lru_cache
 from pathlib import Path
 from typing import Dict, FrozenSet, List, Optional
 
+from src.core.geography import country_key, country_spellings
 from src.core.intake_mappings import (
     CATALOG_THEME_SECONDARY_GOALS,
     CATALOG_THEME_TO_GOAL,
@@ -230,7 +231,12 @@ def _guest_wording(text: str) -> str:
     return text
 
 
-def _to_destination(row: Dict[str, str], boilerplate: FrozenSet[str] = frozenset()) -> Destination:
+def _to_destination(
+    row: Dict[str, str],
+    boilerplate: FrozenSet[str] = frozenset(),
+    spellings: Optional[Dict[str, str]] = None,
+) -> Destination:
+    """`spellings`: {country_key: name} so one country is written one way (see country_spellings)."""
     themes = row.get("editorial_themes", "")
     paces = parse_paces(row.get("pace_context", ""))
     specific_tradeoffs = _guest_wording(_without_boilerplate(row.get("tradeoffs_to_check", ""), boilerplate))
@@ -238,7 +244,7 @@ def _to_destination(row: Dict[str, str], boilerplate: FrozenSet[str] = frozenset
     return Destination(
         destination_id=row["destination_id"],
         destination=row["destination"],
-        country=row["country"],
+        country=(spellings or {}).get(country_key(row["country"]), row["country"]),
         world_region=row["world_region"],
         latitude=_optional_float(row.get("latitude", "")),
         longitude=_optional_float(row.get("longitude", "")),
@@ -280,6 +286,7 @@ def load_destination_candidates() -> tuple:
     """
     rows = _read_rows(CANDIDATES_FILE_SUFFIX)
     boilerplate = boilerplate_clauses(rows)
+    spellings = country_spellings(row.get("country", "") for row in rows)
     seen, destinations = set(), []
     for row in rows:
         destination_id = row.get("destination_id", "")
@@ -287,7 +294,7 @@ def load_destination_candidates() -> tuple:
             logger.warning("Catalog row skipped: %s destination_id %r.", "missing" if not destination_id else "duplicate", destination_id)
             continue
         seen.add(destination_id)
-        destinations.append(_to_destination(row, boilerplate))
+        destinations.append(_to_destination(row, boilerplate, spellings))
     return tuple(destinations)
 
 

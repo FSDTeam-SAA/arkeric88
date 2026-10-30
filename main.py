@@ -5,7 +5,9 @@ from app.router.dates_route import router as dates_router
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-app = FastAPI(title="Travel Planner API", version="2.0.0")
+API_VERSION_PREFIX = "/v2"
+
+app = FastAPI(title="Travel Planner API v2", version="2.0.0")
 
 # Browsers block cross-origin calls (e.g. the account pages fetching a saved
 # search) unless the API allows the frontend's origin. Set CORS_ALLOW_ORIGINS
@@ -20,5 +22,8 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-app.include_router(city_content_router)
-app.include_router(dates_router)
+for router in (city_content_router, dates_router):
+    # Every endpoint lives under /v2 (e.g. POST /v2/get_suggested_city); Swagger shows only these.
+    app.include_router(router, prefix=API_VERSION_PREFIX)
+    # The unversioned paths keep working, hidden from Swagger, until the website has moved to /v2.
+    app.include_router(router, include_in_schema=False)

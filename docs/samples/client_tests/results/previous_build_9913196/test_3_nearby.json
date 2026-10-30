@@ -1,0 +1,587 @@
+{
+  "http_status": 200,
+  "fields_not_supported_by_this_build": [
+    "primary_trip_goal"
+  ],
+  "body": {
+    "session_id": "e3bb3d0c-8dcc-4012-8851-a3dc67e8c3c4",
+    "match_status": "matched",
+    "suggested_cities": [
+      {
+        "city_name": "Sedona",
+        "country_name": "United States",
+        "number_of_days": 5,
+        "primary_feeling": "Restored",
+        "description": "Room to feel restored and reflective: visual landscape and reflective time. It offers red rocks, hiking and art, a good match for your love of nature and wildlife and quiet and privacy.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLevJvaYpwYDRXVlcv35ZzNrGOCeQHC7dT7LsM-jwQnrjc2miaFvH1qNmb2HsoAImQ4GPCNxqwAM9QDG0YH4qZskjKHi-UMhL9Fq2hpuiahQo0tdIRsjtV_63o0aBW9oVL0PhYLiac5bWptLK19OKb_nW1OL4UvQdzsyWyDvZA3qNxTxEI3Jh384N8Wej-EsXUofCIf46KhbWK_m0sOcB13gftTIvdqj7i612QIAmEYIGV0A8tbAGqss2ziNqBcYTks6kcsCDW4PNudZjv3fdMlLSMvc7wXfOXfmky9Pwzzx97CyGcSx40Dghnc4mrRpeskefaOB5I3ybduFzUW7zAMn-g-IXZvXQEH2Yz3xKn9eEYs8HTsNs6cqj9qyyAuIyxmHlTKa363R0gLQy-YmjnfMegc/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLfmstDK1F2M8-Wphvtzami-UEwi-yis20Zi1gW9AB6d_Zl9m5FnfSY1zHKZxdmsOCNe8aqO8RbOkAzMaKgu3Y8RwMS5_lSCCJu2AcVBoZQfhhk8FTHP7PKKcO1ExP7gcGHnYf3BjISFB329xGDzMcX6V6UyJPM_HVPASHT3Kl0AzW7gTIDPahYIqOrH27xUHVjoRknjypwz3ifhIo3TtJ2r-U7fIw4wPMt_q6Xtd3S8pap3eqywMeaCuqNrmmKBSdjkcI-diagoPnanADKCIsziJ5cudStjLtrKc0EeudMCtnJtIVtc1MFQG7UmkaZ8oY3XwFPGdOp0xs1rLKnqnhgeauuGSYPqrJ2z0s3W-f6mlfCzT68fadA-uqeaI90iuzAc4Cril1sQBBPWqaEEzv9bDi3r98WLIfw6n1axMbjQLg/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLfnvTb8FxO6KGhLgTgpoGGPKBAez4YEhyAcsvlaOeVs0D81k1lQzqiM2VW8cIIN6fCNNJEeWZyLQXxR5ExicH9i4OTJwvc2VquZjeVjgvQjILt_L4qKlb7geBu_jpKIgYWVfsZx3Zq__lb0tFaeA4pfPDPPImjka-JMrHQ11W3UgDX_EJbSWs051yyTAhiGGc9c47VNZ4cOHeTtXV4lByDFx7lps-KPSf76xGi2ikOUQAYgQYtC3_pda0cLwKqDi0D_Jz1aBS8lPGMkR0tHyNqc-Ob_94QEO1ja-JdxDUyhSwIMPr0onKe65bK99OfKM8p7KVRq5AsC6ZvRHJMIwrH3aeOygU_xP1pS7Zm-REbiZGpS4MIjkLmTJHjg1MP60Y-tAfYYnE07UWH1o6MOK_mLCUETa9iKnJuYjnmkiHPd6A/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLcFclBaDgU5HachjTX17pTBK6rDGzTaPupTDnRauE38VBd_224efc5P8vRNVacgWMxcDEPTtn_-psGk7MRfEBrCfDvbA41GJIpXBA2YREWFCShY1tIWUZFlYiE8nmKgkjhQAJf8Sls4GxNDVQU1pbT3FTdGP0wOUqfe5O-0MmHKEZERiZFrEC-YMFGDxR0kleZZNdS6hEupq5gt1-Wv8FAksdl3KLZj-HA_SSR8jGmV5A1onqtCxaQ_a_BFe423cbWuV3sHMCJzo8rJemVmWqvFxJ5JcEeXShRQuFq0ZzzExxh5hbpBPa96IM1QxIDt1gl9DsQdqRgC1Uhwq1SiVzuKoEHaRhEvAfgOMM7dfw5rwC0XVzLMgHdOa-Y4wbCHQAgmVgW55-jkMAFN2c6es563VOk/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+        ],
+        "latitude": 34.86175980000001,
+        "longitude": -111.81394360000002,
+        "destination_id": "US-SED",
+        "world_region": "North America",
+        "match_score": 72,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 16.67,
+          "settings": 0.0,
+          "pace": 5.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "Room to feel restored and reflective: visual landscape and reflective time.",
+          "It offers red rocks, hiking and art, a good match for your love of nature and wildlife and quiet and privacy."
+        ],
+        "tradeoffs": [
+          "Worth knowing: popular trails can be crowded."
+        ],
+        "unresolved_facts": [
+          "Prices and availability need exact dates; until then this is inspiration only.",
+          "Check current entry, safety and accessibility guidance for your travel details."
+        ],
+        "warnings": [
+          "Worth knowing: popular trails can be crowded."
+        ],
+        "restriction_checks": [
+          {
+            "restriction": "no_intense_activity",
+            "label": "No intense activity",
+            "severity": "prefer_avoid",
+            "status": "no_catalog_concern",
+            "detail": "No known concern here; we'll still confirm it for your trip."
+          }
+        ],
+        "distance_check": {
+          "status": "within_straight_line_limit",
+          "straight_line_km": 1413,
+          "detail": "About 1,413 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+          "internal_notes": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+            "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+          ]
+        },
+        "evidence": {
+          "destination_source_url": "https://visitsedona.com/",
+          "source_scope": "Tourism destination source; verify specific itinerary",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Sedona",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-10-30T06:22:34.536841+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Tucson & Sonoran Desert",
+        "country_name": "United States",
+        "number_of_days": 5,
+        "primary_feeling": "Restored",
+        "description": "Room to feel restored and reflective: space for quiet and active days. It offers desert, hiking and spa, a good match for your love of quiet and privacy and spa and wellness.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLfh_jF7e5j0XtVLWt2DbtlCO8gaRHzH6107xbkLg9WdYbtpAX_abL21PicCa6ZlEX0RgR6EonJsZlR7R3SmuhR4g108xkWP5zICQS99CWQv_BlyyRh9FpUiHeaI-NQSZUTl0GFncDvXFEBS4PhQ2uZfLLF36h1xAcWV2kHFHXv9XWzxGf4U8DZFMqPXvESMUSLKPFff76w6U_8DgsWATJSJ1qGa-bTihkVFdUvSlifAnBO_XIGg4S2QxdP4NPbYJGX27o4xTWPrjOMA82QkKamPe0FvYnqpVt-SfLimpTvFd2w66wjL0_gy10LdfK9j-5pahyK2BCPCTKY0ZKTx3YrzKGLzV_N7kLAGDyeNnw2NA626lEioyITM2iUS9NrXj_SJ_yBpg5Xlxv8MIz2BYpIlC__F/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLcp3inRMLKeSlRJ4o6sCFJt8excPaoJaMhUl2PCqCnpN1KrUFM9mfIqEAWM0xvWK82xD3_kRWWlZIfXqxbQZRTFW7lNBB31sfaU095OHnShtEXdcs4tmiVvGlsQ8Ac2T4_3mmGUWy_U9tN83b3ly32inxfVyoE50rnCA8uWJTgKjQyrkkSjdutfBnu9KSsxHdtzZo5IXOWndC5MKKrsiraCAFZIkv0DviQt5jBmy5sr95OsEIfJKPeXpHiAEDTFf-_2A4rBae9Qs456k6doIwLb1l3NM_Y849O1AUzRgRDtL3qiZC9A2Pld8qlkNQuWB4qbL7EYjY5yx_ALROyvLQMpLOklfTkbMjme14V_v9Ti5JxRf_T93ak0VfkqYvf8PRvTNNminvR4f_6f8WJ5PvEbV5Qd3r-0vo_8acOsTIb34w/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLeydwiaHHePoLuONZm6cF5RMo7eqZcxZKheYZNbedIkNcMO4MaITQtEmguB1FbMyedr8UHgS-9yvcs_hL2oQwHJ06EG4Lc-1vuCQSgn-VKod3AuTBXeLZjLPtKN-EQR0O5JurddhzMvhRofgKLX1eY-5CMc0cJN2J_ZUrRrf58iRjEgo2bxFsicv8qohYGHD_2iTLQhJaJVMrLV24bV193nmMo9wGgndUDdwcoiawQtoNbaMObxm7byuyQTETTeb0CzczWDSRXb9dmwQYHadBRX3ENLFW72cFPww8gTDNCKVFrlar94u_-EfTjtJu8eGz-KApBRda3jDry7JI3Fa2l4RcYDLGWvySY60SSACUXAoqtBd5m0dR92kMRIBWSVlT5vpgc3p6difw8-6YLzlys2An8jebXAyIy57y6K3x30/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLeZrQN5goNwtaaFiWsaaANJ1OKYEnzxJ_ycpVlTaXMb1-rp2MiRocRQUwleOH5DiO0d1Qfvcl3OR9-Ul3McLwL_Oyoqt7OIjMCpw5MG6hpZhxT7XlOamzPkxw4PzH7_C1tZLgRoeXWg7W-gGkBWWHHFBfgM4pTnna4V3I8MTQ5xHh_VK2MJ1-lhyAJv4tMIlrJINNkH_eraclfdz9yGTOktxBVdeqj3_eTsVsPCTCQlalkkvkZru1tOw3VzXcvaVjUu4rcGlhx345s5W4bkeIqVdQSNkc9PqBOAnufaFZhHbG-KOcJHpCvP6c5E_NY-c2BXyEsYV6iK_zAM6_Hy8A8E89kfyZHa4IS0gYPlj6LhRLtpke8FhqJ-oDsbn5uPgpY9SAJLt8CrUaWgwtkr-GOTz4oxARg/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+        ],
+        "latitude": 32.2539787,
+        "longitude": -110.97417689999999,
+        "destination_id": "US-TUC",
+        "world_region": "North America",
+        "match_score": 72,
+        "score_breakdown": {
+          "desired_outcomes": 40.0,
+          "experience_interests": 16.67,
+          "settings": 0.0,
+          "pace": 5.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "Room to feel restored and reflective: space for quiet and active days.",
+          "It offers desert, hiking and spa, a good match for your love of quiet and privacy and spa and wellness."
+        ],
+        "tradeoffs": [
+          "Worth knowing: summer heat limits midday outings."
+        ],
+        "unresolved_facts": [
+          "Prices and availability need exact dates; until then this is inspiration only.",
+          "Check current entry, safety and accessibility guidance for your travel details."
+        ],
+        "warnings": [
+          "Worth knowing: summer heat limits midday outings."
+        ],
+        "restriction_checks": [
+          {
+            "restriction": "no_intense_activity",
+            "label": "No intense activity",
+            "severity": "prefer_avoid",
+            "status": "no_catalog_concern",
+            "detail": "No known concern here; we'll still confirm it for your trip."
+          }
+        ],
+        "distance_check": {
+          "status": "within_straight_line_limit",
+          "straight_line_km": 1276,
+          "detail": "About 1,276 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+          "internal_notes": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+            "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+          ]
+        },
+        "evidence": {
+          "destination_source_url": "https://www.visittucson.org/things-to-do/health-and-wellness/",
+          "source_scope": "Official tourism source",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Tucson",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-10-30T06:22:34.535109+00:00"
+          }
+        }
+      },
+      {
+        "city_name": "Oaxaca City & valleys",
+        "country_name": "Mexico",
+        "number_of_days": 5,
+        "primary_feeling": "Restored",
+        "description": "Room to feel reflective: cultural depth with optional slower pacing. It offers food, art, culture and nature, a good match for your love of nature and wildlife and quiet and privacy.",
+        "city_image": [
+          "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLfZbqYHsECc-tJDaTL5RnXD8GDR7dX7YoeGHRHYYUx-Hv5yOeq-5ESnD9VHh8uCT3ZJCxev5rd-kjUG_HEc_0kRSD1H2J6JK0Lmp3W07X69si_Zp5wDhyfDuVvyGTusrFiRmb9pqc2mDgnwi0qwMfA1zOzpLRotOlAlPugN1PRa7zaICVPkm3bOR6XEVfj_gwJUujxnKk0Kf08oVZnef54ab4J_CYeNHAj9_IUkqNCb9gsFCCJQkRcKBbJc7P7oqfbKig2luksRWdv_ya21VhKJvuLCV1ZjkgTcvfjMkIUHPBgy4sr8ppHDYee6LqYLvYPrkveJJSn_toVzSnMBjrY28wF1HP5OUtbM1uZfKQODFs03NoU-Ptt-nuVPpupNpfab2W04aZcJBjudGoxM2QSAFS0yZVtRcpo3qUovICKUXQ/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLf74JdSFLU59QD8tnytvbEtZ-c2XPZBW_UFIgk_OLdkIoiszgPOPiiejdwJy5wCLneUW2io8GFbp0X-RqEaqXuZm3s31ZyIsrWn211aDq0_hFbQEZ3M7m-bJs6M73Q7WGf2JmF9oBJuefKyoTyj8qDuQZLbG3T8UL2W5hIs_9jQhSpaw8kE4lZMGqolKmnoXCjnFyePXx70aQodFGzD3S-2O3unBP1dJSfSYoKy8paSX_sQ3TusAvuZh8ikZSArDAv_kPk0fw1pGE18667nOa34k18zqCuLhGRGgEYQuOep2lxax2wOUZwPGOmFBjN4MpoRoTPgmGyK2g_WsCo8FvQWv66NhJIpQcXHmJ9FqxlfIGzZNTTzLKnWzMJdVZN1AzDxZ_VwOt2t0_Tj382YZ0yX9k-qpEs/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLdpE7IpGi2yctDvu1NOqQ-EG0_21KFYO_au24QR_H1f9sM29kKM7N4LbkHmTnK0wM5KIzZK5ROUDUS-0nPx4HJ-916TCSjk92Bq5iTdzyjT9uOwxoyAkLiLDAKAAzRgRgASkhHZ94a1v1kP4VRKRA_TOTiMkPJMjLNVQ9UvK1V49zoUh4W_UJuR7kpYJqpX7EpgUmXcw6k3dRTB2RXyUJ1BDr2lyphN33t5zs88lbfz3ooThFm9tfQPIIe-wJ79_U1RCRtLwgnCOpbwgQY02IvV_RAfROLsDxnA9wUdc0MSnPAGL76vtb1tkd8yRSKvr4Gm7n-TVjVzxQANZa1di57Lhy-SJlL0_0qSMIRk4A1rNQFKRD7SMV9P-NqzJoiDdmFD60r_5qHGPYeL6xI4uU_yKeE/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+          "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLfnDV7LyQXUMHSytSxMtICpoLBZb_NMTaSLD3-YAG0RCGnX-vceu6sZx3h8T-UzOHdEFDi2nAhSAaomFX40q53BqTVC3lh7MI1Lfol2Fu8t5_XSispYo3uuxwO9IRvng_rZ7BEDkZIod6AvCigSrLfCLsYf0zUHxUoZzkcgVUhtWOyOCwnY9uyEu_UGkMxRIddeN_PReKjewkRgZgaSdWCUAVuH3E0cs_PudZtjmY7fjgssSciuIOU-yAh1GujN2ttCbQQmyhz5NUOa7sloq4w9p3RiP2cEu5fb-KuJ4jCwegkOYcWypuswMlCw2j6wrNyw_es7Fr2-diDleDL3vdRgKUhqyMB3qE9XFNg_hNtazBMpfurXJ5ijQugIMdDrHsqWxjkqYi4eoxSJfnrUvyoPM1mpsvTmgyc0MNcxKW56/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+        ],
+        "latitude": 17.0731842,
+        "longitude": -96.7265889,
+        "destination_id": "MX-OAX",
+        "world_region": "North America",
+        "match_score": 67,
+        "score_breakdown": {
+          "desired_outcomes": 20.0,
+          "experience_interests": 16.67,
+          "settings": 15.0,
+          "pace": 5.0,
+          "travel_distance": 10.0,
+          "prefer_avoid_penalty": 0.0
+        },
+        "match_reasons": [
+          "Room to feel reflective: cultural depth with optional slower pacing.",
+          "It offers food, art, culture and nature, a good match for your love of nature and wildlife and quiet and privacy.",
+          "The city and mountain setting suits your preference for mountains."
+        ],
+        "tradeoffs": [
+          "Worth knowing: crowds and heat vary by dates.",
+          "Fewer clear chances to feel restored here than in your other options."
+        ],
+        "unresolved_facts": [
+          "Prices and availability need exact dates; until then this is inspiration only.",
+          "Check current entry, safety and accessibility guidance for your travel details."
+        ],
+        "warnings": [
+          "Worth knowing: crowds and heat vary by dates.",
+          "Fewer clear chances to feel restored here than in your other options."
+        ],
+        "restriction_checks": [
+          {
+            "restriction": "no_intense_activity",
+            "label": "No intense activity",
+            "severity": "prefer_avoid",
+            "status": "no_catalog_concern",
+            "detail": "No known concern here; we'll still confirm it for your trip."
+          }
+        ],
+        "distance_check": {
+          "status": "within_straight_line_limit",
+          "straight_line_km": 1471,
+          "detail": "About 1,471 km in a straight line; the actual route, mode and transfers have not been checked.",
+          "route_status": "UNVERIFIED"
+        },
+        "verification": {
+          "candidate_status": "CANDIDATE_ONLY",
+          "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+          "live_lodging_status": "NOT_CHECKED",
+          "verified_nightly_usd": null,
+          "budget_status": "UNKNOWN",
+          "price_claim": "NONE",
+          "availability_claim": "NONE",
+          "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+          "internal_notes": [
+            "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+            "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+            "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+          ]
+        },
+        "evidence": {
+          "destination_source_url": "https://www.visitmexico.com/",
+          "source_scope": "Destination concept; recheck local experience availability",
+          "source_last_checked_utc": "2026-09-24",
+          "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+          "coordinates_source": "place_lookup",
+          "place_lookup": {
+            "query": "Oaxaca City",
+            "outcome": "MATCHED",
+            "checked_at_utc": "2026-10-30T06:22:34.529117+00:00"
+          }
+        }
+      }
+    ],
+    "response": {
+      "match_status": "matched",
+      "suggested_cities": [
+        {
+          "destination_id": "US-SED",
+          "city_name": "Sedona",
+          "country_name": "United States",
+          "world_region": "North America",
+          "number_of_days": 5,
+          "primary_feeling": "Restored",
+          "description": "Room to feel restored and reflective: visual landscape and reflective time. It offers red rocks, hiking and art, a good match for your love of nature and wildlife and quiet and privacy.",
+          "latitude": 34.86175980000001,
+          "longitude": -111.81394360000002,
+          "match_score": 72,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 16.67,
+            "settings": 0.0,
+            "pace": 5.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "Room to feel restored and reflective: visual landscape and reflective time.",
+            "It offers red rocks, hiking and art, a good match for your love of nature and wildlife and quiet and privacy."
+          ],
+          "tradeoffs": [
+            "Worth knowing: popular trails can be crowded."
+          ],
+          "unresolved_facts": [
+            "Prices and availability need exact dates; until then this is inspiration only.",
+            "Check current entry, safety and accessibility guidance for your travel details."
+          ],
+          "warnings": [
+            "Worth knowing: popular trails can be crowded."
+          ],
+          "restriction_checks": [
+            {
+              "restriction": "no_intense_activity",
+              "label": "No intense activity",
+              "severity": "prefer_avoid",
+              "status": "no_catalog_concern",
+              "detail": "No known concern here; we'll still confirm it for your trip."
+            }
+          ],
+          "distance_check": {
+            "status": "within_straight_line_limit",
+            "straight_line_km": 1413,
+            "detail": "About 1,413 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+            "internal_notes": [
+              "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+              "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+              "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+            ]
+          },
+          "evidence": {
+            "destination_source_url": "https://visitsedona.com/",
+            "source_scope": "Tourism destination source; verify specific itinerary",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Sedona",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-10-30T06:22:34.536841+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLevJvaYpwYDRXVlcv35ZzNrGOCeQHC7dT7LsM-jwQnrjc2miaFvH1qNmb2HsoAImQ4GPCNxqwAM9QDG0YH4qZskjKHi-UMhL9Fq2hpuiahQo0tdIRsjtV_63o0aBW9oVL0PhYLiac5bWptLK19OKb_nW1OL4UvQdzsyWyDvZA3qNxTxEI3Jh384N8Wej-EsXUofCIf46KhbWK_m0sOcB13gftTIvdqj7i612QIAmEYIGV0A8tbAGqss2ziNqBcYTks6kcsCDW4PNudZjv3fdMlLSMvc7wXfOXfmky9Pwzzx97CyGcSx40Dghnc4mrRpeskefaOB5I3ybduFzUW7zAMn-g-IXZvXQEH2Yz3xKn9eEYs8HTsNs6cqj9qyyAuIyxmHlTKa363R0gLQy-YmjnfMegc/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLfmstDK1F2M8-Wphvtzami-UEwi-yis20Zi1gW9AB6d_Zl9m5FnfSY1zHKZxdmsOCNe8aqO8RbOkAzMaKgu3Y8RwMS5_lSCCJu2AcVBoZQfhhk8FTHP7PKKcO1ExP7gcGHnYf3BjISFB329xGDzMcX6V6UyJPM_HVPASHT3Kl0AzW7gTIDPahYIqOrH27xUHVjoRknjypwz3ifhIo3TtJ2r-U7fIw4wPMt_q6Xtd3S8pap3eqywMeaCuqNrmmKBSdjkcI-diagoPnanADKCIsziJ5cudStjLtrKc0EeudMCtnJtIVtc1MFQG7UmkaZ8oY3XwFPGdOp0xs1rLKnqnhgeauuGSYPqrJ2z0s3W-f6mlfCzT68fadA-uqeaI90iuzAc4Cril1sQBBPWqaEEzv9bDi3r98WLIfw6n1axMbjQLg/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLfnvTb8FxO6KGhLgTgpoGGPKBAez4YEhyAcsvlaOeVs0D81k1lQzqiM2VW8cIIN6fCNNJEeWZyLQXxR5ExicH9i4OTJwvc2VquZjeVjgvQjILt_L4qKlb7geBu_jpKIgYWVfsZx3Zq__lb0tFaeA4pfPDPPImjka-JMrHQ11W3UgDX_EJbSWs051yyTAhiGGc9c47VNZ4cOHeTtXV4lByDFx7lps-KPSf76xGi2ikOUQAYgQYtC3_pda0cLwKqDi0D_Jz1aBS8lPGMkR0tHyNqc-Ob_94QEO1ja-JdxDUyhSwIMPr0onKe65bK99OfKM8p7KVRq5AsC6ZvRHJMIwrH3aeOygU_xP1pS7Zm-REbiZGpS4MIjkLmTJHjg1MP60Y-tAfYYnE07UWH1o6MOK_mLCUETa9iKnJuYjnmkiHPd6A/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJDbBC-TKhLYcR_Y5s-iPFSFU/photos/AV-0GLcFclBaDgU5HachjTX17pTBK6rDGzTaPupTDnRauE38VBd_224efc5P8vRNVacgWMxcDEPTtn_-psGk7MRfEBrCfDvbA41GJIpXBA2YREWFCShY1tIWUZFlYiE8nmKgkjhQAJf8Sls4GxNDVQU1pbT3FTdGP0wOUqfe5O-0MmHKEZERiZFrEC-YMFGDxR0kleZZNdS6hEupq5gt1-Wv8FAksdl3KLZj-HA_SSR8jGmV5A1onqtCxaQ_a_BFe423cbWuV3sHMCJzo8rJemVmWqvFxJ5JcEeXShRQuFq0ZzzExxh5hbpBPa96IM1QxIDt1gl9DsQdqRgC1Uhwq1SiVzuKoEHaRhEvAfgOMM7dfw5rwC0XVzLMgHdOa-Y4wbCHQAgmVgW55-jkMAFN2c6es563VOk/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "US-TUC",
+          "city_name": "Tucson & Sonoran Desert",
+          "country_name": "United States",
+          "world_region": "North America",
+          "number_of_days": 5,
+          "primary_feeling": "Restored",
+          "description": "Room to feel restored and reflective: space for quiet and active days. It offers desert, hiking and spa, a good match for your love of quiet and privacy and spa and wellness.",
+          "latitude": 32.2539787,
+          "longitude": -110.97417689999999,
+          "match_score": 72,
+          "score_breakdown": {
+            "desired_outcomes": 40.0,
+            "experience_interests": 16.67,
+            "settings": 0.0,
+            "pace": 5.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "Room to feel restored and reflective: space for quiet and active days.",
+            "It offers desert, hiking and spa, a good match for your love of quiet and privacy and spa and wellness."
+          ],
+          "tradeoffs": [
+            "Worth knowing: summer heat limits midday outings."
+          ],
+          "unresolved_facts": [
+            "Prices and availability need exact dates; until then this is inspiration only.",
+            "Check current entry, safety and accessibility guidance for your travel details."
+          ],
+          "warnings": [
+            "Worth knowing: summer heat limits midday outings."
+          ],
+          "restriction_checks": [
+            {
+              "restriction": "no_intense_activity",
+              "label": "No intense activity",
+              "severity": "prefer_avoid",
+              "status": "no_catalog_concern",
+              "detail": "No known concern here; we'll still confirm it for your trip."
+            }
+          ],
+          "distance_check": {
+            "status": "within_straight_line_limit",
+            "straight_line_km": 1276,
+            "detail": "About 1,276 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+            "internal_notes": [
+              "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+              "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+              "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+            ]
+          },
+          "evidence": {
+            "destination_source_url": "https://www.visittucson.org/things-to-do/health-and-wellness/",
+            "source_scope": "Official tourism source",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Tucson",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-10-30T06:22:34.535109+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLfh_jF7e5j0XtVLWt2DbtlCO8gaRHzH6107xbkLg9WdYbtpAX_abL21PicCa6ZlEX0RgR6EonJsZlR7R3SmuhR4g108xkWP5zICQS99CWQv_BlyyRh9FpUiHeaI-NQSZUTl0GFncDvXFEBS4PhQ2uZfLLF36h1xAcWV2kHFHXv9XWzxGf4U8DZFMqPXvESMUSLKPFff76w6U_8DgsWATJSJ1qGa-bTihkVFdUvSlifAnBO_XIGg4S2QxdP4NPbYJGX27o4xTWPrjOMA82QkKamPe0FvYnqpVt-SfLimpTvFd2w66wjL0_gy10LdfK9j-5pahyK2BCPCTKY0ZKTx3YrzKGLzV_N7kLAGDyeNnw2NA626lEioyITM2iUS9NrXj_SJ_yBpg5Xlxv8MIz2BYpIlC__F/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLcp3inRMLKeSlRJ4o6sCFJt8excPaoJaMhUl2PCqCnpN1KrUFM9mfIqEAWM0xvWK82xD3_kRWWlZIfXqxbQZRTFW7lNBB31sfaU095OHnShtEXdcs4tmiVvGlsQ8Ac2T4_3mmGUWy_U9tN83b3ly32inxfVyoE50rnCA8uWJTgKjQyrkkSjdutfBnu9KSsxHdtzZo5IXOWndC5MKKrsiraCAFZIkv0DviQt5jBmy5sr95OsEIfJKPeXpHiAEDTFf-_2A4rBae9Qs456k6doIwLb1l3NM_Y849O1AUzRgRDtL3qiZC9A2Pld8qlkNQuWB4qbL7EYjY5yx_ALROyvLQMpLOklfTkbMjme14V_v9Ti5JxRf_T93ak0VfkqYvf8PRvTNNminvR4f_6f8WJ5PvEbV5Qd3r-0vo_8acOsTIb34w/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLeydwiaHHePoLuONZm6cF5RMo7eqZcxZKheYZNbedIkNcMO4MaITQtEmguB1FbMyedr8UHgS-9yvcs_hL2oQwHJ06EG4Lc-1vuCQSgn-VKod3AuTBXeLZjLPtKN-EQR0O5JurddhzMvhRofgKLX1eY-5CMc0cJN2J_ZUrRrf58iRjEgo2bxFsicv8qohYGHD_2iTLQhJaJVMrLV24bV193nmMo9wGgndUDdwcoiawQtoNbaMObxm7byuyQTETTeb0CzczWDSRXb9dmwQYHadBRX3ENLFW72cFPww8gTDNCKVFrlar94u_-EfTjtJu8eGz-KApBRda3jDry7JI3Fa2l4RcYDLGWvySY60SSACUXAoqtBd5m0dR92kMRIBWSVlT5vpgc3p6difw8-6YLzlys2An8jebXAyIy57y6K3x30/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJK-0sC0Fl1oYRFccWTTgtw3M/photos/AV-0GLeZrQN5goNwtaaFiWsaaANJ1OKYEnzxJ_ycpVlTaXMb1-rp2MiRocRQUwleOH5DiO0d1Qfvcl3OR9-Ul3McLwL_Oyoqt7OIjMCpw5MG6hpZhxT7XlOamzPkxw4PzH7_C1tZLgRoeXWg7W-gGkBWWHHFBfgM4pTnna4V3I8MTQ5xHh_VK2MJ1-lhyAJv4tMIlrJINNkH_eraclfdz9yGTOktxBVdeqj3_eTsVsPCTCQlalkkvkZru1tOw3VzXcvaVjUu4rcGlhx345s5W4bkeIqVdQSNkc9PqBOAnufaFZhHbG-KOcJHpCvP6c5E_NY-c2BXyEsYV6iK_zAM6_Hy8A8E89kfyZHa4IS0gYPlj6LhRLtpke8FhqJ-oDsbn5uPgpY9SAJLt8CrUaWgwtkr-GOTz4oxARg/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+          ]
+        },
+        {
+          "destination_id": "MX-OAX",
+          "city_name": "Oaxaca City & valleys",
+          "country_name": "Mexico",
+          "world_region": "North America",
+          "number_of_days": 5,
+          "primary_feeling": "Restored",
+          "description": "Room to feel reflective: cultural depth with optional slower pacing. It offers food, art, culture and nature, a good match for your love of nature and wildlife and quiet and privacy.",
+          "latitude": 17.0731842,
+          "longitude": -96.7265889,
+          "match_score": 67,
+          "score_breakdown": {
+            "desired_outcomes": 20.0,
+            "experience_interests": 16.67,
+            "settings": 15.0,
+            "pace": 5.0,
+            "travel_distance": 10.0,
+            "prefer_avoid_penalty": 0.0
+          },
+          "match_reasons": [
+            "Room to feel reflective: cultural depth with optional slower pacing.",
+            "It offers food, art, culture and nature, a good match for your love of nature and wildlife and quiet and privacy.",
+            "The city and mountain setting suits your preference for mountains."
+          ],
+          "tradeoffs": [
+            "Worth knowing: crowds and heat vary by dates.",
+            "Fewer clear chances to feel restored here than in your other options."
+          ],
+          "unresolved_facts": [
+            "Prices and availability need exact dates; until then this is inspiration only.",
+            "Check current entry, safety and accessibility guidance for your travel details."
+          ],
+          "warnings": [
+            "Worth knowing: crowds and heat vary by dates.",
+            "Fewer clear chances to feel restored here than in your other options."
+          ],
+          "restriction_checks": [
+            {
+              "restriction": "no_intense_activity",
+              "label": "No intense activity",
+              "severity": "prefer_avoid",
+              "status": "no_catalog_concern",
+              "detail": "No known concern here; we'll still confirm it for your trip."
+            }
+          ],
+          "distance_check": {
+            "status": "within_straight_line_limit",
+            "straight_line_km": 1471,
+            "detail": "About 1,471 km in a straight line; the actual route, mode and transfers have not been checked.",
+            "route_status": "UNVERIFIED"
+          },
+          "verification": {
+            "candidate_status": "CANDIDATE_ONLY",
+            "source_review_status": "SOURCE_CLAIM_REVIEW_REQUIRED",
+            "live_lodging_status": "NOT_CHECKED",
+            "verified_nightly_usd": null,
+            "budget_status": "UNKNOWN",
+            "price_claim": "NONE",
+            "availability_claim": "NONE",
+            "guest_display_gate": "Display only after destination-specific claim review, hard-constraint checks, and date/occupancy-specific live stay validation. No rate or availability claim from this workbook.",
+            "internal_notes": [
+              "Source review pending: catalog claims have not yet been checked against a destination-specific source.",
+              "Nightly lodging cost is unknown, not yet compared with the $300 per room budget.",
+              "Route from Austin, Texas (mode, transfers and travel time) has not been checked."
+            ]
+          },
+          "evidence": {
+            "destination_source_url": "https://www.visitmexico.com/",
+            "source_scope": "Destination concept; recheck local experience availability",
+            "source_last_checked_utc": "2026-09-24",
+            "editorial_evidence_limit": "Editorial inference from existing destination goal tags; a prompt for exploration, not proof of an emotional outcome",
+            "coordinates_source": "place_lookup",
+            "place_lookup": {
+              "query": "Oaxaca City",
+              "outcome": "MATCHED",
+              "checked_at_utc": "2026-10-30T06:22:34.529117+00:00"
+            }
+          },
+          "city_image": [
+            "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLfZbqYHsECc-tJDaTL5RnXD8GDR7dX7YoeGHRHYYUx-Hv5yOeq-5ESnD9VHh8uCT3ZJCxev5rd-kjUG_HEc_0kRSD1H2J6JK0Lmp3W07X69si_Zp5wDhyfDuVvyGTusrFiRmb9pqc2mDgnwi0qwMfA1zOzpLRotOlAlPugN1PRa7zaICVPkm3bOR6XEVfj_gwJUujxnKk0Kf08oVZnef54ab4J_CYeNHAj9_IUkqNCb9gsFCCJQkRcKBbJc7P7oqfbKig2luksRWdv_ya21VhKJvuLCV1ZjkgTcvfjMkIUHPBgy4sr8ppHDYee6LqYLvYPrkveJJSn_toVzSnMBjrY28wF1HP5OUtbM1uZfKQODFs03NoU-Ptt-nuVPpupNpfab2W04aZcJBjudGoxM2QSAFS0yZVtRcpo3qUovICKUXQ/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLf74JdSFLU59QD8tnytvbEtZ-c2XPZBW_UFIgk_OLdkIoiszgPOPiiejdwJy5wCLneUW2io8GFbp0X-RqEaqXuZm3s31ZyIsrWn211aDq0_hFbQEZ3M7m-bJs6M73Q7WGf2JmF9oBJuefKyoTyj8qDuQZLbG3T8UL2W5hIs_9jQhSpaw8kE4lZMGqolKmnoXCjnFyePXx70aQodFGzD3S-2O3unBP1dJSfSYoKy8paSX_sQ3TusAvuZh8ikZSArDAv_kPk0fw1pGE18667nOa34k18zqCuLhGRGgEYQuOep2lxax2wOUZwPGOmFBjN4MpoRoTPgmGyK2g_WsCo8FvQWv66NhJIpQcXHmJ9FqxlfIGzZNTTzLKnWzMJdVZN1AzDxZ_VwOt2t0_Tj382YZ0yX9k-qpEs/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLdpE7IpGi2yctDvu1NOqQ-EG0_21KFYO_au24QR_H1f9sM29kKM7N4LbkHmTnK0wM5KIzZK5ROUDUS-0nPx4HJ-916TCSjk92Bq5iTdzyjT9uOwxoyAkLiLDAKAAzRgRgASkhHZ94a1v1kP4VRKRA_TOTiMkPJMjLNVQ9UvK1V49zoUh4W_UJuR7kpYJqpX7EpgUmXcw6k3dRTB2RXyUJ1BDr2lyphN33t5zs88lbfz3ooThFm9tfQPIIe-wJ79_U1RCRtLwgnCOpbwgQY02IvV_RAfROLsDxnA9wUdc0MSnPAGL76vtb1tkd8yRSKvr4Gm7n-TVjVzxQANZa1di57Lhy-SJlL0_0qSMIRk4A1rNQFKRD7SMV9P-NqzJoiDdmFD60r_5qHGPYeL6xI4uU_yKeE/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400",
+            "https://places.googleapis.com/v1/places/ChIJsdkm30kix4URO_zfV3aniKw/photos/AV-0GLfnDV7LyQXUMHSytSxMtICpoLBZb_NMTaSLD3-YAG0RCGnX-vceu6sZx3h8T-UzOHdEFDi2nAhSAaomFX40q53BqTVC3lh7MI1Lfol2Fu8t5_XSispYo3uuxwO9IRvng_rZ7BEDkZIod6AvCigSrLfCLsYf0zUHxUoZzkcgVUhtWOyOCwnY9uyEu_UGkMxRIddeN_PReKjewkRgZgaSdWCUAVuH3E0cs_PudZtjmY7fjgssSciuIOU-yAh1GujN2ttCbQQmyhz5NUOa7sloq4w9p3RiP2cEu5fb-KuJ4jCwegkOYcWypuswMlCw2j6wrNyw_es7Fr2-diDleDL3vdRgKUhqyMB3qE9XFNg_hNtazBMpfurXJ5ijQugIMdDrHsqWxjkqYi4eoxSJfnrUvyoPM1mpsvTmgyc0MNcxKW56/media?key=AIzaSyBHOYbBE7kFT21wtxFtKwZ6cqgt-yJXGzM&maxHeightPx=400"
+          ]
+        }
+      ],
+      "no_valid_result": null,
+      "clarifications": [],
+      "guest_context": {
+        "recent_feelings": [
+          "Stretched thin"
+        ],
+        "trip_goals": [
+          {
+            "code": "restoration",
+            "label": "Restoration",
+            "definition": "Space to slow down and feel less pulled in every direction"
+          },
+          {
+            "code": "reflection",
+            "label": "Reflection",
+            "definition": "Quiet and perspective to think about what matters"
+          }
+        ],
+        "trip_prompt": "I need a break",
+        "preferred_moments": [
+          "Nature and wildlife",
+          "Quiet and privacy",
+          "Spa and wellness"
+        ],
+        "preferred_environments": [
+          "Mountains",
+          "Forest or jungle"
+        ],
+        "trip_pace": "One highlight each day, with plenty of free time",
+        "party": "My partner and me: 2 adults, 1 room",
+        "restrictions": [
+          "Prefer to avoid: No intense activity"
+        ],
+        "timing": "Flexible dates, 5 nights",
+        "budget_per_night_usd": 300.0,
+        "budget_open_ended": false
+      },
+      "eligible_count": 4,
+      "excluded_count": 68,
+      "excluded_by_reason": {
+        "travel_distance": 67,
+        "no_grounded_fit": 1
+      },
+      "total_candidate_count": 72,
+      "data_gaps": [
+        "No candidate has a verified nightly price yet, so budget could not filter destinations. Your budget will be applied when live stays are checked for exact dates.",
+        "1 candidates could not be located on the map, so their distance from you was not checked."
+      ],
+      "origin": {
+        "status": "GEOCODED",
+        "latitude": 30.267152999999997,
+        "longitude": -97.7430608,
+        "country": "United States",
+        "region": "north america",
+        "checked_at_utc": "2026-10-30T06:22:34.528825+00:00",
+        "detail": "",
+        "country_code": "US"
+      },
+      "estimate_status": "Suggestions are editorial candidates. No live price, availability or route has been checked.",
+      "generated_at_utc": "2026-10-30T06:22:36.396372+00:00",
+      "intake_form": {
+        "form_id": "velari_emotional_travel_intake",
+        "form_version": 1
+      },
+      "catalog_version": {
+        "snapshot_date": "2026-09-24",
+        "candidate_count": 72,
+        "backlog_count": 928,
+        "candidates_file": "1. AI_IMPORT_DESTINATIONS.csv"
+      },
+      "intake_mapping_version": "2026-09-28.1",
+      "scoring_version": "velari-destinations-2026-09-28.1"
+    }
+  }
+}
