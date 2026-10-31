@@ -4,7 +4,7 @@ Existing editorial candidates,72,Original source seed records
 Additional location-enriched records,928,Geographic source plus inferred tags; not destination-specific research
 Rows available in production import,1000,AI_IMPORT_DESTINATIONS contains all records
 Rows with coordinates,972,Geocoding still required for missing values
-Verified live hotel rates,0,None asserted; integrate provider on request
+Verified live hotel rates,0,None in the catalogue; LiteAPI supplies live rates for exact dates
 Verified activity availability,0,None asserted; query Viator live
 Eligibility,DISCOVERY ONLY,No source-backed venue/rate claims without API confirmation
 Consolidated working inventory,CATALOGUE_MASTER_1000,"Research and operational QA view, not a production recommendation feed"
@@ -19,3 +19,20 @@ Source requirement,destination-specific authoritative URL + observed evidence + 
 Copy requirement,No medical/wellness results guaranteed,Use careful claims about experience characteristics and suitability
 PDF parity,Use same validated results object as on-screen itinerary,"No invented hotel prices, travel times, or activities in PDF"
 Recommended next milestone,"Research prioritized destination records, then property-level catalogue","Expand genuinely useful, source-supported inventory incrementally"
+Catalogue release,Editorial candidate 2026-10-30,"Conservative tag update; 21 columns and all 1,000 IDs unchanged"
+Theme changes applied,147,"Medium confidence only, all within the 928; provisional, not source-verified"
+Rows keeping prior tags pending research,781,770 low-confidence proposals and 11 medium-confidence rows left unapplied
+Original 72 changed,0,Protected curated set
+Rows tagged Restoration,38,Was 75 before this release
+Rows tagged Connection,837,Was 946 before this release
+Rows tagged Discovery,982,Unchanged
+Rows tagged Reflection,796,Was 882 before this release
+Rows tagged Inspiration,97,Was 48 before this release
+Rows tagged Adventure,22,Unchanged; Explorer also gives 942 rows a partial match
+Rows tagged Celebration,0,No destination carries this theme yet
+Rows tagged Growth,1,Unchanged
+Price estimate rows,1000,"Modelled, low confidence; joined by destination_id; never a quote or a hard exclusion"
+Release validation,Staging first,Diff the 21 columns and run the five regression tests; do not overwrite the live catalogue until tests complete
+Rollback,Keep prior catalogue,Roll back by destination_id and prior theme fields if matching degrades
+Client retest scope,Five tests plus budget,Restoration + Reflection; Discovery + Inspiration; Nearby from Austin; unrecognized departure + Decide Later; accessibility + flexible dates; budget scenarios once pricing is active
+Open refinement,Nearby radius,"1,500 km kept for the next test round; refine toward traveler travel tolerance afterwards"

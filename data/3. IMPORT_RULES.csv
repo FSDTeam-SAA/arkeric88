@@ -2,10 +2,10 @@
 Primary import,"Import all 1,000 rows from AI_IMPORT_DESTINATIONS. Preserve its 21-column positional mapping; original 72 rows remain unchanged."
 Destination matching,"LOCATION_ENRICHED and CANDIDATE_ONLY rows may enter ranked destination discovery, subject to guest hard constraints. Neither implies verified lodging or bookable output."
 Hotel recommendation gate,"Only recommend a specific lodging property after live rate and occupancy/date search succeeds, or clearly label any property a non-bookable idea. Never infer prices from city tags."
-Emotional themes,"Tags are broad candidate matching hints, not scientific emotional outcomes. Map Restorer to Restoration, Connector to Connection, Explorer to Discovery/Adventure, Reflector to Reflection and Inspirer to Inspiration."
+Emotional themes,"Tags are broad candidate matching hints, not scientific emotional outcomes. Map Restorer to Restoration, Connector to Connection, Explorer to Discovery/Adventure, Reflector to Reflection and Inspirer to Inspiration. A destination may carry more than one theme. Update classifications through editorial_themes and the existing destination_id, with no mapping or structural change. Provisional tags never create hard exclusions."
 Destination matching confidence,Existing 72 editorial records: edited candidates requiring claim review. Other 928: location-grounded records with heuristic travel tags; rank lower until enriched by primary sources and verified providers.
 Geography,Use latitude/longitude for 928 new records; first 72 have missing coordinates and need geocoding before radius/distance ranking.
-Live inventory,"Booking.com or other provider API establishes accommodation rates and availability only for exact dates, occupants, currency and market. Handle empty and error results separately."
+Live inventory,"LiteAPI establishes accommodation rates and availability only for exact dates, occupants, currency and market. Revalidate a rate before presenting it as available. Handle empty and error results separately. Flexible-window search and hotel booking wait until the core experience is validated."
 Activities,"Viator API supplies bookable activity options. Match activity proximity, timing, availability, dietary/accessibility needs and live pricing."
 Travel logistics,Google Maps API verifies route and transfer duration. Do not estimate unsupported route metrics or assume all nearby cities are well connected.
 Fallback,"If live lodging returns zero inventory, offer destination inspiration, date/budget flexibility, or a clearly labeled alternative. Do not falsely report that rooms are available."
@@ -18,3 +18,10 @@ Implementation,"Enable all 1,000 destinations for candidate retrieval; gate fina
 Editorial enhancement,"All 928 previously generic backlog rows now include regionally informed editorial copy, experience tags, pacing and traveler tradeoffs. These are editorial drafts, not individually researched or source-verified destination guides."
 Matching guidance,"Use editorial_themes and experience_context as candidate relevance signals only. Do not treat emotional outcomes, attractions, amenities, prices or suitability as verified without separate evidence."
 Editorial status,"Original 72 preserve existing entries; 928 new entries have source_review_status EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK, and remain candidate-only until validation."
+Theme release,"Editorial candidate 2026-10-30 changes editorial_themes on 147 medium-confidence rows, all within the 928. Other proposals in EMOTIONAL_TAG_REVIEW stay unapplied pending research. No other mapped field changes."
+Budget input,Keep the nightly accommodation budget. No total-trip budget question for now.
+Price estimates,"PRICE_ESTIMATES_1000 joins by destination_id outside the 21-column import and leaves verified_nightly_usd blank. Use estimates for preliminary ranking and soft warnings, never to exclude a destination and never as a quote. Live LiteAPI rates take precedence when available."
+Premium budget,A higher budget allows premium accommodation but does not favor luxury destinations unless the traveler's preferences support that experience.
+Unverified departure,Preserve an unrecognized departure exactly as entered and mark it unverified. Do not estimate distance or make proximity claims. Still return recommendations.
+Nearby,"Keep the current 1,500 km definition for the next test round. Later refinement should reflect the traveler's travel tolerance rather than one universal radius."
+Match presentation,"Show guests qualitative labels such as Excellent Match, Strong Match and Good Match. Keep numeric scores internal for analysis."

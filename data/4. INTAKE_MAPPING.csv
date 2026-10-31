@@ -7,6 +7,6 @@ settings,Up to two settings or surprise me,Preference unless explicitly mandator
 pace,"Open time, one highlight, balanced, full days",Itinerary density,Separate from fitness/accessibility
 party,"Adults, child ages, room count",Occupancy and suitability,Required for live rates
 constraints,Must-avoid and prefer-avoid separately,Hard filter versus soft penalty,Ask if a critical need is unclear
-origin_radius,Origin and travel tolerance,Feasibility,Route and transport checks
+origin_radius,Origin and travel tolerance; origin may be left as decide later,Feasibility,"Route and transport checks; keep an unrecognized origin as entered, marked unverified, with no proximity claims"
 dates_duration,Exact dates or flexible period; nights,"Seasonality, inventory, itinerary",Exact dates for price/availability
-nightly_budget,Numeric USD per room-night for full party,Live payable cost filter,Confirm rooms if party needs more than one
+nightly_budget,Numeric USD per room-night for full party,Preliminary soft ranking from price estimates; live payable cost takes precedence when available,"Confirm rooms if party needs more than one; label estimates as estimates, not quotes"

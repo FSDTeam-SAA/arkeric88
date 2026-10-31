@@ -43,10 +43,10 @@ DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 CANDIDATES_FILE_SUFFIX = "AI_IMPORT_DESTINATIONS.csv"
 BACKLOG_FILE_SUFFIX = "DISCOVERY_BACKLOG.csv"
 
-# Catalogue release v3 (Velari_Editorially_Expanded_Destinations_1000.xlsx);
+# Catalogue release v4 (Velari_Conservative_Catalogue_Release_Candidate_1000.xlsx);
 # IMPORT_RULES.csv "Import verification": 1,000 rows, 1,000 unique IDs.
-CATALOG_RELEASE = "v3"
-CATALOG_SNAPSHOT_DATE = "2026-10-28"
+CATALOG_RELEASE = "v4"
+CATALOG_SNAPSHOT_DATE = "2026-10-30"
 EXPECTED_CANDIDATE_COUNT = 1000
 EXPECTED_EDITORIAL_COUNT = 72
 EXPECTED_BACKLOG_COUNT = 928

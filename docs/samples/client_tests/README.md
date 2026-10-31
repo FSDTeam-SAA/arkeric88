@@ -28,7 +28,7 @@ Full responses are saved in `results/`:
 - `results/current_build/`: `main` after the 30 Oct 2026 fixes.
 
 Both were run with Austin located by Google Maps. On a server, check that `response.scoring_version`
-is `2026-10-30.1` and `response.total_candidate_count` is `1000`; otherwise it runs an older build.
+is `velari-destinations-2026-10-30.1` and `response.total_candidate_count` is `1000`; otherwise it runs an older build.
 
 | Test | Client reported | Previous build (9913196) | Current build |
 | --- | --- | --- | --- |
