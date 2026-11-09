@@ -156,8 +156,9 @@ class CitySuggestionInput(BaseModel):
     city_name: str
     country_name: str
     number_of_days: int
-    # Guest display: "Designed to help you feel: **{primary_feeling}**", then description.
+    # The profile is stated once in the response's "profile_summary", not per card.
     primary_feeling: Optional[str] = None
+    feelings: List[str] = []
     description: Optional[str] = None
     city_image: List[str] = []
     latitude: Optional[float] = None
@@ -165,6 +166,8 @@ class CitySuggestionInput(BaseModel):
     destination_id: Optional[str] = None
     world_region: Optional[str] = None
     match_score: Optional[int] = None
+    # Show this to guests instead of match_score.
+    match_label: Optional[str] = None
     score_breakdown: Dict[str, float] = {}
     match_reasons: List[str] = []
     tradeoffs: List[str] = []

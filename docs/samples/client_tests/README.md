@@ -16,6 +16,8 @@ Each file differs from Test 1 only where the client's test changed it.
 | `test_6_flexible_20_day_window.json` | Flexible-dates finding | 20-day window 1–21 Dec 2026, 5 nights, still `flexible` |
 | `test_7_decide_later.json` | "Decide later" | No `departure_location` / `travel_distance` |
 
+The saved results below predate catalogue release v5 (1,500 destinations, see `docs/11. CATALOG_1500_IMPORT.md`).
+
 ## Previous build vs. current build
 
 Full responses are saved in `results/`:

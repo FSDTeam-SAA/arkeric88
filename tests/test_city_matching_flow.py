@@ -88,7 +88,7 @@ def test_get_suggested_city_returns_two_to_three_catalog_destinations():
         assert city["verification"]["evidence_tier"] in {"editorial", "location_enriched"}
         assert city["evidence"]["place_lookup"]["outcome"] == "UNVERIFIED"  # offline in tests
     body = data["response"]
-    assert body["total_candidate_count"] == 1000
+    assert body["total_candidate_count"] == 1500
     assert body["catalog_version"]["backlog_count"] == 928
     assert body["catalog_version"]["location_enriched_count"] == 928
     # The departure is located even for "Open to anywhere" (travel effort); offline it stays unverified.
@@ -100,6 +100,8 @@ def test_get_suggested_city_returns_two_to_three_catalog_destinations():
 # A guest-supplied point in the South Pacific: only the three Oceania rows
 # without catalog coordinates (Byron hinterland, Rotorua, Queenstown) can't be
 # measured and stay in range; every other destination is beyond "Nearby".
+# Located on the map, those three are beyond it too.
+OCEANIA_LOOKUPS = {"AU-BYR": (-28.64, 153.61), "NZ-ROT": (-38.14, 176.25), "NZ-QUE": (-45.03, 168.66)}
 REMOTE_NEARBY = dict(
     travel_distance="nearby", departure_location="Pacific test point",
     departure_latitude=-50.0, departure_longitude=-130.0, departure_country="New Zealand",
@@ -109,7 +111,7 @@ REMOTE_NEARBY = dict(
 def test_no_country_is_repeated_and_fewer_options_are_explained():
     data = _suggest(build_intake(**REMOTE_NEARBY)).json()
     cities = data["suggested_cities"]
-    assert [city["destination_id"] for city in cities] == ["AU-BYR", "NZ-ROT"]
+    assert [city["destination_id"] for city in cities] == ["NZ-QUE", "AU-BYR"]
     assert any("showing fewer options" in gap for gap in data["response"]["data_gaps"])
 
 
@@ -125,8 +127,13 @@ def test_old_questionnaire_payload_is_rejected():
 BLOCKED = build_intake(trip_goals=["growth"], preferred_moments=["music_nightlife"], **REMOTE_NEARBY)
 
 
+def _suggest_blocked():
+    with patch("app.router.city_content_route.lookup_missing_coordinates", return_value=OCEANIA_LOOKUPS):
+        return _suggest(BLOCKED)
+
+
 def test_no_valid_result_names_the_constraint_instead_of_relaxing_it():
-    response = _suggest(BLOCKED)
+    response = _suggest_blocked()
     assert response.status_code == 200
     data = response.json()
     assert data["match_status"] == "no_valid_result"
@@ -225,7 +232,7 @@ def test_regenerate_never_repeats_until_exhausted_then_404():
 
 
 def test_regenerate_with_intake_updates_lets_the_guest_flex_a_constraint():
-    blocked = _suggest(BLOCKED).json()
+    blocked = _suggest_blocked().json()
     assert blocked["match_status"] == "no_valid_result"
     response = client.post("/v1/regenerate_suggested_city", json={
         "session_id": blocked["session_id"],
@@ -398,6 +405,40 @@ def test_get_tour_plan_accepts_a_suggested_city_by_name():
     response, *_ = _plan(initial["session_id"], selected_city=chosen["city_name"].upper())
     assert response.status_code == 200
     assert response.json()["destination_id"] == chosen["destination_id"]
+
+
+def test_cards_carry_their_label_and_the_profile_is_stated_once():
+    data = _suggest(build_intake()).json()
+    summary = data["response"]["profile_summary"]
+    assert summary.startswith("You're looking for ")
+    for city in data["suggested_cities"]:
+        assert city["match_label"]
+        assert summary not in json.dumps(city)
+
+
+def _same_name_session(first: str, second: str) -> str:
+    # Two same-named destinations in one session (the catalogue has 13 such names).
+    session_id = _suggest(build_intake()).json()["session_id"]
+    from src.session.city_session_store import CitySessionStore
+    CitySessionStore._sessions[session_id].shown_destination_ids = [first, second]
+    return session_id
+
+
+def test_a_name_shared_across_countries_needs_the_destination_id():
+    panama, chile = "NE-1159136879", "NE-1159151615"
+    response, *_ = _plan(_same_name_session(panama, chile), selected_city="Santiago")
+    assert response.status_code == 400
+    assert "destination_id" in response.json()["detail"]
+
+
+def test_itineraries_for_same_named_places_are_kept_apart():
+    dominican, panama = "NE-1159149837", "NE-1159136879"
+    session_id = _same_name_session(dominican, panama)
+    first, *_ = _plan(session_id, destination_id=dominican)
+    second, ai, *_ = _plan(session_id, destination_id=panama)
+    assert first.json()["destination_id"] == dominican
+    assert second.json()["destination_id"] == panama and second.json()["source"] == "generated"
+    assert ai.called
 
 
 def test_get_tour_plan_rejects_destinations_not_suggested_in_the_session():

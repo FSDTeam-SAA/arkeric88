@@ -87,6 +87,8 @@ def from_pipes(value: Optional[str]) -> List[str]:
 
 def lower_first(text: str) -> str:
     text = (text or "").strip()
+    if text[:2].isalpha() and text[:2].isupper():  # An acronym ("MADES announced ...").
+        return text
     return text[:1].lower() + text[1:] if text else text
 
 

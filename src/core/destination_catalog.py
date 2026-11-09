@@ -1,9 +1,9 @@
 """
 Load the destination catalog described by data/3. IMPORT_RULES.csv.
 
-- AI_IMPORT_DESTINATIONS holds all 1,000 destinations ("Primary import"):
-  the 72 original editorial candidates (CANDIDATE_ONLY) and 928
-  location-enriched records (LOCATION_ENRICHED). Both may be ranked.
+- AI_IMPORT_DESTINATIONS holds all 1,500 destinations ("Primary import"):
+  572 source-linked candidates (CANDIDATE_ONLY: the 72 original and 500 added)
+  and 928 location-enriched records (LOCATION_ENRICHED). Both may be ranked.
 - DISCOVERY_BACKLOG is loaded only for integrity checks: every backlog row is
   now imported into AI_IMPORT_DESTINATIONS (import_status ENRICHED_IN_IMPORT).
 - No historical property or archetype sheet is part of this import.
@@ -43,18 +43,18 @@ DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 CANDIDATES_FILE_SUFFIX = "AI_IMPORT_DESTINATIONS.csv"
 BACKLOG_FILE_SUFFIX = "DISCOVERY_BACKLOG.csv"
 
-# Catalogue release v4 (Velari_Conservative_Catalogue_Release_Candidate_1000.xlsx);
-# IMPORT_RULES.csv "Import verification": 1,000 rows, 1,000 unique IDs.
-CATALOG_RELEASE = "v4"
-CATALOG_SNAPSHOT_DATE = "2026-10-30"
-EXPECTED_CANDIDATE_COUNT = 1000
-EXPECTED_EDITORIAL_COUNT = 72
+# Catalogue release v5 (Velari_AI_IMPORT_DESTINATIONS_1500.xlsx);
+# IMPORT_RULES.csv "Import verification": 1,500 rows, 1,500 unique IDs.
+CATALOG_RELEASE = "v5"
+CATALOG_SNAPSHOT_DATE = "2026-11-07"
+EXPECTED_CANDIDATE_COUNT = 1500
+EXPECTED_EDITORIAL_COUNT = 572
 EXPECTED_BACKLOG_COUNT = 928
 
 EDITORIAL_CANDIDATE = "CANDIDATE_ONLY"
 LOCATION_ENRICHED = "LOCATION_ENRICHED"
 
-# A clause repeated word for word on at least this many rows (10% of the
+# A clause repeated word for word on at least this many rows (about 7% of the
 # catalog) is boilerplate. Shorter templates such as "Plan around weather
 # changes and driving times" (26 rows) still describe the place and are kept.
 BOILERPLATE_MIN_ROWS = 100
@@ -64,6 +64,9 @@ _STAFF_CLAUSES = (
     "verify dates, occupancy, price and access",
     "This is an editorial interpretation, not a guest-specific conclusion.",
 )
+# The 49 protected-area rows end with a note on how the tag was chosen; the
+# theme word changes, so it never repeats often enough to count as boilerplate.
+_STAFF_CLAUSE = re.compile(r"^this setting may suit travell?ers seeking|^emotional fit is a hypothesis", re.IGNORECASE)
 _CLAUSE_BREAK = re.compile(r"(?<=[.;])\s+")
 # Staff wording on the 44 tourism-listing rows: "Consider when guest seeks
 # inspiration and discovery: architecture, culture, and coast."
@@ -76,7 +79,23 @@ _CONTRAST_CLAUSE = re.compile(r"\b(?:rather than|instead of|not suited to)\b[^.;
 _STAFF_PHRASES = (
     (re.compile(r"\bmay not suit (?:the |every )?guests?\b", re.IGNORECASE), "may not suit everyone"),
     (re.compile(r"\bguests seeking\b", re.IGNORECASE), "travelers seeking"),
+    # The 44 tourism-listing rows write these in lower case.
+    *((re.compile(rf"\b{word.lower()}\b"), word) for word in (
+        "Japanese", "Swiss", "Tasmanian", "Mediterranean", "Andean", "Pacific", "Atlantic", "Guanacaste", "South Island",
+    )),
 )
+# experience_context words that describe a booking step, not the place. Read as
+# a claim ("Booked gallery tour", "Date-confirmed hike") they would state
+# something nobody has checked, so guests see the experience without them.
+_OPERATIONAL_PREFIX = re.compile(
+    r"^(?:(?:(?:date|season|operator|route|language|condition|ability|host|companion|age|advance|community)"
+    r"-(?:confirmed|approved|matched|cleared|specific|eligible|arranged|planned|paced|focused)"
+    r"|booked|prebooked|reserved|prearranged|confirmed|eligible|requested|approved|verified"
+    r"|selected|planned|arranged|paced|matched|dated)\s+)+",
+    re.IGNORECASE,
+)
+_BOOKING_CLAIM = re.compile(r"\b(?:confirmed|booked|prebooked|reserved|prearranged|approved|verified)\b", re.IGNORECASE)
+_WORD = re.compile(r"[^\W\d_]+")
 
 _CATALOG_PACES = {"gentle": "Gentle", "balanced": "Balanced", "active": "Active"}
 
@@ -115,6 +134,8 @@ class Destination:
     # Tradeoffs and rationale without boilerplate or staff wording.
     specific_tradeoffs: str = ""
     guest_rationale: str = ""
+    # Each experience as (catalog wording for matching, wording guests may see).
+    experience_items: tuple = ()
     record: Dict[str, str] = field(default_factory=dict, compare=False, repr=False)
     match_fields: Dict[str, str] = field(default_factory=dict, compare=False, repr=False)
 
@@ -217,7 +238,10 @@ def boilerplate_clauses(rows: List[Dict[str, str]], min_rows: int = BOILERPLATE_
 
 
 def _without_boilerplate(text: str, boilerplate: FrozenSet[str]) -> str:
-    kept = " ".join(clause.strip() for clause in _clauses(text) if _clause_key(clause) not in boilerplate)
+    kept = " ".join(
+        clause.strip() for clause in _clauses(text)
+        if _clause_key(clause) not in boilerplate and not _STAFF_CLAUSE.match(clause.strip())
+    )
     return kept.strip().rstrip(";,: ").strip()
 
 
@@ -231,16 +255,59 @@ def _guest_wording(text: str) -> str:
     return text
 
 
+def word_counts(rows: List[Dict[str, str]]) -> Counter:
+    """How often each word appears across the fields guests can read about a place."""
+    counts: Counter = Counter()
+    for row in rows:
+        for name in ("destination", "experience_context", "editorial_rationale", "tradeoffs_to_check", "setting_context"):
+            counts.update(word.lower() for word in _WORD.findall(row.get(name, "")))
+    return counts
+
+
+def is_run_together(word: str, counts: Counter) -> bool:
+    """
+    True for a word the source lost its spaces in ("TeAwaruaOPorirua",
+    "harbourhistory"): mixed case inside the word, or a rare long word made of
+    two words the catalog uses on their own.
+    """
+    if re.search(r"[a-z][A-Z]", word):
+        return True
+    lowered = word.lower()
+    if len(lowered) < 11 or counts[lowered] > 2:
+        return False
+    return len(lowered) >= 17 or any(
+        counts[lowered[:cut]] >= 2 and counts[lowered[cut:]] >= 2 for cut in range(4, len(lowered) - 3)
+    )
+
+
+def _experience_items(raw: str, counts: Counter) -> tuple:
+    """
+    "Booked cooking class|Monte Alban" -> pairs of (catalog wording, guest
+    wording). Split on pipes only: a row may hold one full sentence with commas.
+    A row with run-together words shows none of them until the source is fixed.
+    """
+    entries = [entry.strip() for entry in (raw or "").split("|") if entry.strip()]
+    if any(is_run_together(word, counts) for entry in entries for word in _WORD.findall(entry)):
+        return ()
+    items = []
+    for entry in entries:
+        shown = _OPERATIONAL_PREFIX.sub("", entry).strip().rstrip(".")
+        if shown and not _BOOKING_CLAIM.search(shown):
+            items.append((entry, shown[0].upper() + shown[1:]))
+    return tuple(items)
+
+
 def _to_destination(
     row: Dict[str, str],
     boilerplate: FrozenSet[str] = frozenset(),
     spellings: Optional[Dict[str, str]] = None,
+    counts: Optional[Counter] = None,
 ) -> Destination:
     """`spellings`: {country_key: name} so one country is written one way (see country_spellings)."""
     themes = row.get("editorial_themes", "")
     paces = parse_paces(row.get("pace_context", ""))
     specific_tradeoffs = _guest_wording(_without_boilerplate(row.get("tradeoffs_to_check", ""), boilerplate))
-    guest_rationale = _guest_rationale(_without_boilerplate(row.get("editorial_rationale", ""), boilerplate))
+    guest_rationale = _guest_wording(_guest_rationale(_without_boilerplate(row.get("editorial_rationale", ""), boilerplate)))
     return Destination(
         destination_id=row["destination_id"],
         destination=row["destination"],
@@ -269,6 +336,7 @@ def _to_destination(
         catalog_paces=paces,
         specific_tradeoffs=specific_tradeoffs,
         guest_rationale=guest_rationale,
+        experience_items=_experience_items(row.get("experience_context", ""), counts or Counter()),
         record=dict(row),
         match_fields={
             "tradeoffs_to_check": specific_tradeoffs,
@@ -287,6 +355,7 @@ def load_destination_candidates() -> tuple:
     rows = _read_rows(CANDIDATES_FILE_SUFFIX)
     boilerplate = boilerplate_clauses(rows)
     spellings = country_spellings(row.get("country", "") for row in rows)
+    counts = word_counts(rows)
     seen, destinations = set(), []
     for row in rows:
         destination_id = row.get("destination_id", "")
@@ -294,7 +363,7 @@ def load_destination_candidates() -> tuple:
             logger.warning("Catalog row skipped: %s destination_id %r.", "missing" if not destination_id else "duplicate", destination_id)
             continue
         seen.add(destination_id)
-        destinations.append(_to_destination(row, boilerplate, spellings))
+        destinations.append(_to_destination(row, boilerplate, spellings, counts))
     return tuple(destinations)
 
 

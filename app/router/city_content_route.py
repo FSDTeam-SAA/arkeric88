@@ -1397,6 +1397,8 @@ def _match_intake(request: TravelIntakeRequest, exclude_ids: frozenset = frozens
         "no_valid_result": build_no_valid_result(result, profile) if match_status == "no_valid_result" else None,
         "clarifications": profile.clarifications,
         "guest_context": profile.guest_context(),
+        # Show once above the cards; the cards then say only why each place fits.
+        "profile_summary": profile.profile_summary,
         "eligible_count": len(result.ranked),
         "excluded_count": len(result.exclusions),
         "excluded_by_reason": result.excluded_by_reason(),
@@ -1550,9 +1552,15 @@ def _resolve_selected_destination(city_session, request_data: TourPlanRequestDat
     if not wanted:
         raise HTTPException(status_code=400, detail="Provide destination_id (preferred) or selected_city.")
     shown = [get_destination(destination_id) for destination_id in shown_ids]
-    for destination in shown:
-        if destination is not None and destination.destination.lower() == wanted:
-            return destination
+    named = [destination for destination in shown if destination is not None and destination.destination.lower() == wanted]
+    if len(named) > 1:
+        # Some names repeat across countries (San Jose, Santiago).
+        raise HTTPException(
+            status_code=400,
+            detail=f"'{request_data.selected_city}' matches more than one destination in this session; send destination_id.",
+        )
+    if named:
+        return named[0]
     options = ", ".join(destination.destination for destination in shown if destination is not None)
     raise HTTPException(
         status_code=400,
@@ -1677,6 +1685,7 @@ async def get_tour_plan(request_data: TourPlanRequestData):
         activity_session = ActivitySessionStore.get_by_city(
             session_id=request_data.session_id,
             city_name=city_name,
+            destination_id=destination.destination_id,
         )
         if activity_session is not None:
             return _session_payload(activity_session, "cached")
