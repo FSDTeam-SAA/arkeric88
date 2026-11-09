@@ -33,6 +33,7 @@ from src.core.intake_mappings import (
     BUDGET_ABOVE_PENALTY,
     BUDGET_STRETCH_PENALTY,
     ENVIRONMENT_KEYWORDS,
+    EVIDENCE_EXCLUDED_WORDS,
     ENVIRONMENT_LABELS,
     GOAL_EXPERIENCE_KEYWORDS,
     HIGH_IMPACT_DESTINATION_RESTRICTIONS,
@@ -430,6 +431,10 @@ def score_destination(
             f"Verified nightly cost ${destination.verified_nightly_usd:,.0f} exceeds your ${profile.budget_per_night:,.0f} budget.",
         )
 
+    if not destination.goals and not destination.secondary_goals:
+        # The source left editorial_themes blank (71 rows): nothing says what this place offers.
+        return None, Exclusion(destination.destination_id, "no_grounded_fit", "The catalogue has no themes for this destination yet.")
+
     matched_goals = [goal for goal in profile.goals if goal in destination.goals]
     goal_share = sum(profile.goal_weight(goal) * destination.goal_strength(goal) for goal in profile.goals)
     moment_hits = _matched_moments(destination)
@@ -669,13 +674,14 @@ def select_diverse(
 
 # ==================== EXPLANATION ====================
 
-_GENERIC_SETTINGS = {"regional destination", "destination", "region"}
-_TAG_SPLIT = re.compile(r"\s*(?:\||,|;|\band\b)\s*", re.IGNORECASE)
-
-
-def _tags(value: str) -> List[str]:
-    """Catalog "Art|Nature|Food" or "Architecture, culture, and coast" -> ["art", "nature", "food"]."""
-    return [tag.strip().lower() for tag in _TAG_SPLIT.split(value or "") if tag and tag.strip()]
+_GENERIC_SETTINGS = {
+    "regional destination", "destination", "region", "regional gateway", "urban / regional gateway", "nature and culture",
+}
+# First words of settings that stay capitalized ("Andean valley").
+_PROPER_SETTING_WORDS = {
+    "Aboriginal", "Amazon", "Andean", "Andes", "Andes-to-Amazon", "Apatani", "Atlantic", "Baltic", "Carpathian", "Gran",
+    "Himalayan", "Indian", "Ivatan", "Kutch", "Melanesian", "Pacific", "Patagonian", "Sahara", "Sudanian", "Tibetan-influenced",
+}
 
 
 def _rationale_phrase(destination: Destination) -> str:
@@ -692,41 +698,31 @@ def _rationale_phrase(destination: Destination) -> str:
     return lower_first(first)
 
 
-# Vowel letters with a consonant sound ("a university town") and the reverse ("an hour").
-_A_BEFORE = ("uni", "use", "usu", "eu", "one", "once")
-_AN_BEFORE = ("hour", "honest", "heir")
-
-
-def _article(phrase: str) -> str:
-    word = phrase.lower()
-    if word.startswith(_AN_BEFORE):
-        return "an"
-    if word.startswith(_A_BEFORE):
-        return "a"
-    return "an" if word[:1] in "aeiou" else "a"
+def _setting_tags(destination: Destination) -> List[str]:
+    """The catalog settings in guest words, without generic ones ("City|Town" is a city)."""
+    tags = [tag.strip() for tag in destination.setting_context.split("|") if tag.strip()]
+    kept = [tag for tag in tags if tag.lower() not in _GENERIC_SETTINGS and not tag.lower().endswith("protected landscape")]
+    if {"City", "Town"} <= set(kept):
+        kept.remove("Town")
+    return [tag if tag.split()[0] in _PROPER_SETTING_WORDS else lower_first(tag) for tag in kept]
 
 
 def _setting_phrase(destination: Destination) -> str:
-    """The catalog setting in guest words ("town and jungle"), or "" when generic."""
-    return natural_list([tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS])
+    """At most two settings ("town and jungle"), or "" when generic."""
+    return natural_list(_setting_tags(destination)[:2])
 
 
 def _introduction(destination: Destination) -> str:
     """
-    What the place is and what a stay there offers -- no matching language.
-    A rationale that already describes the place by name is used as written.
+    What the place is, one sentence from its rationale. The experiences are
+    left for "match_reasons", which picks the ones this guest asked for.
     """
     rationale = _rationale_phrase(destination)
-    if rationale and rationale.split()[0] in destination.destination.split():
+    if rationale and rationale[0].isupper() and rationale.split()[0] in destination.destination.split():
         return f"{rationale}."
-    experiences = natural_list(_tags(destination.experience_context))
-    settings = _setting_phrase(destination)
-    setting = f", in {_article(settings)} {settings} setting" if settings else ""
-    if experiences:
-        return f"{destination.destination} is known for {experiences}{setting}."
     if rationale:
         return f"{destination.destination}: {rationale}."
-    return ""
+    return f"{destination.destination}, {destination.country}."
 
 
 def _home(profile: TripProfile) -> str:
@@ -734,67 +730,59 @@ def _home(profile: TripProfile) -> str:
     return (profile.departure_location or "").split(",")[0].strip() or "your departure point"
 
 
-def _moment_evidence(destination: Destination, moment: str) -> Optional[str]:
-    """What at this destination backs a chosen moment: its own tags, else its pace."""
-    tags = [tag for tag in _tags(destination.experience_context) if _matches(MOMENT_KEYWORDS[moment], tag)]
-    if tags:
-        return natural_list(tags[:2])
-    paces = set(destination.catalog_paces) & MOMENT_PACE_SIGNALS.get(moment, set())
-    if paces:
-        return f"a {sorted(paces)[0].lower()} pace"
+def _take_evidence(fragments: Iterable[str], available: List[tuple], code: str) -> Optional[str]:
+    """The first unused entry the keywords match, removed so no two lines name the same one."""
+    for entry in available:
+        if _matches(fragments, entry[0]) and not _matches(EVIDENCE_EXCLUDED_WORDS.get(code, ()), entry[0]):
+            available.remove(entry)
+            return entry[1]
     return None
 
 
-def _goal_experiences(destination: Destination, goal: str) -> List[str]:
-    tags = _tags(destination.experience_context) + [
-        tag for tag in _tags(destination.setting_context) if tag not in _GENERIC_SETTINGS
-    ]
-    return [tag for tag in dict.fromkeys(tags) if _matches(GOAL_EXPERIENCE_KEYWORDS[goal], tag)][:3]
-
-
-def _goal_reasons(item: ScoredDestination) -> List[str]:
+def _evidence_lines(item: ScoredDestination) -> Tuple[List[str], List[str]]:
     """
-    One line per group of selected goals, naming the destination's own
-    experiences that support them ("For restoration and reflection: yoga,
-    nature and jungle."). Goals backed by the same experiences share a line.
+    ("Discovery: Monte Alban and historic Oaxaca.", ...) for the goals, then
+    the same for the chosen moments. Each goal gets its own line and its own
+    experience, so Discovery and Inspiration are never run together; a goal
+    with nothing on file gets no line rather than a generic one. A row with
+    one or two experiences was tagged from them, so those back its goals
+    directly; failing that, a setting the goal's keywords match.
     """
     destination = item.destination
-    groups: Dict[tuple, List[str]] = {}
+    introduction = _introduction(destination).lower()
+    available = [entry for entry in destination.experience_items if entry[1].lower() not in introduction]
+    direct = len(destination.experience_items) <= 2
+    settings = [] if item.matched_environments else [(tag, f"{tag[0].upper()}{tag[1:]} setting") for tag in _setting_tags(destination)]
+    goals, moments = [], []
     for goal in item.matched_goals:
-        groups.setdefault(tuple(_goal_experiences(destination, goal)), []).append(goal)
-    # The rationale backs a goal only when the introduction doesn't already say it.
-    rationale = _rationale_phrase(destination)
-    fallback = "" if rationale and rationale in _introduction(destination) else rationale
-    lines = []
-    for experiences, goals in groups.items():
-        labels = natural_list([TRIP_GOAL_LABELS[goal].lower() for goal in goals])
-        support = natural_list(experiences) or fallback
-        lines.append(f"For {labels}: {support}." if support else f"Suited to {labels}.")
-    return lines
+        evidence = (
+            _take_evidence(GOAL_EXPERIENCE_KEYWORDS[goal], available, goal)
+            or (available.pop(0)[1] if direct and available else None)
+            or _take_evidence(GOAL_EXPERIENCE_KEYWORDS[goal], settings, goal)
+        )
+        if evidence:
+            goals.append(f"{TRIP_GOAL_LABELS[goal]}: {evidence}.")
+    for moment in item.matched_moments:
+        evidence = _take_evidence(MOMENT_KEYWORDS[moment], available, moment)
+        if evidence:
+            moments.append(f"{PREFERRED_MOMENT_LABELS[moment]}: {evidence}.")
+    return goals, moments
 
 
 def _reasons(item: ScoredDestination, profile: TripProfile) -> List[str]:
     """
-    Guest-facing reasons tied to the guest's own answers, each saying something
-    the introduction doesn't: which experiences support the selected goals,
-    which chosen moments and setting it fits, and when the journey suits the
-    trip length. Never catalog tags, pipe-separated lists or "our editors".
+    Why this place fits this guest, each line saying something the
+    introduction doesn't: an experience behind each selected goal, then one
+    behind a chosen moment, then the trip length and setting. The guest's
+    profile itself is stated once, in the response's "profile_summary".
+    Never catalog tags, pipe-separated lists or "our editors".
     """
     destination = item.destination
-    reasons: List[str] = _goal_reasons(item)
-    if item.matched_moments:
-        parts = []
-        for moment in item.matched_moments:
-            label = PREFERRED_MOMENT_LABELS[moment].lower()
-            evidence = _moment_evidence(destination, moment)
-            parts.append(f"{label} ({evidence})" if evidence and evidence not in label else label)
-        reasons.append(f"It has what you're drawn to: {'; '.join(parts)}.")
-    if item.matched_environments:
-        setting = _setting_phrase(destination)
-        wanted = natural_list([ENVIRONMENT_LABELS[env].lower() for env in item.matched_environments])
-        reasons.append(f"The {setting} setting suits your preference for {wanted}." if setting else f"It suits your preference for {wanted}.")
-    elif item.pace_fit == "match" and destination.catalog_pace:
-        reasons.append(f"Its {destination.catalog_pace.lower()} pace fits how you like to travel.")
+    goal_lines, moment_lines = _evidence_lines(item)
+    if item.matched_goals and not goal_lines:
+        # One goal only: naming two here would blend them with nothing to tell them apart.
+        goal_lines = [f"Suited to {TRIP_GOAL_LABELS[item.matched_goals[0]].lower()}."]
+    reasons: List[str] = goal_lines + moment_lines[:1]
     if (
         item.suggested_min_nights is not None
         and item.distance.straight_line_km is not None
@@ -805,6 +793,19 @@ def _reasons(item: ScoredDestination, profile: TripProfile) -> List[str]:
             f"About {item.distance.straight_line_km:,} km from {_home(profile)} in a straight line, "
             f"a comfortable distance for {profile.nights} nights."
         )
+    if item.matched_environments:
+        # Only settings that are the kind asked for: a city with mountains nearby is not a mountain setting.
+        fitting = [
+            tag for tag in _setting_tags(destination)
+            if any(_matches(ENVIRONMENT_KEYWORDS[env], tag) for env in item.matched_environments)
+        ]
+        wanted = natural_list(fitting[:2]) or natural_list([ENVIRONMENT_LABELS[env].lower() for env in item.matched_environments], "or")
+        reasons.append(f"Setting you asked for: {wanted}.")
+    reasons += moment_lines[1:]
+    if len(reasons) < 2 and item.pace_fit == "match" and destination.catalog_pace:
+        reasons.append(f"Its {destination.catalog_pace.lower()} pace fits how you like to travel.")
+    if not reasons and item.matched_moments:
+        reasons.append(f"It fits your interest in {PREFERRED_MOMENT_LABELS[item.matched_moments[0]].lower()}.")
     return reasons[:4]
 
 
@@ -911,8 +912,8 @@ def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Opti
         "country_name": destination.country,
         "world_region": destination.world_region,
         "number_of_days": profile.nights,
-        # Guest display: "Designed to help you feel: **{primary_feeling}**" -- every
-        # selected goal, main goal first ("Restored and reflective").
+        # Kept for existing clients. The profile is stated once, in the response's
+        # "profile_summary"; a results page should not repeat this on every card.
         "primary_feeling": profile.feeling_label,
         "feelings": profile.feelings,
         # What the place is; "match_reasons" says why it fits. No sentence is in both.
@@ -932,7 +933,7 @@ def build_suggestion(item: ScoredDestination, profile: TripProfile, origin: Opti
         "distance_check": item.distance.to_dict(),
         "verification": {
             "candidate_status": destination.candidate_status,
-            # "editorial": one of the 72 edited candidates; "location_enriched":
+            # "editorial": one of the 572 source-linked candidates; "location_enriched":
             # one of the 928 records with heuristic travel tags.
             "evidence_tier": "location_enriched" if destination.is_location_enriched else "editorial",
             "source_review_status": destination.source_review_status,

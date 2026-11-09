@@ -129,6 +129,13 @@ class TripProfile:
         return " and ".join([words[0], *[word.lower() for word in words[1:]]])
 
     @property
+    def profile_summary(self) -> str:
+        """The guest's goals and interests, stated once for the whole result page."""
+        wants = [TRIP_GOAL_DEFINITIONS[goal][0].lower() + TRIP_GOAL_DEFINITIONS[goal][1:] for goal in self.goals]
+        enjoys = [label[0].lower() + label[1:] for label in self.moment_labels]
+        return f"You're looking for {', and '.join(wants)}. You told us you enjoy {'; '.join(enjoys)}."
+
+    @property
     def accessibility_need_labels(self) -> List[str]:
         labels = [ACCESSIBILITY_NEED_LABELS[need] for need in self.accessibility_needs if need != "other"]
         if self.accessibility_needs_other:

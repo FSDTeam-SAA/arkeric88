@@ -327,13 +327,17 @@ class ActivitySessionStore:
         cls,
         session_id: str,
         city_name: str,
+        destination_id: Optional[str] = None,
     ) -> Optional[ActivitySession]:
         """
         Retrieve activity session by parent session ID and city name.
         Used to check if activities already exist for this city (caching).
+        `destination_id` keeps same-named places in different countries apart.
         """
         for session in cls._children(session_id):
-            if session.city == city_name:
+            if session.city != city_name:
+                continue
+            if destination_id is None or session.destination_id in (None, destination_id):
                 return deepcopy(session)
         return None
 

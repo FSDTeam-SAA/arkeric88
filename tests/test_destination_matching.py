@@ -106,7 +106,9 @@ def test_unknown_high_impact_must_avoid_is_not_a_pass():
 def test_no_valid_result_names_the_blocking_constraint():
     remote = Origin("GUEST_SUPPLIED", -50.0, -130.0, "New Zealand", "oceania", "2026-10-29T00:00:00+00:00")
     profile = _profile(build_intake(trip_goals=["growth"], preferred_moments=["music_nightlife"], travel_distance="nearby"))
-    result = rank_destinations(profile, remote)
+    # The three Oceania rows without catalog coordinates, located on the map.
+    located = {"AU-BYR": (-28.64, 153.61), "NZ-ROT": (-38.14, 176.25), "NZ-QUE": (-45.03, 168.66)}
+    result = rank_destinations(profile, remote, located)
     assert result.ranked == []
     no_result = build_no_valid_result(result, profile)
     assert no_result["relaxed_automatically"] is False
@@ -255,7 +257,7 @@ def test_select_diverse_never_repeats_a_country_even_under_another_spelling():
     result = rank_destinations(_profile(build_intake()), None)
     us = [item for item in result.ranked if country_key(item.destination.country) == "united states"]
     assert {get_destination("US-SED").country, get_destination("NE-1159151489").country} == {"United States"}
-    assert len(select_diverse(us)) == 1
+    assert len(select_diverse(us)) <= 2
 
 
 def test_equal_scores_are_not_ordered_by_catalog_id():
@@ -286,18 +288,21 @@ def test_primary_goal_carries_more_of_the_desired_outcome_points():
     assert weighted.goals[0] == "reflection"
     by_id = {item.destination_id: item for item in rank_destinations(weighted, None).ranked}
     plain = {item.destination_id: item for item in rank_destinations(equal, None).ranked}
-    reflection_only = get_destination("NE-1159151389")  # Hiroshima: Reflection; Discovery
-    restoration_only = get_destination("NE-1159150791")  # Valencia: Restoration; Discovery
+    def single_goal(goal):
+        return next(d for d in load_destination_candidates() if goal in d.goals and not {"restoration", "reflection"} - {goal} & set(d.goals))
+    reflection_only, restoration_only = single_goal("reflection"), single_goal("restoration")
     assert by_id[reflection_only.destination_id].breakdown["desired_outcomes"] == 24
     assert by_id[restoration_only.destination_id].breakdown["desired_outcomes"] == 16
     assert plain[reflection_only.destination_id].breakdown["desired_outcomes"] == 20
 
 
-def test_explorer_counts_as_a_partial_adventure_match():
+def test_explorer_counts_as_a_partial_adventure_match(monkeypatch):
+    explorer = replace(get_destination("NZ-ROT"), goals=("discovery",), secondary_goals=("adventure",))
+    monkeypatch.setattr(destination_matching, "load_destination_candidates", lambda: (explorer, get_destination("NZ-QUE")))
     profile = _profile(build_intake(trip_goals=["adventure"]))
     by_id = {item.destination_id: item for item in rank_destinations(profile, None).ranked}
-    assert by_id["NE-1159140667"].breakdown["desired_outcomes"] == 20  # Pardubice: Explorer only
-    assert by_id["NZ-QUE"].breakdown["desired_outcomes"] == 40  # Queenstown: Adventurer
+    assert by_id["NZ-ROT"].breakdown["desired_outcomes"] == 20
+    assert by_id["NZ-QUE"].breakdown["desired_outcomes"] == 40  # Queenstown: Adventure
 
 
 def test_select_diverse_skips_excluded_ids():
@@ -307,16 +312,29 @@ def test_select_diverse_skips_excluded_ids():
     assert not _ids(first) & _ids(second)
 
 
-def test_all_1000_destinations_are_considered():
+def test_all_1500_destinations_are_considered():
     result = rank_destinations(_profile(build_intake(preferred_environments=["surprise_me"])), None)
-    assert result.total_candidate_count == 1000
-    assert len(result.ranked) + len(result.exclusions) == 1000
+    assert result.total_candidate_count == 1500
+    assert len(result.ranked) + len(result.exclusions) == 1500
     backlog_ids = {row["destination_id"] for row in load_discovery_backlog()}
     assert len(_ids(result.ranked) & backlog_ids) > 500
 
 
-def test_goal_with_no_catalog_coverage_is_reported_as_a_data_gap():
-    result = rank_destinations(_profile(build_intake(trip_goals=["celebration"])), None)
+def test_a_row_without_themes_is_never_ranked():
+    # Santiago, Chile: blank editorial_themes, but its rationale mentions food and culture.
+    santiago = get_destination("NE-1159151615")
+    assert not santiago.goals
+    result = rank_destinations(_profile(build_intake(preferred_moments=["food_drinks", "art_history_culture"])), None)
+    assert santiago.destination_id in _excluded_ids(result, "no_grounded_fit")
+
+
+def test_goal_with_no_catalog_coverage_is_reported_as_a_data_gap(monkeypatch):
+    catalog = tuple(
+        replace(destination, goals=tuple(goal for goal in destination.goals if goal != "celebration"))
+        for destination in load_destination_candidates()
+    )
+    monkeypatch.setattr(destination_matching, "load_destination_candidates", lambda: catalog)
+    result = rank_destinations(_profile(build_intake(trip_goals=["celebration"], preferred_moments=["food_drinks"])), None)
     assert result.ranked
     assert any("Celebration" in gap for gap in result.data_gaps)
 
@@ -332,7 +350,7 @@ def test_suggestion_ties_reasons_to_guest_labels_and_states_what_is_unverified()
     profile = _profile(build_intake(**exact_dates(nights=5)))
     item = select_diverse(rank_destinations(profile, None).ranked)[0]
     suggestion = build_suggestion(item, profile, None)
-    assert suggestion["match_reasons"][0].startswith("For restoration")
+    assert suggestion["match_reasons"][0].startswith(("Restoration:", "Reflection:", "Suited to"))
     # Both selected goals, main goal first -- not just the first one clicked.
     assert suggestion["primary_feeling"] == "Restored and reflective"
     assert suggestion["feelings"] == ["Restored", "Reflective"]

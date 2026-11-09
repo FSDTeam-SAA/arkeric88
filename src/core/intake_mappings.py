@@ -13,8 +13,8 @@ Bump INTAKE_MAPPING_VERSION whenever a mapping or threshold changes so each
 session records which ruleset produced its suggestions.
 """
 
-INTAKE_MAPPING_VERSION = "2026-10-30.1"
-SCORING_VERSION = "velari-destinations-2026-10-30.1"
+INTAKE_MAPPING_VERSION = "2026-11-09.1"
+SCORING_VERSION = "velari-destinations-2026-11-09.1"
 
 # ---------------------------------------------------------------------------
 # Guest-facing labels, copied verbatim from the intake form so explanations
@@ -284,28 +284,51 @@ MOMENT_KEYWORDS = {
 # destination's rationale.
 GOAL_EXPERIENCE_KEYWORDS = {
     "restoration": [
-        r"spa", r"wellness", r"yoga", r"hot springs", r"onsen", r"thermal", r"beach(?:es)?", r"nature",
-        r"quiet", r"retreats?", r"islands?", r"lakes?", r"river", r"ocean", r"jungle", r"forests?",
+        r"spa", r"wellness", r"yoga", r"hot springs", r"onsen", r"thermal", r"bath\w*", r"beach(?:es)?", r"nature",
+        r"quiet", r"retreats?", r"islands?", r"lakes?", r"lakeside", r"river", r"ocean", r"jungle", r"forests?",
+        r"gardens?", r"unhurried", r"slow(?:er)?", r"paced", r"parkland", r"pause", r"rest",
     ],
     "reflection": [
-        r"yoga", r"meditation", r"temples?", r"spiritual", r"nature", r"quiet", r"desert", r"stargazing",
-        r"monaster(?:y|ies)", r"gardens?", r"red rocks", r"river", r"jungle", r"forests?", r"foothills",
+        r"yoga", r"meditation", r"temples?", r"spiritual", r"sacred", r"nature", r"quiet", r"desert", r"stargazing",
+        r"monaster(?:y|ies)", r"gardens?", r"red rocks", r"river", r"jungle", r"forests?", r"foothills", r"memorial\w*",
+        r"contemplat\w*", r"deliberate", r"pilgrim\w*", r"silen\w*", r"church(?:es)?", r"shrines?", r"unhurried", r"viewpoints?",
     ],
     "discovery": [
-        r"cultur(?:e|al)", r"food", r"history", r"heritage", r"markets?", r"architecture", r"museums?",
-        r"neighbou?rhoods?", r"coffee", r"wine", r"local heritage", r"traditions?",
+        r"cultur(?:e|al)", r"food", r"history", r"historic(?:al)?", r"heritage", r"markets?", r"architecture", r"museums?",
+        r"neighbou?rhoods?", r"coffee", r"wine", r"local heritage", r"traditions?", r"archaeolog\w*", r"explor\w*",
+        r"interpret\w*", r"visit", r"sites?",
     ],
     "inspiration": [
-        r"arts?", r"architecture", r"design", r"music", r"creative", r"craft", r"museums?",
-        r"galler(?:y|ies)", r"landscapes?", r"red rocks",
+        r"arts?", r"artisans?", r"architecture", r"design", r"music", r"creative", r"craft", r"museums?", r"galler(?:y|ies)",
+        r"landscapes?", r"red rocks", r"paint\w*", r"sculptures?", r"murals?", r"studios?", r"exhibit\w*", r"performances?",
+        r"collections?", r"views?", r"viewing", r"photograph\w*",
     ],
     "adventure": [
-        r"hiking", r"trails?", r"div(?:e|ing)", r"surf\w*", r"trek\w*", r"wildlife", r"reef", r"adventure",
-        r"outdoors?", r"kayak\w*", r"geothermal",
+        r"hik(?:e|es|ing)", r"trails?", r"div(?:e|ing)", r"surf\w*", r"trek\w*", r"wildlife", r"reef", r"adventures?",
+        r"outdoors?", r"kayak\w*", r"geothermal", r"climb\w*", r"paddl\w*", r"raft\w*", r"cycl\w*", r"ski\w*", r"snorkel\w*",
+        r"canyon\w*", r"volcan\w*", r"balloon", r"excursions?", r"routes?", r"safari\w*",
     ],
-    "connection": [r"food", r"wine", r"community", r"markets?", r"beach(?:es)?", r"cooking", r"dining"],
-    "celebration": [r"wine", r"food", r"nightlife", r"music", r"beach(?:es)?", r"spa", r"dining"],
-    "growth": [r"learning", r"craft", r"hiking", r"cultur(?:e|al)", r"language", r"workshops?", r"yoga"],
+    "connection": [
+        r"food", r"wine", r"community", r"markets?", r"beach(?:es)?", r"cooking", r"dining", r"shared", r"companion-\w+",
+        r"hosted", r"host-\w+", r"family", r"together", r"table", r"small-group", r"group",
+    ],
+    "celebration": [
+        r"wine", r"food", r"nightlife", r"music", r"beach(?:es)?", r"spa", r"dining", r"festivals?", r"dance", r"carnival",
+        r"tasting\w*", r"balloon",
+    ],
+    "growth": [
+        r"learning", r"craft", r"hik(?:e|es|ing)", r"cultur(?:e|al)", r"language", r"workshops?", r"yoga", r"class(?:es)?",
+        r"courses?", r"instruction", r"practice", r"skills?", r"milestone", r"lessons?", r"making",
+    ],
+}
+
+# An experience with one of these words never backs the goal or moment named
+# here on a card: "private group cooking" is not quiet, a yoga festival not a spa.
+EVIDENCE_EXCLUDED_WORDS = {
+    "quiet_privacy": [r"group", r"shared", r"festivals?", r"markets?", r"cooking"],
+    "spa_wellness": [r"festivals?", r"shared"],
+    "restoration": [r"group", r"festivals?", r"markets?", r"nightlife"],
+    "reflection": [r"group", r"festivals?", r"markets?", r"nightlife"],
 }
 
 # Structured catalog fields that also evidence a moment, beyond keywords.

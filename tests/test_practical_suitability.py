@@ -218,17 +218,32 @@ def test_ubud_card_names_specific_experiences_for_the_selected_goals():
     profile = _profile(departure_location=None, travel_distance=None)
     ubud = _ranked(profile, origin=None)["ID-UBU"]
     suggestion = build_suggestion(ubud, profile, None)
-    assert suggestion["description"] == "Ubud is known for art, nature, food and yoga, in a town and jungle setting."
-    assert suggestion["match_reasons"][0] == "For restoration and reflection: nature, yoga and jungle."
-    assert "spa and wellness (yoga)" in suggestion["match_reasons"][1]
+    assert suggestion["description"] == "Ubud: creative setting and nature."
+    assert suggestion["match_reasons"][0] == "Restoration: Spa and rural stay."
+    assert "Setting you asked for: jungle." in suggestion["match_reasons"]
 
 
 def test_both_goals_are_shown_and_a_missing_one_is_explained():
     profile = _profile(recent_feelings=["curious"], trip_goals=["discovery", "inspiration"], trip_prompt="curious_to_explore")
     suggestion = build_suggestion(_ranked(profile)["CO-COF"], profile, AUSTIN)
     assert suggestion["primary_feeling"] == "Curious and inspired"
-    assert suggestion["match_reasons"][0] == "For discovery: coffee and culture."
-    assert "Offers less for inspiration than for discovery." in suggestion["tradeoffs"]
+    assert suggestion["match_reasons"][:2] == ["Discovery: Lightly scheduled coffee-farm stay.", "Inspiration: Working cultural landscape."]
+    missing = _ranked(_profile(recent_feelings=["curious"], trip_goals=["discovery", "growth"], trip_prompt="curious_to_explore"))["AU-BYR"]
+    assert "Offers less for growth than for discovery." in build_suggestion(missing, _profile(recent_feelings=["curious"], trip_goals=["discovery", "growth"], trip_prompt="curious_to_explore"), AUSTIN)["tradeoffs"]
+
+
+def test_discovery_and_inspiration_are_never_blended_in_one_line():
+    profile = _profile(recent_feelings=["curious"], trip_goals=["discovery", "inspiration"], trip_prompt="curious_to_explore")
+    for item in _ranked(profile).values():
+        for reason in build_suggestion(item, profile, AUSTIN)["match_reasons"]:
+            assert not ("discovery" in reason.lower() and "inspiration" in reason.lower()), reason
+
+
+def test_setting_line_never_calls_a_city_a_mountain_setting():
+    profile = _profile(preferred_environments=["mountains"])
+    for item in _ranked(profile).values():
+        for reason in build_suggestion(item, profile, AUSTIN)["match_reasons"]:
+            assert not reason.startswith("Setting you asked for: city")
 
 
 def test_one_country_is_spelled_one_way_on_every_card():
@@ -251,7 +266,7 @@ def test_setting_the_guest_did_not_pick_is_stated_as_a_tradeoff():
 def test_reasons_never_repeat_an_introduction_built_from_the_rationale():
     # Location-enriched rows often have no experience tag backing the goal; the
     # fallback used to be the rationale sentence the introduction already shows.
-    profile = _profile(trip_goals=["reflection"], departure_location=None, travel_distance=None)
+    profile = _profile(trip_goals=["discovery"], departure_location=None, travel_distance=None)
     tuzla = next(d for d in destination_matching.load_destination_candidates() if d.destination == "Tuzla")
     item = _ranked(profile, origin=None)[tuzla.destination_id]
     suggestion = build_suggestion(item, profile, None)
@@ -273,20 +288,6 @@ def test_any_country_spelled_two_ways_gets_one_name():
     assert spellings["united kingdom"] == "United Kingdom"  # preferred name wins over the more common "UK"
     assert spellings["bahamas"] == "Bahamas"  # otherwise the most common spelling
     assert spellings["peru"] == "Peru"
-
-
-@pytest.mark.parametrize("phrase, article", [
-    ("island", "an"), ("alpine lake", "an"), ("urban / regional gateway", "an"), ("desert", "a"),
-    ("university town", "a"), ("one-street village", "a"), ("hour from the coast", "an"),
-])
-def test_article(phrase, article):
-    assert destination_matching._article(phrase) == article
-
-
-def test_introduction_uses_the_right_article():
-    profile = _profile(departure_location=None, travel_distance=None)
-    baa = build_suggestion(_ranked(profile, origin=None)["MV-BAA"], profile, None)
-    assert baa["description"].endswith("in an island setting.")
 
 
 def test_goal_click_order_never_changes_the_label_or_results():
