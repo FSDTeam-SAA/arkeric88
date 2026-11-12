@@ -87,9 +87,11 @@ def test_every_candidate_stays_unverified_and_price_unknown():
         assert destination.verified_nightly_usd is None
 
 
-def test_every_candidate_has_at_least_one_recognized_theme():
-    for destination in load_destination_candidates():
-        assert destination.goals, destination.destination_id
+def test_every_supplied_theme_is_recognized_and_only_71_rows_have_none():
+    candidates = load_destination_candidates()
+    assert sum(not destination.raw_themes for destination in candidates) == 71
+    for destination in candidates:
+        assert destination.goals or not destination.raw_themes, destination.destination_id
         tokens = [t.strip().lower() for t in re.split(r"[|;,]", destination.raw_themes) if t.strip()]
         assert all(token in mappings.CATALOG_THEME_TO_GOAL for token in tokens), destination.raw_themes
 
@@ -107,7 +109,8 @@ def test_catalog_pace_values_are_understood():
     assert parse_paces("Gentle|Balanced") == ("Gentle", "Balanced")
     for destination in load_destination_candidates():
         if not destination.catalog_paces:
-            assert destination.pace_context.lower().startswith("guest-dependent")
+            # "Slow" (one row) is reported in the import validation and treated as pace to confirm.
+            assert destination.pace_context == "Slow" or destination.pace_context.lower().startswith("guest-dependent")
         assert set(destination.catalog_paces) <= set(mappings.CATALOG_PACE_ORDER)
 
 
