@@ -21,3 +21,5 @@ src/personal
 # *.md
 config.bat
 node_modules
+
+.env
