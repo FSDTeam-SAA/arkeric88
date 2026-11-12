@@ -2,7 +2,7 @@
 Unique destination location records,1500,All IDs unique across main import
 Source-linked candidates,572,72 original seed records and 500 added in release v5
 Additional location-enriched records,928,Geographic source plus inferred tags; not destination-specific research
-Rows available in production import,1500,AI_IMPORT_DESTINATIONS contains all records; 71 with blank themes are held out of matching
+Rows available in production import,1500,AI_IMPORT_DESTINATIONS contains all records
 Rows with coordinates,1472,Geocoding still required for the 28 missing values
 Verified live hotel rates,0,None in the catalogue; LiteAPI supplies live rates for exact dates
 Verified activity availability,0,None asserted; query Viator live
@@ -19,15 +19,15 @@ Source requirement,destination-specific authoritative URL + observed evidence + 
 Copy requirement,No medical/wellness results guaranteed,Use careful claims about experience characteristics and suitability
 PDF parity,Use same validated results object as on-screen itinerary,"No invented hotel prices, travel times, or activities in PDF"
 Recommended next milestone,"Research prioritized destination records, then property-level catalogue","Expand genuinely useful, source-supported inventory incrementally"
-Catalogue release,v5 2026-11-07,"21 columns and all 1,000 existing IDs unchanged; 500 rows added; replaces the held 147-tag revision"
+Catalogue release,v6 2026-11-12,"21 columns and all 1,500 IDs unchanged; 71 rows restored, Cayenne and Rotuma corrected"
 Existing rows re-tagged,1000,"editorial_themes and experience_context changed on every existing row; provisional, not source-verified"
-Rows with blank themes and experiences,71,All location-enriched; held out of matching until tagged
+Rows restored from the 1,000-row workbook,71,Location-enriched; themes and experiences provisional until source-checked
 Rows without source URL or check date,928,All location-enriched; flagged in the import validation report
 Rows tagged Restoration,366,Was 75 in the production release (v3)
-Rows tagged Connection,392,Was 946 in the production release (v3)
-Rows tagged Discovery,1320,Was 982 in the production release (v3)
-Rows tagged Reflection,928,Was 882 in the production release (v3)
-Rows tagged Inspiration,1045,Was 48 in the production release (v3)
+Rows tagged Connection,457,Was 946 in the production release (v3)
+Rows tagged Discovery,1391,Was 982 in the production release (v3)
+Rows tagged Reflection,992,Was 882 in the production release (v3)
+Rows tagged Inspiration,1047,Was 48 in the production release (v3)
 Rows tagged Adventure,346,Was 22 in the production release (v3)
 Rows tagged Celebration,164,Was 0 in the production release (v3)
 Rows tagged Growth,572,Was 1 in the production release (v3)

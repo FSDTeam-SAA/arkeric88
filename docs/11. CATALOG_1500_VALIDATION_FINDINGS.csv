@@ -38,7 +38,6 @@
 25,NZ-ROT,Rotorua,New Zealand,latitude + longitude,WARN,coordinates_blank,Located by map lookup; distance unmeasured if the lookup fails
 26,NZ-QUE,Queenstown,New Zealand,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 26,NZ-QUE,Queenstown,New Zealand,latitude + longitude,WARN,coordinates_blank,Located by map lookup; distance unmeasured if the lookup fails
-27,MV-BAA,Baa Atoll,Maldives,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: candlelight
 27,MV-BAA,Baa Atoll,Maldives,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 27,MV-BAA,Baa Atoll,Maldives,latitude + longitude,WARN,coordinates_blank,Located by map lookup; distance unmeasured if the lookup fails
 28,QA-DOH,Doha,Qatar,destination_source_url,WARN,generic_source_url,"Homepage only, not destination-specific: https://visitqatar.com/"
@@ -145,7 +144,6 @@
 68,NE-1159151169,Brisbane,Australia,editorial_rationale,INFO,staff_wording,Staff wording removed from guest text
 68,NE-1159151169,Brisbane,Australia,pace_context,INFO,pace_to_confirm,Scored as pace to confirm
 69,NE-1159151165,Adelaide,Australia,editorial_rationale,INFO,staff_wording,Staff wording removed from guest text
-69,NE-1159151165,Adelaide,Australia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: glasshouses
 69,NE-1159151165,Adelaide,Australia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 69,NE-1159151165,Adelaide,Australia,pace_context,INFO,pace_to_confirm,Scored as pace to confirm
 70,NE-1159151695,Dunedin,New Zealand,editorial_rationale,INFO,staff_wording,Staff wording removed from guest text
@@ -206,7 +204,6 @@
 105,NE-1159151361,Kuwait City,Kuwait,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 106,NE-1159151209,Nicosia,Cyprus,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 107,NE-1159150445,Gaza,Palestine,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-107,NE-1159150445,Gaza,Palestine,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 108,NE-1159151151,Thimphu,Bhutan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 108,NE-1159151151,Thimphu,Bhutan,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 109,NE-1159132353,Famagusta,Northern Cyprus,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -266,7 +263,6 @@
 148,NE-1159128461,Al Jahra,Kuwait,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 149,NE-1159146007,Lemosos,Cyprus,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 150,NE-1159146065,Nablus,Palestine,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-150,NE-1159146065,Nablus,Palestine,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 151,NE-1159121163,Paro,Bhutan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 151,NE-1159121163,Paro,Bhutan,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 152,NE-1159121963,Kyrenia,Northern Cyprus,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -290,12 +286,10 @@
 168,NE-1159150325,Siem Reap,Cambodia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 168,NE-1159150325,Siem Reap,Cambodia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 169,NE-1159136499,Biratnagar,Nepal,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-169,NE-1159136499,Biratnagar,Nepal,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 170,NE-1159150353,Khulna,Bangladesh,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 171,NE-1159149589,Kandy,Sri Lanka,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 172,NE-1159136477,Osh,Kyrgyzstan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 173,NE-1159144565,Shirvan,Azerbaijan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-173,NE-1159144565,Shirvan,Azerbaijan,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 174,NE-1159149345,Mary,Turkmenistan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 175,NE-1159139569,Al Karak,Jordan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 176,NE-1159139147,Louangphrabang,Laos,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -305,13 +299,11 @@
 179,NE-1159146587,Salalah,Oman,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 180,NE-1159132159,Vanadzor,Armenia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 181,NE-1159148621,Sukhumi,Georgia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-181,NE-1159148621,Sukhumi,Georgia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 182,NE-1159142281,Haifa,Israel,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 183,NE-1159139037,Zahle,Lebanon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 184,NE-1159128453,Al Ahmadi,Kuwait,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 185,NE-1159121843,Larnaka,Cyprus,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 186,NE-1159132349,Al Khalil,Palestine,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-186,NE-1159132349,Al Khalil,Palestine,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 187,NE-1159151531,Urumqi,China,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 188,NE-1159151541,New Delhi,India,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 189,NE-1159151307,Medan,Indonesia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -330,7 +322,6 @@
 200,NE-1159149107,New Taipei,Taiwan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 200,NE-1159149107,New Taipei,Taiwan,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 201,NE-1159149719,Dund-Us,Mongolia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-201,NE-1159149719,Dund-Us,Mongolia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 202,NE-1159144655,Kampong Cham,Cambodia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 203,NE-1159136495,Birganj,Nepal,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 204,NE-1159150421,Rajshahi,Bangladesh,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -376,7 +367,6 @@
 239,NE-1159147851,Rangpur,Bangladesh,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 240,NE-1159148171,Anuradhapura,Sri Lanka,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 241,NE-1159136449,Balykchy,Kyrgyzstan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-241,NE-1159136449,Balykchy,Kyrgyzstan,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 242,NE-1159144581,Lankaran,Azerbaijan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 243,NE-1159147533,Dasoguz,Turkmenistan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 244,NE-1159129733,Irbid,Jordan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -388,7 +378,6 @@
 250,NE-1159142257,Poti,Georgia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 251,NE-1159130717,Beer Sheva,Israel,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 252,NE-1159119221,Nabatiye et Tahta,Lebanon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-252,NE-1159119221,Nabatiye et Tahta,Lebanon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 253,NE-1159151215,Shenzhen,China,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 254,NE-1159151431,Chennai,India,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 254,NE-1159151431,Chennai,India,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
@@ -416,7 +405,6 @@
 272,NE-1159146379,Galle,Sri Lanka,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 273,NE-1159136473,Talas,Kyrgyzstan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 274,NE-1159144591,Stepanakert,Azerbaijan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-274,NE-1159144591,Stepanakert,Azerbaijan,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 275,NE-1159134289,Balkanabat,Turkmenistan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 276,NE-1159129739,As Salt,Jordan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 276,NE-1159129739,As Salt,Jordan,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
@@ -436,7 +424,6 @@
 286,NE-1159150843,Makassar,Indonesia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 287,NE-1159149377,Samsun,Turkey,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 288,NE-1159147891,Nakhon Si Thammarat,Thailand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-288,NE-1159147891,Nakhon Si Thammarat,Thailand,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: Intergenerational
 289,NE-1159150121,Oskemen,Kazakhstan,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 290,NE-1159151613,Paris,France,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 291,NE-1159151529,Berlin,Germany,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -522,14 +509,12 @@
 357,NE-1159148307,Daugavpils,Latvia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 358,NE-1159145889,Banja Luka,Bosnia and Herzegovina,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 359,NE-1159136941,Tiraspol,Moldova,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-359,NE-1159136941,Tiraspol,Moldova,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 360,NE-1159136375,Kaunas,Lithuania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 361,NE-1159147673,Akureyri,Iceland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 362,NE-1159136207,Pec,Kosovo,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 363,NE-1159138957,Bitola,North Macedonia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 364,NE-1159135827,Maribor,Slovenia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-365,NE-1159150911,Cayenne,France,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-365,NE-1159150911,Cayenne,France,world_region,ERROR,region_conflicts_with_coordinates,"Listed France / Europe; coordinates are French Guiana, South America"
+365,NE-1159150911,"Cayenne, French Guiana",France,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 366,NE-1159151353,Hamburg,Germany,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 366,NE-1159151353,Hamburg,Germany,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 367,NE-1159151313,Naples,Italy,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -564,7 +549,6 @@
 392,NE-1159136931,Balti,Moldova,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 393,NE-1159136351,Klaipeda,Lithuania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 394,NE-1159147675,Keflavik,Iceland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-394,NE-1159147675,Keflavik,Iceland,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: Shipbuilding
 395,NE-1159128447,Prizren,Kosovo,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 396,NE-1159129473,Tetovo,North Macedonia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 397,NE-1159150037,Marseille,France,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -612,7 +596,6 @@
 431,NE-1159149435,Bilbao,Spain,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 432,NE-1159135835,Timisoara,Romania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 433,NE-1159148253,Goteborg,Sweden,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-433,NE-1159148253,Goteborg,Sweden,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: ProfilHotels
 433,NE-1159148253,Goteborg,Sweden,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 434,NE-1159149459,Kristiansand,Norway,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 435,NE-1159148595,Kalamata,Greece,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -637,7 +620,6 @@
 453,NE-1159136347,Ventspils,Latvia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 454,NE-1159145885,Prijedor,Bosnia and Herzegovina,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 455,NE-1159116487,Dubasari,Moldova,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-455,NE-1159116487,Dubasari,Moldova,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 456,NE-1159128249,Panevezys,Lithuania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 457,NE-1159146353,Hofn,Iceland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 458,NE-1159150039,Le Havre,France,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -657,7 +639,6 @@
 470,NE-1159119937,Fier,Albania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 471,NE-1159135449,Gyor,Hungary,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 472,NE-1159148651,Oulu,Finland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-472,NE-1159148651,Oulu,Finland,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: greenhouses
 472,NE-1159148651,Oulu,Finland,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 473,NE-1159145057,Pleven,Bulgaria,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 474,NE-1159136311,Groningen,Netherlands,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -690,7 +671,6 @@
 497,NE-1159151207,Nassau,The Bahamas,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 498,NE-1159146021,Christiansted,United States Virgin Islands,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 499,NE-1159146055,Willemstad,Curacao,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-499,NE-1159146055,Willemstad,Curacao,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: transatlantic
 500,NE-1159146057,Oranjestad,Aruba,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 501,NE-1159149847,Roseau,Dominica,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 502,NE-1159150339,Bridgetown,Barbados,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -703,7 +683,6 @@
 508,NE-1159151185,Hamilton,Bermuda,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 509,NE-1159151569,Los Angeles,United States of America,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159150053 (Chile)
 509,NE-1159151569,Los Angeles,United States of America,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-509,NE-1159151569,Los Angeles,United States of America,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: GettyGuide
 510,NE-1159151527,Monterrey,Mexico,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 511,NE-1159151555,Vancouver,Canada,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 511,NE-1159151555,Vancouver,Canada,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
@@ -785,7 +764,6 @@
 580,NE-1159136879,Santiago,Panama,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159149837 (Dominican Republic); NE-1159151615 (Chile)
 580,NE-1159136879,Santiago,Panama,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 581,NE-1159151485,Houston,United States of America,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-581,NE-1159151485,Houston,United States of America,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: McGovern
 581,NE-1159151485,Houston,United States of America,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 582,NE-1159150757,Tampico,Mexico,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 583,NE-1159151025,Winnipeg,Canada,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -795,7 +773,6 @@
 587,NE-1159147249,Qaqortoq,Greenland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 588,NE-1159136105,Granada,Nicaragua,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 589,NE-1159117729,Usulutan,El Salvador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-589,NE-1159117729,Usulutan,El Salvador,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 590,NE-1159127151,Nacaome,Honduras,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 591,NE-1159117825,Savanna-la-Mar,Jamaica,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 592,NE-1159129861,Cartago,Costa Rica,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -824,7 +801,6 @@
 610,NE-1159130411,San Francisco de Macoris,Dominican Republic,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 611,NE-1159140095,Bayamo,Cuba,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 612,NE-1159130383,San Luis,Guatemala,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-612,NE-1159130383,San Luis,Guatemala,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 613,NE-1159149081,Tasiilaq,Greenland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 614,NE-1159128139,Esteli,Nicaragua,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 615,NE-1159117657,Zacatecoluca,El Salvador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -845,7 +821,6 @@
 627,NE-1159128151,Juigalpa,Nicaragua,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 628,NE-1159117711,San Vicente,El Salvador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 629,NE-1159113205,Yoro,Honduras,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-629,NE-1159113205,Yoro,Honduras,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 630,NE-1159117905,Port Morant,Jamaica,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 631,NE-1159151235,Dallas,United States of America,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 632,NE-1159150767,Cancun,Mexico,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -853,27 +828,22 @@
 633,NE-1159151033,Saskatoon,Canada,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 634,NE-1159118885,San Cristobal,Dominican Republic,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159150505 (Venezuela)
 634,NE-1159118885,San Cristobal,Dominican Republic,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-634,NE-1159118885,San Cristobal,Dominican Republic,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 635,NE-1159140243,Matanzas,Cuba,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 636,NE-1159130397,Jutiapa,Guatemala,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-636,NE-1159130397,Jutiapa,Guatemala,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: intercultural
 636,NE-1159130397,Jutiapa,Guatemala,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 637,NE-1159147253,Kangerlussuaq,Greenland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 638,NE-1159128143,Boaco,Nicaragua,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 639,NE-1159117611,Ahuachapan,El Salvador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 639,NE-1159117611,Ahuachapan,El Salvador,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 640,NE-1159113253,Santa Barbara,Honduras,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-640,NE-1159113253,Santa Barbara,Honduras,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 641,NE-1159151239,Boston,United States of America,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 642,NE-1159150765,Tuxtla Gutierrez,Mexico,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 643,NE-1159151029,Regina,Canada,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 644,NE-1159151621,Sao Paulo,Brazil,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 645,NE-1159151615,Santiago,Chile,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159149837 (Dominican Republic); NE-1159136879 (Panama)
 645,NE-1159151615,Santiago,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-645,NE-1159151615,Santiago,Chile,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 646,NE-1159151601,Bogota,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 647,NE-1159151493,Caracas,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-647,NE-1159151493,Caracas,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 648,NE-1159151341,Guayaquil,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 649,NE-1159151135,Santa Cruz,Bolivia,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159149831 (Ecuador)
 649,NE-1159151135,Santa Cruz,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -888,20 +858,17 @@
 657,NE-1159150935,Concepcion,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 657,NE-1159150935,Concepcion,Chile,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 658,NE-1159151237,Maracaibo,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-658,NE-1159151237,Maracaibo,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 659,NE-1159151133,La Paz,Bolivia,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159113237 (Honduras)
 659,NE-1159151133,La Paz,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 660,NE-1159149191,Durazno,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 661,NE-1159149427,Ciudad del Este,Paraguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 662,NE-1159147653,New Amsterdam,Guyana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 663,NE-1159149387,Cottica,Suriname,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-663,NE-1159149387,Cottica,Suriname,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 664,NE-1159151447,Porto Alegre,Brazil,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 664,NE-1159151447,Porto Alegre,Brazil,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 665,NE-1159151345,Cali,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 666,NE-1159150507,Valencia,Venezuela,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159150791 (Spain)
 666,NE-1159150507,Valencia,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-666,NE-1159150507,Valencia,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 667,NE-1159149829,Cuenca,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 668,NE-1159151095,Sucre,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 669,NE-1159147337,Salto,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -913,32 +880,24 @@
 673,NE-1159151443,Brasilia,Brazil,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 674,NE-1159151101,Mar del Plata,Argentina,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 675,NE-1159150613,Tacna,Peru,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-675,NE-1159150613,Tacna,Peru,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 676,NE-1159150929,Antofagasta,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-676,NE-1159150929,Antofagasta,Chile,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 677,NE-1159151003,Leticia,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 678,NE-1159150533,Ciudad Guayana,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-678,NE-1159150533,Ciudad Guayana,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 679,NE-1159149831,Santa Cruz,Ecuador,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159151135 (Bolivia)
 679,NE-1159149831,Santa Cruz,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 680,NE-1159151097,Riberalta,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-680,NE-1159151097,Riberalta,Bolivia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 681,NE-1159147335,Paysandu,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 681,NE-1159147335,Paysandu,Uruguay,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 682,NE-1159146419,Villarrica,Paraguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 683,NE-1159147651,Mabaruma,Guyana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-683,NE-1159147651,Mabaruma,Guyana,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 684,NE-1159151461,Recife,Brazil,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 685,NE-1159151107,Posadas,Argentina,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 686,NE-1159150619,Ica,Peru,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 687,NE-1159150927,Iquique,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 688,NE-1159150859,Mitu,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-688,NE-1159150859,Mitu,Colombia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: birdwatching
 689,NE-1159150505,San Cristobal,Venezuela,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159118885 (Dominican Republic)
 689,NE-1159150505,San Cristobal,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-689,NE-1159150505,San Cristobal,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 690,NE-1159146911,Portoviejo,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-690,NE-1159146911,Portoviejo,Ecuador,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 691,NE-1159150337,Tarija,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 692,NE-1159146181,San Jose de Mayo,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 693,NE-1159147939,Filadelfia,Paraguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -949,9 +908,7 @@
 698,NE-1159149845,Barranquilla,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 699,NE-1159149271,Merida,Venezuela,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159150769 (Mexico)
 699,NE-1159149271,Merida,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-699,NE-1159149271,Merida,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 700,NE-1159148397,Machala,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-700,NE-1159148397,Machala,Ecuador,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 701,NE-1159150287,Trinidad,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 702,NE-1159146183,Rocha,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 703,NE-1159136083,Pedro Juan Caballero,Paraguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -987,14 +944,12 @@
 732,NE-1159148715,Cobija,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 733,NE-1159132417,Mercedes,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 734,NE-1159136087,Bella Vista,Paraguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-734,NE-1159136087,Bella Vista,Paraguay,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 735,NE-1159151459,Goiania,Brazil,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 736,NE-1159150303,Rosario,Argentina,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 737,NE-1159149419,Chimbote,Peru,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 738,NE-1159150051,La Serena,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 739,NE-1159146937,Cucuta,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 740,NE-1159146289,Maturin,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-740,NE-1159146289,Maturin,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 741,NE-1159139967,Ambato,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 742,NE-1159147713,Camiri,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 743,NE-1159132411,Bella Union,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1004,10 +959,8 @@
 745,NE-1159151005,Manaus,Brazil,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 746,NE-1159150297,Tucuman,Argentina,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 747,NE-1159149421,Pucallpa,Peru,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-747,NE-1159149421,Pucallpa,Peru,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: woodcarving
 748,NE-1159150053,Los Angeles,Chile,destination,INFO,name_shared_across_countries,Keyed by destination_id; also: NE-1159151569 (United States of America)
 748,NE-1159150053,Los Angeles,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-748,NE-1159150053,Los Angeles,Chile,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 749,NE-1159146913,Bello,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 750,NE-1159147473,Ciudad Bolivar,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 751,NE-1159140073,Esmeraldas,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1022,10 +975,8 @@
 758,NE-1159150049,Copiapo,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 759,NE-1159146935,Santa Marta,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 760,NE-1159146291,Cumana,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-760,NE-1159146291,Cumana,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 761,NE-1159140163,Ibarra,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 762,NE-1159149013,San Matias,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-762,NE-1159149013,San Matias,Bolivia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 763,NE-1159123067,Punta del Este,Uruguay,destination,INFO,possible_same_place,Within 8 km of NE-1159123051 (Maldonado); never shown together
 763,NE-1159123067,Punta del Este,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 763,NE-1159123067,Punta del Este,Uruguay,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
@@ -1036,9 +987,7 @@
 768,NE-1159150045,Coihaique,Chile,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 769,NE-1159146931,Ibague,Colombia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 770,NE-1159147403,Punto Fijo,Venezuela,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-770,NE-1159147403,Punto Fijo,Venezuela,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 771,NE-1159139935,Milagro,Ecuador,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-771,NE-1159139935,Milagro,Ecuador,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 772,NE-1159144841,Potosi,Bolivia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 773,NE-1159123051,Maldonado,Uruguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 774,NE-1159128125,Encarnacion,Paraguay,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1051,7 +1000,6 @@
 780,NE-1159151469,Luanda,Angola,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 781,NE-1159150571,Lusaka,Zambia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 782,NE-1159151115,Yaounde,Cameroon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-782,NE-1159151115,Yaounde,Cameroon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 783,NE-1159150537,Tunis,Tunisia,destination,INFO,possible_same_place,Within 8 km of TN-TUNIS-MEDINA (Medina of Tunis); never shown together
 783,NE-1159150537,Tunis,Tunisia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 784,NE-1159151439,Abidjan,Ivory Coast,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1066,7 +1014,6 @@
 791,NE-1159151403,Accra,Ghana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 792,NE-1159150993,Brazzaville,Congo (Brazzaville),destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 793,NE-1159150913,Libreville,Gabon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-793,NE-1159150913,Libreville,Gabon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 794,NE-1159150943,Nouakchott,Mauritania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 795,NE-1159150427,Bujumbura,Burundi,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 796,NE-1159151513,Dakar,Senegal,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1080,7 +1027,6 @@
 802,NE-1159150873,Asmara,Eritrea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 803,NE-1159150831,Maseru,Lesotho,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 804,NE-1159150803,Bissau,Guinea Bissau,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-804,NE-1159150803,Bissau,Guinea Bissau,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 805,NE-1159149869,Djibouti,Djibouti,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 806,NE-1159150625,Freetown,Sierra Leone,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 807,NE-1159149997,Banjul,The Gambia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1088,29 +1034,23 @@
 809,NE-1159151205,Praia,Cape Verde,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 810,NE-1159150867,Malabo,Equatorial Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 811,NE-1159149075,Bir Lehlou,Western Sahara,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-811,NE-1159149075,Bir Lehlou,Western Sahara,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 812,NE-1159149083,Moroni,Comoros,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 813,NE-1159151195,Sao Tome,Sao Tome and Principe,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 814,NE-1159151515,Johannesburg,South Africa,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 814,NE-1159151515,Johannesburg,South Africa,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 815,NE-1159151297,Kano,Nigeria,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-815,NE-1159151297,Kano,Nigeria,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 816,NE-1159151137,Oran,Algeria,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 817,NE-1159151349,Alexandria,Egypt,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 818,NE-1159150963,Gonder,Ethiopia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-818,NE-1159150963,Gonder,Ethiopia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: interchange
 819,NE-1159150829,Mombasa,Kenya,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 820,NE-1159151131,Huambo,Angola,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-820,NE-1159151131,Huambo,Angola,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 821,NE-1159149359,Kitwe,Zambia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 822,NE-1159151113,Maroua,Cameroon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-822,NE-1159151113,Maroua,Cameroon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 823,NE-1159149315,Sousse,Tunisia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 823,NE-1159149315,Sousse,Tunisia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 824,NE-1159150999,Yamoussoukro,Ivory Coast,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 825,NE-1159149809,Fianarantsoa,Madagascar,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 826,NE-1159150175,Nzerekore,Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-826,NE-1159150175,Nzerekore,Guinea,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 827,NE-1159150679,Beira,Mozambique,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 828,NE-1159150787,Grootfontein,Namibia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 829,NE-1159149993,Blantyre,Malawi,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1118,21 +1058,16 @@
 831,NE-1159148507,Kumasi,Ghana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 832,NE-1159150171,Pointe-Noire,Congo (Brazzaville),destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 833,NE-1159150919,Port-Gentil,Gabon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-833,NE-1159150919,Port-Gentil,Gabon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 834,NE-1159150947,Atar,Mauritania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 835,NE-1159145221,Muyinga,Burundi,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 836,NE-1159135751,Nyanza,Rwanda,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 837,NE-1159149437,Kaolack,Senegal,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-837,NE-1159149437,Kaolack,Senegal,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 838,NE-1159148289,Buchanan,Liberia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 839,NE-1159150355,Francistown,Botswana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 840,NE-1159150345,Porto-Novo,Benin,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-840,NE-1159150345,Porto-Novo,Benin,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 841,NE-1159149313,Atakpame,Togo,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 842,NE-1159150441,Berbera,Somaliland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-842,NE-1159150441,Berbera,Somaliland,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 843,NE-1159149867,Assab,Eritrea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-843,NE-1159149867,Assab,Eritrea,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 844,NE-1159148713,Mafetang,Lesotho,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 845,NE-1159139425,Bafata,Guinea Bissau,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 846,NE-1159140535,Ali Sabih,Djibouti,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1151,10 +1086,8 @@
 857,NE-1159150871,Luxor,Egypt,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 858,NE-1159150097,Dire Dawa,Ethiopia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 859,NE-1159149761,Eldoret,Kenya,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-859,NE-1159149761,Eldoret,Kenya,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 860,NE-1159151129,Menongue,Angola,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 861,NE-1159149353,Kabwe,Zambia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-861,NE-1159149353,Kabwe,Zambia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: Palaeoanthropological
 862,NE-1159149365,Douala,Cameroon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 863,NE-1159147487,Sfax,Tunisia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 864,NE-1159150177,Bouake,Ivory Coast,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1167,37 +1100,28 @@
 870,NE-1159149363,Chitungwiza,Zimbabwe,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 871,NE-1159148509,Sekondi,Ghana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 872,NE-1159150031,Kayes,Congo (Brazzaville),destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-872,NE-1159150031,Kayes,Congo (Brazzaville),editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 873,NE-1159150033,Franceville,Gabon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-873,NE-1159150033,Franceville,Gabon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 874,NE-1159150065,Nouadhibou,Mauritania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 875,NE-1159146001,Gitega,Burundi,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 876,NE-1159135755,Gitarama,Rwanda,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 876,NE-1159135755,Gitarama,Rwanda,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 877,NE-1159149439,Kaedi,Senegal,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-877,NE-1159149439,Kaedi,Senegal,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 878,NE-1159148291,Robertsport,Liberia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 878,NE-1159148291,Robertsport,Liberia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 879,NE-1159150357,Mahalapye,Botswana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 880,NE-1159150343,Parakou,Benin,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-880,NE-1159150343,Parakou,Benin,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 881,NE-1159133821,Sokode,Togo,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 882,NE-1159146047,Burco,Somaliland,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-882,NE-1159146047,Burco,Somaliland,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 883,NE-1159140533,Mendefera,Eritrea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-883,NE-1159140533,Mendefera,Eritrea,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 884,NE-1159117545,Hlotse,Lesotho,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 885,NE-1159139419,Bolama,Guinea Bissau,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-885,NE-1159139419,Bolama,Guinea Bissau,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 886,NE-1159140539,Obock,Djibouti,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 887,NE-1159136189,Kenema,Sierra Leone,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 888,NE-1159118993,Mansa Konko,The Gambia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-888,NE-1159118993,Mansa Konko,The Gambia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 889,NE-1159115543,Manzini,eSwatini,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 890,NE-1159150661,Pretoria,South Africa,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 890,NE-1159150661,Pretoria,South Africa,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 891,NE-1159150773,Sokoto,Nigeria,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-891,NE-1159150773,Sokoto,Nigeria,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 892,NE-1159149727,Mwanza,Tanzania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 893,NE-1159151143,Tamanrasset,Algeria,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 894,NE-1159149855,Bur Said,Egypt,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1207,11 +1131,8 @@
 898,NE-1159149361,Livingstone,Zambia,destination,INFO,possible_same_place,Within 8 km of ZM-MOSI-OA-TUNYA (Mosi-oa-Tunya National Park); never shown together
 898,NE-1159149361,Livingstone,Zambia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 899,NE-1159150315,Bamenda,Cameroon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-899,NE-1159150315,Bamenda,Cameroon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 900,NE-1159133879,Gabes,Tunisia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-900,NE-1159133879,Gabes,Tunisia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 901,NE-1159148711,Daloa,Ivory Coast,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-901,NE-1159148711,Daloa,Ivory Coast,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 902,NE-1159149813,Toliara,Madagascar,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 903,NE-1159148703,Labe,Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 904,NE-1159150675,Marrakesh,Morocco,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1222,11 +1143,8 @@
 908,NE-1159147579,Mutare,Zimbabwe,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 909,NE-1159141609,Tamale,Ghana,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 910,NE-1159148591,Ouesso,Congo (Brazzaville),destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-910,NE-1159148591,Ouesso,Congo (Brazzaville),editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 911,NE-1159148513,Oyem,Gabon,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-911,NE-1159148513,Oyem,Gabon,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 912,NE-1159150069,Ayoun el Atrous,Mauritania,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-912,NE-1159150069,Ayoun el Atrous,Mauritania,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 913,NE-1159145215,Bururi,Burundi,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 914,NE-1159135777,Ruhengeri,Rwanda,destination,INFO,possible_same_place,"Within 8 km of RW-VOLCANOES (Volcanoes National Park, Rwanda); never shown together"
 914,NE-1159135777,Ruhengeri,Rwanda,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1238,12 +1156,10 @@
 919,NE-1159149073,Melekeok,Palau,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 920,NE-1159146907,Noumea,New Caledonia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 921,NE-1159149061,Palikir,Federated States of Micronesia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-921,NE-1159149061,Palikir,Federated States of Micronesia,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 922,NE-1159149063,Majuro,Marshall Islands,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 923,NE-1159149065,Agana,Guam,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 924,NE-1159149071,Funafuti,Tuvalu,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 925,NE-1159149079,Tarawa,Kiribati,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-925,NE-1159149079,Tarawa,Kiribati,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 926,NE-1159149099,Avarua,Cook Islands,destination,INFO,possible_same_place,Within 8 km of CK-RAROTONGA-CROSS-ISLAND (Rarotonga Cross-Island Track); never shown together
 926,NE-1159149099,Avarua,Cook Islands,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 927,NE-1159150429,Pago Pago,American Samoa,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1298,7 +1214,6 @@
 960,NE-1159150413,Gold Coast,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 960,NE-1159150413,Gold Coast,Australia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: TrueColours
 961,NE-1159116427,Arawa,Papua New Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-961,NE-1159116427,Arawa,Papua New Guinea,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 962,NE-1159151681,Whangarei,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 963,NE-1159116467,Kimbe,Papua New Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 963,NE-1159116467,Kimbe,Papua New Guinea,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: KimbeBay
@@ -1306,7 +1221,6 @@
 964,NE-1159150399,Bendigo,Australia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 965,NE-1159151685,Invercargill,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 966,NE-1159121931,Daru,Papua New Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-966,NE-1159121931,Daru,Papua New Guinea,editorial_themes + experience_context,ERROR,blank_themes_and_experiences,Held out of matching until tagged
 967,NE-1159150367,Mandurah,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 968,NE-1159151663,Whanganui,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 969,NE-1159116375,Vanimo,Papua New Guinea,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1330,7 +1244,7 @@
 978,NE-1159150387,Dubbo,Australia,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: AnimalInArt, groupcreative, objecthistories, regionalgallery, tailoredworkshop"
 978,NE-1159150387,Dubbo,Australia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 979,NE-1159151641,North Shore,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-979,NE-1159151641,North Shore,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Navalhistory, sailorphotoalbums"
+979,NE-1159151641,North Shore,New Zealand,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: sailorphotoalbums
 979,NE-1159151641,North Shore,New Zealand,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 980,NE-1159150379,Geraldton,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 980,NE-1159150379,Geraldton,Australia,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: MidWest, museuminterpretation"
@@ -1345,7 +1259,7 @@
 985,NE-1159151635,Masterton,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 985,NE-1159151635,Masterton,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Inventionchronology, WhatCameFirst"
 986,NE-1159150395,Whyalla,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-986,NE-1159150395,Whyalla,Australia,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Locallybuilt, aboardshipinterpretation, navalservice"
+986,NE-1159150395,Whyalla,Australia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: aboardshipinterpretation
 987,NE-1159151637,Levin,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 987,NE-1159151637,Levin,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: EnglishCottage, Heritagehouse"
 988,NE-1159150415,Devonport,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
@@ -1356,7 +1270,7 @@
 990,NE-1159150391,Broken Hill,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 990,NE-1159150391,Broken Hill,Australia,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: Heritagegallery
 991,NE-1159151647,Ashburton,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-991,NE-1159151647,Ashburton,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Civiclandmark, CountyCouncil, HeatherSarin, civicmemory, communityhistory"
+991,NE-1159151647,Ashburton,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Civiclandmark, CountyCouncil, HeatherSarin, communityhistory"
 992,NE-1159150377,Karratha,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 992,NE-1159150377,Karratha,Australia,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Countryinterpretation, culturalresponsibility"
 992,NE-1159150377,Karratha,Australia,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
@@ -1375,12 +1289,11 @@
 999,NE-1159151709,Porirua,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 999,NE-1159151709,Porirua,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: TeAwaruaOPorirua, harbourhistory, placeidentity"
 1000,NE-1159150393,Port Lincoln,Australia,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
-1000,NE-1159150393,Port Lincoln,Australia,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Finnishboatbuilders, displayinterpretation, domesticmemory, maritimeconversation, workinglife"
+1000,NE-1159150393,Port Lincoln,Australia,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Finnishboatbuilders, displayinterpretation, domesticmemory, maritimeconversation"
 1001,NE-1159151713,Pukekohe,New Zealand,destination_source_url + source_last_checked_utc,WARN,missing_source_details,No URL or check date; EDITORIAL_DRAFT_NEEDS_SOURCE_CHECK
 1001,NE-1159151713,Pukekohe,New Zealand,experience_context,ERROR,words_run_together,"Experience text hidden from guests until corrected: Nostalgicstilllifepainting, everydayobjects"
 1007,US-NPS-BLCA,"Black Canyon of the Gunnison National Park, CO",United States,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1023,US-NPS-GRSM,"Great Smoky Mountains National Park, TN, NC",United States,destination,INFO,possible_same_place,"Within 8 km of US-TN-ARROWMONT (Gatlinburg, Tennessee (Arrowmont)); never shown together"
-1025,US-NPS-GUMO,"Guadalupe Mountains National Park, TX",United States,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: McKittrick
 1043,US-NC-PENLAND,"Penland, North Carolina",United States,destination_source_url,WARN,generic_source_url,"Homepage only, not destination-specific: https://penlandorg.azurewebsites.net/"
 1044,US-NC-BRASSTOWN,"Brasstown, North Carolina (Folk School)",United States,destination_source_url,WARN,generic_source_url,"Homepage only, not destination-specific: https://www.folkschool.org/"
 1053,GB-BATH,"Bath, England",United Kingdom,destination_source_url,WARN,generic_source_url,"Homepage only, not destination-specific: https://www.thermaebathspa.com/"
@@ -1394,7 +1307,6 @@
 1146,NZ-MILFORD,Piopiotahi / Milford Sound,New Zealand,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1190,FJ-BOUMA,"Bouma Falls, Taveuni",Fiji,destination,INFO,possible_same_place,Within 8 km of OC-TAVEUNI-ISLAND (Taveuni Island); never shown together
 1193,VU-MT-YASUR,"Mount Yasur, Tanna",Vanuatu,destination,INFO,possible_same_place,Within 8 km of VU-TANNA (Tanna Island); never shown together
-1220,GH-CAPE-COAST-CASTLE,Cape Coast Castle,Ghana,experience_context,ERROR,words_run_together,Experience text hidden from guests until corrected: transatlantic
 1245,NZ-RAKIURA-TRACK,"Rakiura Track, Stewart Island",New Zealand,destination,INFO,possible_same_place,Within 8 km of OC-STEWART-ISLAND-RAKIURA (Stewart Island/Rakiura); never shown together
 1288,BR-PANTANAL,Pantanal Conservation Area,Brazil,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1296,NZ-KAIKOURA,Kaikōura,New Zealand,destination_source_url,WARN,generic_source_url,"Homepage only, not destination-specific: https://www.kaikoura.co.nz/"
@@ -1406,7 +1318,6 @@
 1373,BW-KGALAGADI,Kgalagadi Transfrontier Park,Botswana and South Africa,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1380,GH-MOLE,Mole National Park,Ghana,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1384,PE-TAMBOPATA,Tambopata National Reserve,Peru,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
-1399,FJ-ROTUMA,Rotuma Island,Fiji,pace_context,ERROR,unrecognized_value,"'Slow' is not Gentle, Balanced or Active; treated as pace to confirm"
 1403,IN-ZIRO-VALLEY,Ziro Valley,India,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1405,IN-MAJULI,Majuli Island,India,experience_context,INFO,booking_words,Reads as a confirmed booking; removed from guest text
 1409,PH-BATANES,Batanes Islands,Philippines,destination_source_url,WARN,generic_source_url,"Homepage only, not destination-specific: https://visitors.breathtakingbatanes.com/"

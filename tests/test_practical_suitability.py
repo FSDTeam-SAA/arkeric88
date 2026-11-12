@@ -274,6 +274,15 @@ def test_reasons_never_repeat_an_introduction_built_from_the_rationale():
     assert not any(suggestion["description"].rstrip(".") in reason for reason in suggestion["match_reasons"])
 
 
+def test_a_name_with_a_comma_still_leads_its_introduction():
+    cayenne = get_destination("NE-1159150911")
+    assert cayenne.destination == "Cayenne, French Guiana" and cayenne.world_region == "South America"
+    assert destination_matching._introduction(cayenne).startswith("Cayenne offers")
+    # The map names French Guiana; the catalog files it under France.
+    from src.core.geography import same_country
+    assert same_country("French Guiana", "France") and not same_country("Guyana", "France")
+
+
 def test_photos_are_requested_at_the_largest_size_google_allows():
     urls = _extract_photo_urls({"photos": [{"name": "places/abc/photos/def"}]}, "test-key")
     assert urls == [

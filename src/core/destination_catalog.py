@@ -43,10 +43,10 @@ DATA_DIR = Path(__file__).resolve().parents[2] / "data"
 CANDIDATES_FILE_SUFFIX = "AI_IMPORT_DESTINATIONS.csv"
 BACKLOG_FILE_SUFFIX = "DISCOVERY_BACKLOG.csv"
 
-# Catalogue release v5 (Velari_AI_IMPORT_DESTINATIONS_1500.xlsx);
+# Catalogue release v6 (Velari_AI_IMPORT_DESTINATIONS_1500_UPDATED.xlsx);
 # IMPORT_RULES.csv "Import verification": 1,500 rows, 1,500 unique IDs.
-CATALOG_RELEASE = "v5"
-CATALOG_SNAPSHOT_DATE = "2026-11-07"
+CATALOG_RELEASE = "v6"
+CATALOG_SNAPSHOT_DATE = "2026-11-12"
 EXPECTED_CANDIDATE_COUNT = 1500
 EXPECTED_EDITORIAL_COUNT = 572
 EXPECTED_BACKLOG_COUNT = 928
@@ -96,6 +96,8 @@ _OPERATIONAL_PREFIX = re.compile(
 )
 _BOOKING_CLAIM = re.compile(r"\b(?:confirmed|booked|prebooked|reserved|prearranged|approved|verified)\b", re.IGNORECASE)
 _WORD = re.compile(r"[^\W\d_]+")
+# Real compounds start like this ("intercultural", "transatlantic").
+_COMPOUND_PREFIX = re.compile(r"^(?:inter|intra|trans|palaeo|paleo|multi|counter)", re.IGNORECASE)
 
 _CATALOG_PACES = {"gentle": "Gentle", "balanced": "Balanced", "active": "Active"}
 
@@ -268,12 +270,14 @@ def is_run_together(word: str, counts: Counter) -> bool:
     """
     True for a word the source lost its spaces in ("TeAwaruaOPorirua",
     "harbourhistory"): mixed case inside the word, or a rare long word made of
-    two words the catalog uses on their own.
+    two words the catalog uses on their own. Shorter compounds ("candlelight",
+    "birdwatching") are left alone. A name written in mixed case ("VanDusen")
+    is also caught; its row then shows no experience text, which is safe.
     """
-    if re.search(r"[a-z][A-Z]", word):
+    if re.search(r"[a-z][A-Z]", word) and not re.match(r"^(?:Mc|Mac)[A-Z]", word):
         return True
     lowered = word.lower()
-    if len(lowered) < 11 or counts[lowered] > 2:
+    if len(lowered) < 13 or counts[lowered] > 2 or _COMPOUND_PREFIX.match(lowered):
         return False
     return len(lowered) >= 17 or any(
         counts[lowered[:cut]] >= 2 and counts[lowered[cut:]] >= 2 for cut in range(4, len(lowered) - 3)

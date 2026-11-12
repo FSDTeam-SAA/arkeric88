@@ -684,6 +684,12 @@ _PROPER_SETTING_WORDS = {
 }
 
 
+def _starts_with_name(text: str, destination: Destination) -> bool:
+    """"Cayenne offers ..." starts with the name "Cayenne, French Guiana"; punctuation is ignored."""
+    words = text.split()
+    return bool(words) and words[0].strip(",.;:") in {word.strip(",.;:") for word in destination.destination.split()}
+
+
 def _rationale_phrase(destination: Destination) -> str:
     """
     The rationale's first sentence. Staff wording is already gone
@@ -693,7 +699,7 @@ def _rationale_phrase(destination: Destination) -> str:
     first = re.split(r"(?<=[.!?])\s+", destination.guest_rationale.strip(), maxsplit=1)[0].rstrip(" .;,")
     if not first:
         return ""
-    if first.split()[0] in destination.destination.split():
+    if _starts_with_name(first, destination):
         return first
     return lower_first(first)
 
@@ -718,7 +724,7 @@ def _introduction(destination: Destination) -> str:
     left for "match_reasons", which picks the ones this guest asked for.
     """
     rationale = _rationale_phrase(destination)
-    if rationale and rationale[0].isupper() and rationale.split()[0] in destination.destination.split():
+    if rationale and rationale[0].isupper() and _starts_with_name(rationale, destination):
         return f"{rationale}."
     if rationale:
         return f"{destination.destination}: {rationale}."

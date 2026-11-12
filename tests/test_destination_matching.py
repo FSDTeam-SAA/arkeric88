@@ -320,10 +320,10 @@ def test_all_1500_destinations_are_considered():
     assert len(_ids(result.ranked) & backlog_ids) > 500
 
 
-def test_a_row_without_themes_is_never_ranked():
-    # Santiago, Chile: blank editorial_themes, but its rationale mentions food and culture.
-    santiago = get_destination("NE-1159151615")
-    assert not santiago.goals
+def test_a_row_without_themes_is_never_ranked(monkeypatch):
+    # A catalogue update may leave editorial_themes blank; the rationale still mentions food and culture.
+    santiago = replace(get_destination("NE-1159151615"), goals=(), secondary_goals=(), raw_themes="")
+    monkeypatch.setattr(destination_matching, "load_destination_candidates", lambda: (santiago,))
     result = rank_destinations(_profile(build_intake(preferred_moments=["food_drinks", "art_history_culture"])), None)
     assert santiago.destination_id in _excluded_ids(result, "no_grounded_fit")
 

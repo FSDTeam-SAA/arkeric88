@@ -172,12 +172,20 @@ def country_spellings(countries: Iterable[str]) -> Dict[str, str]:
     }
 
 
+# Overseas regions the catalog files under the parent country ("Cayenne,
+# French Guiana" is listed as France) while the map names the region. Only for
+# matching a lookup to a catalog row: the region stays its own place for travel distance.
+_PART_OF_COUNTRY = {
+    "french guiana": "france", "guadeloupe": "france", "martinique": "france", "mayotte": "france",
+}
+
+
 def same_country(first: str | None, second: str | None) -> bool:
     """Compare country names from different sources (catalog vs. map lookup)."""
     first_key, second_key = country_key(first), country_key(second)
     if not first_key or not second_key:
         return False
-    return first_key == second_key
+    return _PART_OF_COUNTRY.get(first_key, first_key) == _PART_OF_COUNTRY.get(second_key, second_key)
 
 
 def address_in_country(address: str | None, country: str | None) -> bool:
